@@ -20,6 +20,7 @@
 ##############################################################################
 import time
 from osv import fields, osv
+from openerp.tools.translate import _
 
 
 class project_progress_measurement(osv.osv):
@@ -33,5 +34,10 @@ class project_progress_measurement(osv.osv):
                                       select="1",
                                       required=True),
     }
+
+    _sql_constraints = [
+        ('project_meas_type_date_uniq', 'unique(project_id, progress_measurement_type, communication_date)',
+         _("Only one measurement of the same type can exist for each project on a given date."))
+    ]
 
 project_progress_measurement()

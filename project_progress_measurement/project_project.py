@@ -26,8 +26,7 @@ class project(osv.osv):
 
     _inherit = "project.project"
 
-    _columns = {        
-
+    _columns = {
         'progress_measurements': fields.one2many('project.progress.measurement',
                                                  'project_id',
                                                  'Measurements'),

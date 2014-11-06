@@ -16,6 +16,7 @@
                         <group>
                             <field name="name"/>
                             <field name="account_id"/>
+                            <field name="account_stage"/>
                             <field name="journal_id"/>
                             <field name="version_id"/>
                             <field name="user_id"/>
@@ -57,6 +58,7 @@
             <field name="arch" type="xml">
                 <tree string="Analytic Entries" editable="top">
                     <field name="account_id"/>
+                    <field name="account_stage"/>
                     <field name="date"/>                    
                     <field name="name"/>
                     <field name="journal_id" invisible="False"/>     
@@ -89,7 +91,6 @@
                     <field name="user_id"/>
                     <group string="Group By..." expand="0">
                         <filter string="Analytic Account" context="{'group_by':'account_id'}"/>
-                        <filter string="Project Task" context="{'group_by':'task_id'}"/>
                         <filter string="Fin. Account" context="{'group_by':'general_account_id'}"/>
                         <filter string="Journal" context="{'group_by':'journal_id'}" name="group_journal"/>
                         <filter string="Version" context="{'group_by':'version_id'}" name="group_version"/>

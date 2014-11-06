@@ -39,7 +39,7 @@ class account_analytic_line_plan(osv.osv):
         company_id = self.pool.get('res.company')._company_default_get(cr, uid,
                                                              'account.analytic.line',
                                                              context=context)
-        company = company_obj.browse(cr, uid, company_id,context=context)
+        company = company_obj.browse(cr, uid, company_id, context=context)
         return company.currency_id and company.currency_id.id or False
 
     _columns = {
@@ -58,6 +58,11 @@ class account_analytic_line_plan(osv.osv):
                                       'Analytic Account', required=True,
                                       ondelete='cascade', select=True,
                                       domain=[('type', '<>', 'view')]),
+        'account_stage': fields.related('account_id', 'stage_id',
+                                        type='many2one',
+                                        relation='analytic.account.stage',
+                                        string='Stage',
+                                        readonly=True),
         'user_id': fields.many2one('res.users', 'User'),
         'company_id': fields.related('account_id', 'company_id', type='many2one',
                                      relation='res.company', string='Company',
@@ -235,14 +240,18 @@ class account_analytic_line_plan(osv.osv):
         
         res = self.on_change_unit_amount(cr, uid, id, prod_id, quantity, currency_id, company_id,
                                          unit, journal_id, context)
-        
+
         prod = self.pool.get('product.product').browse(cr, uid, prod_id, context=context)
-        prod_uom_po = prod.uom_po_id.id
-                            
-        res['value'].update({
-            'product_uom_id': prod_uom_po,
-        })
-          
+        if prod:
+            if prod.uom_po_id:
+                res['value'].update({
+                    'product_uom_id': prod.uom_po_id.id,
+                })
+            elif prod.uom_id:
+                res['value'].update({
+                    'product_uom_id': prod.uom_id.id,
+                })
+
         return res  
 
     def view_header_get(self, cr, user, view_id, view_type, context=None):

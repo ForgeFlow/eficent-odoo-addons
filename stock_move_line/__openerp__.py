@@ -25,16 +25,13 @@
     "version": "1.0",
     "author": "Eficent",
     "website": "www.eficent.com",
-    'summary': 'Creates move lines only for revenue and expenses',
-    "depends": ["stock", "account_analytic_moves_extend"],
+    'summary': 'Adds the analytic account to stock moves.',
+    "depends": ["stock", "analytic", "stock_analytic_account"],
     "description": """
     - Limits the creation of analytic lines associated to stock moves to only occur when the move is associated to an expense or revenue account.
-    - Introduces the  analytic account associated to tshe account move
-    - Creates an analytic line associated to the expense or income account for that analytic account when the account move is created.    
     """,
     "init_xml": [],
     'data': [
-             'stock_view.xml',
     ],
     'test':[
     ],
@@ -42,4 +39,3 @@
     'active': False,
     'certificate': '',
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

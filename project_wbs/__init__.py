@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2011 Eficent (<http://www.eficent.com/>)
-#              Jordi Ballester Alomar <jordi.ballester@eficent.com>
+#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
+#               <contact@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,9 +19,7 @@
 #
 ##############################################################################
 
-import project_lifecycle
-import project_scope_wbs
-
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+import analytic_account_stage
+import account_analytic_account
+import project_project
+import project_task
