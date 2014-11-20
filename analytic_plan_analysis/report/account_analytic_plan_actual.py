@@ -19,8 +19,8 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-import tools
+from openerp.osv import fields, osv
+import openerp.tools as tools
 
 
 class report_account_analytic_plan_actual(osv.osv):

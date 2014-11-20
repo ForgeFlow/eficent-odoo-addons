@@ -19,9 +19,9 @@
 #
 ##############################################################################
 
-import tools
-from osv import fields, osv
-from tools.translate import _
+import openerp.tools as tools
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
 
 _ANALYTIC_ACCOUNT_STATE = [('draft', 'New'),
                            ('open', 'In Progress'),

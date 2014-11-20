@@ -22,7 +22,7 @@
 from datetime import datetime, date
 from datetime import datetime as dt
 from dateutil.rrule import *
-from osv import fields, osv
+from openerp.osv import fields, osv
 
 
 class project(osv.osv):
