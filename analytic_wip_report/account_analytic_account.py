@@ -19,7 +19,7 @@
 #
 ##############################################################################
 import decimal_precision as dp
-from osv import fields, osv
+from openerp.osv import fields, osv
 
 
 class account_analytic_account(osv.osv):
