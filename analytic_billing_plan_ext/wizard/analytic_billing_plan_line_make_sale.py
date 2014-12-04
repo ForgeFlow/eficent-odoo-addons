@@ -20,7 +20,7 @@
 ##############################################################################
 from datetime import datetime
 from openerp.osv import fields, osv, orm
-from tools.translate import _
+from openerp.tools.translate import _
 
 
 class analytic_billing_plan_line_make_sale(orm.TransientModel):

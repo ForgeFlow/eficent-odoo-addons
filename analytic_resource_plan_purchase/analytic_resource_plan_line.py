@@ -19,7 +19,7 @@
 #
 ##############################################################################
 import decimal_precision as dp
-from osv import fields, osv
+from openerp.osv import fields, osv
 
 
 class analytic_resource_plan_line(osv.osv):

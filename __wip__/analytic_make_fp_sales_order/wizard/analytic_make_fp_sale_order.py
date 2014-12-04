@@ -21,7 +21,7 @@
 
 from datetime import datetime
 from openerp.osv import fields, osv, orm
-from tools.translate import _
+from openerp.tools.translate import _
 
 
 class analytic_make_fp_sale_order(orm.TransientModel):

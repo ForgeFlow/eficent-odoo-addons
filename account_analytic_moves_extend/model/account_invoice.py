@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2011 Eficent (<http://www.eficent.com/>)
-#               <contact@eficent.com>
+#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
+#              Jordi Ballester Alomar <jordi.ballester@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,17 +18,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from osv import fields, osv
-
-
-class account_analytic_account(osv.osv):
-
-    _inherit = 'account.analytic.account'
+from openerp.osv import fields, osv, orm
 
 
-    _columns = {
-        'lob': fields.many2one('account.analytic.lob','Line of Business'),                
-     }
-    
-account_analytic_account()
+class account_invoice(osv.osv):
+
+    _inherit = "account.invoice"
+
+    def _get_analytic_lines(self, cr, uid, id, context=None):
+
+        if context is None:
+            context = {}
+        inv = self.browse(cr, uid, id)
+        cur_obj = self.pool.get('res.currency')
+
+        iml = self.pool.get('account.invoice.line').move_line_get(cr, uid, inv.id, context=context)
+       
+        return iml
+
+account_invoice()

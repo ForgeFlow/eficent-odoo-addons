@@ -2,6 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$USER_HOME$/Odoo8/local/odoo-addons/Eficent/account-payment" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Eficent/contract" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Eficent/partner-contact" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Eficent/sale-workflow" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../OCA/account-financial-reporting" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../OCA/account-payment" vcs="Git" />
@@ -13,5 +16,7 @@
     <mapping directory="$PROJECT_DIR$/../OCA/sale-workflow" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../OCA/server-tools" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../OCA/stock-logistics-workflow" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../OCA/web" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Ok/web_m2x_options" vcs="Git" />
   </component>
 </project>

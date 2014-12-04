@@ -15,9 +15,12 @@
     <orderEntry type="module" module-name="pri-addons" />
     <orderEntry type="module" module-name="bank-payment" />
     <orderEntry type="module" module-name="l10n-canada" />
-    <orderEntry type="module" module-name="account-payment" />
     <orderEntry type="module" module-name="account-financial-reporting" />
     <orderEntry type="module" module-name="reporting-engine" />
     <orderEntry type="module" module-name="sale-workflow" />
+    <orderEntry type="module" module-name="contract" />
+    <orderEntry type="module" module-name="partner-contact" />
+    <orderEntry type="module" module-name="web" />
+    <orderEntry type="module" module-name="account-payment" />
   </component>
 </module>

@@ -20,8 +20,8 @@
 ##############################################################################
 
 import decimal_precision as dp
-from tools.translate import _
-from osv import fields, osv
+from openerp.tools.translate import _
+from openerp.osv import fields, osv
 
 
 class sale_order_line_billing_milestone(osv.osv):
