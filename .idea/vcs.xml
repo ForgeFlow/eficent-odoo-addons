@@ -3,6 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$USER_HOME$/Odoo8/local/odoo-addons/Eficent/account-payment" vcs="Git" />
+    <mapping directory="$USER_HOME$/Odoo8/local/odoo-addons/Eficent/purchase-workflow" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Eficent/contract" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Eficent/partner-contact" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Eficent/sale-workflow" vcs="Git" />
