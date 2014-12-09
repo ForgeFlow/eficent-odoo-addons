@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record id="group_so_credit_block_releaser" model="res.groups">
+        	<field name="name">Sales Order Credit Block Releaser</field>
+			<field name="category_id" ref="base.module_category_sales_management"/>
+			<field name="comment">The user will have permission to confirm sales orders where the credit limit has been exceeded.</field>
+    	</record>
+
+    </data>
+</openerp>
