@@ -23,6 +23,6 @@
     <orderEntry type="module" module-name="account-payment" />
     <orderEntry type="module" module-name="purchase-workflow" />
     <orderEntry type="module" module-name="product-attribute" />
-    <orderEntry type="module" module-name="ecosoft-addons" />
+    <orderEntry type="module" module-name="sale-financial" />
   </component>
 </module>

@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/../OCA/bank-payment/.idea/bank-payment.iml" filepath="$PROJECT_DIR$/../OCA/bank-payment/.idea/bank-payment.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Eficent/contract/.idea/contract.iml" filepath="$PROJECT_DIR$/../Eficent/contract/.idea/contract.iml" />
       <module fileurl="file://$PROJECT_DIR$/../OCA/department/.idea/department.iml" filepath="$PROJECT_DIR$/../OCA/department/.idea/department.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../ecosoft-addons/.idea/ecosoft-addons.iml" filepath="$PROJECT_DIR$/../ecosoft-addons/.idea/ecosoft-addons.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/eficent-odoo-addons.iml" filepath="$PROJECT_DIR$/.idea/eficent-odoo-addons.iml" />
       <module fileurl="file://$PROJECT_DIR$/../OCA/l10n-canada/.idea/l10n-canada.iml" filepath="$PROJECT_DIR$/../OCA/l10n-canada/.idea/l10n-canada.iml" />
       <module fileurl="file://$PROJECT_DIR$/../openerp-usa/.idea/openerp-usa.iml" filepath="$PROJECT_DIR$/../openerp-usa/.idea/openerp-usa.iml" />
@@ -18,6 +17,7 @@
       <module fileurl="file://$PROJECT_DIR$/../OCA/product-attribute/.idea/product-attribute.iml" filepath="$PROJECT_DIR$/../OCA/product-attribute/.idea/product-attribute.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Eficent/purchase-workflow/.idea/purchase-workflow.iml" filepath="$PROJECT_DIR$/../Eficent/purchase-workflow/.idea/purchase-workflow.iml" />
       <module fileurl="file://$PROJECT_DIR$/../OCA/reporting-engine/.idea/reporting-engine.iml" filepath="$PROJECT_DIR$/../OCA/reporting-engine/.idea/reporting-engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Eficent/sale-financial/.idea/sale-financial.iml" filepath="$PROJECT_DIR$/../Eficent/sale-financial/.idea/sale-financial.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Eficent/sale-workflow/.idea/sale-workflow.iml" filepath="$PROJECT_DIR$/../Eficent/sale-workflow/.idea/sale-workflow.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../server/.idea/server.iml" filepath="$PROJECT_DIR$/../../server/.idea/server.iml" />
       <module fileurl="file://$PROJECT_DIR$/../OCA/server-tools/.idea/server-tools.iml" filepath="$PROJECT_DIR$/../OCA/server-tools/.idea/server-tools.iml" />
