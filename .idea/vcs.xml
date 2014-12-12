@@ -9,6 +9,7 @@
     <mapping directory="$PROJECT_DIR$/../Eficent/sale-financial" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Eficent/sale-workflow" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../OCA/account-financial-reporting" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../OCA/account-invoicing" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../OCA/account-payment" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../OCA/bank-payment" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../OCA/department" vcs="Git" />
