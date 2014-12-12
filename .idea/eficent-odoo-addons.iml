@@ -5,7 +5,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="openobject-addons" />
-    <orderEntry type="module" module-name="addons-vauxoo" />
     <orderEntry type="module" module-name="server" />
     <orderEntry type="module" module-name="server-tools" />
     <orderEntry type="module" module-name="department" />
