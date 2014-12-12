@@ -287,6 +287,7 @@ class analytic_resource_plan_line(osv.osv):
 
         if product_id:
             prod = self.pool.get('product.product').browse(cr, uid, product_id, context=context)
+            res['value'].update({'name': prod.name})
             if prod.seller_ids:
                 supplier_id = prod.seller_ids[0].name and prod.seller_ids[0].name.id
                 res['value'].update({'supplier_id': supplier_id})
@@ -382,6 +383,20 @@ class analytic_resource_plan_line(osv.osv):
             return res
         else:
             return {}
+
+    def write(self, cr, uid, ids, vals, context=None):
+        if context is None:
+            context = {}
+        if isinstance(ids, (int, long)):
+            ids = [ids]
+        analytic_obj = self.pool.get('account.analytic.account')
+
+        if 'account_id' in context:
+            analytic = analytic_obj.browse(cr, uid, context['account_id'])
+            vals['date'] = analytic.date
+
+        return super(analytic_resource_plan_line, self).write(
+            cr, uid, ids, vals, context=context)
 
     def unlink(self, cr, uid, ids, context=None):
         line_plan_ids = []
