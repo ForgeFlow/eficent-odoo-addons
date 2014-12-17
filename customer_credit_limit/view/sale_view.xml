@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <button name="print_quotation" position="after">
-                    <button name="check_limit" string="Check credit limit" type="object" states="draft, sent" groups="base.group_user"/>
+                    <button name="check_limit" string="Check credit limit" type="object" states="draft,sent" groups="base.group_user"/>
                 </button>
             </field>
         </record>
