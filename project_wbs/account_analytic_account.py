@@ -35,7 +35,7 @@ class account_analytic_account(base_stage, osv.osv):
     def get_child_accounts(self, cr, uid, ids, context=None):    
         result = {}
         read_data = []
-        read_data = self.pool.get('account.analytic.account').read(cr, uid, ids,['child_ids'])
+        read_data = self.pool.get('account.analytic.account').read(cr, uid, ids, ['child_ids'])
         for data in read_data:                
             for curr_id in ids:
                 result[curr_id] = True   
