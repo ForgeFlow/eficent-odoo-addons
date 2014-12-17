@@ -180,8 +180,28 @@ class project(base_stage, osv.osv):
             fold[stage.id] = stage.fold or False
         return result, fold
 
+    def _get_parent_members(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        member_ids = []
+        project_obj = self.pool.get('project.project')
+        if 'default_parent_id' in context and context['default_parent_id']:
+            for project_id in project_obj.search(
+                    cr, uid, [('analytic_account_id', '=',
+                               context['default_parent_id'])]):
+                project = project_obj.browse(cr, uid,
+                                              project_id,
+                                              context=context)
+                for member in project.members:
+                    member_ids.append(member.id)
+        return member_ids
+
     _columns = {        
         'project_child_complete_ids': fields.function(_child_compute, relation='project.project', method=True, string="Project Hierarchy", type='many2many'),
+    }
+
+    _defaults = {
+        'members': _get_parent_members,
     }
 
     _group_by_full = {
