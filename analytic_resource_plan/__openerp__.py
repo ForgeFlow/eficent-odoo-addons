@@ -50,7 +50,9 @@ Analytic Resource Planning
         "analytic_account_view.xml",
         "product_view.xml",
         "project_view.xml",
+        "wizard/analytic_resource_plan_copy_version_view.xml",
         "security/ir.model.access.csv",
+
         
     ],
     'demo_xml': [
