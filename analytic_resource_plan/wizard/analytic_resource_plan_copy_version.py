@@ -45,7 +45,7 @@ class analytic_resource_plan_copy_version(osv.osv_memory):
         'include_child': True,
     }
 
-    def analytic_plan_copy_version_open_window(
+    def analytic_resource_plan_copy_version_open_window(
             self, cr, uid, ids, context=None):
 
         if context is None:
@@ -102,5 +102,3 @@ class analytic_resource_plan_copy_version(osv.osv_memory):
             'context': False,
             'type': 'ir.actions.act_window'
         }
-
-analytic_resource_plan_copy_version()
