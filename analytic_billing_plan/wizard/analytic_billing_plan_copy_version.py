@@ -21,14 +21,14 @@
 
 from openerp.osv import orm, fields, osv
 from openerp.tools.translate import _
-import time
 
-class analytic_plan_copy_version(osv.osv_memory):
+
+class analytic_billing_plan_copy_version(osv.osv_memory):
     """
-    For copying all the planned costs to a separate planning version
+    For copying all the planned billings to a separate planning version
     """
-    _name = "analytic.plan.copy.version"
-    _description = "Analytic Plan copy versions"
+    _name = "analytic.billing.plan.copy.version"
+    _description = "Analytic Billing Plan copy versions"
 
     _columns = {
         'source_version_id': fields.many2one('account.analytic.plan.version',
@@ -45,14 +45,14 @@ class analytic_plan_copy_version(osv.osv_memory):
         'include_child': True,
     }
 
-    def analytic_plan_copy_version_open_window(
+    def analytic_billing_plan_copy_version_open_window(
             self, cr, uid, ids, context=None):
 
         if context is None:
             context = {}
         new_line_plan_ids = []
         analytic_obj = self.pool.get('account.analytic.account')
-        line_plan_obj = self.pool.get('account.analytic.line.plan')
+        line_plan_obj = self.pool.get('analytic.billing.plan.line')
         plan_version_obj = self.pool.get('account.analytic.plan.version')
 
         data = self.read(cr, uid, ids, [], context=context)[0]
@@ -85,8 +85,8 @@ class analytic_plan_copy_version(osv.osv_memory):
 
         for line_plan_id in line_plan_ids:
             new_line_plan_id = line_plan_obj.copy(cr, uid,
-                                                   line_plan_id,
-                                                   context=context)
+                                                  line_plan_id,
+                                                  context=context)
             new_line_plan_ids.append(new_line_plan_id)
 
         line_plan_obj.write(cr, uid, new_line_plan_ids,
@@ -94,13 +94,13 @@ class analytic_plan_copy_version(osv.osv_memory):
 
         return {
             'domain': "[('id','in', ["+','.join(map(str, new_line_plan_ids))+"])]",
-            'name': _('Analytic Planning Lines'),
+            'name': _('Billing Plan Lines'),
             'view_type': 'form',
             'view_mode': 'tree,form',
-            'res_model': 'account.analytic.line.plan',
+            'res_model': 'analytic.billing.plan.line',
             'view_id': False,
             'context': False,
             'type': 'ir.actions.act_window'
         }
 
-analytic_plan_copy_version()
+analytic_billing_plan_copy_version()

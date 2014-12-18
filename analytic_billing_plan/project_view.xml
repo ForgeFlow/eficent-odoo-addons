@@ -15,6 +15,18 @@
                 </xpath>
             </field>
         </record>
+
+        <act_window name="Billing Plan Lines"
+            res_model="analytic.billing.plan.line"
+            src_model="project.project"
+            view_mode="form"
+            target="new"
+            multi="True"
+            key2="client_action_multi"
+            context="{'default_account_id': analytic_account_id,'search_default_account_id': analytic_account_id}"
+            groups="project.group_project_manager"
+            id="action_analytic_billing_plan_line_open_form"/>
+
     </data>
 
 </openerp>

@@ -155,6 +155,7 @@
                     <field name="date_start"/>
                     <field name="date"/>
                     <field name="stage_id"/>
+                    <field name="analytic_account_id" invisible="True"/>
             	</xpath>
 
                 <xpath expr="//field[@name='planned_hours']" position="replace"/>
