@@ -59,10 +59,9 @@ class analytic_resource_plan_line(osv.osv):
             context = {}
         if default is None:
             default = {}
-        default['order_line_ids'] = []
+        default['requisition_line_ids'] = []
         res = super(analytic_resource_plan_line, self).copy(
             cr, uid, id, default, context)
-        self.map_sequences(cr, uid, id, res, context)
         return res
 
 analytic_resource_plan_line()

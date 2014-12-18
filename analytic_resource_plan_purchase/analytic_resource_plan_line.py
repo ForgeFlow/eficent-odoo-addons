@@ -60,7 +60,6 @@ class analytic_resource_plan_line(osv.osv):
         default['order_line_ids'] = []
         res = super(analytic_resource_plan_line, self).copy(
             cr, uid, id, default, context)
-        self.map_sequences(cr, uid, id, res, context)
         return res
 
 analytic_resource_plan_line()

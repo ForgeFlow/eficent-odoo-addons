@@ -102,5 +102,3 @@ class analytic_billing_plan_copy_version(osv.osv_memory):
             'context': False,
             'type': 'ir.actions.act_window'
         }
-
-analytic_billing_plan_copy_version()

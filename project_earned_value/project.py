@@ -395,6 +395,7 @@ class project(osv.osv):
                     self._total_plan_cost(cr, [projects_data_analytic_account_id])
 
             records = []
+
             for day_datetime in l_days:
 
                 day_date = day_datetime.date()
