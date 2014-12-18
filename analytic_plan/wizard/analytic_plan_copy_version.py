@@ -32,10 +32,13 @@ class analytic_plan_copy_version(osv.osv_memory):
 
     _columns = {
         'source_version_id': fields.many2one('account.analytic.plan.version',
-                                             'Source Planning Version', required=True),
+                                             'Source Planning Version',
+                                             required=True),
         'dest_version_id': fields.many2one('account.analytic.plan.version',
-                                           'Destination Planning Version', required=True),
-        'include_child': fields.boolean('Include child accounts', required=True),
+                                           'Destination Planning Version',
+                                           required=True),
+        'include_child': fields.boolean('Include child accounts',
+                                        required=True),
     }
 
     _defaults = {
