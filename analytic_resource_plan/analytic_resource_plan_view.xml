@@ -110,7 +110,7 @@
 	   	</record>
 	   	
 	   	<record model="ir.actions.act_window.view" id="action_analytic_resource_plan_line_form2">
-	        <field name="sequence" eval="1"/>
+	        <field name="sequence" eval="2"/>
 	        <field name="view_mode">form</field>
 	        <field name="view_id" ref="view_analytic_resource_plan_line_form"/>
 	        <field name="act_window_id" ref="action_analytic_resource_plan_line_open_form"/>
