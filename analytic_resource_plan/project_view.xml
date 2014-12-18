@@ -7,25 +7,23 @@
             <field name="inherit_id" ref="project.edit_project"/>
             <field name="arch" type="xml">
                 <xpath expr='//div[@name="buttons"]' position='inside'>
-                    <button string="Resource planning lines"
+                    <button string="Resource plan lines"
                         name="%(action_analytic_resource_plan_line_open_form)d"
                         type="action"
-                        context="{'default_account_id': analytic_account_id,'search_default_account_id': analytic_account_id}"
-                        groups="project.group_project_manager"/>
+                        context="{'default_account_id': analytic_account_id,'search_default_account_id': [analytic_account_id]}"
+                        groups="project.group_project_user,project.group_project_manager"/>
                 </xpath>
             </field>
         </record>
 
-        <act_window name="Resource Plan Lines"
+        <act_window
+            name="Resource plan lines"
+            id="resource_plan_line_action_project"
             res_model="analytic.resource.plan.line"
             src_model="project.project"
-            view_mode="form"
-            target="new"
-            multi="True"
-            key2="client_action_multi"
-            context="{'default_account_id': analytic_account_id,'search_default_account_id': analytic_account_id}"
-            groups="project.group_project_manager"
-            id="action_analytic_resource_plan_line_open_form"/>
+            context="{'default_account_id': analytic_account_id,'search_default_account_id': [analytic_account_id]}"
+            groups="project.group_project_user,project.group_project_manager"/>
+
 
     </data>
 
