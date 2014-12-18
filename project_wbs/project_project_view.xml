@@ -128,7 +128,6 @@
             			<field name="complete_wbs_code" string="WBS code"/>
 						<field name="account_class" string="Class"/>
                         <field name="stage_id" domain="[]"/>
-                        <field name="parent_id"/>
             	</field>
             </field>
         </record>
@@ -159,7 +158,6 @@
                     <field name="date_start"/>
                     <field name="date"/>
                     <field name="stage_id"/>
-                    <field name="analytic_account_id" invisible="True"/>
                     <field name="child_ids" invisible="True"/>
             	</xpath>
 
