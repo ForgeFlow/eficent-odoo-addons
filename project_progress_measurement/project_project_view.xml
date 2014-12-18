@@ -13,19 +13,28 @@
                                 name="%(action_project_progress_measurement)d"
                                 class="oe_link"
                                 type="action"
-                                context="{'default_project_id': active_id,'search_default_project_id': active_id}"
-                                groups="project.group_project_manager"/>
+                                context="{'default_project_id': active_id,'search_default_project_id': [active_id]}"
+                                groups="project.group_project_user,project.group_project_manager"/>
                             <newline/>
                             <button string="Enter non-aggregated Progress Measurements for all WBS elements"
                                 name="%(action_progress_measurements_entry_form)d"
                                 class="oe_link"
                                 type="action"
-                                context="{'default_project_id': active_id,'search_default_project_id': active_id}"
-                                groups="project.group_project_manager"/>
+                                context="{'default_project_id': active_id,'search_default_project_id': [active_id]}"
+                                groups="project.group_project_user,project.group_project_manager"/>
                         </group>
                     </page>
                 </notebook>
             </field>
         </record>
+
+        <act_window
+            name="List non-aggregated Progress Measurements"
+            id="proj_progress_measurement_action_project"
+            res_model="project.progress.measurement"
+            src_model="project.project"
+            context="{'default_project_id': active_id,'search_default_project_id': [active_id]}"
+            groups="project.group_project_user,project.group_project_manager"/>
+
     </data>
 </openerp>
