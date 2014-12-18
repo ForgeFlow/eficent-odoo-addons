@@ -274,45 +274,65 @@ class project(base_stage, osv.osv):
                 'nodestroy': True
             }
 
-    def action_openView(self, cr, uid, ids, module, act_window, context=None):
+    def action_openChildView(self, cr, uid, ids, module, act_window, context=None):
         """
         :return dict: dictionary value for created view
         """
+        if context is None:
+            context = {}
         project = self.browse(cr, uid, ids[0], context)
+        child_project_ids = self.pool.get('project.project').search(
+            cr, uid, [('parent_id', '=', project.analytic_account_id.id)])
         res = self.pool.get('ir.actions.act_window').for_xml_id(cr, uid, module, act_window, context)
         res['context'] = {
-            'search_default_parent_id': project.analytic_account_id and project.analytic_account_id.id or False,
             'default_parent_id': project.analytic_account_id and project.analytic_account_id.id or False,
             'default_partner_id': project.partner_id and project.partner_id.id or False,
         }
-        res['nodestroy'] = True
+        res['domain'] = "[('id', 'in', ["+','.join(map(str, child_project_ids))+"])]"
+        res['nodestroy'] = False
         return res
 
     def action_openProjectsView(self, cr, uid, ids, context=None):
 
-        return self.action_openView(cr, uid, ids, 'project_wbs', 'open_view_project_projects', context=context)
+        return self.action_openChildView(cr, uid, ids, 'project_wbs', 'open_view_project_projects', context=context)
 
     def action_openPhasesView(self, cr, uid, ids, context=None):
 
-        return self.action_openView(cr, uid, ids, 'project_wbs', 'open_view_project_phases', context=context)
+        return self.action_openChildView(cr, uid, ids, 'project_wbs', 'open_view_project_phases', context=context)
 
     def action_openDeliverablesView(self, cr, uid, ids, context=None):
 
-        return self.action_openView(cr, uid, ids, 'project_wbs', 'open_view_project_deliverables', context=context)
+        return self.action_openChildView(cr, uid, ids, 'project_wbs', 'open_view_project_deliverables', context=context)
 
     def action_openWorkPackagesView(self, cr, uid, ids, context=None):
 
-        return self.action_openView(cr, uid, ids, 'project_wbs', 'open_view_project_work_packages', context=context)
+        return self.action_openChildView(cr, uid, ids, 'project_wbs', 'open_view_project_work_packages', context=context)
 
     def action_openUnclassifiedView(self, cr, uid, ids, context=None):
 
-        return self.action_openView(cr, uid, ids, 'project', 'open_view_project_all', context=context)
+        return self.action_openChildView(cr, uid, ids, 'project', 'open_view_project_all', context=context)
 
     def action_openChildTreeView(self, cr, uid, ids, context=None):
 
-        return self.action_openView(cr, uid, ids, 'project_wbs', 'open_view_project_child_tree', context=context)
+        return self.action_openChildView(cr, uid, ids, 'project_wbs', 'open_view_wbs_tree', context=context)
 
+    def action_openParentTreeView(self, cr, uid, ids, context=None):
+        """
+        :return dict: dictionary value for created view
+        """
+        if context is None:
+            context = {}
+        project = self.browse(cr, uid, ids[0], context)
+        res = self.pool.get('ir.actions.act_window').for_xml_id(
+            cr, uid, 'project_wbs', 'open_view_wbs_tree', context)
+        if project.parent_id:
+            for parent_project_id in self.pool.get('project.project').search(
+                    cr, uid, [('analytic_account_id', '=',
+                               project.parent_id.id)]):
+                res['domain'] = "[('id','=',"+str(parent_project_id)+")]"
 
+        res['nodestroy'] = False
+        return res
 
     def on_change_parent(self, cr, uid, ids, parent_id, context=None):
         return self.pool.get('account.analytic.account').on_change_parent(cr, uid, ids, parent_id)
