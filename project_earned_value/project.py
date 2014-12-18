@@ -61,9 +61,7 @@ class project(osv.osv):
         # The planned cost to date is a linear interpolation of the planned
         # cost from start date to end date
         plan_cost_to_date = 0
-
-        cr.execute('''SELECT LP.account_id as account_id,
-        abs(sum(LP.amount)) as total_plan_cost,
+        cr.execute('''abs(sum(LP.amount)) as total_plan_cost,
         sum(cast(to_char(date_trunc('day',AA.date) -
         date_trunc('day',AA.date_start),'DD') as int) +1 )
         as no_of_days_total,
@@ -76,14 +74,14 @@ class project(osv.osv):
         AND LP.account_id = AA.id
         WHERE LP.account_id IN %s
         AND LP.amount < 0
-        AND AA.date_start <= %s
-        GROUP BY LP.id''',
+        AND AA.date_start <= %s''',
                    (to_date, tuple(ids), to_date))
-        for account_id, total_plan_cost, no_of_days_total, no_of_days_to_date \
-                in cr.fetchall():
-            if no_of_days_total and no_of_days_to_date:
-                plan_cost_to_date += \
+        for total_plan_cost, no_of_days_total, no_of_days_to_date \
+                in cr.fetchone():
+            if no_of_days_total:
+                plan_cost_to_date = \
                     total_plan_cost * no_of_days_to_date / no_of_days_total
+
         return plan_cost_to_date
 
     @staticmethod
