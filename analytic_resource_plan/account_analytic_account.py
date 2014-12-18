@@ -34,15 +34,19 @@ class account_analytic_account(osv.osv):
 
         res = super(account_analytic_account, self).write(
             cr, uid, ids, vals, context=context)
-        plan_line_obj = self.pool.get('analytic.resource.plan.line')
 
+        plan_line_obj = self.pool.get('analytic.resource.plan.line')
         if 'date' in vals and vals['date']:
-            for analytic_account_id in ids:
+            for analytic_account in self.browse(cr, uid, ids,
+                                                context=context):
                 plan_line_ids = plan_line_obj.search(
-                    cr, uid, [('account_id', '=', analytic_account_id)],
+                    cr, uid, [('account_id', '=', analytic_account.id),
+                              ('version_id', '=', analytic_account.
+                               active_analytic_planning_version.id)],
                     context=context)
-                plan_line_obj.write(
-                    cr, uid, plan_line_ids, {'date': vals['date']})
+                if plan_line_ids:
+                    plan_line_obj.write(
+                        cr, uid, plan_line_ids, {'date': vals['date']})
         return res
 
 account_analytic_account()
