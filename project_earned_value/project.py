@@ -85,7 +85,7 @@ class project(osv.osv):
             if date_end_str:
                 date_end = datetime.strptime(date_end_str, '%Y-%m-%d').date()
                 if to_date > date_end:
-                    plan_cost_to_date = total_plan_cost
+                    plan_cost_to_date += total_plan_cost
                 else:
                     plan_cost_to_date += \
                         total_plan_cost * no_of_days_to_date / no_of_days_total
