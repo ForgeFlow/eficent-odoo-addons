@@ -138,9 +138,10 @@ class analytic_resouce_plan_line_make_purchase_requisition(orm.TransientModel):
                             'date_end': make_requisition.date_end,
                             'company_id': company_id,
                         }, context=context)
-                        self.message_subscribe_users(
-                            cr, uid, [purchase_id],
-                            user_ids=[line.account_id.user_id.id])
+                        if line.account_id.user_id:
+                            requisition_obj.message_subscribe_users(
+                                cr, uid, [purchase_id],
+                                user_ids=[line.account_id.user_id.id])
                                                         
                     purchase_requisition_line.update(
                         {'requisition_id': purchase_id,

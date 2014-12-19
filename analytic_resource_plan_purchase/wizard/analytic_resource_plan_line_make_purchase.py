@@ -125,7 +125,7 @@ class analytic_resource_plan_line_make_purchase(orm.TransientModel):
                         company_id = line_company_id        
                     
                     line_account_id = line.account_id \
-                                      and line.account_id.id or False
+                        and line.account_id.id or False
 
                     account_id = line_account_id
                     
@@ -184,9 +184,10 @@ class analytic_resource_plan_line_make_purchase(orm.TransientModel):
                                 and partner.property_supplier_payment_term.id
                                 or False
                              }, context=context)
-                        self.message_subscribe_users(
-                            cr, uid, [purchase_id],
-                            user_ids=[line.account_id.user_id.id])
+                        if line.account_id.user_id:
+                            order_obj.message_subscribe_users(
+                                cr, uid, [purchase_id],
+                                user_ids=[line.account_id.user_id.id])
                                                         
                     purchase_order_line.update({
                         'order_id': purchase_id
