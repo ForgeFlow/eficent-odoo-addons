@@ -18,12 +18,30 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
 
 
-class product_product(osv.osv):
-    _inherit = "product.product"
+{
+    "name": "Purchase Requisition Limit Products",
+    "version": "1.0",
+    "author": "Eficent",
+    "website": "www.eficent.com",
+    "category": "Purchase Management",
+    "depends": ["purchase_requisition"],
+    "description": """
+    Purchase Requisition Limit Products
+    ===================================
+    This module will limit the list of products available
+    for selection in purchase requisitions to those
+    that are flagged as 'Can be purchased' in the product
+    form.
 
-    _columns = {
-        'old_code': fields.char('Old Reference', size=64, select=True),
-    }
+""",
+    "init_xml": [],
+    "update_xml": [],
+    'demo_xml': [],
+    'test':[
+    ],
+    'installable': True,
+    'active': False,
+    'certificate': '',
+}

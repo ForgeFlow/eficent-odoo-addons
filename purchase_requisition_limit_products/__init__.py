@@ -18,12 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
+
+import model
 
 
-class product_product(osv.osv):
-    _inherit = "product.product"
 
-    _columns = {
-        'old_code': fields.char('Old Reference', size=64, select=True),
-    }

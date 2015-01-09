@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
+#    Copyright (C) 2011 Eficent (<http://www.eficent.com/>)
 #              <contact@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,12 +18,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
+
+from openerp.osv import fields, osv
 
 
-class product_product(osv.osv):
-    _inherit = "product.product"
+class purchase_requisition_line(osv.osv):
+    
+    _inherit = "purchase.requisition.line"
 
     _columns = {
-        'old_code': fields.char('Old Reference', size=64, select=True),
-    }
+        'product_id': fields.many2one('product.product', 'Product', domain=[('purchase_ok','=',True)], change_default=True),
+    }    
+    
+purchase_requisition_line()
