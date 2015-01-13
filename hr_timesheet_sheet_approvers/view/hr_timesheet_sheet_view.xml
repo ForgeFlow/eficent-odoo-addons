@@ -15,6 +15,14 @@
                     <attribute name="invisible">False</attribute>
                     <attribute name="readonly">True</attribute>
                 </field>
+                <xpath expr='//button[@name="done"]' position="replace">
+                    <button name="action_done" states="confirm" string="Approve" type="object"
+                            groups="base.group_hr_user,base.group_hr_manager" class="oe_highlight"/>
+                </xpath>
+                <xpath expr='//button[@name="cancel"]' position="replace">
+                    <button name="action_cancel" states="confirm" string="Refuse" type="object"
+                            groups="base.group_hr_user,base.group_hr_manager" class="oe_highlight"/>
+                </xpath>
             </field>
         </record>
 
@@ -35,7 +43,7 @@
                             domain="[('department_id.manager_id.user_id','=',uid)]"
                             help="My department's Timesheets to Approve"/>
                     <filter name="my_employees_timesheets_to_approve"
-                            string="My employees"
+                            string="My employee's"
                             domain="[('employee_id.parent_id.user_id','=',uid)]"
                             help="My employees's Timesheets to Approve"/>
                     <filter name="my_timesheets"

@@ -42,10 +42,11 @@ This module incorporates the following features:
     the manager of the department to which the employee is assigned,
     or to the employee's manager.
 
-    Adds a default filter on timesheets to approve "Mine to Approve",
+    Adds filters on timesheets to approve "My department's" and "My employees",
     that will show only  the timesheets that are associated to the department's
-    or employee manager. As a consequence, even users in group
-    'Human Resources / Manager' will know which timesheets they should approve.
+    or employee manager respectively. As a consequence, even users in group
+    'Human Resources / Manager' will be able to list all employee's timesheets, but
+    at the same time will know which timesheets they should approve.ç
 
     Adds the deparment and employee's manager to the timesheet form and
     list views.

@@ -20,10 +20,28 @@
 ##############################################################################
 
 from openerp.osv import fields, osv
+from openerp.tools.translate import _
+from openerp import netsvc
 
 
 class hr_timesheet_sheet(osv.osv):
     _inherit = "hr_timesheet_sheet.sheet"
+
+    def _get_approver_user_ids(self, cursor, user, ids, name, arg, context=None):
+        res = {}
+        for timesheet in self.browse(cursor, user, ids, context=context):
+            res[timesheet.id] = []
+            if timesheet.employee_id \
+                    and timesheet.employee_id.parent_id \
+                    and timesheet.employee_id.parent_id.user_id:
+                res[timesheet.id].append(
+                    timesheet.employee_id.parent_id.user_id.id)
+            if timesheet.department_id \
+                    and timesheet.department_id.manager_id \
+                    and timesheet.department_id.manager_id.user_id:
+                res[timesheet.id].append(
+                    timesheet.department_id.manager_id.user_id.id)
+        return res
 
     _columns = {
         'employee_manager_id': fields.related('employee_id', 'parent_id',
@@ -38,6 +56,11 @@ class hr_timesheet_sheet(osv.osv):
                                                 store=False,
                                                 string="Department's Manager",
                                                 required=False, readonly=True),
+        'approver_user_ids': fields.function(_get_approver_user_ids,
+                                             type='many2many',
+                                             string='Timesheet Approver users',
+                                             method=True,
+                                             readonly=True),
     }
 
     def button_confirm(self, cr, uid, ids, context=None):
@@ -50,3 +73,36 @@ class hr_timesheet_sheet(osv.osv):
                         context=context)
         return super(hr_timesheet_sheet, self).button_confirm(cr, uid, ids,
                                                               context=context)
+
+    def action_set_to_draft(self, cr, uid, ids, *args):
+        for timesheet in self.browse(cr, uid, ids):
+            if uid not in timesheet.approver_user_ids:
+                raise osv.except_osv(_('Invalid Action!'),
+                                     _('You are not authorised to approve '
+                                       'this Timesheet.'))
+        return super(hr_timesheet_sheet, self).action_set_to_draft(
+            cr, uid, ids, *args)
+
+    def action_done(self, cr, uid, ids, *args):
+        for timesheet in self.browse(cr, uid, ids):
+            if uid not in timesheet.approver_user_ids:
+                raise osv.except_osv(_('Invalid Action!'),
+                                     _('You are not authorised to approve '
+                                       'this Timesheet.'))
+        self.write(cr, uid, ids, {'state': 'done'})
+        wf_service = netsvc.LocalService('workflow')
+        for id in ids:
+            wf_service.trg_create(uid, self._name, id, cr)
+        return True
+
+    def action_cancel(self, cr, uid, ids, *args):
+        for timesheet in self.browse(cr, uid, ids):
+            if uid not in timesheet.approver_user_ids:
+                raise osv.except_osv(_('Invalid Action!'),
+                                     _('You are not authorised to approve '
+                                       'this Timesheet.'))
+        self.write(cr, uid, ids, {'state': 'cancel'})
+        wf_service = netsvc.LocalService('workflow')
+        for id in ids:
+            wf_service.trg_create(uid, self._name, id, cr)
+        return True
