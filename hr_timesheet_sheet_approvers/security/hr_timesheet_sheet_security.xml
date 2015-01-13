@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
 <openerp>
     <data noupdate="1">
-
+        <record id="base.group_timesheet_approver" model="res.groups">
+            <field name="name">Timesheet Approver</field>
+            <field name="comment">the user will have access to validate timesheets.</field>
+            <field name="category_id" ref="base.module_category_human_resources"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
         <record model="ir.rule" id="pri_timesheet_manager_rule">
             <field name="name">Timesheet by manager</field>
             <field name="model_id" search="[('model','=','hr_timesheet_sheet.sheet')]" model="ir.model"/>
             <field name="global" eval="True"/>
             <field name="domain_force">['|','|',('department_id.manager_id.user_id','=',user.id),('employee_id.parent_id.user_id','=',user.id),('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_timesheet_approver'))]"/>
         </record>
-
     </data>
 </openerp>

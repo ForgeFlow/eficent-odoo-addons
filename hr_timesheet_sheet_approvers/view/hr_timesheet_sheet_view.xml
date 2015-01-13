@@ -17,11 +17,11 @@
                 </field>
                 <xpath expr='//button[@name="done"]' position="replace">
                     <button name="action_done" states="confirm" string="Approve" type="object"
-                            groups="base.group_hr_user,base.group_hr_manager" class="oe_highlight"/>
+                            groups="base.group_timesheet_approver,base.group_hr_user,base.group_hr_manager" class="oe_highlight"/>
                 </xpath>
                 <xpath expr='//button[@name="cancel"]' position="replace">
                     <button name="action_cancel" states="confirm" string="Refuse" type="object"
-                            groups="base.group_hr_user,base.group_hr_manager" class="oe_highlight"/>
+                            groups="base.group_timesheet_approver,base.group_hr_user,base.group_hr_manager" class="oe_highlight"/>
                 </xpath>
             </field>
         </record>
@@ -71,5 +71,9 @@
                 </field>
             </field>
         </record>
+
+        <menuitem action="hr_timesheet_sheet.act_hr_timesheet_sheet_form" id="hr_timesheet_sheet.menu_act_hr_timesheet_sheet_form" parent="hr_attendance.menu_hr_time_tracking"
+             sequence="2" groups="base.group_timesheet_approver,base.group_hr_user,base.group_hr_manager"/>
+
     </data>
 </openerp>

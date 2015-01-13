@@ -37,16 +37,16 @@ The current functionality allows any user in groups:
 
 This module incorporates the following features:
 
-    Adds an additional layer of security for users in group
-    'Human Resources / Officer', to allow only to approve timesheets to
-    the manager of the department to which the employee is assigned,
-    or to the employee's manager.
+    Adds an additional group 'Timesheet validator'.
+
+    Restricts users in this group to approve or refuse only the timesheets
+    of the employees that belong to the department that they are managers of,
+    or employees that they are direct manager of.
+
 
     Adds filters on timesheets to approve "My department's" and "My employees",
     that will show only  the timesheets that are associated to the department's
-    or employee manager respectively. As a consequence, even users in group
-    'Human Resources / Manager' will be able to list all employee's timesheets, but
-    at the same time will know which timesheets they should approve.ç
+    or employee manager respectively.
 
     Adds the deparment and employee's manager to the timesheet form and
     list views.
@@ -62,6 +62,7 @@ This module incorporates the following features:
     'data': [
         'security/hr_timesheet_sheet_security.xml',
         'view/hr_timesheet_sheet_view.xml',
+        'view/hr_timesheet_workflow.xml',
     ],
     'demo': [],
     'test': [],
