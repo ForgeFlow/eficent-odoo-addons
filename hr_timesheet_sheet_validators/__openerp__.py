@@ -19,12 +19,12 @@
 #
 ##############################################################################
 {
-    'name': 'Timesheet approvers',
+    'name': 'Timesheet validators',
     'version': '1.0',
     'author': 'Eficent',
     'category': 'Human Resources',
     'description': """
-Timesheet approvers.
+Timesheet validators
 ========================================
 
 It is frequent for companies to restrict the visibility of
@@ -37,12 +37,10 @@ The current functionality allows any user in groups:
 
 This module incorporates the following features:
 
-    Adds an additional group 'Timesheet validator'.
 
-    Restricts users in this group to approve or refuse only the timesheets
+    Allows any employee to approve or refuse the timesheets
     of the employees that belong to the department that they are managers of,
     or employees that they are direct manager of.
-
 
     Adds filters on timesheets to approve "My department's" and "My employees",
     that will show only  the timesheets that are associated to the department's

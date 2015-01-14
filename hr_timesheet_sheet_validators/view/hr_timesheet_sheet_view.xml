@@ -7,21 +7,23 @@
             <field name="model">hr_timesheet_sheet.sheet</field>
             <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
             <field name="arch" type="xml">
-                <field name="department_id" position="after">
-                    <field name="employee_manager_id"/>
-                    <field name="department_manager_id"/>
-                </field>
                 <field name="department_id" position="attributes">
                     <attribute name="invisible">False</attribute>
-                    <attribute name="readonly">True</attribute>
                 </field>
                 <xpath expr='//button[@name="done"]' position="replace">
                     <button name="action_done" states="confirm" string="Approve" type="object"
-                            groups="base.group_timesheet_approver,base.group_hr_user,base.group_hr_manager" class="oe_highlight"/>
+                            groups="base.group_user,base.group_hr_user" class="oe_highlight"/>
                 </xpath>
                 <xpath expr='//button[@name="cancel"]' position="replace">
                     <button name="action_cancel" states="confirm" string="Refuse" type="object"
-                            groups="base.group_timesheet_approver,base.group_hr_user,base.group_hr_manager" class="oe_highlight"/>
+                            groups="base.group_user,base.group_hr_user" class="oe_highlight"/>
+                </xpath>
+                <xpath expr='//page[@string="Attendances"]' position="after">
+                    <page string="Validators" groups="base.group_hr_user">
+                         <group>
+                             <field name="validator_user_ids"/>
+                         </group>
+                    </page>
                 </xpath>
             </field>
         </record>
@@ -32,24 +34,13 @@
             <field name="inherit_id" ref="hr_timesheet_sheet.view_hr_timesheet_sheet_filter"/>
             <field name="arch" type="xml">
                 <xpath expr='//field[@name="employee_id"]' position="after">
-                    <field name="employee_manager_id"/>
-                </xpath>
-                <xpath expr='//field[@name="department_id"]' position="after">
-                <field name="department_manager_id"/>
+                    <field name="validator_user_ids"/>
                 </xpath>
                 <xpath expr='//filter[@name="to_approve"]' position="after">
-                    <filter name="my_department_timesheets_to_approve"
-                            string="My department's"
-                            domain="[('department_id.manager_id.user_id','=',uid)]"
-                            help="My department's Timesheets to Approve"/>
-                    <filter name="my_employees_timesheets_to_approve"
-                            string="My employee's"
-                            domain="[('employee_id.parent_id.user_id','=',uid)]"
-                            help="My employees's Timesheets to Approve"/>
                     <filter name="my_timesheets"
-                            string="My timesheets"
-                            domain="[('user_id','=',uid)]"
-                            help="My Timesheets"/>
+                            string="My timesheets to validate"
+                            domain="[('validator_user_ids','in',[uid])]"
+                            help="My Timesheets to validate"/>
                 </xpath>
             </field>
         </record>
@@ -60,12 +51,6 @@
             <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree_simplified"/>
             <field eval="10" name="priority"/>
             <field name="arch" type="xml">
-                <field name="employee_id" position="after">
-                    <field name="employee_manager_id"/>
-                </field>
-                <field name="department_id" position="after">
-                    <field name="department_manager_id"/>
-                </field>
                 <field name="department_id" position="attributes">
                     <attribute name="invisible">False</attribute>
                 </field>
@@ -73,7 +58,7 @@
         </record>
 
         <menuitem action="hr_timesheet_sheet.act_hr_timesheet_sheet_form" id="hr_timesheet_sheet.menu_act_hr_timesheet_sheet_form" parent="hr_attendance.menu_hr_time_tracking"
-             sequence="2" groups="base.group_timesheet_approver,base.group_hr_user,base.group_hr_manager"/>
+             sequence="2" groups="base.group_user,base.group_hr_user"/>
 
     </data>
 </openerp>
