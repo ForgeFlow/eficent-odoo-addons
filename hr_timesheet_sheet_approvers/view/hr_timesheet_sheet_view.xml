@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="hr_timesheet_sheet_form" model="ir.ui.view">
+            <field name="name">hr.timesheet.sheet.form</field>
+            <field name="model">hr_timesheet_sheet.sheet</field>
+            <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
+            <field name="arch" type="xml">
+                <field name="department_id" position="after">
+                    <field name="employee_manager_id"/>
+                    <field name="department_manager_id"/>
+                </field>
+                <field name="department_id" position="attributes">
+                    <attribute name="invisible">False</attribute>
+                    <attribute name="readonly">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_hr_timesheet_sheet_filter" model="ir.ui.view">
+            <field name="name">hr_timesheet_sheet.sheet.filter</field>
+            <field name="model">hr_timesheet_sheet.sheet</field>
+            <field name="inherit_id" ref="hr_timesheet_sheet.view_hr_timesheet_sheet_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr='//field[@name="employee_id"]' position="after">
+                    <field name="employee_manager_id"/>
+                </xpath>
+                <xpath expr='//field[@name="department_id"]' position="after">
+                <field name="department_manager_id"/>
+                </xpath>
+                <xpath expr='//filter[@name="to_approve"]' position="after">
+                    <filter name="my_department_timesheets_to_approve"
+                            string="My department's"
+                            domain="[('department_id.manager_id.user_id','=',uid)]"
+                            help="My department's Timesheets to Approve"/>
+                    <filter name="my_employees_timesheets_to_approve"
+                            string="My employees"
+                            domain="[('employee_id.parent_id.user_id','=',uid)]"
+                            help="My employees's Timesheets to Approve"/>
+                    <filter name="my_timesheets"
+                            string="My timesheets"
+                            domain="[('user_id','=',uid)]"
+                            help="My Timesheets"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_timesheet_sheet_tree_simplified" model="ir.ui.view">
+            <field name="name">hr.timesheet.sheet.tree</field>
+            <field name="model">hr_timesheet_sheet.sheet</field>
+            <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree_simplified"/>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="employee_id" position="after">
+                    <field name="employee_manager_id"/>
+                </field>
+                <field name="department_id" position="after">
+                    <field name="department_manager_id"/>
+                </field>
+                <field name="department_id" position="attributes">
+                    <attribute name="invisible">False</attribute>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
