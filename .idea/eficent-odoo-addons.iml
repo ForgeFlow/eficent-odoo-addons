@@ -19,9 +19,7 @@
     <orderEntry type="module" module-name="partner-contact" />
     <orderEntry type="module" module-name="web" />
     <orderEntry type="module" module-name="purchase-workflow" />
-    <orderEntry type="module" module-name="product-attribute" />
     <orderEntry type="module" module-name="sale-financial" />
     <orderEntry type="module" module-name="account-invoicing" />
   </component>
 </module>
-
