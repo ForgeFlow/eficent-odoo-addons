@@ -34,6 +34,7 @@ This modules adds the manufacturer to the purchase requisitions
     "depends": [
         "purchase_requisition",
         "product_manufacturer",
+        "purchase_requisition_line_analytic",
     ], 
     "demo": [], 
     "data": [
