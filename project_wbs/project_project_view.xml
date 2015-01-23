@@ -140,33 +140,29 @@
             <field name="inherit_id" ref="project.view_project"/>
             <field name="field_parent">child_ids</field>
             <field name="arch" type="xml">
-                <xpath expr="//tree" position="attributes">
-                    <attribute name="editable">top</attribute>
+                <xpath expr='//tree[@string="Projects"]' position="replace">
+                    <tree editable="top" string="WBS elements">
+                        <field name="message_unread" invisible="1"/>
+                        <button string="Parent WBS element"
+                            name="action_openParentTreeView"
+                            type="object"
+                            icon="STOCK_GO_UP" attrs="{'invisible': [('parent_id', '=', False)]}"/>
+                        <button string="Child WBS elements"
+                            name="action_openChildTreeView"
+                            type="object"
+                            icon="STOCK_GO_DOWN" attrs="{'invisible': [('child_ids', '=', [])]}"/>
+                        <field name="code" string="Code"/>
+                        <field name="name" string="Name"/>
+                        <field name="parent_id" on_change="on_change_parent(parent_id)" string="Parent"/>
+                        <field name="account_class" string="Class"/>
+                        <field name="date_start" string="Start Date"/>
+                        <field name="date" string="End Date"/>
+                        <field name="stage_id"/>
+                        <field name="state" readonly="True"/>
+                        <field name="child_ids" invisible="True"/>
+                        <field name="progress_rate" readonly="True"/>
+                    </tree>
                 </xpath>
-                <xpath expr="//field[@name='state']" position="attributes">
-                    <attribute name="readonly">true</attribute>
-                </xpath>
-                <xpath expr="//field[@name='name']" position="replace">
-                    <button string="Parent WBS element"
-                        name="action_openParentTreeView"
-                        type="object"
-                        icon="STOCK_GO_UP" attrs="{'invisible': [('parent_id', '=', False)]}"/>
-                    <button string="Child WBS elements"
-                        name="action_openChildTreeView"
-                        type="object"
-                        icon="STOCK_GO_DOWN" attrs="{'invisible': [('child_ids', '=', [])]}"/>
-            		<field name="complete_wbs_name" string="WBS name"/>					
-            		<field name="complete_wbs_code" string="WBS code"/>
-            		<field name="account_class" string="Class"/>
-                    <field name="date_start"/>
-                    <field name="date"/>
-                    <field name="stage_id"/>
-                    <field name="child_ids" invisible="True"/>
-            	</xpath>
-
-                <xpath expr="//field[@name='planned_hours']" position="replace"/>
-                <xpath expr="//field[@name='total_hours']" position="replace"/>
-                <xpath expr="//field[@name='effective_hours']" position="replace"/>
             </field>
         </record>
 
