@@ -52,11 +52,12 @@ class project_change_state(orm.TransientModel):
         project_obj = self.pool.get('project.project')
         for project in project_obj.browse(cr, uid, context['active_ids'],
                                           context=context):
-            if project.state != 'pending':
+            if project.state not in ('pending', 'closed', 'cancelled'):
                 raise orm.except_orm(_('Warning!'),
                                      _("Selected project(s) cannot be "
                                        "changed to 'Open' state as they "
-                                       "are not all in 'Pending' states."))
+                                       "are not all in 'Pending', "
+                                       "'Closed' or 'Cancelled' states."))
             project_obj.set_open(cr, uid, [project.id], context=context)
 
         return {'type': 'ir.actions.act_window_close'}
@@ -83,12 +84,12 @@ class project_change_state(orm.TransientModel):
         project_obj = self.pool.get('project.project')
         for project in project_obj.browse(cr, uid, context['active_ids'],
                                           context=context):
-            if project.state not in ('open', 'pending'):
+            if project.state not in ('open', 'pending', 'done'):
                 raise orm.except_orm(_('Warning!'),
                                      _("Selected project(s) cannot be "
                                        "changed to 'Cancelled' state as they "
-                                       "are not all in 'Pending' or 'Open' "
-                                       "states."))
+                                       "are not all in 'Pending', 'Open' "
+                                       "or 'Done' states."))
             project_obj.set_cancel(cr, uid, [project.id], context=context)
 
         return {'type': 'ir.actions.act_window_close'}
