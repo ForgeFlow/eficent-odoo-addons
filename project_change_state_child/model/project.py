@@ -57,7 +57,6 @@ class project(orm.Model):
     def set_pending(self, cr, uid, ids, context=None):
         super(project, self).set_pending(cr, uid, ids, context=context)
         task_obj = self.pool.get('project.task')
-        task_stage_obj = self.pool.get('project.task.type')
         for proj in self.browse(cr, uid, ids, context=None):
             cr.execute("select id from project_task where project_id=%s "
                        "and state not in ('cancelled','done','pending')",
@@ -79,7 +78,7 @@ class project(orm.Model):
                        "and state in ('cancelled','done')", (proj.id,))
             tasks_id = [x[0] for x in cr.fetchall()]
             if tasks_id:
-                task_obj.case_pending(cr, uid, tasks_id, context=context)
+                task_obj.case_open(cr, uid, tasks_id, context=context)
             child_ids = self.search(cr, uid, [('parent_id', '=',
                                                proj.analytic_account_id.id)])
             if child_ids:
