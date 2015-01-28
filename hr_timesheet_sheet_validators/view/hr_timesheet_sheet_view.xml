@@ -11,11 +11,17 @@
                     <attribute name="invisible">False</attribute>
                     <attribute name="readonly">True</attribute>
                 </field>
-                <xpath expr='//button[@name="done"]' position="replace">
+                <xpath expr='//button[@name="done"]' position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr='//button[@name="done"]' position="after">
                     <button name="action_done" states="confirm" string="Approve" type="object"
                             groups="base.group_user,base.group_hr_user" class="oe_highlight"/>
                 </xpath>
-                <xpath expr='//button[@name="cancel"]' position="replace">
+                <xpath expr='//button[@name="cancel"]' position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr='//button[@name="cancel"]' position="after">
                     <button name="action_cancel" states="confirm" string="Refuse" type="object"
                             groups="base.group_user,base.group_hr_user" class="oe_highlight"/>
                 </xpath>
