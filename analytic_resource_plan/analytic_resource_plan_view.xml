@@ -39,6 +39,8 @@
                             <field name="amount" colspan="4"/>
                             <field name="general_account_id"/>
                         </group>
+                        <group string="Procurement">
+                        </group>
                     </group>
                     <notebook>
                         <page string="Notes" name="notes">
