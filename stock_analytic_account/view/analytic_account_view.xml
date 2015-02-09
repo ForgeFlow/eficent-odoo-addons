@@ -9,7 +9,7 @@
             <field name="name">Stock Moves</field>
             <field name="res_model">stock.move</field>
             <field name="src_model">account.analytic.account</field>
-            <field name="view_id" ref="view_move_picking_tree"/>
+            <field name="view_id" ref="view_move_tree"/>
             <field name="view_mode">tree,form</field>
             <field name="view_type">form</field>
         </record>
