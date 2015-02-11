@@ -32,16 +32,40 @@ class analytic_resource_plan_line(osv.osv):
     _inherits = {'account.analytic.line.plan': "analytic_line_plan_id"}
 
     _columns = {
-        'supplier_id': fields.many2one('res.partner', 'Supplier', required=False,
-                                       domain=[('supplier', '=', True)]),
-        'pricelist_id': fields.many2one('product.pricelist',
-                                        'Purchasing Pricelist', required=False),
-        'price_unit': fields.float('Unit Price', required=False,
-                                   digits_compute=dp.get_precision('Purchase Price')),
-        'analytic_line_plan_id': fields.many2one('account.analytic.line.plan',
-                                                 'Planning analytic lines',
-                                                 ondelete="cascade", required=True),
+        'state': fields.selection(
+            [('draft', 'Draft'), ('confirm', 'Confirmed')], 'Status',
+            select=True, required=True, readonly=True,
+            help=' * The \'Draft\' status is used when a user is encoding '
+                 'a new and unconfirmed resource plan line. \
+                \n* The \'Confirmed\' status is used for to confirm the '
+                 'resource plan line by the user.'),
+        'supplier_id': fields.many2one(
+            'res.partner', 'Supplier', required=False, readonly=True,
+            domain=[('supplier', '=', True)],
+            states={'draft': [('readonly', False)]}),
+        'pricelist_id': fields.many2one(
+            'product.pricelist', 'Purchasing Pricelist',
+            required=False, readonly=True,
+            states={'draft': [('readonly', False)]}),
+        'price_unit': fields.float(
+            'Unit Price', required=False,
+            digits_compute=dp.get_precision('Purchase Price'),
+            readonly=True, states={'draft': [('readonly', False)]}),
+        'analytic_line_plan_id': fields.many2one(
+            'account.analytic.line.plan', 'Planning analytic lines',
+            ondelete="cascade", required=True, readonly=True,
+            states={'draft': [('readonly', False)]}),
     }
+
+    _defaults = {
+        'state': 'draft',
+    }
+
+    def action_button_draft(self, cr, uid, ids, context=None):
+        return self.write(cr, uid, ids, {'state': 'draft'})
+
+    def action_button_confirm(self, cr, uid, ids, context=None):
+        return self.write(cr, uid, ids, {'state': 'confirm'})
 
     def on_change_amount_currency_resource(self,
                                            cr, uid, ids, account_id,
