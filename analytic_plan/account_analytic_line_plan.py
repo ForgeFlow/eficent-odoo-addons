@@ -70,7 +70,7 @@ class account_analytic_line_plan(osv.osv):
         'product_uom_id': fields.many2one('product.uom', 'UoM'),
         'product_id': fields.many2one('product.product', 'Product'),
         'general_account_id': fields.many2one('account.account', 'General Account',
-                                              required=False, ondelete='restrict'),
+                                              required=True, ondelete='restrict'),
         'journal_id': fields.many2one('account.analytic.plan.journal',
                                       'Planning Analytic Journal',
                                       required=True, ondelete='restrict',
