@@ -25,7 +25,7 @@
             <field name="arch" type="xml">
                 <xpath expr='//div[@name="buttons"]' position='inside'>
                     <button name="%(act_account_analytic_2_analytic_resource_plan_line)d" string="Resource plan lines" type="action"/>
-                </xpath>                
+                </xpath>
             </field>
        </record>
        
