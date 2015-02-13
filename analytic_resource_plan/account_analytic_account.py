@@ -19,10 +19,10 @@
 #
 ##############################################################################
 import decimal_precision as dp
-from openerp.osv import fields, osv
+from openerp.osv import fields, orm
 
 
-class account_analytic_account(osv.osv):
+class account_analytic_account(orm.Model):
     
     _inherit = 'account.analytic.account'
 
@@ -40,13 +40,9 @@ class account_analytic_account(osv.osv):
             for analytic_account in self.browse(cr, uid, ids,
                                                 context=context):
                 plan_line_ids = plan_line_obj.search(
-                    cr, uid, [('account_id', '=', analytic_account.id),
-                              ('version_id', '=', analytic_account.
-                               active_analytic_planning_version.id)],
+                    cr, uid, [('account_id', '=', analytic_account.id),],
                     context=context)
                 if plan_line_ids:
                     plan_line_obj.write(
                         cr, uid, plan_line_ids, {'date': vals['date']})
         return res
-
-account_analytic_account()

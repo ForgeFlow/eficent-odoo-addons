@@ -19,19 +19,13 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
-
-#----------------------------------------------------------
-# Products
-#----------------------------------------------------------
+from openerp.osv import fields, orm
 
 
-class product_template(osv.osv):
+class product_template(orm.Model):
     _inherit = "product.template"
     _columns = {
         'expense_analytic_plan_journal_id': fields.many2one('account.analytic.plan.journal',
                                                             'Cost Planning Analytic Journal',
                                                             ondelete='restrict'),
     }
-
-product_template()
