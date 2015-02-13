@@ -19,394 +19,148 @@
 #
 ##############################################################################
 
-import time
+from openerp.osv import fields, orm
 from openerp.tools.translate import _
-from openerp.osv import fields, osv
-import decimal_precision as dp
+import time
 
 
-class analytic_resource_plan_line(osv.osv):
+class analytic_resource_plan_line(orm.Model):
 
     _name = 'analytic.resource.plan.line'
     _description = "Analytic Resource Planning lines"
-    _inherits = {'account.analytic.line.plan': "analytic_line_plan_id"}
 
     _columns = {
+        'account_id': fields.many2one('account.analytic.account',
+                                      'Analytic Account', required=True,
+                                      ondelete='cascade', select=True,
+                                      domain=[('type', '<>', 'view')],
+                                      readonly=True,
+                                      states={
+                                          'draft': [('readonly', False)]
+                                      }),
+        'name': fields.char('Activity description', size=256, required=True,
+                            readonly=True,
+                            states={'draft': [('readonly', False)]}),
+        'date': fields.date('Date', required=True, select=True, readonly=True,
+                            states={'draft': [('readonly', False)]}),
         'state': fields.selection(
-            [('draft', 'Draft'), ('confirm', 'Confirmed')], 'Status',
+            [('draft', 'Draft'),
+             ('confirm', 'Confirmed'),
+             ('cancel', 'Cancelled')], 'Status',
             select=True, required=True, readonly=True,
             help=' * The \'Draft\' status is used when a user is encoding '
-                 'a new and unconfirmed resource plan line. \
-                \n* The \'Confirmed\' status is used for to confirm the '
-                 'resource plan line by the user.'),
-        'supplier_id': fields.many2one(
-            'res.partner', 'Supplier', required=False, readonly=True,
-            domain=[('supplier', '=', True)],
-            states={'draft': [('readonly', False)]}),
-        'pricelist_id': fields.many2one(
-            'product.pricelist', 'Purchasing Pricelist',
-            required=False, readonly=True,
-            states={'draft': [('readonly', False)]}),
-        'price_unit': fields.float(
-            'Unit Price', required=False,
-            digits_compute=dp.get_precision('Purchase Price'),
-            readonly=True, states={'draft': [('readonly', False)]}),
-        'analytic_line_plan_id': fields.many2one(
-            'account.analytic.line.plan', 'Planning analytic lines',
-            ondelete="cascade", required=True, readonly=True,
-            states={'draft': [('readonly', False)]}),
+                 'a new and unconfirmed resource plan line. '
+                 '\n* The \'Confirmed\' status is used for to confirm the '
+                 'resource plan line by the user.'
+                 '\n* The \'Cancelled\' status is used to cancel '
+                 'the resource plan line.'),
+        'product_id': fields.many2one('product.product', 'Product',
+                                      readonly=True, required=True,
+                                      states={'draft': [('readonly', False)]}),
+        'product_uom_id': fields.many2one('product.uom', 'UoM', required=True,
+                                          readonly=True,
+                                          states={'draft': [('readonly', False)]}),
+        'unit_amount': fields.float('Quantity', readonly=True, required=True,
+                                    states={'draft': [('readonly', False)]},
+                                    help='Specifies the amount of '
+                                         'quantity to count.'),
+        'notes': fields.text('Notes'),
     }
 
     _defaults = {
         'state': 'draft',
+        'date': lambda *a: time.strftime('%Y-%m-%d'),
     }
 
-    def action_button_draft(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state': 'draft'})
+    def _prepare_analytic_lines(self, cr, uid, line, context=None):
+        res = {}
+        res['value'] = {}
+        journal_id = line.product_id.expense_analytic_plan_journal_id \
+            and line.product_id.expense_analytic_plan_journal_id.id or False
 
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state': 'confirm'})
+        general_account_id = line.product_id.product_tmpl_id.\
+            property_account_expense.id
+        if not general_account_id:
+            general_account_id = line.product_id.categ_id.\
+                property_account_expense_categ.id
+        if not general_account_id:
+            raise orm.except_orm(_('Error !'),
+                                 _('There is no expense account defined '
+                                   'for this product: "%s" (id:%d)')
+                                 % (line.product_id.name,
+                                    line.product_id.id,))
+        return [{
+            'resource_plan_id': line.id,
+            'account_id': line.account_id.id,
+            'name': line.name,
+            'date': line.date,
+            'product_id': line.product_id.id,
+            'product_uom_id': line.product_uom_id.id,
+            'unit_amount': line.unit_amount,
+            'amount': line.product_id.standard_price,
+            'general_account_id': general_account_id,
+            'journal_id': journal_id,
+            'notes': line.notes,
+            'version_id': line.account_id.active_analytic_planning_version.id,
+            'currency_id': line.account_id.company_id.currency_id.id,
+            'amount_currency': line.product_id.standard_price,
+        }]
 
-    def on_change_amount_currency_resource(self,
-                                           cr, uid, ids, account_id,
-                                           name, date, supplier_id,
-                                           pricelist_id, product_id, unit_amount,
-                                           product_uom_id, price_unit, amount_currency,
-                                           currency_id, version_id, journal_id,
-                                           ref, company_id, amount, general_account_id, context=None):
-
-        analytic_line_plan_obj = self.pool.get('account.analytic.line.plan')
-
-        res = analytic_line_plan_obj.on_change_amount_currency(cr, uid, ids, amount_currency,
-                                                               currency_id, company_id, context)
+    def create_analytic_lines(self, cr, uid, line, context=None):
+        res = []
+        line_plan_obj = self.pool.get('account.analytic.line.plan')
+        lines_vals = self._prepare_analytic_lines(cr, uid, line,
+                                                  context=context)
+        for line_vals in lines_vals:
+            line_id = line_plan_obj.create(cr, uid, line_vals, context=context)
+            res.append(line_id)
         return res
 
-    def on_change_currency_resource(self,
-                                    cr, uid, ids, account_id,
-                                    name, date, supplier_id,
-                                    pricelist_id, product_id, unit_amount,
-                                    product_uom_id, price_unit, amount_currency,
-                                    currency_id, version_id, journal_id,
-                                    ref, company_id, amount, general_account_id, context=None):
+    def _delete_analytic_lines(self, cr, uid, line, context=None):
+        line_plan_obj = self.pool.get('account.analytic.line.plan')
+        ana_line_ids = line_plan_obj.search(
+            cr, uid, [('resource_plan_id', '=', line.id)],
+            context=context)
+        line_plan_obj.unlink(cr, uid, ana_line_ids, context=context)
+        return True
 
-        return self.on_change_amount_currency_resource(cr, uid, ids, account_id,
-                                                       name, date, supplier_id,
-                                                       pricelist_id, product_id, unit_amount,
-                                                       product_uom_id, price_unit, amount_currency,
-                                                       currency_id, version_id, journal_id,
-                                                       ref, company_id, amount, general_account_id, context)
+    def action_button_draft(self, cr, uid, ids, context=None):
+        for line in self.browse(cr, uid, ids, context=context):
+            self._delete_analytic_lines(cr, uid, line, context=context)
+        return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
 
-    def on_change_unit_amount_resource(self,
-                                       cr, uid, ids, account_id,
-                                       name, date, supplier_id,
-                                       pricelist_id, product_id, unit_amount,
-                                       product_uom_id, price_unit, amount_currency,
-                                       currency_id, version_id, journal_id,
-                                       ref, company_id, amount, general_account_id, context=None):
+    def action_button_cancel(self, cr, uid, ids, context=None):
+        for line in self.browse(cr, uid, ids, context=context):
+            self._delete_analytic_lines(cr, uid, line, context=context)
+        return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
 
-        res = {}
+    def action_button_confirm(self, cr, uid, ids, context=None):
+        for line in self.browse(cr, uid, ids, context=context):
+            self.create_analytic_lines(cr, uid, line, context=context)
+        return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
+
+    def on_change_product_id(self, cr, uid, id, product_id, context=None):
+        res = dict()
         res['value'] = {}
-
-        if context is None:
-            context = {}
-
-        analytic_line_plan_obj = self.pool.get('account.analytic.line.plan')
-
-        amount_currency = -1 * price_unit * unit_amount
-        res['value'].update({'amount_currency': amount_currency})
-
-        res_amount_currency = analytic_line_plan_obj.on_change_amount_currency(cr, uid, ids,
-                                                                               amount_currency, currency_id,
-                                                                               company_id, context)
-        if res_amount_currency and 'value' in res_amount_currency:
-            res['value'].update(res_amount_currency['value'])
-
-        if res['value']:
-            return res
-        else:
-            return {}
-
-    def on_change_price_unit_resource(self,
-                                      cr, uid, ids, account_id,
-                                      name, date, supplier_id,
-                                      pricelist_id, product_id, unit_amount,
-                                      product_uom_id, price_unit, amount_currency,
-                                      currency_id, version_id, journal_id,
-                                      ref, company_id, amount, general_account_id, context=None):
-
-        return self.on_change_unit_amount_resource(cr, uid, ids, account_id,
-                                                   name, date, supplier_id,
-                                                   pricelist_id, product_id, unit_amount,
-                                                   product_uom_id, price_unit, amount_currency,
-                                                   currency_id, version_id, journal_id,
-                                                   ref, company_id, amount, general_account_id, context)
-
-    def on_change_date_resource(self,
-                                cr, uid, ids, account_id,
-                                name, date, supplier_id,
-                                pricelist_id, product_id, unit_amount,
-                                product_uom_id, price_unit, amount_currency,
-                                currency_id, version_id, journal_id,
-                                ref, company_id, amount, general_account_id, context=None):
-
-        #Change in date affects:
-        #  - price_unit => Only if there's a pricelist_id, product_id, product_uom_id and date
-
-        pricelist_obj = self.pool.get('product.pricelist')
-        res = {}
-        res['value'] = {}
-
-        #Compute new price_unit
-        if pricelist_id and product_id and product_uom_id and date:
-            price_unit = pricelist_obj.price_get(cr, uid, [pricelist_id],
-                                                 product_id, unit_amount or 1.0, supplier_id,
-                                                 {'uom': product_uom_id,
-                                                  'date': date,
-                                                  })[pricelist_id]
-
-            res['value'].update({'price_unit': price_unit})
-
-            res_price_unit = self.on_change_price_unit_resource(cr, uid, ids, account_id,
-                                                                name, date, supplier_id,
-                                                                pricelist_id, product_id, unit_amount,
-                                                                product_uom_id, price_unit, amount_currency,
-                                                                currency_id, version_id, journal_id,
-                                                                ref, company_id, amount, general_account_id, context)
-
-            if 'value' in res_price_unit:
-                res['value'].update(res_price_unit['value'])
-
-        if res['value']:
-            return res
-        else:
-            return {}
-
-    def on_change_account_id_resource(self,
-                                      cr, uid, ids, account_id,
-                                      name, date, supplier_id,
-                                      pricelist_id, product_id, unit_amount,
-                                      product_uom_id, price_unit, amount_currency,
-                                      currency_id, version_id, journal_id,
-                                      ref, company_id, amount, general_account_id, context=None):
-        res = {}
-        res['value'] = {}
-        #Change in account_id affects:
-        #  - version_id
-        analytic_obj = self.pool.get('account.analytic.account')
-        if account_id:
-            analytic = analytic_obj.browse(cr, uid, account_id, context)
-            version_id = analytic.active_analytic_planning_version and analytic.active_analytic_planning_version.id or False
-            res['value'].update({'version_id': version_id})
-
-        if res['value']:
-            return res
-        else:
-            return {}
-
-    def on_change_pricelist_id_resource(self,
-                                        cr, uid, ids, account_id,
-                                        name, date, supplier_id,
-                                        pricelist_id, product_id, unit_amount,
-                                        product_uom_id, price_unit, amount_currency,
-                                        currency_id, version_id, journal_id,
-                                        ref, company_id, amount, general_account_id, context=None):
-
-        #Change in pricelist affects price_unit, currency.
-        pricelist_obj = self.pool.get('product.pricelist')
-        res = {}
-        res['value'] = {}
-
-        #Compute new price_unit
-        if pricelist_id and product_id and product_uom_id and date:
-            price_unit = pricelist_obj.price_get(cr, uid, [pricelist_id],
-                                                 product_id, unit_amount or 1.0, supplier_id,
-                                                 {'uom': product_uom_id,
-                                                  'date': date,
-                                                  })[pricelist_id]
-
-            res = self.on_change_price_unit_resource(cr, uid, ids, account_id,
-                                                     name, date, supplier_id,
-                                                     pricelist_id, product_id, unit_amount,
-                                                     product_uom_id, price_unit, amount_currency,
-                                                     currency_id, version_id, journal_id,
-                                                     ref, company_id, amount, general_account_id, context)
-            res['value'].update({'price_unit': price_unit})
-
-        #Compute the new currency
-        if pricelist_id:
-            pricelist = pricelist_obj.browse(cr, uid, pricelist_id, context=context)
-            currency_id = pricelist.currency_id and pricelist.currency_id.id
-            res['value'].update({'currency_id': currency_id})
-
-        if res['value']:
-            return res
-        else:
-            return {}
-
-    def on_change_product_uom_resource(self,
-                                       cr, uid, ids, account_id,
-                                       name, date, supplier_id,
-                                       pricelist_id, product_id, unit_amount,
-                                       product_uom_id, price_unit, amount_currency,
-                                       currency_id, version_id, journal_id,
-                                       ref, company_id, amount, general_account_id, context=None):
-
-        res = {}
-        res['value'] = {}
-
-        product_obj = self.pool.get('product.product')
-
-        #TODO: Check if the new product is allowed for the current pricelist
-
-        #If there's a pricelist and a product, get the unit price for the new UoM
-        if pricelist_id and product_id and product_uom_id:
-            res_pricelist = self.on_change_pricelist_id_resource(cr, uid, ids, account_id,
-                                                                 name, date, supplier_id,
-                                                                 pricelist_id, product_id, unit_amount,
-                                                                 product_uom_id, price_unit, amount_currency,
-                                                                 currency_id, version_id, journal_id,
-                                                                 ref, company_id, amount, general_account_id,
-                                                                 context)
-            if 'value' in res_pricelist:
-                res['value'].update(res_pricelist['value'])
-
-            if 'price_unit' in res['value']:
-            #Compute the changes to the price unit downwards
-                price_unit = res['value']['price_unit']
-                res_price_unit = self.on_change_price_unit_resource(cr, uid, ids, account_id,
-                                                                    name, date, supplier_id,
-                                                                    pricelist_id, product_id, unit_amount,
-                                                                    product_uom_id, price_unit, amount_currency,
-                                                                    currency_id, version_id, journal_id,
-                                                                    ref, company_id, amount, general_account_id,
-                                                                    context)
-                if 'value' in res_price_unit:
-                    res['value'].update(res_price_unit['value'])
-
-        elif not pricelist_id:
-            product = product_obj.browse(cr, uid, product_id, context)
-            res['value'].update({'price_unit': product.standard_price})
-
-        if res['value']:
-            return res
-        else:
-            return {}
-
-    def on_change_product_id_resource(self,
-                                      cr, uid, ids, account_id,
-                                      name, date, supplier_id,
-                                      pricelist_id, product_id, unit_amount,
-                                      product_uom_id, price_unit, amount_currency,
-                                      currency_id, version_id, journal_id,
-                                      ref, company_id, amount, general_account_id, context=None):
-        #Change in product allowed only if:
-        #  - Compatible with current pricelist? => TODO
-        #Change in product directly influences
-        #  - UoM, only if there's no pricelist
-        #  - journal_id
-        #  - general_account_id
-
-        res = {}
-        res['value'] = {}
-
         if product_id:
-            prod = self.pool.get('product.product').browse(cr, uid, product_id, context=context)
+            prod = self.pool.get('product.product').browse(cr, uid,
+                                                           product_id,
+                                                           context=context)
             res['value'].update({'name': prod.name})
-            if prod.seller_ids:
-                supplier_id = prod.seller_ids[0].name and prod.seller_ids[0].name.id
-                res['value'].update({'supplier_id': supplier_id})
-                res_supplier = self.onchange_supplier_id(cr, uid, ids, account_id,
-                                                         name, date, supplier_id,
-                                                         pricelist_id, product_id, unit_amount,
-                                                         product_uom_id, price_unit, amount_currency,
-                                                         currency_id, version_id, journal_id,
-                                                         ref, company_id, amount, general_account_id,
-                                                         context)
-                res['value'].update(res_supplier['value'])
-                if 'pricelist_id' in res_supplier:
-                    pricelist_id = res_supplier['pricelist_id']
-                if 'currency_id' in res_supplier:
-                    currency_id = res_supplier['currency_id']
-
-            prod_uom = prod.uom_po_id and prod.uom_po_id.id or False
-            if not prod_uom:
-                prod_uom = prod.uom_id and prod.uom_id.id or False
+            prod_uom = prod.uom_id and prod.uom_id.id or False
             res['value'].update({'product_uom_id': prod_uom})
+        return res
 
-            res_uom = self.on_change_product_uom_resource(cr, uid, ids, account_id,
-                                                          name, date, supplier_id,
-                                                          pricelist_id, product_id, unit_amount,
-                                                          prod_uom, price_unit, amount_currency,
-                                                          currency_id, version_id, journal_id,
-                                                          ref, company_id, amount, general_account_id,
-                                                          context)
-
-            res['value'].update(res_uom)
-
-            journal_id = prod.expense_analytic_plan_journal_id and prod.expense_analytic_plan_journal_id.id or False
-            res['value'].update({'journal_id': journal_id})
-
-            general_account_id = prod.product_tmpl_id.property_account_expense.id
-            if not general_account_id:
-                general_account_id = prod.categ_id.property_account_expense_categ.id
-            if not general_account_id:
-                raise osv.except_osv(_('Error !'),
-                                     _('There is no expense account defined '
-                                       'for this product: "%s" (id:%d)')
-                                     % (prod.name, prod.id,))
-
-            res['value'].update({'general_account_id': general_account_id})
-
-        if res['value']:
-            return res
-        else:
-            return {}
-
-    def onchange_supplier_id(self,
-                             cr, uid, ids, account_id,
-                             name, date, supplier_id,
-                             pricelist_id, product_id, unit_amount,
-                             product_uom_id, price_unit, amount_currency,
-                             currency_id, version_id, journal_id,
-                             ref, company_id, amount, general_account_id, context=None):
-        #Change in supplier directly influences
-        #  - pricelist
-        res = {}
+    def on_change_account_id(self, cr, uid, id, account_id, context=None):
+        res = dict()
         res['value'] = {}
-        pricelist_obj = self.pool.get('product.pricelist')
+        if account_id:
+            account = self.pool.get('account.analytic.account').browse(
+                cr, uid, account_id, context=context)
+            if account.date:
+                res['value'].update({'date': account.date})
+        return res
 
-        if supplier_id:
-            partner = self.pool.get('res.partner').browse(cr, uid, supplier_id)
-            pricelist_id = partner.property_product_pricelist_purchase and partner.property_product_pricelist_purchase.id
-            if pricelist_id:
-                res['value'].update({'pricelist_id': pricelist_id})
-                res_pricelist = self.on_change_pricelist_id_resource(cr, uid, ids, account_id,
-                                                                     name, date, supplier_id,
-                                                                     pricelist_id, product_id, unit_amount,
-                                                                     product_uom_id, price_unit, amount_currency,
-                                                                     currency_id, version_id, journal_id, ref,
-                                                                     company_id, amount, general_account_id,
-                                                                     context)
-                if 'value' in res_pricelist:
-                    res['value'].update(res_pricelist['value'])
-                pricelist = pricelist_obj.browse(cr, uid, pricelist_id, context=context)
-                if pricelist:
-                    currency_id = pricelist.currency_id and pricelist.currency_id.id
-                    res['value'].update({'currency_id': currency_id})
-                    res_currency = self.on_change_currency_resource(cr, uid, ids, account_id,
-                                                                    name, date, supplier_id,
-                                                                    pricelist_id, product_id, unit_amount,
-                                                                    product_uom_id, price_unit, amount_currency,
-                                                                    currency_id, version_id, journal_id,
-                                                                    ref, company_id, amount, general_account_id,
-                                                                    context)
-                    if 'value' in res_currency:
-                        res['value'].update(res_currency['value'])
-
-        if res['value']:
-            return res
-        else:
-            return {}
 
     def write(self, cr, uid, ids, vals, context=None):
         if context is None:
@@ -422,14 +176,12 @@ class analytic_resource_plan_line(osv.osv):
         return super(analytic_resource_plan_line, self).write(
             cr, uid, ids, vals, context=context)
 
-    def unlink(self, cr, uid, ids, context=None):
-        line_plan_ids = []
-        analytic_line_plan_obj = self.pool.get('account.analytic.line.plan')
-        for resource_plan_line in self.browse(cr, uid, ids, context=context):
-            if resource_plan_line.analytic_line_plan_id:
-                line_plan_ids.append(resource_plan_line.analytic_line_plan_id.id)
-        res = super(analytic_resource_plan_line, self).unlink(cr, uid, ids, context=context)
-        analytic_line_plan_obj.unlink(cr, uid, line_plan_ids, context=context)
-        return res
 
-analytic_resource_plan_line()
+class account_analytic_line_plan(orm.Model):
+    _inherit = 'account.analytic.line.plan'
+
+    _columns = {
+        'resource_plan_id': fields.many2one('analytic.resource.plan.line',
+                                            'Resource Plan Line',
+                                            ondelete='cascade'),
+        }
