@@ -46,14 +46,11 @@ Analytic Resource Planning
     """,
     "init_xml": [],
     "update_xml": [
-        "analytic_resource_plan_view.xml",
-        "analytic_account_view.xml",
-        "product_view.xml",
-        "project_view.xml",
-        "wizard/analytic_resource_plan_copy_version_view.xml",
+        "view/analytic_resource_plan_view.xml",
+        "view/analytic_account_view.xml",
+        "view/product_view.xml",
+        "view/project_view.xml",
         "security/ir.model.access.csv",
-
-        
     ],
     'demo_xml': [
 
