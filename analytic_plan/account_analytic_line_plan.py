@@ -90,6 +90,13 @@ class account_analytic_line_plan(orm.Model):
 
     }
 
+    def _get_currency(self, cr, uid, context=None):
+        company_obj = self.pool.get('res.company')
+        company_id = company_obj._company_default_get(
+            cr, uid, 'account.analytic.line', context=context)
+        company = company_obj.browse(cr, uid, company_id, context=context)
+        return company.currency_id.id
+
     _defaults = {
         'date': lambda *a: time.strftime('%Y-%m-%d'),
         'company_id': lambda self, cr, uid, c:
@@ -102,6 +109,7 @@ class account_analytic_line_plan(orm.Model):
         'version_id': lambda s, cr, uid,
         c: s.pool.get('account.analytic.plan.version').search(
             cr, uid, [('default_plan', '=', True)], context=None),
+        'currency_id': _get_currency,
     }
     _order = 'date desc'
 
@@ -158,7 +166,8 @@ class account_analytic_line_plan(orm.Model):
                               currency_id, company_id, unit=False,
                               journal_id=False, context=None):
                 
-        res = {}
+        res = dict()
+        res['value'] = {}
         
         if context is None:
             context = {}
@@ -170,8 +179,6 @@ class account_analytic_line_plan(orm.Model):
         prod = False
         if prod_id:
             prod = product_obj.browse(cr, uid, prod_id, context=context)
-            res['value'] = {}
-
         if not journal_id:
             j_ids = analytic_journal_obj.search(cr, uid,
                                                 [('type', '=', 'purchase')])
@@ -250,19 +257,16 @@ class account_analytic_line_plan(orm.Model):
         res = self.on_change_unit_amount(cr, uid, id, prod_id, quantity,
                                          currency_id, company_id,
                                          unit, journal_id, context)
-
-        prod = self.pool.get('product.product').browse(cr, uid, prod_id,
-                                                       context=context)
-        if prod:
-            if prod.uom_po_id:
-                res['value'].update({
-                    'product_uom_id': prod.uom_po_id.id,
-                })
-            elif prod.uom_id:
+        if prod_id:
+            prod = self.pool.get('product.product').browse(cr, uid, prod_id,
+                                                           context=context)
+            res['value'].update({
+                'name': prod.name,
+            })
+            if prod.uom_id:
                 res['value'].update({
                     'product_uom_id': prod.uom_id.id,
                 })
-
         return res  
 
     def view_header_get(self, cr, user, view_id, view_type, context=None):
