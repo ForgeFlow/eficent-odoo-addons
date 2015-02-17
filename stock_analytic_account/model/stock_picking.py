@@ -20,17 +20,16 @@
 ##############################################################################
 from openerp.osv import fields, osv
 
+
 class stock_picking(osv.osv):
 
     _inherit = "stock.picking"
 
     _columns = {
-        'analytic_account_ids': fields.related('move_lines',
-                                               'analytic_account_id',
-                                               type='many2many',
-                                               relation='account.analytic.account',
-                                               string='Analytic Account',
-                                               readonly=True),
+        'analytic_account_ids': fields.related(
+            'move_lines', 'analytic_account_id', type='many2many',
+            relation='account.analytic.account', string='Analytic Account',
+            readonly=True),
         'analytic_account_user_ids': fields.related('move_lines',
                                                     'analytic_account_user_id',
                                                     type='many2many',
@@ -46,8 +45,10 @@ class stock_picking_in(osv.osv):
 
     def __init__(self, pool, cr):
         super(stock_picking_in, self).__init__(pool, cr)
-        self._columns['analytic_account_ids'] = self.pool['stock.picking']._columns['analytic_account_ids']
-        self._columns['analytic_account_user_ids'] = self.pool['stock.picking']._columns['analytic_account_user_ids']
+        self._columns['analytic_account_ids'] = \
+            self.pool['stock.picking']._columns['analytic_account_ids']
+        self._columns['analytic_account_user_ids'] = \
+            self.pool['stock.picking']._columns['analytic_account_user_ids']
 
 
 class stock_picking_out(osv.osv):
@@ -56,5 +57,7 @@ class stock_picking_out(osv.osv):
 
     def __init__(self, pool, cr):
         super(stock_picking_out, self).__init__(pool, cr)
-        self._columns['analytic_account_ids'] = self.pool['stock.picking']._columns['analytic_account_ids']
-        self._columns['analytic_account_user_ids'] = self.pool['stock.picking']._columns['analytic_account_user_ids']
+        self._columns['analytic_account_ids'] = \
+            self.pool['stock.picking']._columns['analytic_account_ids']
+        self._columns['analytic_account_user_ids'] = \
+            self.pool['stock.picking']._columns['analytic_account_user_ids']
