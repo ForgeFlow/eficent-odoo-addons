@@ -90,16 +90,22 @@ class analytic_resource_plan_line(orm.Model):
                                    'for this product: "%s" (id:%d)')
                                  % (line.product_id.name,
                                     line.product_id.id,))
-        default_plan_id = plan_version_obj.search(
-            cr, uid, [('default_plan', '=', True)],  context=context, count=1)
-        default_plan = plan_version_obj.browse(cr, uid, default_plan_id,
-                                               context=context)
+        default_plan_ids = plan_version_obj.search(
+            cr, uid, [('default_plan', '=', True)],  context=context)
+        if default_plan_ids:
+            default_plan = plan_version_obj.browse(cr, uid,
+                                                   default_plan_ids[0],
+                                                   context=context)
+        else:
+            default_plan = False
+
         if line.account_id.active_analytic_planning_version != default_plan:
             raise orm.except_orm(_('Error !'),
                                  _('The active planning version of the '
                                    'analytic account must be %s. '
                                    '')
                                  % (default_plan.name,))
+
         return [{
             'resource_plan_id': line.id,
             'account_id': line.account_id.id,
