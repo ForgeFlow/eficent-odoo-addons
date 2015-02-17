@@ -41,13 +41,13 @@ The stock input account is frequently called the Goods Received Not Invoiced
 account (GRIN).
 
 Furthermore, when the invoice is accepted, the application will identify
-any differences between the invoice price and the product cost, and will
-post the differences to a new Price Differences account defined in the
-product or product category.
+any differences between the invoice price and the cost recorded in the
+incoming stock moves, and will post the differences to a new Price
+Differences account defined in the product or product category.
 
 """,
     'images': [],
-    'depends': ['product', 'purchase'],
+    'depends': ['product', 'purchase', 'stock_picking_invoice_link'],
     'category': 'Accounting & Finance',
     'demo': [],
     'data': ['product_view.xml',],
