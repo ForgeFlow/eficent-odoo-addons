@@ -50,7 +50,7 @@ Differences account defined in the product or product category.
     'depends': ['product', 'purchase', 'stock_picking_invoice_link'],
     'category': 'Accounting & Finance',
     'demo': [],
-    'data': ['product_view.xml',],
+    'data': ['view/product_view.xml',],
     'auto_install': False,
     'installable': True,
 }
