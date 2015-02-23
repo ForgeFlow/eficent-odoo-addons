@@ -36,6 +36,7 @@
         "project_evm_data.xml",
         "wizard/earned_value_view.xml",
         "project_project_view.xml",
+        "security/ir.model.access.csv",
     ],
     'demo_xml': [
 

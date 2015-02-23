@@ -114,7 +114,7 @@ class analytic_resource_plan_line(orm.Model):
             'product_id': line.product_id.id,
             'product_uom_id': line.product_uom_id.id,
             'unit_amount': line.unit_amount,
-            'amount': line.product_id.standard_price,
+            'amount': -1*line.product_id.standard_price * line.unit_amount,
             'general_account_id': general_account_id,
             'journal_id': journal_id,
             'notes': line.notes,
