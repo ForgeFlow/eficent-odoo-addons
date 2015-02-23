@@ -107,15 +107,12 @@ class account_invoice_line(orm.Model):
                             if line['price'] != i_line.price_subtotal and acc:
                                 price_diff = \
                                     i_line.price_subtotal - line['price']
-                                line.update({
-                                    'price': line['price'] * line['quantity']
-                                })
                                 diff_res.append({
                                     'type': 'src',
                                     'name': i_line.name[:64],
                                     'price_unit': price_diff,
                                     'quantity': line['quantity'],
-                                    'price': price_diff * line['quantity'],
+                                    'price': price_diff,
                                     'account_id': acc,
                                     'product_id': line['product_id'],
                                     'uos_id': line['uos_id'],
