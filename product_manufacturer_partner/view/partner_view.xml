@@ -1,0 +1,32 @@
+<openerp>
+    <data>
+
+        <record id="view_partner_manufacturer_form" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr='//notebook/page[@string="Sales &amp; Purchases"]//field[@name="supplier"]'
+                       position="after">
+                    <field name="manufacturer"/>
+                </xpath>
+            </field>
+        </record>
+
+       <record id="view_res_partner_manufacturer_filter" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+
+           <field name="inherit_id" ref="base.view_res_partner_filter"/>
+           <field name="model">res.partner</field>
+           <field name="arch" type="xml">
+                <xpath expr='//filter[@name="supplier"]' position="after">
+                    <filter string="Manufacturers" name="manufacturer"
+                            domain="[('manufacturer','=',1)]"
+                            help="Manufacturer Partners"/>
+                </xpath>
+           </field>
+        </record>
+
+    </data>
+</openerp>
