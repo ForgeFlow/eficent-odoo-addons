@@ -24,7 +24,7 @@
     'author': 'Eficent',
     "website": "www.eficent.com",
     'category': 'Purchase Management',
-    'depends': ['product_manufacturer'],
+    'depends': ['purchase', 'product_manufacturer'],
     'demo': [],
     'description': """
 A module that classifies partners as manufacturers
