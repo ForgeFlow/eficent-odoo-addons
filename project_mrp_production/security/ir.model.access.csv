@@ -1,0 +1,2 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_mrp_production_project_manager","mrp.production project manager","mrp.model_mrp_production","project.group_project_manager",1,1,1,1

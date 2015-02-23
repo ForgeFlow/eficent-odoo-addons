@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="edit_project_stock_move" model="ir.ui.view">
+            <field name="name">project.project.form.stock.move</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Stock" name="stock">
+                        <group>
+                            <field name="warehouse_id"/>
+                            <field name="location_id"/>
+                            <field name="dest_address_id"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</openerp>
