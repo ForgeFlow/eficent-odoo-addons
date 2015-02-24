@@ -19,6 +19,4 @@
 #
 ##############################################################################
 
-import product
-import purchase
-import invoice
+from . import model

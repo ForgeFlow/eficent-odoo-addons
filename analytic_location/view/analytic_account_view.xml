@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+#---------------------------------------------------------------------------------------------------------
+#   Extend the analytic account
+#---------------------------------------------------------------------------------------------------------
+        <record id="view_account_analytic_account_form_location" model="ir.ui.view">
+            <field name="name">account.analytic.account.form.location</field>
+            <field name="model">account.analytic.account</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Stock" name="stock">
+                        <group>
+                            <field name="warehouse_id"/>
+                            <field name="location_id"/>
+                            <field name="dest_address_id"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</openerp>

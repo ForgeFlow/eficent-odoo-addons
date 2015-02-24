@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="edit_project_procurement" model="ir.ui.view">
+            <field name="name">project.project.form.procurement</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr='//div[@name="buttons"]' position='inside'>
+                    <button string="Procurement Orders"
+                        name="%(procurement_analytic.act_analytic_account_2_procurement_order)d"
+                        type="action"
+                        context="{'default_analytic_account_id': analytic_account_id,'search_default_analytic_account_id': [analytic_account_id]}"
+                        groups="project.group_project_manager"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

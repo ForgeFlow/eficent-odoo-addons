@@ -70,7 +70,7 @@
                     <field name="currency_id" on_change="on_change_amount_currency(amount_currency, currency_id, company_id)" sum="Total"/>
                     <field name="amount" sum="Total" invisible="True"/>
                     <field name="company_id" invisible="True"/>
-                    <field name="general_account_id" invisible="True"/>
+                    <field name="general_account_id"/>
                 </tree>
             </field>
         </record>

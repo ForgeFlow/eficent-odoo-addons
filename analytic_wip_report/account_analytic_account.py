@@ -48,36 +48,62 @@ class account_analytic_account(osv.osv):
 
             #Total Value
             query_params = (tuple(all_ids),)
-            cr.execute("SELECT COALESCE(sum(amount),0.0) AS total_value FROM account_analytic_line_plan AS l "
-                       "LEFT JOIN account_analytic_account AS a "
-                       "ON l.account_id = a.id "
-                       "WHERE l.account_id IN %s AND l.amount>0 "
-                       "AND a.active_analytic_planning_version = l.version_id",
+            cr.execute(
+                """SELECT COALESCE(sum(amount),0.0) AS total_value
+                FROM account_analytic_line_plan AS L
+                LEFT JOIN account_analytic_account AS A
+                ON L.account_id = A.id
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type
+                WHERE AT.report_type = 'income'
+                AND l.account_id IN %s
+                AND a.active_analytic_planning_version = l.version_id""",
                        query_params)
             val = cr.fetchone()[0] or 0
             res[account.id]['total_value'] = val
 
             #Actual billings to date
-            cr.execute("SELECT COALESCE(sum(amount),0.0) FROM account_analytic_line \
-                        WHERE account_id IN %s\
-                        AND amount>0", query_params)
+            cr.execute(
+                """SELECT COALESCE(sum(amount),0.0)
+                FROM account_analytic_line L
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type
+                WHERE AT.report_type = 'income'
+                AND L.account_id IN %s""", query_params)
             val = cr.fetchone()[0] or 0
             res[account.id]['actual_billings'] = val
 
             #Actual costs to date
-            cr.execute("SELECT COALESCE(-sum(amount),0.0) FROM account_analytic_line \
-                        WHERE account_id IN %s\
-                        AND amount<0", query_params)
+            cr.execute(
+                """SELECT COALESCE(-1*sum(amount),0.0)
+                FROM account_analytic_line L
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type
+                WHERE AT.report_type = 'expense'
+                AND L.account_id IN %s""", query_params)
             val = cr.fetchone()[0] or 0
             res[account.id]['actual_costs'] = val
 
             #Total estimated costs
-            cr.execute("SELECT COALESCE(-sum(amount),0.0) AS total_value FROM account_analytic_line_plan AS l "
-                            "LEFT JOIN account_analytic_account AS a "
-                            "ON l.account_id = a.id "
-                            "WHERE l.account_id IN %s AND l.amount<0 "
-                            "AND a.active_analytic_planning_version = l.version_id",
-                            query_params)
+            cr.execute("""
+            SELECT COALESCE(-1*sum(amount),0.0) AS total_value
+            FROM account_analytic_line_plan AS L
+            LEFT JOIN account_analytic_account AS A
+            ON L.account_id = A.id
+            INNER JOIN account_account AC
+            ON L.general_account_id = AC.id
+            INNER JOIN account_account_type AT
+            ON AT.id = AC.user_type
+            WHERE AT.report_type = 'expense'
+            AND L.account_id IN %s
+            AND A.active_analytic_planning_version = L.version_id""",
+                       query_params)
             val = cr.fetchone()[0] or 0
             res[account.id]['total_estimated_costs'] = val
 
@@ -105,7 +131,7 @@ class account_analytic_account(osv.osv):
             if over_under_billings > 0:
                 res[account.id]['over_billings'] = over_under_billings
             else:
-                res[account.id]['under_billings'] = over_under_billings
+                res[account.id]['under_billings'] = -1*over_under_billings
 
         return res
 
