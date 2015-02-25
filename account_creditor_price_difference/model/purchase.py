@@ -30,8 +30,11 @@ class purchase_order(orm.Model):
     def _choose_account_from_po_line(self, cr, uid, order_line, context=None):
         account_id = super(purchase_order, self)._choose_account_from_po_line(
             cr, uid, order_line, context=context)
-        if order_line.product_id \
-                and not order_line.product_id.type == 'service':
+        if (
+            order_line.product_id
+            and order_line.product_id.type != 'service'
+            and order_line.product_id.valuation == 'real_time'
+        ):
             # Only consider if it's going to be moved to a company location
             if order_line.order_id.location_id \
                     and order_line.order_id.location_id.company_id:

@@ -37,6 +37,8 @@ class stock_picking(osv.osv):
             if type == 'in_refund':
                 if picking.invoice_id:
                     for ol in picking.invoice_id.invoice_line:
+                        if not ol.product_id.valuation == 'real_time':
+                            continue
                         for move_line in picking.move_lines:
                             if move_line.invoice_line_id \
                                     and move_line.invoice_line_id.id != ol.id:
@@ -66,6 +68,8 @@ class stock_picking(osv.osv):
             elif type == 'in_invoice':
                 if picking.invoice_id:
                     for ol in picking.invoice_id.invoice_line:
+                        if not ol.product_id.valuation == 'real_time':
+                            continue
                         for move_line in picking.move_lines:
                             if move_line.invoice_line_id \
                                     and move_line.invoice_line_id.id != ol.id:
