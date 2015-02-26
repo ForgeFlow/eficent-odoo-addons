@@ -105,6 +105,15 @@
             </field>
         </record>
 
+        <record id="create_wbs_element" model="ir.actions.act_window">
+            <field name="name">WBS elements</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
         <menuitem action="open_view_project_wbs" id="project.menu_projects" name="Work Breakdown Structure" parent="project.menu_project_management" sequence="1"/>
         <menuitem action="open_view_project_projects" id="menu_project_wbs_projects" name="Projects" parent="project.menu_projects" sequence="2"/>
         <menuitem action="open_view_project_phases" id="menu_project_wbs_phases" name="Phases" parent="project.menu_projects" sequence="3"/>
@@ -150,7 +159,7 @@
                         <button string="Child WBS elements"
                             name="action_openChildTreeView"
                             type="object"
-                            icon="STOCK_GO_DOWN" attrs="{'invisible': [('child_ids', '=', [])]}"/>
+                            icon="STOCK_GO_DOWN"/>
                         <field name="code" string="Code"/>
                         <field name="name" string="Name"/>
                         <field name="parent_id" on_change="on_change_parent(parent_id)" string="Parent"/>
@@ -199,7 +208,15 @@
             	</group>
                 <notebook position="inside">
                     <page string="WBS">
-                        <field name="project_child_complete_ids"/>
+                        <group>
+                            <button name="%(create_wbs_element)d"
+                              string="Create child WBS element"
+                              type="action"
+                              context="{'default_parent_id': analytic_account_id,'default_partner_id': partner_id,'default_user_id': user_id}"/>
+                        </group>
+                        <group>
+                            <field name="project_child_complete_ids"/>
+                        </group>
                     </page>
                     <page string="Child Stages" name="child_stages">
                          <field name="child_stage_ids"/>
