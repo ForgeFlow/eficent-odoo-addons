@@ -111,7 +111,7 @@
             <field name="res_model">project.project</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
-            <field name="target">new</field>
+            <field name="target">current</field>
         </record>
 
         <menuitem action="open_view_project_wbs" id="project.menu_projects" name="Work Breakdown Structure" parent="project.menu_project_management" sequence="1"/>
