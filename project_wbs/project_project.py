@@ -197,7 +197,14 @@ class project(base_stage, osv.osv):
         return member_ids
 
     _columns = {        
-        'project_child_complete_ids': fields.function(_child_compute, relation='project.project', method=True, string="Project Hierarchy", type='many2many'),
+        'project_child_complete_ids': fields.function(
+            _child_compute, relation='project.project',
+            method=True, string="Project Hierarchy", type='many2many'),
+        'c_wbs_code': fields.related('analytic_account_id',
+                                     'complete_wbs_code',
+                                     string='WBS Code',
+                                     type='char',
+                                     store=True, readonly=True,)
     }
 
     _defaults = {
@@ -207,6 +214,8 @@ class project(base_stage, osv.osv):
     _group_by_full = {
         'stage_id': _read_group_stage_ids,
     }
+
+    _order = "c_wbs_code"
 
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):       
 

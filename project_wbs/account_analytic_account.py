@@ -214,6 +214,8 @@ class account_analytic_account(base_stage, osv.osv):
         'child_stage_ids': _get_type_common,
     }
 
+    _order = 'complete_wbs_code'
+
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):        
         if not args:
             args = []
