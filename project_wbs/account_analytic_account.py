@@ -84,6 +84,24 @@ class account_analytic_account(base_stage, osv.osv):
             res.append((account.id, data))
         return dict(res)
 
+    def _wbs_indent_calc(self, cr, uid, ids, prop, unknow_none, unknow_dict):
+        if not ids:
+            return []
+        res = []
+        for account in self.browse(cr, uid, ids, context=None):
+            data = []
+            acc = account
+            while acc:
+                if acc.name and acc.parent_id.parent_id:
+                    data.insert(0, '>')
+                else:
+                    data.insert(0, '')
+
+                acc = acc.parent_id
+            data = ''.join(data)
+            res.append((account.id, data))
+        return dict(res)
+
     def _child_count(self, cr, uid, ids, account_class, arg, context=None):
         if context is None:
             context = {}
@@ -168,6 +186,9 @@ class account_analytic_account(base_stage, osv.osv):
         return result, fold
 
     _columns = {
+        'wbs_indent': fields.function(_wbs_indent_calc, method=True,
+                                      type='char', string='Level',
+                                      size=32, readonly=True),
         'complete_wbs_code': fields.function(_complete_wbs_code_calc, method=True, type='char',
                                              string='Full WBS Code', size=250,
                                              help='The full WBS code describes the full path of this '
