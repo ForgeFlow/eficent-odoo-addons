@@ -69,3 +69,5 @@ class purchase_order(orm.Model):
                           'non-service product set with real time inventory '
                           'valuation, and the the PO is not being directly '
                           'shipped to a third party.'))
+        return super(purchase_order, self).wkf_confirm_order(cr, uid, ids,
+                                                             context=None)
