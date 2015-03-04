@@ -2,125 +2,6 @@
 <openerp>
     <data>
 
-#---------------------------------------------------------------------------------------------------------
-#  Extend the menus of the project
-#---------------------------------------------------------------------------------------------------------
-
-         <record id="open_view_project_projects" model="ir.actions.act_window">
-            <field name="name">Projects</field>
-            <field name="res_model">project.project</field>
-            <field name="view_type">form</field>
-            <field name="domain">[]</field>
-            <field name="view_mode">kanban,tree,form,gantt</field>
-            <field name="view_id" ref="project.view_project_kanban"/>
-            <field name="search_view_id" ref="project.view_project_project_filter"/>
-            <field name="context">{'search_default_Current': 1, 'search_default_account_class':'project', 'default_account_class':'project'}</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                  Click to start a new project.
-                </p>
-            </field>
-        </record>
-
-        <record id="open_view_project_phases" model="ir.actions.act_window">
-            <field name="name">Phases</field>
-            <field name="res_model">project.project</field>
-            <field name="view_type">form</field>
-            <field name="domain">[]</field>
-            <field name="view_mode">kanban,tree,form,gantt</field>
-            <field name="view_id" ref="project.view_project_kanban"/>
-            <field name="search_view_id" ref="project.view_project_project_filter"/>
-            <field name="context">{'search_default_Current': 1, 'search_default_account_class':'phase', 'default_account_class':'phase'}</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                  Click to start a new phase.
-                </p>
-            </field>
-        </record>
-
-        <record id="open_view_project_deliverables" model="ir.actions.act_window">
-            <field name="name">Deliverables</field>
-            <field name="res_model">project.project</field>
-            <field name="view_type">form</field>
-            <field name="domain">[]</field>
-            <field name="view_mode">kanban,tree,form,gantt</field>
-            <field name="view_id" ref="project.view_project_kanban"/>
-            <field name="search_view_id" ref="project.view_project_project_filter"/>
-            <field name="context">{'search_default_Current': 1, 'search_default_account_class':'deliverable', 'default_account_class':'deliverable'}</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                  Click to start a new deliverable.
-                </p>
-            </field>
-        </record>
-
-        <record id="open_view_project_work_packages" model="ir.actions.act_window">
-            <field name="name">Work Packages</field>
-            <field name="res_model">project.project</field>
-            <field name="view_type">form</field>
-            <field name="domain">[]</field>
-            <field name="view_mode">kanban,tree,form,gantt</field>
-            <field name="view_id" ref="project.view_project_kanban"/>
-            <field name="search_view_id" ref="project.view_project_project_filter"/>
-            <field name="context">{'search_default_Current': 1, 'search_default_account_class':'work_package', 'default_account_class':'work_package'}</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                  Click to start a new work package.
-                </p>
-            </field>
-        </record>
-
-        <record id="open_view_wbs_tree" model="ir.actions.act_window">
-            <field name="name">WBS elements</field>
-            <field name="res_model">project.project</field>
-            <field name="view_type">form</field>
-            <field name="domain">[]</field>
-            <field name="view_mode">tree,kanban,form,gantt</field>
-            <field name="view_id" ref="project.view_project"/>
-            <field name="search_view_id" ref="project.view_project_project_filter"/>
-            <field name="context">{'search_default_account_class':False, 'default_account_class':False}</field>
-        </record>
-
-        <record id="open_view_project_wbs" model="ir.actions.act_window">
-            <field name="name">WBS elements</field>
-            <field name="res_model">project.project</field>
-            <field name="view_type">form</field>
-            <field name="domain">[]</field>
-            <field name="view_mode">kanban,tree,form,gantt</field>
-            <field name="view_id" ref="project.view_project_kanban"/>
-            <field name="search_view_id" ref="project.view_project_project_filter"/>
-            <field name="context">{'search_default_Current': 1, 'search_default_account_class':False, 'default_account_class':False}</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                  Click to start a new project.
-                </p><p>
-                  Projects are used to organize your activities; plan
-                  tasks, track issues, invoice timesheets. You can define
-                  internal projects (R&amp;D, Improve Sales Process),
-                  private projects (My Todos) or customer ones.
-                </p><p>
-                  You will be able collaborate with internal users on
-                  projects or invite customers to share your activities.
-                </p>
-            </field>
-        </record>
-
-        <record id="create_wbs_element" model="ir.actions.act_window">
-            <field name="name">WBS elements</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">project.project</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">current</field>
-        </record>
-
-        <menuitem action="open_view_project_wbs" id="project.menu_projects" name="Work Breakdown Structure" parent="project.menu_project_management" sequence="1"/>
-        <menuitem action="open_view_project_projects" id="menu_project_wbs_projects" name="Projects" parent="project.menu_projects" sequence="2"/>
-        <menuitem action="open_view_project_phases" id="menu_project_wbs_phases" name="Phases" parent="project.menu_projects" sequence="3"/>
-        <menuitem action="open_view_project_deliverables" id="menu_project_wbs_deliverables" name="Deliverables" parent="project.menu_projects" sequence="4"/>
-        <menuitem action="open_view_project_work_packages" id="menu_project_work_packages" name="Work Packages" parent="project.menu_projects" sequence="5"/>
-        <menuitem action="project.action_view_task" id="project.menu_action_view_task" parent="project.menu_projects" sequence="6"/>
-
 
 #---------------------------------------------------------------------------------------------------------
 #   Extend the project
@@ -315,7 +196,7 @@
                                             <span class="oe_e">N</span>
                                             <field name="date"/>
                                         </span>
-                                    </div>                                    
+                                    </div>
                                     <div class="oe_kanban_project_avatars">
                                         <t t-foreach="record.members.raw_value.slice(0,11)" t-as="member">
                                             <img t-att-src="kanban_image('res.users', 'image_small', member)" t-att-data-member_id="member"/>
@@ -325,10 +206,139 @@
                                 <div class="oe_clear"></div>
                             </div>
                         </t>
-                    </templates>	            	
-	            	</kanban>            	
+                    </templates>
+	            	</kanban>
 				</kanban>
 			</field>
 		</record>
+
+#---------------------------------------------------------------------------------------------------------
+#  Extend the menus of the project
+#---------------------------------------------------------------------------------------------------------
+
+         <record id="open_view_project_projects" model="ir.actions.act_window">
+            <field name="name">Projects</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,kanban,gantt</field>
+            <field name="view_id" ref="view_project"/>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="context">{'search_default_Current': 1, 'search_default_account_class':'project', 'default_account_class':'project'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to start a new project.
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_project_phases" model="ir.actions.act_window">
+            <field name="name">Phases</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,kanban,gantt</field>
+            <field name="view_id" ref="view_project"/>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="context">{'search_default_Current': 1, 'search_default_account_class':'phase', 'default_account_class':'phase'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to start a new phase.
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_project_deliverables" model="ir.actions.act_window">
+            <field name="name">Deliverables</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,kanban,gantt</field>
+            <field name="view_id" ref="view_project"/>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="context">{'search_default_Current': 1, 'search_default_account_class':'deliverable', 'default_account_class':'deliverable'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to start a new deliverable.
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_project_work_packages" model="ir.actions.act_window">
+            <field name="name">Work Packages</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,kanban,gantt</field>
+            <field name="view_id" ref="view_project"/>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="context">{'search_default_Current': 1, 'search_default_account_class':'work_package', 'default_account_class':'work_package'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to start a new work package.
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_wbs_tree" model="ir.actions.act_window">
+            <field name="name">WBS elements</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,kanban,form,gantt</field>
+            <field name="view_id" ref="view_project"/>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="context">{'search_default_account_class':False, 'default_account_class':False}</field>
+        </record>
+
+        <record id="open_view_project_wbs" model="ir.actions.act_window">
+            <field name="name">WBS elements</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,kanban,gantt</field>
+            <field name="view_id" ref="view_project"/>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="context">{'search_default_Current': 1, 'search_default_account_class':False, 'default_account_class':False}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to start a new project.
+                </p><p>
+                  Projects are used to organize your activities; plan
+                  tasks, track issues, invoice timesheets. You can define
+                  internal projects (R&amp;D, Improve Sales Process),
+                  private projects (My Todos) or customer ones.
+                </p><p>
+                  You will be able collaborate with internal users on
+                  projects or invite customers to share your activities.
+                </p>
+            </field>
+        </record>
+
+        <record id="create_wbs_element" model="ir.actions.act_window">
+            <field name="name">WBS elements</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="project.menu_projects" name="Work Breakdown Structure" parent="project.menu_project_management" sequence="1"/>
+        <menuitem action="open_view_project_projects"
+                  id="menu_project_wbs_projects" name="Projects" parent="project.menu_projects" sequence="1"/>
+        <menuitem action="open_view_project_phases"
+                  id="menu_project_wbs_phases" name="Phases" parent="project.menu_projects" sequence="2"/>
+        <menuitem action="open_view_project_deliverables"
+                  id="menu_project_wbs_deliverables" name="Deliverables" parent="project.menu_projects" sequence="3"/>
+        <menuitem action="open_view_project_work_packages"
+                  id="menu_project_work_packages" name="Work Packages" parent="project.menu_projects" sequence="4"/>
+        <menuitem action="open_view_project_wbs"
+                  id="menu_project_all_wbs"
+                  name="All WBS Elements"
+                  parent="project.menu_projects" sequence="5"/>
+        <menuitem action="project.action_view_task" id="project.menu_action_view_task" parent="project.menu_projects" sequence="6"/>
+
+
     </data>
 </openerp>
