@@ -69,7 +69,7 @@ class project(base_stage, osv.osv):
         projects_data = self._get_project_analytic_wbs(cr, uid, ids,
                                                        context=context)
         for ppid in projects_data.values():
-            result.append(ppid.keys())
+            result.extend(ppid.keys())
         return result
 
     def name_get(self, cr, uid, ids, context=None):
