@@ -32,20 +32,26 @@ class account_analytic_account(base_stage, osv.osv):
     
     _inherit = 'account.analytic.account'
 
-    def get_child_accounts(self, cr, uid, ids, context=None):    
+    def get_child_accounts(self, cr, uid, ids, context=None):
         result = {}
-        read_data = []
-        read_data = self.pool.get('account.analytic.account').read(cr, uid, ids, ['child_ids'])
-        for data in read_data:                
-            for curr_id in ids:
-                result[curr_id] = True   
-            for child_id in data['child_ids']:  
-                lchild_id = []
-                lchild_id.append(child_id)                                                         
-                result.update(self.get_child_accounts(cr, uid, lchild_id, context))         
+        cr.execute('''
+        WITH RECURSIVE children AS (
+        SELECT parent_id, id
+        FROM account_analytic_account
+        WHERE parent_id IN %s
+        UNION ALL
+        SELECT a.parent_id, a.id
+        FROM account_analytic_account a
+        JOIN children b ON(a.parent_id = b.id)
+        )
+        SELECT * FROM children order by parent_id
+        ''', (tuple(ids),))
+        res = cr.fetchall()
+        result = dict((x, y) for x, y in res)
         return result
 
-    def _complete_wbs_code_calc(self, cr, uid, ids, prop, unknow_none, unknow_dict):        
+    def _complete_wbs_code_calc(self, cr, uid, ids, prop, unknow_none,
+                                unknow_dict):
         if not ids:
             return []
         res = []    
@@ -56,7 +62,7 @@ class account_analytic_account(base_stage, osv.osv):
                 if acc.code:
                     data.insert(0, acc.code)
                 else:
-                    data.insert(0,'')                    
+                    data.insert(0, '')
                 
                 acc = acc.parent_id
             data = ' / '.join(data)
@@ -65,7 +71,8 @@ class account_analytic_account(base_stage, osv.osv):
             res.append((account.id, data))
         return dict(res)                                 
 
-    def _complete_wbs_name_calc(self, cr, uid, ids, prop, unknow_none, unknow_dict):        
+    def _complete_wbs_name_calc(self, cr, uid, ids, prop, unknow_none,
+                                unknow_dict):
         if not ids:
             return []
         res = []    
@@ -76,7 +83,7 @@ class account_analytic_account(base_stage, osv.osv):
                 if acc.name:
                     data.insert(0, acc.name)
                 else:
-                    data.insert(0,'')                    
+                    data.insert(0, '')
 
                 acc = acc.parent_id
                 

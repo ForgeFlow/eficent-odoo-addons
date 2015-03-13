@@ -33,13 +33,17 @@ class project(osv.osv):
     @staticmethod
     def _total_plan_cost(cr, ids):
 
-        cr.execute('SELECT abs(sum(LP.amount)) '
-                   'FROM account_analytic_line_plan AS LP '
-                   'INNER JOIN account_analytic_account AS AA '
-                   'ON LP.version_id = AA.active_analytic_planning_version '
-                   'AND LP.account_id = AA.id '
-                   'WHERE LP.account_id IN %s '
-                   'AND LP.amount < 0',
+        cr.execute("""SELECT abs(sum(LP.amount))
+                   FROM account_analytic_line_plan AS LP
+                   INNER JOIN account_analytic_account AS AA
+                   ON LP.version_id = AA.active_analytic_planning_version
+                   INNER JOIN account_account AC
+                   ON LP.general_account_id = AC.id
+                   INNER JOIN account_account_type AT
+                   ON AT.id = AC.user_type
+                   WHERE AT.report_type = 'expense'
+                   AND LP.account_id = AA.id
+                   AND LP.account_id IN %s""",
                    (tuple(ids),))
         cr_result = cr.fetchone()
         return cr_result and cr_result[0] or 0.0
@@ -47,11 +51,15 @@ class project(osv.osv):
     @staticmethod
     def _total_actual_cost_to_date(cr, ids, to_date):
 
-        cr.execute('SELECT abs(sum(amount)) '
-                   'FROM account_analytic_line '
-                   'WHERE account_id IN %s '
-                   'AND amount < 0'
-                   'AND date <= %s ', (tuple(ids), to_date))
+        cr.execute("""SELECT abs(sum(amount))
+                   FROM account_analytic_line as AAL
+                   INNER JOIN account_account AC
+                   ON AAL.general_account_id = AC.id
+                   INNER JOIN account_account_type AT
+                   ON AT.id = AC.user_type
+                   WHERE AT.report_type = 'expense'
+                   AND AAL.account_id IN %s
+                   AND AAL.date <= %s""", (tuple(ids), to_date))
         cr_result = cr.fetchone()
         return cr_result and cr_result[0] or 0.0
 
@@ -74,9 +82,13 @@ class project(osv.osv):
         FROM account_analytic_line_plan AS LP
         INNER JOIN account_analytic_account AS AA
         ON LP.version_id = AA.active_analytic_planning_version
+        INNER JOIN account_account AC
+        ON LP.general_account_id = AC.id
+        INNER JOIN account_account_type AT
+        ON AT.id = AC.user_type
+        WHERE AT.report_type = 'expense'
         AND LP.account_id = AA.id
-        WHERE LP.account_id IN %s
-        AND LP.amount < 0
+        AND LP.account_id IN %s
         AND AA.date_start <= %s
         GROUP BY AA.id, AA.date''',
                    (to_date, tuple(ids), to_date))
@@ -187,18 +199,20 @@ class project(osv.osv):
 
         measurement_type_obj = self.pool.get('progress.measurement.type')
         project_obj = self.pool.get('project.project')
-        def_meas_type_ids = measurement_type_obj.search(cr, uid, [('is_default', '=', True)], context=context)
+        def_meas_type_ids = measurement_type_obj.search(
+            cr, uid, [('is_default', '=', True)], context=context)
 
         if def_meas_type_ids:
-            progress_measurement_type = measurement_type_obj.browse(cr, uid,
-                                                                    def_meas_type_ids[0],
-                                                                    context=context)
+            progress_measurement_type = measurement_type_obj.browse(
+                cr, uid, def_meas_type_ids[0], context=context)
             progress_max_value = progress_measurement_type.default_max_value
         else:
             progress_max_value = 0
 
         # Search for child projects
-        for project_id in ids:
+        wbs_projects_data = project_obj._get_project_analytic_wbs(
+            cr, uid, ids, context=context)
+        for project_id in wbs_projects_data.keys():
             res[project_id] = {
                 'pv': 0,
                 'ev': 0,
@@ -220,22 +234,22 @@ class project(osv.osv):
             }
             if def_meas_type_ids:
                 date_today = time.strftime('%Y-%m-%d')
-                wbs_projects_data = project_obj._get_project_analytic_wbs(
-                    cr, uid, [project_id], context=context)
+
                 # Compute the Budget at Completion
                 total_bac = self._total_plan_cost(
-                    cr, wbs_projects_data.values())
+                    cr, wbs_projects_data[project_id].values())
                 pv = self._total_plan_cost_to_date(
-                    cr, wbs_projects_data.values(), date.today())
+                    cr, wbs_projects_data[project_id].values(), date.today())
                 ac = self._total_actual_cost_to_date(
-                    cr, wbs_projects_data.values(), date.today())
+                    cr, wbs_projects_data[project_id].values(), date.today())
                 ev = 0
 
                 if total_bac > 0:
-                    for wbs_project_id in wbs_projects_data.keys():
+                    for wbs_project_id in wbs_projects_data[project_id].keys():
                         # Compute the Budget at Completion
                         bac = self._total_plan_cost(
-                            cr, [wbs_projects_data[wbs_project_id]])
+                            cr,
+                            [wbs_projects_data[project_id][wbs_project_id]])
 
                         # Obtain the latest progress measurement
                         # for this project
@@ -324,7 +338,8 @@ class project(osv.osv):
                               help="""Schedule Variance (SV) determines
                               whether a project is ahead or behind schedule.
                               It is calculated as EV - PV.
-                              A negative value indicates an unfavorable condition."""),
+                              A negative value indicates an unfavorable
+                              condition."""),
         'svp': fields.function(_earned_value, method=True,
                                multi=_earned_value,
                                string='SVP', type='float',
@@ -407,7 +422,9 @@ class project(osv.osv):
             cr, uid, progress_measurement_type_id, context=context)
         progress_max_value = progress_measurement_type.default_max_value
 
-        for project_id in project_ids:
+        wbs_projects_data = project_obj._get_project_analytic_wbs(
+            cr, uid, project_ids, context=context)
+        for project_id in wbs_projects_data.keys():
 
             project = project_obj.browse(cr, uid, project_id,
                                          context=context)
@@ -418,10 +435,8 @@ class project(osv.osv):
             project_evm_obj.unlink(cr, uid, project_evm_ids, context=context)
 
             # Obtain all child projects
-            projects_data = project_obj._get_project_analytic_wbs(
-                cr, uid, [project_id], context=context)
-            wbs_project_ids = projects_data.keys()
-            wbs_analytic_account_ids = projects_data.values()
+            wbs_project_ids = wbs_projects_data[project_id].keys()
+            wbs_analytic_account_ids = wbs_projects_data[project_id].values()
 
             # Get the earliest and latest dates for based on the project
             if not project.date_start:
@@ -442,7 +457,7 @@ class project(osv.osv):
             projects_total_amount = {}
 
             for projects_data_project_id, projects_data_analytic_account_id \
-                    in projects_data.items():
+                    in wbs_projects_data[project_id].items():
                 # Total planned_cost
                 projects_total_amount[projects_data_project_id] = \
                     self._total_plan_cost(cr,
@@ -456,7 +471,8 @@ class project(osv.osv):
                 pv = self._total_plan_cost_to_date(
                     cr, wbs_analytic_account_ids, day_date)
 
-                # Record the earned value as a function of the progress measurements
+                # Record the earned value as a function of the
+                # progress measurements
                 # Current progress
                 cr.execute('SELECT project_id, value '
                            'FROM project_progress_measurement '
@@ -475,7 +491,7 @@ class project(osv.osv):
                 ev = 0
                 for pd_project_id, \
                     pd_analytic_account_id \
-                        in projects_data.items():
+                        in wbs_projects_data[project_id].items():
                     # If we identify a progress measurement on this date,
                     # record new earned value
                     # Otherwise will maintain the previous value
@@ -493,7 +509,7 @@ class project(osv.osv):
                                 progress_max_value
 
                 for pd_project_id, pd_analytic_account_id \
-                        in projects_data.items():
+                        in wbs_projects_data[project_id].items():
                     if pd_project_id in ev_projects.keys():
                         ev += ev_projects[pd_project_id]
 

@@ -58,7 +58,14 @@
             </field>
         </record>
 
-
+        <record id="create_wbs_element" model="ir.actions.act_window">
+            <field name="name">WBS elements</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
 
         <record id="edit_project" model="ir.ui.view">
             <field name="name">project.project.form</field>
@@ -313,15 +320,6 @@
                   projects or invite customers to share your activities.
                 </p>
             </field>
-        </record>
-
-        <record id="create_wbs_element" model="ir.actions.act_window">
-            <field name="name">WBS elements</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">project.project</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">current</field>
         </record>
 
         <menuitem id="project.menu_projects" name="Work Breakdown Structure" parent="project.menu_project_management" sequence="1"/>
