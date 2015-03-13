@@ -178,7 +178,6 @@ class analytic_resource_plan_line(orm.Model):
                 res['value'].update({'date': account.date})
         return res
 
-
     def write(self, cr, uid, ids, vals, context=None):
         if context is None:
             context = {}
@@ -186,8 +185,8 @@ class analytic_resource_plan_line(orm.Model):
             ids = [ids]
         analytic_obj = self.pool.get('account.analytic.account')
 
-        if 'account_id' in context:
-            analytic = analytic_obj.browse(cr, uid, context['account_id'])
+        if 'account_id' in vals:
+            analytic = analytic_obj.browse(cr, uid, vals['account_id'])
             vals['date'] = analytic.date
 
         return super(analytic_resource_plan_line, self).write(
