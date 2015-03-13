@@ -104,5 +104,8 @@ class purchase_order(orm.Model):
         res = super(purchase_order, self)._prepare_order_line_move(
             cr, uid, order, order_line, picking_id, context=context)
         if order.warehouse_id and not order.dest_address_id:
+            if not order.warehouse_id.partner_id:
+                raise orm.except_orm(_('Error!'),
+                                     _('The warehouse must have an address.'))
             res['partner_id'] = order.warehouse_id.partner_id.id,
         return res
