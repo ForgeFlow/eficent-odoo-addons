@@ -399,4 +399,21 @@ class project(base_stage, osv.osv):
         return self.pool.get('account.analytic.account').on_change_parent(
             cr, uid, ids, parent_id)
 
+    def on_change_stage(self, cr, uid, ids, stage_id, context=None):
+        if context is None:
+            context = {}
+        stage_obj = self.pool.get('analytic.account.stage')
+        stage = stage_obj.browse(cr, uid, stage_id, context=context)
+        if stage.project_state == 'close':
+            self.set_done(cr, uid, ids, context=context)
+        elif stage.project_state == 'cancelled':
+            self.set_cancel(cr, uid, ids, context=context)
+        elif stage.project_state == 'pending':
+            self.set_pending(cr, uid, ids, context=context)
+        elif stage.project_state == 'open':
+            self.set_open(cr, uid, ids, context=context)
+        return True
+
+
+
 project()

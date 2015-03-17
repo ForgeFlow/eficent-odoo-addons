@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <record id="view_project" model="ir.ui.view">
-            <field name="name">project.project.tree</field>
-            <field name="model">project.project</field>
-            <field name="inherit_id" ref="project_wbs.view_project"/>
-            <field name="field_parent">child_ids</field>
-            <field name="arch" type="xml">
-                <xpath expr='//field[@name="progress_rate"]' position='replace'>
-                    <field name="poc" widget="progressbar"/>
-                </xpath>
-            </field>
-        </record>
+
 
         <record id="edit_project" model="ir.ui.view">
             <field name="name">project.project.form</field>
