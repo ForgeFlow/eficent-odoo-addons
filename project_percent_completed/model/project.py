@@ -53,17 +53,16 @@ class project(orm.Model):
         for proj in self.browse(cr, uid, wbs_projects_data.keys(),
                                 context=context):
             total_duration = {}
-            ev = 0.0
-            for wbs_project_id in wbs_projects_data[proj.id].keys():
-                delta_days = timedelta(days=0).days
-                if proj.date_start and proj.date:
-                    date_start = datetime.strptime(proj.date_start, "%Y-%m-%d")
-                    date_end = datetime.strptime(proj.date, "%Y-%m-%d")
+            for wbs_project in self.browse(cr, uid, wbs_projects_data[
+                proj.id].keys(), context=context):
+                if wbs_project.date_start and wbs_project.date:
+                    date_start = datetime.strptime(wbs_project.date_start, "%Y-%m-%d")
+                    date_end = datetime.strptime(wbs_project.date, "%Y-%m-%d")
                     d = date_start - date_end
                     d_days = d.days
-                    total_duration[wbs_project_id] = abs(d_days)
+                    total_duration[wbs_project.id] = abs(d_days)
                 else:
-                    total_duration[wbs_project_id] = 0
+                    total_duration[wbs_project.id] = 0
             tot_dur = sum(total_duration.values())
             ev = 0.0
             for wbs_project_id in wbs_projects_data[proj.id].keys():
