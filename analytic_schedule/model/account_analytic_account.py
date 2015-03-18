@@ -30,8 +30,10 @@ class account_analytic_account(orm.Model):
         start_dates = []
         end_dates = []
         for child in analytic.child_ids:
-            start_dates.append(child.date_start)
-            end_dates.append(child.date)
+            if child.date_start:
+                start_dates.append(child.date_start)
+            if child.date:
+                end_dates.append(child.date)
         vals = {
             'date_start': min(start_dates) or False,
             'date': max(end_dates) or False,
