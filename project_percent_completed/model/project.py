@@ -34,7 +34,6 @@ class project(orm.Model):
             context = {}
 
         measurement_type_obj = self.pool.get('progress.measurement.type')
-        project_obj = self.pool.get('project.project')
         def_meas_type_ids = measurement_type_obj.search(
             cr, uid, [('is_default', '=', True)], context=context)
 
@@ -46,53 +45,53 @@ class project(orm.Model):
             progress_max_value = 0
 
         date_today = time.strftime('%Y-%m-%d')
-        # Search for child projects
-        wbs_projects_data = project_obj._get_project_analytic_wbs(
+
+        wbs_projects_data = self._get_project_analytic_wbs(
             cr, uid, ids, context=context)
-
-        for proj in self.browse(cr, uid, wbs_projects_data.keys(),
-                                context=context):
-            total_duration = {}
-            for wbs_project in self.browse(cr, uid, wbs_projects_data[
-                proj.id].keys(), context=context):
-                if wbs_project.date_start and wbs_project.date:
-                    date_start = datetime.strptime(wbs_project.date_start, "%Y-%m-%d")
-                    date_end = datetime.strptime(wbs_project.date, "%Y-%m-%d")
-                    d = date_start - date_end
-                    d_days = d.days
-                    total_duration[wbs_project.id] = abs(d_days)
-                else:
-                    total_duration[wbs_project.id] = 0
-            tot_dur = sum(total_duration.values())
+        for project_id in wbs_projects_data.keys():
+            total_dur = 0.0
             ev = 0.0
-            for wbs_project_id in wbs_projects_data[proj.id].keys():
+            cr.execute("""
+                WITH progress AS (
+                    SELECT p.id as pid,
+                    COALESCE(abs(date_part('day',
+                    age(a1.date_start::timestamp, a1.date::timestamp))), '0')
+                    as duration, COALESCE(pm.value, '0') as value,
+                    COALESCE(pm.progress_measurement_type, %s) as mt,
+                    COALESCE (pm.communication_date, %s) as cdate
+                    FROM project_project p
+                    INNER JOIN account_analytic_account a1
+                    ON a1.id = p.analytic_account_id
+                    LEFT OUTER JOIN project_progress_measurement pm
+                    ON p.id = pm.project_id
+                    WHERE a1.id NOT IN
+                    (SELECT parent_id from account_analytic_account a2
+                    WHERE a2.parent_id = a1.id)
+                    AND p.id in %s
+                    ORDER BY p.id
+                )
+                SELECT DISTINCT(pid) pid, duration, value, cdate
+                FROM progress
+                WHERE cdate <= %s
+                AND mt = %s
+                ORDER BY pid, cdate DESC
 
-                cr.execute('SELECT DISTINCT ON (a.project_id) value '
-                           'FROM project_progress_measurement AS a '
-                           'WHERE a.project_id IN %s '
-                           'AND a.progress_measurement_type = %s '
-                           'AND a.communication_date <= %s '
-                           'ORDER BY a.project_id, '
-                           'a.communication_date DESC ',
-                           (tuple([wbs_project_id]),
-                            def_meas_type_ids[0],
-                            date_today))
-                cr_result = cr.fetchone()
-                measurement_value = cr_result and cr_result[0] or 0.0
-                ev += total_duration[wbs_project_id] * measurement_value / \
-                    progress_max_value
-            if tot_dur > 0:
-                res[proj.id] = round(ev / tot_dur * 100, 2)
+            """, (def_meas_type_ids[0], date_today,
+                  tuple(wbs_projects_data[project_id].keys()),
+                  date_today, def_meas_type_ids[0]),)
+            for r in cr.fetchall():
+                total_dur += r[1]
+                ev += r[1] * r[2] / progress_max_value
+            if total_dur > 0:
+                res[project_id] = round(ev / total_dur * 100)
             else:
-                res[proj.id] = 0.0
+                res[project_id] = 0.0
         return res
 
     _columns = {
-        'progress_rate': fields.function(_compute_poc_on_duration,
-                                         method=True, string='% Completed',
-                                         type='float',
-                                         help="""Aggregated percent
-                                         completed, based on the duration
-                                         of the project
-                                       """),
+        'progress_rate': fields.function(
+            _compute_poc_on_duration, method=True,
+            string='% Completed', type='float',
+            help="""Aggregated percent completed, based on the duration
+            of the project""")
     }
