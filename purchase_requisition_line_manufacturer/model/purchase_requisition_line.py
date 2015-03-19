@@ -79,6 +79,34 @@ class purchase_requisition_line(orm.Model):
                                      _('The Manufacturer Product Name does '
                                        'not match '
                                        'with that defined in the Product.'))
+        else:
+            if manufacturer_pname:
+                product_ids = product_obj.search(
+                    cr, uid, [('manufacturer_pname', '=', manufacturer_pname)],
+                    context=context)
+                if product_ids:
+                    pr_id = product_ids[0]
+                    product = product_obj.browse(cr, uid, pr_id,
+                                                 context=context)
+                    manufacturer_pref = product.manufacturer_pref
+                    manufacturer = product.manufacturer.id
+                else:
+                    pr_id = False
+                    manufacturer_pref = ''
+                    msg = _('No suitable product was found for this '
+                            'manufacturer part name. This item cannot not '
+                            'be ordered unless the product is added.')
+
+                    res['warning'] = {
+                        'title': "Warning",
+                        'message': msg,
+                    }
+
+                res['value'] = {
+                    'product_id': pr_id,
+                    'manufacturer_pref': manufacturer_pref,
+                    'manufacturer': manufacturer,
+                }
         return res
 
     def onchange_manufacturer_pref(self, cr, uid, ids, product_id,
@@ -103,6 +131,7 @@ class purchase_requisition_line(orm.Model):
                     product = product_obj.browse(cr, uid, pr_id,
                                                  context=context)
                     manufacturer_pname = product.manufacturer_pname
+                    manufacturer = product.manufacturer.id
                 else:
                     pr_id = False
                     manufacturer_pname = ''
@@ -118,6 +147,7 @@ class purchase_requisition_line(orm.Model):
                 res['value'] = {
                     'product_id': pr_id,
                     'manufacturer_pname': manufacturer_pname,
+                    'manufacturer': manufacturer,
                 }
 
         return res
