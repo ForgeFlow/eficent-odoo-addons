@@ -93,6 +93,7 @@ class purchase_requisition_line(orm.Model):
                 else:
                     pr_id = False
                     manufacturer_pref = ''
+                    manufacturer = False
                     msg = _('No suitable product was found for this '
                             'manufacturer part name. This item cannot not '
                             'be ordered unless the product is added.')
@@ -135,6 +136,7 @@ class purchase_requisition_line(orm.Model):
                 else:
                     pr_id = False
                     manufacturer_pname = ''
+                    manufacturer = False
                     msg = _('No suitable product was found for this '
                             'manufacturer part number. This item cannot not '
                             'be ordered unless the product is added.')
