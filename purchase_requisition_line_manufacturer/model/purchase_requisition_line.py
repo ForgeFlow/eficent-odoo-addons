@@ -76,7 +76,8 @@ class purchase_requisition_line(orm.Model):
             product = product_obj.browse(cr, uid, product_id, context=context)
             if product.manufacturer_pname != manufacturer_pname:
                 raise orm.except_orm(_('Invalid Action!'),
-                                     _('The Manufacturer Product Name does not match '
+                                     _('The Manufacturer Product Name does '
+                                       'not match '
                                        'with that defined in the Product.'))
         return res
 
@@ -89,8 +90,34 @@ class purchase_requisition_line(orm.Model):
             product = product_obj.browse(cr, uid, product_id, context=context)
             if product.manufacturer_pref != manufacturer_pref:
                 raise orm.except_orm(_('Invalid Action!'),
-                                     _('The Manufacturer Product Code does not match '
+                                     _('The Manufacturer Product Code does '
+                                       'not match '
                                        'with that defined in the Product.'))
-        return res
+        else:
+            if manufacturer_pref:
+                product_ids = product_obj.search(
+                    cr, uid, [('manufacturer_pref', '=', manufacturer_pref)],
+                    context=context)
+                if product_ids:
+                    pr_id = product_ids[0]
+                    product = product_obj.browse(cr, uid, pr_id,
+                                                 context=context)
+                    manufacturer_pname = product.manufacturer_pname
+                else:
+                    pr_id = False
+                    manufacturer_pname = ''
+                    msg = _('No suitable product was found for this '
+                            'manufacturer part number. This item cannot not '
+                            'be ordered unless the product is added.')
 
-purchase_requisition_line()
+                    res['warning'] = {
+                        'title': "Warning",
+                        'message': msg,
+                    }
+
+                res['value'] = {
+                    'product_id': pr_id,
+                    'manufacturer_pname': manufacturer_pname,
+                }
+
+        return res
