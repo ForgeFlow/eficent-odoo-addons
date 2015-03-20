@@ -48,6 +48,8 @@ class account_analytic_account(base_stage, osv.osv):
         ''', (tuple(ids),))
         res = cr.fetchall()
         result = dict((x, y) for x, y in res)
+        parent = dict((x, x) for x in ids)
+        result.update(parent)
         return result
 
     def _complete_wbs_code_calc(self, cr, uid, ids, prop, unknow_none,
