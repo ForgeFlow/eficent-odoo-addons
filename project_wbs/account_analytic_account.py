@@ -34,6 +34,9 @@ class account_analytic_account(base_stage, osv.osv):
 
     def get_child_accounts(self, cr, uid, ids, context=None):
         result = {}
+        for curr_id in ids:
+            result[curr_id] = True
+        # Now add the children
         cr.execute('''
         WITH RECURSIVE children AS (
         SELECT parent_id, id
@@ -47,9 +50,8 @@ class account_analytic_account(base_stage, osv.osv):
         SELECT * FROM children order by parent_id
         ''', (tuple(ids),))
         res = cr.fetchall()
-        result = dict((x, y) for x, y in res)
-        parent = dict((x, x) for x in ids)
-        result.update(parent)
+        for x, y in res:
+            result[y] = True
         return result
 
     def _complete_wbs_code_calc(self, cr, uid, ids, prop, unknow_none,
@@ -203,15 +205,20 @@ class account_analytic_account(base_stage, osv.osv):
                                              help='The full WBS code describes the full path of this '
                                                   'component within the project WBS hierarchy',
                                              store={
-                                                 'account.analytic.account': (get_child_accounts,
-                                                                              ['name', 'code', 'parent_id'], 20)
+                                                 'account.analytic.account':
+                                                     (get_child_accounts,
+                                                      ['name', 'code',
+                                                       'parent_id'], 20)
                                             }),
 
         'complete_wbs_name': fields.function(_complete_wbs_name_calc, method=True, type='char',
                                              string='Full WBS path', size=250,
                                              help='Full path in the WBS hierarchy',
-                                             store={'account.analytic.account': (get_child_accounts,
-                                                                                  ['name', 'code', 'parent_id'], 20)
+                                             store={
+                                                 'account.analytic.account':
+                                                     (get_child_accounts,
+                                                      ['name', 'code',
+                                                       'parent_id'], 20)
                                                     }),
 
         'account_class': fields.selection([('project', 'Project'), ('phase', 'Phase'),
