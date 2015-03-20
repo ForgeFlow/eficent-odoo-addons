@@ -30,6 +30,9 @@ class project(orm.Model):
     def _compute_poc_on_duration(self, cr, uid, ids, names,
                                             arg, context=None):
         res = {}
+        for i in ids:
+            res[i] = 0.0
+
         if context is None:
             context = {}
 
