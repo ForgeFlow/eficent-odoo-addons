@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp.osv import fields, orm
-
+from openerp import netsvc
 
 class account_analytic_account(orm.Model):
     _inherit = "account.analytic.account"
@@ -40,6 +40,17 @@ class account_analytic_account(orm.Model):
         }
         self.write(cr, uid, analytic.id, vals, context=context)
         return True
+
+    def create(self, cr, uid, values, context=None):
+        acc_id = super(account_analytic_account, self).create(cr,
+                                                        uid,
+                                                        values,
+                                                        context=context)
+        acc = self.browse(cr, uid, acc_id, context=context)
+        self._compute_scheduled_dates(cr, uid, acc.parent_id,
+                                              context=context)
+        return acc_id
+
 
     def write(self, cr, uid, ids, vals, context=None):
         res = super(account_analytic_account, self).write(cr, uid, ids, vals,
