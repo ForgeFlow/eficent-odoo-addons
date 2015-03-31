@@ -29,6 +29,8 @@ class account_analytic_account(orm.Model):
         #Obtain the earliest and latest dates of the children
         start_dates = []
         end_dates = []
+        if not analytic.child_ids:
+            return True
         for child in analytic.child_ids:
             if child.date_start:
                 start_dates.append(child.date_start)
@@ -61,3 +63,5 @@ class account_analytic_account(orm.Model):
                     return res
                 self._compute_scheduled_dates(cr, uid, acc.parent_id,
                                               context=context)
+        return res
+
