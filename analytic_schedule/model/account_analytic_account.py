@@ -36,9 +36,15 @@ class account_analytic_account(orm.Model):
                 start_dates.append(child.date_start)
             if child.date:
                 end_dates.append(child.date)
+        min_start_date = False
+        max_end_date = False
+        if start_dates:
+            min_start_date = min(start_dates)
+        if end_dates:
+            max_end_date = max(end_dates)
         vals = {
-            'date_start': min(start_dates) or False,
-            'date': max(end_dates) or False,
+            'date_start': min_start_date,
+            'date': max_end_date,
         }
         self.write(cr, uid, [analytic.id], vals, context=context)
         return True
