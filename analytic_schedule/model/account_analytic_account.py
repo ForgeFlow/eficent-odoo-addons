@@ -26,7 +26,7 @@ class account_analytic_account(orm.Model):
     _inherit = "account.analytic.account"
 
     def _compute_scheduled_dates(self, cr, uid, analytic, context=None):
-        #Obtain the earliest and latest dates of the children
+        # Obtain the earliest and latest dates of the children
         start_dates = []
         end_dates = []
         if not analytic.child_ids:
@@ -40,19 +40,15 @@ class account_analytic_account(orm.Model):
             'date_start': min(start_dates) or False,
             'date': max(end_dates) or False,
         }
-        self.write(cr, uid, analytic.id, vals, context=context)
+        self.write(cr, uid, [analytic.id], vals, context=context)
         return True
 
     def create(self, cr, uid, values, context=None):
-        acc_id = super(account_analytic_account, self).create(cr,
-                                                        uid,
-                                                        values,
-                                                        context=context)
+        acc_id = super(account_analytic_account, self).create(
+            cr, uid, values, context=context)
         acc = self.browse(cr, uid, acc_id, context=context)
-        self._compute_scheduled_dates(cr, uid, acc.parent_id,
-                                              context=context)
+        self._compute_scheduled_dates(cr, uid, acc.parent_id, context=context)
         return acc_id
-
 
     def write(self, cr, uid, ids, vals, context=None):
         res = super(account_analytic_account, self).write(cr, uid, ids, vals,
