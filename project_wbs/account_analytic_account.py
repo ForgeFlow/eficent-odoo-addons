@@ -316,5 +316,31 @@ class account_analytic_account(base_stage, osv.osv):
             res.append((account.id, data))
         return res
 
+    def write(self, cr, uid, ids, values, context=None):
+        res = super(account_analytic_account, self).write(
+            cr, uid, ids, values, context=context)
+        if values.get('stage_id'):
+            project_obj = self.pool.get('project.project')
+            stage_obj = self.pool.get('analytic.account.stage')
+            for acc_id in ids:
+                # Search if there's an associated project
+                project_ids = project_obj.search(
+                    cr, uid, [('analytic_account_id', '=', acc_id)],
+                    context=context)
+                stage = stage_obj.browse(cr, uid, values.get('stage_id'),
+                                         context=context)
+                if stage.project_state == 'close':
+                    project_obj.set_done(cr, uid, project_ids,
+                                         context=context)
+                elif stage.project_state == 'cancelled':
+                    project_obj.set_cancel(cr, uid, project_ids,
+                                           context=context)
+                elif stage.project_state == 'pending':
+                    project_obj.set_pending(cr, uid, project_ids,
+                                            context=context)
+                elif stage.project_state == 'open':
+                    project_obj.set_open(cr, uid, project_ids,
+                                         context=context)
+        return res
 
 account_analytic_account()

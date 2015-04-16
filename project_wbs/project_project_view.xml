@@ -50,7 +50,7 @@
                         <field name="user_id"/>
                         <field name="date_start" string="Start Date"/>
                         <field name="date" string="End Date"/>
-                        <field name="stage_id" on_change="on_change_stage(stage_id)"/>
+                        <field name="stage_id"/>
                         <field name="state" invisible="True"/>
                         <field name="child_ids" invisible="True"/>
                         <field name="progress_rate" readonly="True"/>
@@ -84,7 +84,7 @@
                     <attribute name="invisible">True</attribute>
                 </xpath>
                 <xpath expr='//field[@name="state"]' position="after">
-                    <field name="stage_id" widget="statusbar" clickable="True" on_change="on_change_stage(stage_id)"/>
+                    <field name="stage_id" widget="statusbar" clickable="True"/>
                 </xpath>
             	<group position="after">
 					<group string="Project configuration">
