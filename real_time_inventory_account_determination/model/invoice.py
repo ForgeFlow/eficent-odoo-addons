@@ -34,30 +34,30 @@ class account_invoice_line(orm.Model):
         total_qty = 0.0
         if (
             line.invoice_id.type not in ('in_invoice', 'in_refund')
-            or not line.move_line_ids
             or line.product_id.valuation != 'real_time'
         ):
             return res
-        for move in line.move_line_ids:
-            qty = uom_obj._compute_qty(cr, uid, move.product_uom.id,
-                                       move.product_qty,
-                                       move.product_id.uom_id.id)
-            total_qty += qty
-            if move.product_id.cost_method == 'average' \
-                    and move.price_unit:
-                price_unit = currency_obj.compute(
-                    cr, uid, line.invoice_id.currency_id.id,
-                    move.price_currency_id.id, move.price_unit,
-                    round=False)
-                moves_price += price_unit * qty
-            else:
-                price_unit = currency_obj.compute(
-                    cr, uid, line.invoice_id.currency_id.id,
-                    move.price_currency_id.id,
-                    move.product_id.standard_price, round=False)
-                moves_price += price_unit * qty
-        res['price'] = moves_price
-        res['price_unit'] = moves_price / total_qty
+        if line.move_line_ids:
+            for move in line.move_line_ids:
+                qty = uom_obj._compute_qty(cr, uid, move.product_uom.id,
+                                           move.product_qty,
+                                           move.product_id.uom_id.id)
+                total_qty += qty
+                if move.product_id.cost_method == 'average' \
+                        and move.price_unit:
+                    price_unit = currency_obj.compute(
+                        cr, uid, line.invoice_id.currency_id.id,
+                        move.price_currency_id.id, move.price_unit,
+                        round=False)
+                    moves_price += price_unit * qty
+                else:
+                    price_unit = currency_obj.compute(
+                        cr, uid, line.invoice_id.currency_id.id,
+                        move.price_currency_id.id,
+                        move.product_id.standard_price, round=False)
+                    moves_price += price_unit * qty
+            res['price'] = moves_price
+            res['price_unit'] = moves_price / total_qty
         return res
 
     def move_line_get(self, cr, uid, invoice_id, context=None):

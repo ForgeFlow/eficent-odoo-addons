@@ -50,24 +50,3 @@ class purchase_order(orm.Model):
                     account_id = self.pool.get('account.fiscal.position').\
                         map_account(cr, uid, fpos, acc_id)
         return account_id
-
-    def wkf_confirm_order(self, cr, uid, ids, context=None):
-        for po in self.browse(cr, uid, ids, context=context):
-            for line in po.order_line:
-                if (
-                    line.product_id.valuation == 'real_time'
-                    and line.product_id.type != 'service'
-                    and not po.dest_address_id
-                    and po.invoice_method in ('manual', 'order')
-                ):
-                    raise orm.except_orm(
-                        _('Error!'),
-                        _('It is not possible to confirm a purchase order '
-                          'with invoice control method "Based on generated '
-                          'draft invoice" or "Based on Purchase Order lines". '
-                          'if the PO contains at least one line with a '
-                          'non-service product set with real time inventory '
-                          'valuation, and the the PO is not being directly '
-                          'shipped to a third party.'))
-        return super(purchase_order, self).wkf_confirm_order(cr, uid, ids,
-                                                             context=None)

@@ -63,15 +63,6 @@ revenue originated from the sale of this product.
 * Expense Account:
 Should map to the same account as in 'Stock Output Account'.
 
-Restriction to confirm purchase orders
---------------------------------------
-It is not possible to confirm a purchase order with invoice control method
-"Based on generated draft invoice" or "Based on Purchase Order lines" if the
-PO contains at least one line with a non-service product set with real time
-inventory valuation, and the destination the PO is not being directly
-shipped to a third party (drop shipments).
-
-
 Creating Supplier Invoices
 --------------------------
 When a supplier invoice is created from a Purchase Order or Picking,
