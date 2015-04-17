@@ -62,7 +62,7 @@
             <field name="field_parent">child_complete_ids</field>
             <field name="arch" type="xml">
                 <tree string="Bill of Materials" editable="top"
-                      colors="blue:has_child == False">
+                      colors="blue:method">
                     <button string="Parent BOM"
                         name="action_openParentTreeView"
                         type="object"
@@ -76,6 +76,7 @@
                     <field name="complete_bom_hierarchy_code"/>
                     <field name="complete_bom_hierarchy_name"/>
                     <field name="bom_id"/>
+                    <field name="sequence"/>
                     <field name="code"/>
                     <field name="position"/>
                     <field name="has_child"/>
