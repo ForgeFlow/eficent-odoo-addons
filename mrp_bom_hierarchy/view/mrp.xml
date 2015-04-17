@@ -10,7 +10,6 @@
             <field name="arch" type="xml">
                 <xpath
                         expr="//notebook/page/field[@name='bom_lines']/tree//field[@name='product_id']" position="before">
-                    <field name="code"/>
                     <field name="has_child"/>
                 </xpath>
             </field>
@@ -35,12 +34,11 @@
             <field name="field_parent">child_complete_ids</field>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='product_id']" position="before">
-                    <field name="code"/>
+                    <field name="is_parent"/>
                     <field name="has_child"/>
                 </xpath>
             </field>
         </record>
-
 
         <record id="view_mrp_bom_filter" model="ir.ui.view">
             <field name="name">mrp.bom.select</field>
