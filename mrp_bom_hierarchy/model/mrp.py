@@ -166,7 +166,7 @@ class mrp_bom(osv.osv):
         'has_child': fields.function(_is_bom, string="Has components",
                                      type='boolean', readonly=True),
         'product_has_own_bom': fields.function(_product_has_own_bom,
-                                               string="Has own BOM",
+                                               string="Product has own BOM",
                                                type='boolean', readonly=True),
         'bom_hierarchy_indent': fields.function(_bom_hierarchy_indent_calc,
                                                 method=True,
@@ -245,23 +245,14 @@ class mrp_bom(osv.osv):
         product_bom_ids = self.pool.get('mrp.bom').search(
             cr, uid, [('product_id', '=', bom.product_id.id),
                       ('bom_id', '=', False)], context=context)
-        cr.execute("""
-            SELECT b2.id
-            FROM mrp_bom b1
-            JOIN mrp_bom b2
-            ON b1.id = b2.bom_id
-            WHERE b1.product_id = %s
-            AND b1.bom_id IS NULL""", (bom.product_id.id, ))
-        res = cr.fetchall()
-        bom_ids = [x[0] for x in res]
         res = self.pool.get('ir.actions.act_window').for_xml_id(
-            cr, uid, 'mrp_bom_hierarchy', 'action_mrp_bom_hierarchy_tree2',
+            cr, uid, 'mrp', 'mrp_bom_form_action2',
             context)
-        if product_bom_ids:
-            res['context'] = {
-                'default_bom_id': product_bom_ids[0],
-            }
+
+        res['context'] = {
+            'default_product_id': bom.product_id.id,
+        }
         res['domain'] = "[('id', 'in', ["+','.join(
-            map(str, bom_ids))+"])]"
+            map(str, product_bom_ids))+"])]"
         res['nodestroy'] = False
         return res
