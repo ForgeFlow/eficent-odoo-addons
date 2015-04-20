@@ -27,6 +27,8 @@ class mrp_bom(osv.osv):
 
     def get_child_boms(self, cr, uid, ids, context=None):
         result = {}
+        if not ids:
+            return result
         for curr_id in ids:
             result[curr_id] = True
         # Now add the children
@@ -45,6 +47,18 @@ class mrp_bom(osv.osv):
         res = cr.fetchall()
         for x, y in res:
             result[y] = True
+        return result
+
+    def _get_boms_from_product(self, cr, uid, ids, context=None):
+        result = {}
+        bom_obj = self.pool.get('mrp.bom')
+        for p in ids:
+            product_bom_ids = bom_obj.search(
+                cr, uid, [('product_id', '=', p)])
+            bom_ids = bom_obj.get_child_boms(cr, uid, product_bom_ids,
+                                             context=context)
+            for bom_id in bom_ids:
+                result[bom_id] = True
         return result
 
     def _is_bom(self, cr, uid, ids, name, arg, context=None):
@@ -87,6 +101,10 @@ class mrp_bom(osv.osv):
             while b:
                 if b.code:
                     data.insert(0, b.code)
+                elif b.position:
+                    data.insert(0, b.position)
+                elif b.product_id.default_code:
+                    data.insert(0, b.product_id.default_code)
                 else:
                     data.insert(0, '')
 
@@ -108,6 +126,8 @@ class mrp_bom(osv.osv):
             while b:
                 if b.name:
                     data.insert(0, b.name)
+                elif b.product_id.name:
+                    data.insert(0, b.product_id.name)
                 else:
                     data.insert(0, '')
 
@@ -126,48 +146,56 @@ class mrp_bom(osv.osv):
                 res[bom.id] = False
         return res
 
+    def _product_has_own_bom(self, cr, uid, ids, prop, unknow_none,
+                             unknow_dict):
+        res = {}
+        for bom in self.browse(cr, uid, ids, context=None):
+            bom_ids = self.pool.get('mrp.bom').search(
+                cr, uid, [('product_id', '=', bom.product_id.id),
+                          ('bom_id', '=', False)], context=None)
+            if bom_ids:
+                res[bom.id] = True
+            else:
+                res[bom.id] = False
+        return res
+
     _columns = {
         'is_parent': fields.function(_is_parent, string="Is parent BOM",
                                      type='boolean', readonly=True,
                                      store=True),
         'has_child': fields.function(_is_bom, string="Has components",
                                      type='boolean', readonly=True),
+        'product_has_own_bom': fields.function(_product_has_own_bom,
+                                               string="Has own BOM",
+                                               type='boolean', readonly=True),
         'bom_hierarchy_indent': fields.function(_bom_hierarchy_indent_calc,
                                                 method=True,
                                                 type='char', string='Level',
                                                 size=32, readonly=True),
         'complete_bom_hierarchy_code': fields.function(
             _complete_bom_hierarchy_code_calc, method=True, type='char',
-            string='Full BOM Hierarchy Code', size=250,
-            help='The full BOM code describes the full path of this component '
-                 'within the BOM hierarchy',
-            store={'mrp.bom': (get_child_boms, ['name', 'code',
-                                                'bom_id'], 20)}),
+            string='Complete Reference', size=250,
+            help='Describes the full path of this '
+                 'component within the BOM hierarchy using the BOM reference.',
+            store={
+                'mrp.bom': (get_child_boms, ['name', 'code', 'position',
+                                             'bom_id'], 20),
+                'product.product': (_get_boms_from_product, ['default_code'],
+                                    20),
+            }),
         'complete_bom_hierarchy_name': fields.function(
             _complete_bom_hierarchy_name_calc, method=True, type='char',
-            string='Full BOM Hierarchy Name', size=250,
-            help='Full path in the BOM hierarchy',
-            store={'mrp.bom': (get_child_boms, ['name', 'code',
-                                                'bom_id'], 20)}),
+            string='Complete Name', size=250,
+            help='Describes the full path of this '
+                 'component within the BOM hierarchy using the BOM name.',
+            store={
+                'mrp.bom': (get_child_boms, ['name', 'bom_id'], 20),
+                'product.product': (_get_boms_from_product, ['name'], 20),
+            },
+            ),
     }
 
     _order = 'complete_bom_hierarchy_code'
-
-    def onchange_product_id(self, cr, uid, ids, product_id, name,
-                            context=None):
-        res = super(mrp_bom, self).onchange_product_id(cr, uid, ids,
-                                                       product_id, name,
-                                                       context=context)
-        if product_id:
-            prod = self.pool.get('product.product').browse(
-                cr, uid, product_id, context=context)
-            if 'value' in res:
-                res['value'].update({'code': prod.code})
-            else:
-                res = {'value': {'name': prod.name,
-                                 'code': prod.code,
-                                 'product_uom': prod.uom_id.id}}
-        return res
 
     def action_openChildTreeView(self, cr, uid, ids, context=None):
         """
@@ -204,5 +232,36 @@ class mrp_bom(osv.osv):
                     cr, uid, [('id', '=',
                                bom.bom_id.id)]):
                 res['domain'] = "[('id','=',"+str(parent_bom_id)+")]"
+        res['nodestroy'] = False
+        return res
+
+    def action_openProductBOMTreeView(self, cr, uid, ids, context=None):
+        """
+        :return dict: dictionary value for created view
+        """
+        if context is None:
+            context = {}
+        bom = self.browse(cr, uid, ids[0], context)
+        product_bom_ids = self.pool.get('mrp.bom').search(
+            cr, uid, [('product_id', '=', bom.product_id.id),
+                      ('bom_id', '=', False)], context=context)
+        cr.execute("""
+            SELECT b2.id
+            FROM mrp_bom b1
+            JOIN mrp_bom b2
+            ON b1.id = b2.bom_id
+            WHERE b1.product_id = %s
+            AND b1.bom_id IS NULL""", (bom.product_id.id, ))
+        res = cr.fetchall()
+        bom_ids = [x[0] for x in res]
+        res = self.pool.get('ir.actions.act_window').for_xml_id(
+            cr, uid, 'mrp_bom_hierarchy', 'action_mrp_bom_hierarchy_tree2',
+            context)
+        if product_bom_ids:
+            res['context'] = {
+                'default_bom_id': product_bom_ids[0],
+            }
+        res['domain'] = "[('id', 'in', ["+','.join(
+            map(str, bom_ids))+"])]"
         res['nodestroy'] = False
         return res
