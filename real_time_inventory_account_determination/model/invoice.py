@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp.osv import orm
+from openerp.tools.float_utils import float_round as round
 
 
 class account_invoice_line(orm.Model):
@@ -104,26 +105,39 @@ class account_invoice_line(orm.Model):
                         a = self.pool.get('account.fiscal.position').\
                             map_account(cr, uid, fpos, oa)
                     diff_res = []
+                    decimal_precision = self.pool.get('decimal.precision')
+                    account_prec = decimal_precision.precision_get(cr, uid,
+                                                                   'Account')
                     # calculate and write down the possible price difference
                     # between invoice price and product price
                     for line in res:
                         if a == line['account_id'] \
                                 and i_line.product_id.id == line['product_id']:
-                            if line['price'] != i_line.price_subtotal and acc:
-                                price_diff = \
-                                    i_line.price_subtotal - line['price']
-                                diff_res.append({
-                                    'type': 'src',
-                                    'name': i_line.name[:64],
-                                    'price_unit': price_diff,
-                                    'quantity': line['quantity'],
-                                    'price': price_diff,
-                                    'account_id': acc,
-                                    'product_id': line['product_id'],
-                                    'uos_id': line['uos_id'],
-                                    'account_analytic_id':
-                                        line['account_analytic_id'],
-                                    'taxes': line.get('taxes', []),
-                                    })
+                            # price with discount and without tax included
+                            price_unit = self.pool['account.tax'].compute_all(
+                                cr, uid, line['taxes'],
+                                i_line.price_unit *
+                                (1-(i_line.discount or 0.0)/100.0),
+                                line['quantity'])['total']
+                            price_line = round(line['price_unit'] *
+                                               line['quantity'], account_prec)
+                            price_diff = round(price_unit - price_line,
+                                               account_prec)
+                            line.update({'price': price_line})
+                            diff_res.append({
+                                'type': 'src',
+                                'name': i_line.name[:64],
+                                'price_unit': round(
+                                    price_diff / line['quantity'],
+                                    account_prec),
+                                'quantity': line['quantity'],
+                                'price': price_diff,
+                                'account_id': acc,
+                                'product_id': line['product_id'],
+                                'uos_id': line['uos_id'],
+                                'account_analytic_id':
+                                    line['account_analytic_id'],
+                                'taxes': line.get('taxes', []),
+                                })
                     res += diff_res
         return res
