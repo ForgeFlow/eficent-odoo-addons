@@ -19,11 +19,6 @@
 #
 ##############################################################################
 
-from lxml import etree
-import time
-from datetime import datetime, date
-
-from openerp.tools.translate import _
 from openerp.osv import fields, osv
 from openerp.addons.base_status.base_stage import base_stage
 
@@ -226,7 +221,7 @@ class account_analytic_account(base_stage, osv.osv):
                                            ('work_package','Work Package')], 'Class',
                                           help='The classification allows you to create a proper project '
                                                'Work Breakdown Structure'),
-        'stage_id': fields.many2one('analytic.account.stage', 'Stage', track_visibility='onchange',
+        'stage_id': fields.many2one('analytic.account.stage', 'Stage',
                                     domain="['&', ('fold', '=', False), ('analytic_account_ids', '=', parent_id)]"),
         'child_stage_ids': fields.many2many('analytic.account.stage', 'analytic_account_stage_rel',
                                       'analytic_account_id', 'stage_id', 'Child Stages',
