@@ -43,7 +43,6 @@ class project(base_stage, osv.osv):
             INNER JOIN project_project p
             ON a.id = p.analytic_account_id
             WHERE p.id IN %s
-            AND p.state not in ('template', 'cancelled')
             UNION ALL
             SELECT b.ppid as ppid, p.id as pid, a.id, a.parent_id
             FROM account_analytic_account a
