@@ -87,7 +87,7 @@ To contribute to this module, please visit http://odoo-community.org.
     'author': "Eficent,Odoo Community Association (OCA)",
     'website': 'http://www.eficent.com',
     'license': 'AGPL-3',
-    "depends": ['mrp'],
+    "depends": ['mrp', 'product'],
     "data": ['mrp_demo.xml'],
     'test': [
         'test/mrp_users.yml',
