@@ -27,15 +27,10 @@ from datetime import datetime, date, timedelta
 class project(orm.Model):
     _inherit = "project.project"
 
-    def _compute_poc_on_duration(self, cr, uid, ids, names,
-                                            arg, context=None):
-        res = {}
-        for i in ids:
-            res[i] = 0.0
-
+    def _compute_poc_on_duration(self, cr, uid, ids, names, arg, context=None):
         if context is None:
             context = {}
-
+        res = dict.fromkeys(ids, 0.0)
         measurement_type_obj = self.pool.get('progress.measurement.type')
         def_meas_type_ids = measurement_type_obj.search(
             cr, uid, [('is_default', '=', True)], context=context)
@@ -51,6 +46,7 @@ class project(orm.Model):
 
         wbs_projects_data = self._get_project_analytic_wbs(
             cr, uid, ids, context=context)
+        # Remove from the list the projects that have been cancelled
         for project_id in wbs_projects_data.keys():
             total_dur = 0.0
             ev = 0.0
@@ -71,6 +67,7 @@ class project(orm.Model):
                     (SELECT parent_id from account_analytic_account a2
                     WHERE a2.parent_id = a1.id)
                     AND p.id in %s
+                    AND p.state <> 'cancelled'
                     ORDER BY p.id
                 )
                 SELECT DISTINCT(pid) pid, duration, value, cdate
