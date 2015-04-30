@@ -124,12 +124,14 @@ class account_invoice_line(orm.Model):
                             price_diff = round(price_unit - price_line,
                                                account_prec)
                             line.update({'price': price_line})
+                            try:
+                                price_unit = price_diff / line['quantity']
+                            except ZeroDivisionError:
+                                price_unit = 0.0
                             diff_res.append({
                                 'type': 'src',
                                 'name': i_line.name[:64],
-                                'price_unit': round(
-                                    price_diff / line['quantity'],
-                                    account_prec),
+                                'price_unit': round(price_unit, account_prec),
                                 'quantity': line['quantity'],
                                 'price': price_diff,
                                 'account_id': acc,
