@@ -399,6 +399,8 @@ class project(base_stage, osv.osv):
             cr, uid, ids, parent_id)
 
     def write(self, cr, uid, ids, values, context=None):
+        if context is None:
+            context = {}
         for p in self.browse(cr, uid, ids, context=context):
             if values.get('state') and not values.get('stage_id'):
                 if not context.get('change_project_stage_from_status'):
