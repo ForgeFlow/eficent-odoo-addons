@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
 #              Jordi Ballester Alomar <jordi.ballester@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,23 +18,44 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import time
 from openerp.osv import fields, osv, orm
+import openerp.addons.decimal_precision as dp
 
-    
-class stock_move(osv.osv):    
+
+class stock_move(orm.Model):
 
     _inherit = "stock.move"
 
     _columns = {        
-        'analytic_account_id': fields.many2one('account.analytic.account', 'Analytic Account'),
-        'analytic_account_user_id': fields.related('analytic_account_id',
-                                           'user_id',
-                                           type='many2one',
-                                           relation='res.users',
-                                           string='Project Manager',
-                                           store=True,
-                                           readonly=True),
+        'analytic_account_id': fields.many2one('account.analytic.account',
+                                               'Analytic Account'),
+        'analytic_account_user_id': fields.related(
+            'analytic_account_id', 'user_id', type='many2one',
+            relation='res.users', string='Project Manager', store=True,
+            readonly=True),
     }
-    
-stock_move()
+
+
+class stock_inventory_line(osv.osv):
+    _inherit = "stock.inventory.line"
+
+    _columns = {
+        'analytic_account_id': fields.many2one('account.analytic.account',
+                                               'Analytic Account'),
+    }
+
+
+class stock_inventory(osv.osv):
+    _inherit = "stock.inventory"
+
+    def _inventory_line_hook(self, cr, uid, inventory_line, move_vals):
+        """ Creates a stock move from an inventory line
+        @param inventory_line:
+        @param move_vals:
+        @return:
+        """
+        if inventory_line.analytic_account_id:
+            move_vals['analytic_account_id'] = \
+                inventory_line.analytic_account_id.id
+        return super(stock_inventory, self)._inventory_line_hook(
+            cr, uid, inventory_line, move_vals)
