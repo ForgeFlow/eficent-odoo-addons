@@ -20,3 +20,4 @@
 ##############################################################################
 from . import stock
 from . import stock_picking
+from . import analytic_account

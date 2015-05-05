@@ -25,7 +25,18 @@
                         type="action"
                         context="{'default_analytic_account_id': active_id,'search_default_analytic_account_id': [active_id]}"
                         groups="analytic.group_analytic_accounting"/>
-                </xpath>                              
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Stock" name="stock">
+                        <group>
+                            <field name="stock_available"/>
+                        </group>
+                        <group>
+                            <label for="move_ids"/>
+                            <field name="move_ids" nolabel="1"/>
+                        </group>
+                    </page>
+                </xpath>
             </field>
         </record>
 
