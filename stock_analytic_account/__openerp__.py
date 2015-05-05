@@ -42,6 +42,8 @@ Features of this module:
              'view/stock_view.xml',
              'view/stock_picking_view.xml',
              'view/analytic_account_view.xml',
+             'report/report_stock_analytic_account_view.xml',
+             'report/report_stock_move_view.xml',
     ],
     'test':[
     ],
