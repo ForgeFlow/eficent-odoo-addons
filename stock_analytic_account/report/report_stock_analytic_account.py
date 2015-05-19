@@ -29,7 +29,10 @@ class stock_report_analytic_account(orm.Model):
     _description = "Stock report by analytic account"
     _auto = False
     _columns = {
-        'qty': fields.float('Quantity', readonly=True),
+        'qty': fields.float(
+            'Quantity in ref UoM',
+            help="Quantity expressed in the reference UoM",
+            readonly=True),
         'location_id': fields.many2one('stock.location', 'Location',
                                        readonly=True, select=True),
         'usage': fields.selection([('supplier', 'Supplier Location'),
@@ -47,6 +50,9 @@ class stock_report_analytic_account(orm.Model):
         'analytic_account_id': fields.many2one('account.analytic.account',
                                                'Analytic Account',
                                                readonly=True, select=True),
+        'analytic_reserved': fields.boolean('Stock reserved for the '
+                                            'Analytic Account',
+                                            readonly=True, select=True),
     }
 
     def init(self, cr):
@@ -58,6 +64,7 @@ class stock_report_analytic_account(orm.Model):
                     usage,
                     product_id,
                     analytic_account_id,
+                    analytic_reserved,
                     sum(qty) as qty
                 from (
                     select -max(sm.id) as id,
@@ -65,6 +72,7 @@ class stock_report_analytic_account(orm.Model):
                         sl.usage,
                         sm.product_id,
                         sm.analytic_account_id,
+                        sm.analytic_reserved,
                         -sum(sm.product_qty /uo.factor) as qty
                     from stock_move as sm
                     left join stock_location sl
@@ -74,13 +82,15 @@ class stock_report_analytic_account(orm.Model):
                     where state = 'done'
                     group by sm.location_id, sl.usage, sm.product_id,
                     sm.product_uom,
-                    sm.analytic_account_id
+                    sm.analytic_account_id,
+                    sm.analytic_reserved
                     union all
                     select max(sm.id) as id,
                         sm.location_dest_id as location_id,
                         sl.usage,
                         sm.product_id,
                         sm.analytic_account_id,
+                        sm.analytic_reserved,
                         sum(sm.product_qty /uo.factor) as qty
                     from stock_move as sm
                     left join stock_location sl
@@ -89,9 +99,11 @@ class stock_report_analytic_account(orm.Model):
                         on (uo.id=sm.product_uom)
                     where sm.state = 'done'
                     group by sm.location_dest_id, sl.usage, sm.product_id,
-                    sm.product_uom, sm.analytic_account_id
+                    sm.product_uom, sm.analytic_account_id,
+                    sm.analytic_reserved
                 ) as report
-                group by location_id, usage, product_id, analytic_account_id
+                group by location_id, usage, product_id,
+                analytic_account_id, analytic_reserved
             )""")
 
     def unlink(self, cr, uid, ids, context=None):

@@ -49,12 +49,16 @@ class Product(orm.Model):
             return res
 
         if context.get('shop', False):
-            warehouse_id = shop_obj.read(cr, uid, int(context['shop']), ['warehouse_id'])['warehouse_id'][0]
+            warehouse_id = shop_obj.read(
+                cr, uid, int(context['shop']),
+                ['warehouse_id'])['warehouse_id'][0]
             if warehouse_id:
                 context['warehouse'] = warehouse_id
 
         if context.get('warehouse', False):
-            lot_id = warehouse_obj.read(cr, uid, int(context['warehouse']), ['lot_stock_id'])['lot_stock_id'][0]
+            lot_id = warehouse_obj.read(
+                cr, uid, int(context['warehouse']),
+                ['lot_stock_id'])['lot_stock_id'][0]
             if lot_id:
                 context['location'] = lot_id
 
@@ -62,7 +66,9 @@ class Product(orm.Model):
             if type(context['location']) == type(1):
                 location_ids = [context['location']]
             elif type(context['location']) in (type(''), type(u'')):
-                location_ids = location_obj.search(cr, uid, [('name','ilike',context['location'])], context=context)
+                location_ids = location_obj.search(
+                    cr, uid, [('name', 'ilike', context['location'])],
+                    context=context)
             else:
                 location_ids = context['location']
         else:
@@ -75,7 +81,8 @@ class Product(orm.Model):
 
         # build the list of ids of children of the location given by id
         if context.get('compute_child',True):
-            child_location_ids = location_obj.search(cr, uid, [('location_id', 'child_of', location_ids)])
+            child_location_ids = location_obj.search(
+                cr, uid, [('location_id', 'child_of', location_ids)])
             location_ids = child_location_ids or location_ids
 
         # this will be a dictionary of the product UoM by product id
@@ -84,9 +91,11 @@ class Product(orm.Model):
         for product in self.read(cr, uid, ids, ['uom_id'], context=context):
             product2uom[product['id']] = product['uom_id'][0]
             uom_ids.append(product['uom_id'][0])
-        # this will be a dictionary of the UoM resources we need for conversion purposes, by UoM id
+        # this will be a dictionary of the UoM resources we need for
+        # conversion purposes, by UoM id
         uoms_o = {}
-        for uom in self.pool.get('product.uom').browse(cr, uid, uom_ids, context=context):
+        for uom in self.pool.get('product.uom').browse(cr, uid, uom_ids,
+                                                       context=context):
             uoms_o[uom.id] = uom
 
         results = []
@@ -96,7 +105,8 @@ class Product(orm.Model):
         to_date = context.get('to_date',False)
         date_str = False
         date_values = False
-        where = [tuple(location_ids),tuple(location_ids),tuple(ids),tuple(states)]
+        where = [tuple(location_ids), tuple(location_ids), tuple(ids),
+                 tuple(states)]
         if from_date and to_date:
             date_str = "date>=%s and date<=%s"
             where.append(tuple([from_date]))
@@ -122,7 +132,8 @@ class Product(orm.Model):
         analytic_account_id = context.get('analytic_account_id', False)
         analytic_account_clause = ''
         if analytic_account_id:
-            analytic_account_clause = ' and analytic_account_id = %s '
+            analytic_account_clause = ' and analytic_account_id = %s and ' \
+                                      'analytic_reserved = True '
             where += [analytic_account_id]
         elif 'analytic_account_id' in context and not analytic_account_clause:
             analytic_account_clause = ' and analytic_account_id is null '
@@ -132,32 +143,34 @@ class Product(orm.Model):
         if 'in' in what:
             # all moves from a location out of the set to a location in the set
             cr.execute(
-                'select sum(product_qty), product_id, product_uom '\
-                'from stock_move '\
-                'where location_id NOT IN %s '\
-                'and location_dest_id IN %s '\
-                'and product_id IN %s '\
-                'and state IN %s ' + (date_str and 'and '+date_str+' ' or '') +' '\
-                + prodlot_clause +
+                'select sum(product_qty), product_id, product_uom '
+                'from stock_move '
+                'where location_id NOT IN %s '
+                'and location_dest_id IN %s '
+                'and product_id IN %s '
+                'and state IN %s ' + (date_str and 'and '+date_str+' ' or '')
+                + ' '
+                + prodlot_clause + ' '
                 # START OF stock_analytic_account
                 + analytic_account_clause +
                 # END OF stock_analytic_account
-                'group by product_id,product_uom',tuple(where))
+                'group by product_id,product_uom', tuple(where))
             results = cr.fetchall()
         if 'out' in what:
             # all moves from a location in the set to a location out of the set
             cr.execute(
-                'select sum(product_qty), product_id, product_uom '\
-                'from stock_move '\
-                'where location_id IN %s '\
-                'and location_dest_id NOT IN %s '\
-                'and product_id  IN %s '\
-                'and state in %s ' + (date_str and 'and '+date_str+' ' or '') + ' '\
-                + prodlot_clause +
+                'select sum(product_qty), product_id, product_uom '
+                'from stock_move '
+                'where location_id IN %s '
+                'and location_dest_id NOT IN %s '
+                'and product_id  IN %s '
+                'and state in %s ' + (date_str and 'and '+date_str+' ' or '')
+                + ' '
+                + prodlot_clause + ' '
                 # START OF stock_analytic_account
                 + analytic_account_clause +
                 # END OF stock_analytic_account
-                'group by product_id,product_uom',tuple(where))
+                'group by product_id,product_uom', tuple(where))
             results2 = cr.fetchall()
 
         # Get the missing UoM resources
@@ -171,16 +184,21 @@ class Product(orm.Model):
             for o in uoms:
                 uoms_o[o.id] = o
 
-        #TOCHECK: before change uom of product, stock move line are in old uom.
+        # TOCHECK: before change uom of product, stock move line are in old
+        # uom.
         context.update({'raise-exception': False})
         # Count the incoming quantities
         for amount, prod_id, prod_uom in results:
-            amount = uom_obj._compute_qty_obj(cr, uid, uoms_o[prod_uom], amount,
-                     uoms_o[context.get('uom', False) or product2uom[prod_id]], context=context)
+            amount = uom_obj._compute_qty_obj(
+                cr, uid, uoms_o[prod_uom], amount,
+                uoms_o[context.get('uom', False) or product2uom[prod_id]],
+                context=context)
             res[prod_id] += amount
         # Count the outgoing quantities
         for amount, prod_id, prod_uom in results2:
-            amount = uom_obj._compute_qty_obj(cr, uid, uoms_o[prod_uom], amount,
-                    uoms_o[context.get('uom', False) or product2uom[prod_id]], context=context)
+            amount = uom_obj._compute_qty_obj(
+                cr, uid, uoms_o[prod_uom], amount,
+                uoms_o[context.get('uom', False) or product2uom[prod_id]],
+                context=context)
             res[prod_id] -= amount
         return res
