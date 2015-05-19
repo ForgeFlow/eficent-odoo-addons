@@ -22,6 +22,8 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from openerp.osv import orm, fields
+from openerp import SUPERUSER_ID
+
 
 class hr_timesheet_sheet(orm.Model):
     _inherit = "hr_timesheet_sheet.sheet"
@@ -31,7 +33,7 @@ class hr_timesheet_sheet(orm.Model):
         sheet_obj = self.pool.get('hr_timesheet_sheet.sheet')
         timesheet_obj = self.pool.get('hr.analytic.timesheet')
 
-        for sheet in sheet_obj.browse(cr, uid, ids, context=context):
+        for sheet in sheet_obj.browse(cr, SUPERUSER_ID, ids, context=context):
             date_from = datetime.strptime(sheet.date_from, '%Y-%m-%d')
             user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
             r = user.company_id and user.company_id.timesheet_range or 'month'
