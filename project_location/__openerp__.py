@@ -26,7 +26,7 @@
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
-    "depends": ["project", "analytic_location"],
+    "depends": ["project_stock", "analytic_location"],
     "description": """
 Stock Location in Project
 =========================
