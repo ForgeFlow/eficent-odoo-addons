@@ -74,7 +74,10 @@ class stock_fill_inventory(osv.osv_memory):
             for move in move_obj.browse(cr, uid, move_ids, context=context):
                 lot_id = move.prodlot_id.id
                 prod_id = move.product_id.id
-                analytic_account_id = move.analytic_account_id.id
+                if move.analytic_reserved:
+                    analytic_account_id = move.analytic_account_id.id
+                else:
+                    analytic_account_id = False
                 if move.location_dest_id.id != move.location_id.id:
                     if move.location_dest_id.id == location:
                         qty = uom_obj._compute_qty_obj(

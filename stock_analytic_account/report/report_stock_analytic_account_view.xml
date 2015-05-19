@@ -10,6 +10,8 @@
                 <tree string="Stock by analytic account" create="false">
                     <field name="analytic_account_id"
                        groups="analytic.group_analytic_accounting"/>
+                    <field name="analytic_reserved"
+                       groups="analytic.group_analytic_accounting"/>
                     <field name="location_id"/>
                     <field name="product_id"/>
                     <field name="qty"/>
@@ -26,8 +28,11 @@
                     <field name="usage"/>
                     <field name="product_id"/>
                     <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
-                    <filter string="Internal Location" icon="terp-personal"
-                            domain="[('usage','=','internal')]"/>
+                    <field name="analytic_reserved" groups="analytic.group_analytic_accounting"/>
+                    <filter string="Internal Location"
+                            icon="terp-personal"
+                            domain="[('usage','=','internal')]"
+                            name="internal"/>
                     <group expand="0" string="Group By...">
                         <filter string="Analytic Account" name="group_analytic"
                                 icon="terp-folder-orange" domain="[]"
@@ -61,14 +66,14 @@
 
         <record model="ir.actions.act_window"
                 id="action_report_stock_analytic_account">
-            <field name="name">Stock by Analytic Account</field>
+            <field name="name">Reserved Project Stock</field>
             <field name="res_model">stock.report.analytic.account</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="help">Display the stock availability associated to an
-                analytic account.</field>
+            <field name="help">Display the stock reserved for an analytic account.</field>
             <field name="search_view_id" ref="report_stock_analytic_account_search"/>
-            <field name="context">{'search_default_group_location':1,'search_default_group_analytic': 1,'search_default_group_product': 1,'group_by':[]}</field>
+            <field name="domain">[('analytic_reserved','=',True)]</field>
+            <field name="context">{'search_default_internal':1,'search_default_group_location':1,'search_default_group_analytic': 1,'search_default_group_product': 1,'group_by':[]}</field>
         </record>
 
         <menuitem parent="stock.next_id_61"
