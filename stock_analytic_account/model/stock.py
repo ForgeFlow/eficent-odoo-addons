@@ -30,11 +30,100 @@ class stock_move(orm.Model):
     _columns = {        
         'analytic_account_id': fields.many2one('account.analytic.account',
                                                'Analytic Account'),
+        'analytic_reserved': fields.boolean(
+            'Reserved',
+            help="Reserved for the Analytic Account"),
         'analytic_account_user_id': fields.related(
             'analytic_account_id', 'user_id', type='many2one',
             relation='res.users', string='Project Manager', store=True,
             readonly=True),
     }
+
+    def _get_analytic_reserved(self, cr, uid, vals, context=None):
+        context = context or {}
+        analytic_obj = self.pool['account.analytic.account']
+        aaid = vals['analytic_account_id']
+        if aaid:
+            aa = analytic_obj.browse(cr, uid, aaid, context=context)
+            vals['analytic_reserved'] = aa.use_reserved_stock
+        else:
+            vals['analytic_reserved'] = False
+        return vals
+
+    def create(self, cr, uid, vals, context=None):
+        if 'analytic_account_id' in vals:
+            vals['analytic_reserved'] = self._get_analytic_reserved(
+                cr, uid, vals, context=context)
+        return super(stock_move, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, vals, context=None):
+        if 'analytic_account_id' in vals:
+            vals['analytic_reserved'] = self._get_analytic_reserved(
+                cr, uid, vals, context=context)
+        return super(stock_move, self).write(cr, uid, ids, vals,
+                                             context=context)
+
+    def action_scrap(self, cr, uid, ids, quantity, location_id, context=None):
+        """ Move the scrap/damaged product into scrap location
+        @param cr: the database cursor
+        @param uid: the user id
+        @param ids: ids of stock move object to be scrapped
+        @param quantity : specify scrap qty
+        @param location_id : specify scrap location
+        @param context: context arguments
+        @return: Scraped lines
+        Attention!!! This method overrides the standard without calling Super
+        The changes introduced by this module are encoded within a
+        comments START OF and END OF stock_analytic_account.
+        """
+
+        # quantity should in MOVE UOM
+        if quantity <= 0:
+            raise osv.except_osv(
+                _('Warning!'),
+                _('Please provide a positive quantity to scrap.'))
+        res = []
+        for move in self.browse(cr, uid, ids, context=context):
+            source_location = move.location_id
+            if move.state == 'done':
+                source_location = move.location_dest_id
+            if source_location.usage != 'internal':
+                # restrict to scrap from a virtual location
+                # because it's meaningless and it may introduce
+                # errors in stock ('creating' new products from nowhere)
+                raise osv.except_osv(
+                    _('Error!'),
+                    _('Forbidden operation: it is not allowed '
+                      'to scrap products from a virtual location.'))
+            move_qty = move.product_qty
+            uos_qty = quantity / move_qty * move.product_uos_qty
+            default_val = {
+                'location_id': source_location.id,
+                'product_qty': quantity,
+                'product_uos_qty': uos_qty,
+                'state': move.state,
+                'scrapped': True,
+                'location_dest_id': location_id,
+                'tracking_id': move.tracking_id.id,
+                'prodlot_id': move.prodlot_id.id,
+                # START OF stock_analytic_account
+                'analytic_account_id': move.analytic_account_id.id,
+                # ENF OF stock_analytic_account
+            }
+            new_move = self.copy(cr, uid, move.id, default_val)
+
+            res += [new_move]
+            product_obj = self.pool.get('product.product')
+            for product in product_obj.browse(cr, uid, [move.product_id.id],
+                                              context=context):
+                if move.picking_id:
+                    uom = product.uom_id.name if product.uom_id else ''
+                    message = _("%s %s %s has been <b>moved to</b> scrap.") \
+                        % (quantity, uom, product.name)
+                    move.picking_id.message_post(body=message)
+
+        self.action_done(cr, uid, res, context=context)
+        return res
 
 
 class stock_inventory_line(osv.osv):
@@ -61,7 +150,6 @@ class stock_inventory(osv.osv):
         return super(stock_inventory, self)._inventory_line_hook(
             cr, uid, inventory_line, move_vals)
 
-
     def action_confirm(self, cr, uid, ids, context=None):
         """ Confirm the inventory and writes its finished date
         Attention!!! This method overrides the standard without calling Super
@@ -71,7 +159,8 @@ class stock_inventory(osv.osv):
         """
         if context is None:
             context = {}
-        # to perform the correct inventory corrections we need analyze stock location by
+        # to perform the correct inventory corrections we need analyze
+        # stock location by
         # location, never recursively, so we use a special context
         product_context = dict(context, compute_child=False)
 
@@ -82,7 +171,8 @@ class stock_inventory(osv.osv):
                 pid = line.product_id.id
                 # START OF stock_analytic_account
                 # Replace the existing entry:
-                # product_context.update(uom=line.product_uom.id, to_date=inv.date,
+                # product_context.update(uom=line.product_uom.id,
+                # to_date=inv.date,
                 # date=inv.date, prodlot_id=line.prod_lot_id.id)
                 # ,with this one:
                 product_context.update(
@@ -90,7 +180,8 @@ class stock_inventory(osv.osv):
                     prodlot_id=line.prod_lot_id.id,
                     analytic_account_id=line.analytic_account_id.id,)
                 # ENF OF stock_analytic_account
-                amount = location_obj._product_get(cr, uid, line.location_id.id, [pid], product_context)[pid]
+                amount = location_obj._product_get(
+                    cr, uid, line.location_id.id, [pid], product_context)[pid]
                 change = line.product_qty - amount
                 lot_id = line.prod_lot_id.id
                 if change:
@@ -104,18 +195,21 @@ class stock_inventory(osv.osv):
                     }
 
                     if change > 0:
-                        value.update( {
+                        value.update({
                             'product_qty': change,
                             'location_id': location_id,
                             'location_dest_id': line.location_id.id,
                         })
                     else:
-                        value.update( {
+                        value.update({
                             'product_qty': -change,
                             'location_id': line.location_id.id,
                             'location_dest_id': location_id,
                         })
-                    move_ids.append(self._inventory_line_hook(cr, uid, line, value))
-            self.write(cr, uid, [inv.id], {'state': 'confirm', 'move_ids': [(6, 0, move_ids)]})
-            self.pool.get('stock.move').action_confirm(cr, uid, move_ids, context=context)
+                    move_ids.append(self._inventory_line_hook(cr, uid, line,
+                                                              value))
+            self.write(cr, uid, [inv.id], {'state': 'confirm',
+                                           'move_ids': [(6, 0, move_ids)]})
+            self.pool.get('stock.move').action_confirm(cr, uid, move_ids,
+                                                       context=context)
         return True

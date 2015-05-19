@@ -19,3 +19,4 @@
 #
 ##############################################################################
 from . import stock_fill_inventory
+from . import stock_change_product_qty
