@@ -26,7 +26,7 @@
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
-    "depends": ["analytic", "stock"],
+    "depends": ["analytic", "stock", "stock_analytic_account"],
     "description": """
 Stock Location in Analytic Account
 ==================================
