@@ -35,3 +35,13 @@ class account_analytic_account(orm.Model):
             help="Stock with reference to this analytic account "
                  "is considered to be reserved.")
     }
+
+    def copy(self, cr, uid, id, default=None, context=None):
+        if context is None:
+            context = {}
+        if default is None:
+            default = {}
+        default['move_ids'] = []
+        res = super(account_analytic_account, self).copy(cr, uid, id, default,
+                                                         context)
+        return res
