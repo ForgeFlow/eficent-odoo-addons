@@ -26,6 +26,10 @@ from openerp.tools.translate import _
 class delivery_carrier(orm.Model):
     _inherit = "delivery.carrier"
 
+    def get_price(self, cr, uid, ids, field_name, arg=None, context=None):
+        if context.get('purchase_order_id', False):
+            return 0.0
+
     def name_get(self, cr, uid, ids, context=None):
         if not len(ids):
             return []
@@ -72,15 +76,15 @@ class delivery_grid(orm.Model):
     _inherit = "delivery.grid"
 
     _columns = {
-            'src_country_ids': fields.many2many(
-                'res.country', 'delivery_grid_src_country_rel',
-                'grid_id', 'country_id', 'Source Countries'),
-            'src_state_ids': fields.many2many('res.country.state',
-                                              'delivery_grid_src_state_rel',
-                                              'grid_id', 'state_id',
-                                              'Source States'),
-            'src_zip_from': fields.char('Start Source Zip', size=12),
-            'src_zip_to': fields.char('To Source Zip', size=12),
+        'src_country_ids': fields.many2many(
+            'res.country', 'delivery_grid_src_country_rel',
+            'grid_id', 'country_id', 'Source Countries'),
+        'src_state_ids': fields.many2many('res.country.state',
+                                          'delivery_grid_src_state_rel',
+                                          'grid_id', 'state_id',
+                                          'Source States'),
+        'src_zip_from': fields.char('Start Source Zip', size=12),
+        'src_zip_to': fields.char('To Source Zip', size=12),
     }
 
     def get_cost(self, cr, uid, id, order, dt, context=None):
@@ -124,5 +128,4 @@ class delivery_grid(orm.Model):
             raise orm.except_orm(_('No cost available!'),
                                  _('No line matched this product or order '
                                    'in the chosen delivery grid.'))
-
         return price
