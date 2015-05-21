@@ -1,0 +1,17 @@
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_product_form_expiry">
+            <field name="name">product.normal.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id"
+                   ref="product_manufacturer.view_product_form_expiry"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='manufacturer']" position="attributes">
+                    <attribute name="context">{'default_manufacturer: True,'default_supplier':False, 'default_customer':False}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
