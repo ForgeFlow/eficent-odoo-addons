@@ -38,6 +38,7 @@ where this indicator has been set.
     """,
     'data': [
         'view/partner_view.xml',
+        'view/product_view.xml',
     ],
     'auto_install': False,
     'installable': True,
