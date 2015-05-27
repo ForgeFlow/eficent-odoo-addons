@@ -53,7 +53,10 @@ class account_analytic_account(osv.osv):
         return account_sequence_obj.create(cr, uid, vals, context=context)
 
     _columns = {
-        'sequence_ids': fields.one2many('analytic.account.sequence', 'analytic_account_id', "Child code sequence"),
+        'sequence_ids': fields.one2many(
+            'analytic.account.sequence',
+            'analytic_account_id',
+            "Child code sequence"),
     }
 
     _defaults = {
@@ -61,7 +64,6 @@ class account_analytic_account(osv.osv):
     }
 
     def create(self, cr, uid, vals, *args, **kwargs):
-
         context = kwargs.get('context', {})
         #Assign a new code, from the parent account's sequence, if it exists.
         # If there's no parent, or the parent has no sequence, assign from the basic sequence of the analytic account.
@@ -89,8 +91,8 @@ class account_analytic_account(osv.osv):
     def write(self, cr, uid, ids, data, context=None):
         if context is None:
             context = {}
-
-        #If the parent project changes, obtain a new code according to the new parent's sequence
+        # If the parent project changes, obtain a new code according to the
+        # new parent's sequence
         if 'parent_id' in data and data['parent_id']:
             obj_sequence = self.pool.get('analytic.account.sequence')
             parent = self.browse(cr, uid, data['parent_id'], context=context)
