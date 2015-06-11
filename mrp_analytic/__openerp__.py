@@ -26,7 +26,7 @@
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Manufacturing",
-    "depends": ["mrp", "analytic"],
+    "depends": ["mrp", "analytic", "procurement_analytic"],
     "description": """
 Procurement Analytic Account link
 ====================================
