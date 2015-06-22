@@ -40,7 +40,7 @@ class account_analytic_account(osv.osv):
                 'analytic_account_id': analytic_account_id,
                 'name': ir_sequence.name,
                 'code': ir_sequence.code,
-                'implementation': ir_sequence.implementation,
+                'implementation': 'no_gap',
                 'active': ir_sequence.active,
                 'prefix': ir_sequence.prefix,
                 'suffix': ir_sequence.suffix,
