@@ -11,7 +11,6 @@
                     <group>
                         <group colspan="3" col="4">
                             <field name="account_id" on_change="on_change_account_id_billing(account_id, name, date, product_id, unit_amount, product_uom_id, price_unit, amount_currency, currency_id, version_id, journal_id, ref, company_id, amount, general_account_id)"/>
-                            <field name="account_stage"/>
                             <field name="name"/>
                             <field name="date" on_change="on_change_date_billing(account_id, name, date, product_id, unit_amount, product_uom_id, price_unit, amount_currency, currency_id, version_id, journal_id, ref, company_id, amount, general_account_id)"/>
                         </group>
@@ -53,7 +52,6 @@
             <field name="arch" type="xml">
 				<tree string="Analytic billing plan line" editable="top">
                     <field name="account_id" on_change="on_change_account_id_billing(account_id, name, date, product_id, unit_amount, product_uom_id, price_unit, amount_currency, currency_id, version_id, journal_id, ref, company_id, amount, general_account_id)"/>
-                    <field name="account_stage"/>
                     <field name="customer_id"/>
                     <field name="date" on_change="on_change_date_billing(account_id, name, date, product_id, unit_amount, product_uom_id, price_unit, amount_currency, currency_id, version_id, journal_id, ref, company_id, amount, general_account_id)"/>
                     <field name="name"/>
