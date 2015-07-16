@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #
-#    Authors: Guewen Baconnier, Leonardo Pistone, Jordi Ballester
-#    Copyright 2015 Camptocamp SA
+#    Authors: Jordi Ballester
 #    Copyright 2015 Eficent
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -25,7 +24,7 @@
     "name": "Invoices Analysis by analytic account",
     "version": "0.1",
     "depends": ['account', 'analytic'],
-    "author": "Camptocamp,Odoo Community Association (OCA)",
+    "author": "Eficent,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "category": "Accounting & Finance",
     'description': """
