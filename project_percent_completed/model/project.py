@@ -80,8 +80,9 @@ class project(orm.Model):
                   tuple(wbs_projects_data[project_id].keys()),
                   date_today, def_meas_type_ids[0]),)
             for r in cr.fetchall():
-                total_dur += r[1]
-                ev += r[1] * r[2] / progress_max_value
+                duration = r[1] + 1
+                total_dur += duration
+                ev += duration * r[2] / progress_max_value
             if total_dur > 0:
                 res[project_id] = round(ev / total_dur * 100)
             else:
@@ -89,7 +90,7 @@ class project(orm.Model):
         return res
 
     _columns = {
-        'progress_rate': fields.function(
+        'poc_rate': fields.function(
             _compute_poc_on_duration, method=True,
             string='% Completed', type='float',
             help="""Aggregated percent completed, based on the duration
