@@ -184,6 +184,7 @@ class stock_inventory(osv.osv):
                     cr, uid, line.location_id.id, [pid], product_context)[pid]
                 change = line.product_qty - amount
                 lot_id = line.prod_lot_id.id
+                analytic_account_id = line.analytic_account_id.id or False
                 if change:
                     location_id = line.product_id.property_stock_inventory.id
                     value = {
@@ -191,6 +192,7 @@ class stock_inventory(osv.osv):
                         'product_id': line.product_id.id,
                         'product_uom': line.product_uom.id,
                         'prodlot_id': lot_id,
+                        'analytic_account_id': analytic_account_id,
                         'date': inv.date,
                     }
 
