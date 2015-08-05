@@ -45,6 +45,7 @@ Features of this module:
              'report/report_stock_analytic_account_view.xml',
              'report/report_stock_move_view.xml',
              'wizard/stock_change_product_qty_view.xml',
+             'wizard/stock_fill_inventory_view.xml',
     ],
     'test':[
         'test/stock_users.yml',
