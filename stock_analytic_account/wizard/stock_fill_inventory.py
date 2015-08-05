@@ -26,6 +26,12 @@ from openerp.tools import mute_logger
 class stock_fill_inventory(osv.osv_memory):
     _inherit = "stock.fill.inventory"
 
+    _columns = {
+        'analytic_account_id': fields.many2one('account.analytic.account',
+                                               'Analytic Account',
+                                               required=False)
+    }
+
     def fill_inventory(self, cr, uid, ids, context=None):
         """ To Import stock inventory according to products available
         in the selected locations.
@@ -65,10 +71,16 @@ class stock_fill_inventory(osv.osv_memory):
         for location in location_ids:
             datas = {}
             res[location] = {}
-            move_ids = move_obj.search(
-                cr, uid, ['|', ('location_dest_id', '=', location),
-                          ('location_id', '=', location),
-                          ('state', '=', 'done')], context=context)
+            search_criteria = ['|', ('location_dest_id', '=', location),
+                               ('location_id', '=', location),
+                               ('state', '=', 'done')]
+            if fill_inventory.analytic_account_id:
+                search_criteria.extend(
+                    [('analytic_account_id', '=',
+                      fill_inventory.analytic_account_id.id)])
+
+            move_ids = move_obj.search(cr, uid, search_criteria,
+                                       context=context)
             local_context = dict(context)
             local_context['raise-exception'] = False
             for move in move_obj.browse(cr, uid, move_ids, context=context):
