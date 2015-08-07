@@ -187,7 +187,8 @@ class analytic_resource_plan_line(orm.Model):
 
         if 'account_id' in vals:
             analytic = analytic_obj.browse(cr, uid, vals['account_id'])
-            vals['date'] = analytic.date
+            if not vals.get('date', False):
+                vals['date'] = analytic.date
 
         return super(analytic_resource_plan_line, self).write(
             cr, uid, ids, vals, context=context)
