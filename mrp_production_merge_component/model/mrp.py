@@ -23,12 +23,13 @@ from openerp.osv import fields, orm
 from openerp import SUPERUSER_ID
 
 
-class MrpProduction(orm.Model):
+class mrp_production(orm.Model):
 
     _inherit = 'mrp.production'
 
-    def _action_compute_lines(self, cr, uid, ids, properties=None, context=None):
-        super(MrpProduction, self)._action_compute_lines(
+    def _action_compute_lines(self, cr, uid, ids, properties=None,
+                              context=None):
+        super(mrp_production, self)._action_compute_lines(
             cr, uid, ids, properties=properties, context=context)
         prod_line_obj = self.pool.get('mrp.production.product.line')
         results = []
