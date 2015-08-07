@@ -96,16 +96,44 @@ class analytic_resouce_plan_line_make_procurement(orm.TransientModel):
                           'no start date. This date is used '
                           'as the scheduled date for the '
                           'procurement.'))
+                # Search for an existing procurement order that is draft or
+                # confirmed, for that same product, UoM, location, delivery
+                # address, procurement method, product, BOM. If found,
+                # then add the extra quantity to it.
+                dest_address_id = line.account_id.dest_address_id \
+                    and line.account_id.dest_address_id.id or False
+                location_id = line.account_id.location_id \
+                    and line.account_id.location_id.id or False
 
-                procurement_id = procurement_obj.create(
-                    cr, uid, line_plan_obj.prepare_procurement(
-                        cr, uid, line,
-                        direct_ship=make_procurement.direct_ship,
-                        move_id=False, context=context))
+                procurement_ids = procurement_obj.search(
+                    cr, uid, [('state', 'in', ['draft', 'confirmed']),
+                              ('product_id', '=', line.product_id.id),
+                              ('product_uom', '=', line.product_uom_id.id),
+                              ('location_id', '=', location_id),
+                              ('procure_method', '=', 'make_to_order'),
+                              ('analytic_account_id', '=',
+                               line.account_id.id),
+                              ('dest_address_id', '=', dest_address_id)],
+                    context=context)
+                if procurement_ids:
+                    procurement_id = procurement_ids[0]
+                    procurement = procurement_obj.browse(
+                        cr, uid, procurement_id, context=context)
+                    new_qty = procurement.product_qty + line.unit_amount
+                    procurement_obj.write(cr, uid, [procurement.id],
+                                          {'product_qty': new_qty},
+                                          context=context)
+                else:
+                    procurement_id = procurement_obj.create(
+                        cr, uid, line_plan_obj.prepare_procurement(
+                            cr, uid, line,
+                            direct_ship=make_procurement.direct_ship,
+                            move_id=False, context=context))
 
-                wf_service = netsvc.LocalService("workflow")
-                wf_service.trg_validate(uid, 'procurement.order',
-                                        procurement_id, 'button_confirm', cr)
+                    wf_service = netsvc.LocalService("workflow")
+                    wf_service.trg_validate(uid, 'procurement.order',
+                                            procurement_id, 'button_confirm',
+                                            cr)
 
                 line_plan_obj.write(cr, uid, [line.id],
                                     {'procurement_id': procurement_id},
