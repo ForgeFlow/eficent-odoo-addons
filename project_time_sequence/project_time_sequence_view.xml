@@ -28,7 +28,8 @@
             <field name="inherit_id" ref="project.view_task_form2"/>       
             <field name="arch" type="xml">        
         		<xpath expr="//form/sheet/notebook/page[@string='Delegation']" position="after">        		        			
-					<page groups="base.group_erp_manager" string="Relationships">
+					<page groups="project.group_project_user"
+                          string="Relationships">
                         <separator string="Predecessor Activities" colspan="4"/>
                         <field colspan="4" height="150" name="predecessor_ids" nolabel="1" domain="[('project_id','=',project_id)]"/>
                         <separator string="Successor Activities" colspan="4"/>
