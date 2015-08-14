@@ -111,6 +111,8 @@ class account_invoice_line(orm.Model):
                     # calculate and write down the possible price difference
                     # between invoice price and product price
                     for line in res:
+                        if line['invl_id'] != i_line.id:
+                            continue
                         if a == line['account_id'] \
                                 and i_line.product_id.id == line['product_id']:
                             # price with discount and without tax included
@@ -140,6 +142,7 @@ class account_invoice_line(orm.Model):
                                 'account_analytic_id':
                                     line['account_analytic_id'],
                                 'taxes': line.get('taxes', []),
+                                'invl_id': i_line.id
                                 })
                     res += diff_res
         return res
