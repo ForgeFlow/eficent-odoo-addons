@@ -32,6 +32,7 @@
     """,
     "init_xml": [],
     'data': [
+        'security/ir.model.access.csv'
     ],
     'test':[
     ],
