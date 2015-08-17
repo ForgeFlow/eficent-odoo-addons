@@ -17,6 +17,7 @@
             			<field name="complete_wbs_name" string="WBS name"/>
             			<field name="complete_wbs_code" string="WBS code"/>
 						<field name="account_class" string="Class"/>
+                        <field name="project_analytic_account_id"/>
                         <field name="stage_id" domain="[]"/>
             	</field>
             </field>
@@ -90,6 +91,7 @@
 					<group string="Project configuration">
 						<group>
 							<field name="account_class" string="Class"/>
+                            <field name="project_analytic_account_id"/>
 						</group>
 						<group>
 							<field name="code" string="Code"/>
