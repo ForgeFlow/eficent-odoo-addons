@@ -20,7 +20,7 @@
                    ref="hr_timesheet_sheet.view_hr_timesheet_report_search"/>
             <field name="arch" type="xml">
                 <field name="account_id" position="after">
-                    <field name="project_analytic_account_id" invisible="1"
+                    <field name="project_analytic_account_id"
                            groups="analytic.group_analytic_accounting"/>
                 </field>
                 <filter string="Analytic Account" position="after">
