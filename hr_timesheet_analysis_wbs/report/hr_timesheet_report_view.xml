@@ -21,6 +21,7 @@
             <field name="arch" type="xml">
                 <field name="account_id" position="after">
                     <field name="project_analytic_account_id"
+                           domain="[('account_class', '=', 'project')]"
                            groups="analytic.group_analytic_accounting"/>
                 </field>
                 <filter string="Analytic Account" position="after">
