@@ -241,6 +241,7 @@ class AccountAnalyticAccount(base_stage, orm.Model):
         'project_analytic_account_id': fields.function(
             _get_project_account_id, method=True, type='many2one',
             relation='account.analytic.account',
+            domain="[('account_class', '=', 'project')]",
             string='Root Project',
             help='Root Project in the WBS hierarchy',
             store={'account.analytic.account': (get_child_accounts,
