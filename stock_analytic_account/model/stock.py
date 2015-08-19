@@ -19,11 +19,10 @@
 #
 ##############################################################################
 from openerp.osv import fields, osv, orm
-import openerp.addons.decimal_precision as dp
 from openerp.tools.translate import _
 
 
-class stock_move(orm.Model):
+class StockMove(orm.Model):
 
     _inherit = "stock.move"
 
@@ -54,14 +53,14 @@ class stock_move(orm.Model):
         if 'analytic_account_id' in vals:
             vals['analytic_reserved'] = self._get_analytic_reserved(
                 cr, uid, vals, context=context)
-        return super(stock_move, self).create(cr, uid, vals, context=context)
+        return super(StockMove, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
         if 'analytic_account_id' in vals:
             vals['analytic_reserved'] = self._get_analytic_reserved(
                 cr, uid, vals, context=context)
-        return super(stock_move, self).write(cr, uid, ids, vals,
-                                             context=context)
+        return super(StockMove, self).write(cr, uid, ids, vals,
+                                            context=context)
 
     def action_scrap(self, cr, uid, ids, quantity, location_id, context=None):
         """ Move the scrap/damaged product into scrap location
@@ -126,7 +125,7 @@ class stock_move(orm.Model):
         return res
 
 
-class stock_inventory_line(osv.osv):
+class StockInventoryLine(orm.Model):
     _inherit = "stock.inventory.line"
 
     _columns = {
@@ -134,8 +133,51 @@ class stock_inventory_line(osv.osv):
                                                'Analytic Account'),
     }
 
+    def _check_inventory_line(self, cr, uid, ids, context=None):
+        """Refuse to record duplicate inventory lines
+        Inventory lines with the sale Product, Location, Serial Number,
+        Analytic Account and date are not taken into account correctly when
+        computing the stock level difference, so we'll simply refuse to
+        record them rather than allow users to introduce errors without
+        even knowing it."""
+        for line in self.browse(cr, uid, ids, context=context):
+            inv_lines = self.search(
+                cr, uid, [
+                    ('product_id', '=', line.product_id.id),
+                    ('location_id', '=', line.location_id.id),
+                    ('prod_lot_id', '=', (
+                        line.prod_lot_id
+                        and line.prod_lot_id.id
+                        or False)),
+                    ('inventory_id.date', '=', line.inventory_id.date),
+                    ('analytic_account_id', '=', line.analytic_account_id.id),
+                    ('id', 'not in', ids),
+                ], context=context)
+            if inv_lines:
+                raise orm.except_orm(
+                    _('Duplicate line detected'),
+                    _('You cannot enter more than a single inventory line for '
+                      'the same Product, Location, Serial Number, Analytic '
+                      'Account and date : \n'
+                      '- Product: %s\n'
+                      '- Location: %s\n'
+                      '- Serial Number: %s\n'
+                      '- Analytic Account: %s.') % (
+                        line.product_id.default_code,
+                        line.location_id.name,
+                        (line.prod_lot_id and line.prod_lot_id.id or _('N/A')),
+                        (line.analytic_account_id and
+                         line.analytic_account_id.name or _('N/A')))
+                )
+        return True
 
-class stock_inventory(osv.osv):
+    _constraints = [
+        (_check_inventory_line, 'Duplicate line detected',
+         ['location_id', 'product_id', 'prod_lot_id', 'analytic_account_id'])
+    ]
+
+
+class StockInventory(orm.Model):
     _inherit = "stock.inventory"
 
     def _inventory_line_hook(self, cr, uid, inventory_line, move_vals):
@@ -147,7 +189,7 @@ class stock_inventory(osv.osv):
         if inventory_line.analytic_account_id:
             move_vals['analytic_account_id'] = \
                 inventory_line.analytic_account_id.id
-        return super(stock_inventory, self)._inventory_line_hook(
+        return super(StockInventory, self)._inventory_line_hook(
             cr, uid, inventory_line, move_vals)
 
     def action_confirm(self, cr, uid, ids, context=None):
