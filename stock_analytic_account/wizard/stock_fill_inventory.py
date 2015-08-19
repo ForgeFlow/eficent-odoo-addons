@@ -21,9 +21,9 @@
 
 from openerp.osv import fields, osv, orm
 from openerp.tools.translate import _
-from openerp.tools import mute_logger
 
-class stock_fill_inventory(osv.osv_memory):
+
+class StockFillInventory(orm.TransientModel):
     _inherit = "stock.fill.inventory"
 
     _columns = {
@@ -54,8 +54,6 @@ class stock_fill_inventory(osv.osv_memory):
         else:
             return {'type': 'ir.actions.act_window_close'}
         fill_inventory = self.browse(cr, uid, ids, context=context)
-        res = {}
-        res_location = {}
 
         if fill_inventory.recursive:
             location_ids = location_obj.search(
@@ -127,8 +125,7 @@ class stock_fill_inventory(osv.osv_memory):
                     {'inventory_id': context['active_ids'][0]})
                 domain = []
                 for field, value in stock_move_details.items():
-                    if field == 'product_qty' \
-                            and fill_inventory.set_stock_zero:
+                    if field == 'product_qty':
                         domain.append((field, 'in', [value, '0']))
                         continue
                     domain.append((field, '=', value))
@@ -142,5 +139,3 @@ class stock_fill_inventory(osv.osv_memory):
                     inventory_line_obj.create(cr, uid, stock_move_details,
                                               context=context)
         return {'type': 'ir.actions.act_window_close'}
-
-stock_fill_inventory()
