@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
-#               <jordi.ballester@eficent.com>
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
+#              Jordi Ballester Alomar <jordi.ballester@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,20 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, osv, orm
-
-
-class AccountAnalyticAccount(orm.Model):
-
-    _inherit = 'account.analytic.account'
-
-    _columns = {
-        'cost_category': fields.selection([
-            ('cogs', 'Cost of Goods Sold'),
-            ('expense', 'Expense')], 'Type of Cost',
-            help="Defines what type of cost does the analytic account carry "
-                 "from an employee perspective.")}
-
-    _defaults = {
-        'cost_category': 'expense'
-    }
+from . import models

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
 #               <jordi.ballester@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -21,17 +21,10 @@
 from openerp.osv import fields, osv, orm
 
 
-class AccountAnalyticAccount(orm.Model):
+class Project(orm.Model):
 
-    _inherit = 'account.analytic.account'
-
-    _columns = {
-        'cost_category': fields.selection([
-            ('cogs', 'Cost of Goods Sold'),
-            ('expense', 'Expense')], 'Type of Cost',
-            help="Defines what type of cost does the analytic account carry "
-                 "from an employee perspective.")}
+    _inherit = 'project.project'
 
     _defaults = {
-        'cost_category': 'expense'
+        'cost_category': 'cogs'
     }
