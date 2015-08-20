@@ -28,4 +28,10 @@ class AccountAnalyticAccount(orm.Model):
     _columns = {
         'cost_category': fields.selection([
             ('cogs', 'Cost of Goods Sold'),
-            ('expense', 'Expense')], 'Type of Cost', help="Product type")}
+            ('expense', 'Expense')], 'Type of Cost',
+            help="Defines what type of cost does the analytic account carry "
+                 "from an employee perspective.")}
+
+    _defaults = {
+        'cost_category': 'expense'
+    }
