@@ -20,6 +20,10 @@
 ##############################################################################
 from openerp.osv import fields, osv, orm
 from openerp.tools.translate import _
+import logging
+from openerp import netsvc
+_logger = logging.getLogger(__name__)
+from openerp.tools import float_compare
 
 
 class StockMove(orm.Model):
@@ -123,6 +127,144 @@ class StockMove(orm.Model):
 
         self.action_done(cr, uid, res, context=context)
         return res
+
+    def check_assign(self, cr, uid, ids, context=None):
+        """ Checks the product type and accordingly writes the state.
+        @return: No. of moves done
+        """
+        done = []
+        count = 0
+        pickings = {}
+        if context is None:
+            context = {}
+        for move in self.browse(cr, uid, ids, context=context):
+            if move.product_id.type == 'consu' or move.location_id.usage == 'supplier':
+                if move.state in ('confirmed', 'waiting'):
+                    done.append(move.id)
+                pickings[move.picking_id.id] = 1
+                continue
+            if move.state in ('confirmed', 'waiting'):
+                # Important: we must pass lock=True to _product_reserve() to avoid race conditions and double reservations
+                if move.analytic_reserved:
+                    analytic_account_id = move.analytic_account_id.id
+                else:
+                    analytic_account_id = False
+                res = self.pool.get(
+                    'stock.location')._product_reserve(
+                    cr, uid, [move.location_id.id], move.product_id.id,
+                    move.product_qty, {'uom': move.product_uom.id,
+                                       'analytic_account_id':
+                                           analytic_account_id}, lock=True)
+                if res:
+                    #_product_available_test depends on the next status for correct functioning
+                    #the test does not work correctly if the same product occurs multiple times
+                    #in the same order. This is e.g. the case when using the button 'split in two' of
+                    #the stock outgoing form
+                    self.write(cr, uid, [move.id], {'state':'assigned'})
+                    done.append(move.id)
+                    pickings[move.picking_id.id] = 1
+                    r = res.pop(0)
+                    product_uos_qty = self.pool.get('stock.move').onchange_quantity(cr, uid, [move.id], move.product_id.id, r[0], move.product_id.uom_id.id, move.product_id.uos_id.id)['value']['product_uos_qty']
+                    cr.execute('update stock_move set location_id=%s, product_qty=%s, product_uos_qty=%s where id=%s', (r[1], r[0],product_uos_qty, move.id))
+
+                    while res:
+                        r = res.pop(0)
+                        product_uos_qty = self.pool.get('stock.move').onchange_quantity(cr, uid, [move.id], move.product_id.id, r[0], move.product_id.uom_id.id, move.product_id.uos_id.id)['value']['product_uos_qty']
+                        move_id = self.copy(cr, uid, move.id, {'product_uos_qty': product_uos_qty, 'product_qty': r[0], 'location_id': r[1]})
+                        done.append(move_id)
+        if done:
+            count += len(done)
+            self.write(cr, uid, done, {'state': 'assigned'})
+
+        if count:
+            for pick_id in pickings:
+                wf_service = netsvc.LocalService("workflow")
+                wf_service.trg_write(uid, 'stock.picking', pick_id, cr)
+        return count
+
+
+class stock_location(orm.Model):
+    _inherit = "stock.location"
+
+    def _product_reserve(self, cr, uid, ids, product_id, product_qty,
+                         context=None, lock=False):
+        """
+        Override the _product_reserve method in order to add the analytic
+        account
+        """
+        result = super(stock_location, self)._product_reserve(
+            cr, uid, ids, product_id, product_qty, context, lock)
+        if context is None:
+            context = {}
+        result = []
+        amount = 0.0
+        if context is None:
+            context = {}
+        uom_obj = self.pool.get('product.uom')
+        uom_rounding = self.pool.get('product.product').browse(
+            cr, uid, product_id, context=context).uom_id.rounding
+        if context.get('uom'):
+            uom_rounding = uom_obj.browse(cr, uid, context.get('uom'),
+                                          context=context).rounding
+        analytic_account_id = context.get('analytic_account_id', False)
+
+        for id in self.search(cr, uid, [('location_id', 'child_of', ids)]):
+            params = {}
+            if analytic_account_id:
+                lines_where_clause = \
+                    "AND analytic_account_id=%(p_analytic_account_id)s"
+                params['p_analytic_account_id'] = analytic_account_id
+            else:
+                lines_where_clause = "AND analytic_account_id IS NULL"
+            params.update({'p_location': id, 'p_product_id': product_id})
+
+            query = ("SELECT product_uom, sum(product_qty) AS product_qty"
+                     " FROM stock_move"
+                     " WHERE location_dest_id=%(p_location)s AND"
+                     " location_id<>%(p_location)s AND"
+                     " product_id=%(p_product_id)s AND"
+                     " state='done' "
+                     + lines_where_clause +
+                     " GROUP BY product_uom")
+
+            cr.execute(query, params)
+            results = cr.dictfetchall()
+
+            query = ("SELECT product_uom,-sum(product_qty) AS product_qty"
+                     " FROM stock_move "
+                     " WHERE location_id=%(p_location)s AND"
+                     " location_dest_id<>%(p_location)s AND"
+                     " product_id=%(p_product_id)s AND"
+                     " state in ('done', 'assigned') "
+                     + lines_where_clause +
+                     " GROUP BY product_uom")
+            cr.execute(query, params)
+            results += cr.dictfetchall()
+            total = 0.0
+            results2 = 0.0
+            for r in results:
+                amount = uom_obj._compute_qty(cr, uid, r['product_uom'],
+                                              r['product_qty'],
+                                              context.get('uom', False))
+                results2 += amount
+                total += amount
+            if total <= 0.0:
+                continue
+
+            amount = results2
+            compare_qty = float_compare(amount, 0,
+                                        precision_rounding=uom_rounding)
+            if compare_qty == 1:
+                if amount > min(total, product_qty):
+                    amount = min(product_qty, total)
+                result.append((amount, id))
+                product_qty -= amount
+                total -= amount
+                if product_qty <= 0.0:
+                    return result
+                if total <= 0.0:
+                    continue
+        return False
 
 
 class StockInventoryLine(orm.Model):
