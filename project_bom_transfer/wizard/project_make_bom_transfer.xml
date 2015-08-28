@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_project_make_bom_transfer" model="ir.ui.view">
+            <field name="name">Transfer BOM to Resource Plan</field>
+            <field name="model">project.make.bom.transfer</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                 <form string="BOM Transfer">
+                     <group colspan="2">
+                         <field name="product_id"
+                                on_change="product_id_change(product_id)"/>
+                         <field name="bom_id"/>
+                         <field name="product_qty"/>
+                         <field name="product_uom_id"/>
+                         <field name="date_planned"/>
+                     </group>
+                     <newline/>
+                     <group colspan="2">
+                         <button name="make_bom_transfer"
+                                 string="Transfer BOM" type="object"
+                                 class="oe_highlight"/>
+                         <button special="cancel" string="Cancel"
+                                 class="oe_link"/>
+                     </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_project_make_bom_transfer" model="ir.actions.act_window">
+            <field name="name">Transfer BOM to Resource Plan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">project.make.bom.transfer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_project_make_bom_transfer"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="project_make_bom_transfer">
+            <field name="model_id"
+                   ref="project.model_project_project" />
+            <field name="object" eval="1" />
+            <field name="name">Transfer BOM to Resource Plan</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_view_project_make_bom_transfer'))" />
+            <field name="key">action</field>
+            <field name="model">project.project</field>
+        </record>
+   
+    </data>
+</openerp>
+
