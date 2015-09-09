@@ -48,10 +48,9 @@ class StockMove(orm.Model):
         aaid = vals['analytic_account_id']
         if aaid:
             aa = analytic_obj.browse(cr, uid, aaid, context=context)
-            vals['analytic_reserved'] = aa.use_reserved_stock
+            return aa.use_reserved_stock
         else:
-            vals['analytic_reserved'] = False
-        return vals
+            return False
 
     def create(self, cr, uid, vals, context=None):
         if 'analytic_account_id' in vals:
@@ -376,7 +375,7 @@ class StockInventory(orm.Model):
                         'product_id': line.product_id.id,
                         'product_uom': line.product_uom.id,
                         'prodlot_id': lot_id,
-                        'analytic_account_id': analytic_account_id,
+
                         'date': inv.date,
                     }
 
