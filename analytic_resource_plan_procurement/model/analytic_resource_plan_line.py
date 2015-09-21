@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp.osv import fields, orm
+from tools.translate import _
 
 
 class AnalyticResourcePlanLine(orm.Model):
