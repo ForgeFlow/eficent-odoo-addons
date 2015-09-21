@@ -10,6 +10,7 @@
             <notebook position="inside">
                 <page name="resource_plan_lines" string="Resource Plan Lines">
                       <group>
+                          <field name="procurement_id" invisible="1"/>
                           <field name="analytic_resource_plan_lines"
                                  nolabel="1"/>
                       </group>
