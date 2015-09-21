@@ -158,6 +158,9 @@ class PurchaseRequestLineMakePurchaseOrder(orm.TransientModel):
                 ('product_id', '=', item.product_id.id or False),
                 ('product_uom', '=',
                  item.product_uom_id.id or False),
+                ('account_analytic_id', '=',
+                 item.line_id.analytic_account_id.id or
+                 False),
                 ('name', '=', item.name)]
 
     def make_purchase_order(self, cr, uid, ids, context=None):
