@@ -93,6 +93,16 @@
                         <field name="name"/>
                         <field name="parent_id"/>
                     </group>
+                    <group expand="0" string="Group By...">
+                        <filter string="Parent"
+                                domain="[]" context="{'group_by' : 'parent_id'}" />
+                        <filter string="Analytic Account"
+                                domain="[]"
+                                context="{'group_by':'account_id'}"/>
+                        <filter string="Product"
+                                domain="[]"
+                                context="{'group_by':'product_id'}"/>
+                    </group>
                 </search>
             </field>
         </record>
