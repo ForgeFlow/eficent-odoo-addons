@@ -20,26 +20,28 @@
 ##############################################################################
 
 {
-    "name": "Analytic BOM to Resource Plan",
+    "name": "Analytic Resource Planning - Purchase Requests",
     "version": "1.0",
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
-    "depends": ["analytic_resource_plan", "analytic_bom", "mrp"],
+    "depends": ["analytic_resource_plan", "analytic_location",
+                "purchase_request"],
     "description": """
-Analytic bom to Resource Plan
-==================================
+Analytic Resource Planning - Purchase Requests
+==============================================
+Module features:
+    - Create purchase requests from analytic resource planning lines
+
     """,
     "init_xml": [],
     "update_xml": [
-        "wizard/analytic_bom_explode_view.xml",
-        "views/analytic_resource_plan_line_view.xml",
+        "wizard/analytic_resource_plan_line_make_purchase_request.xml",
+        "views/purchase_request_view.xml",
+        "views/analytic_resource_plan_view.xml",
     ],
-    'demo_xml': [
-
-    ],
-    'test':[
-    ],
+    'demo_xml': [],
+    'test':[],
     'installable': True,
     'active': False,
     'certificate': '',

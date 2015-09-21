@@ -18,30 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp.osv import fields, orm
 
-{
-    "name": "Analytic BOM entries",
-    "version": "1.0",
-    "author": "Eficent",
-    "website": "www.eficent.com",
-    "category": "Generic Modules/Projects & Services",
-    "depends": ["analytic", "mrp"],
-    "description": """
-Analytic Assemblies
-===================
-    """,
-    "init_xml": [],
-    "update_xml": [
-        "views/analytic_bom_view.xml",
-        "views/analytic_account_view.xml",
-        "security/ir.model.access.csv",
-    ],
-    'demo_xml': [
 
-    ],
-    'test':[
-    ],
-    'installable': True,
-    'active': False,
-    'certificate': '',
-}
+class PurchaseRequestLine(orm.Model):
+
+    _inherit = "purchase.request.line"
+
+    _columns = {
+        'manufacturer': fields.related('product_id', 'manufacturer',
+                                       type='many2one',
+                                       relation='res.partner',
+                                       string='Manufacturer',
+                                       store=True,
+                                       readonly=True),
+    }
