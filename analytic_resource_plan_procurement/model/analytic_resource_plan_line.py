@@ -19,7 +19,6 @@
 #
 ##############################################################################
 from openerp.osv import fields, orm
-from tools.translate import _
 
 
 class AnalyticResourcePlanLine(orm.Model):
@@ -33,6 +32,8 @@ class AnalyticResourcePlanLine(orm.Model):
             'analytic_resource_plan_line_id',
             'procurement_order_id',
             'Procurement Orders', readonly=True),
+        'procurement_id': fields.many2one('procurement.order', required=False),
+        'procurement_state': fields.boolean('Procurement state')
     }
 
     def _prepare_procurement(self, cr, uid, line, product_qty,

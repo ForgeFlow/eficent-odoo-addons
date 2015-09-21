@@ -32,6 +32,4 @@ class ProcurementOrder(orm.Model):
             'procurement_order_id',
             'analytic_resource_plan_line_id',
             'Analytic Resource Plan Lines', readonly=True),
-        'procurement_id': fields.many2one('procurement.order', required=False),
-        'procurement_state': fields.boolean('Procurement state')
     }
