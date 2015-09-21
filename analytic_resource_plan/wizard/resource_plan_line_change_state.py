@@ -31,15 +31,12 @@ class resource_plan_line_change_state(osv.osv_memory):
     _columns = {
         'state': fields.selection(
             [('draft', 'Draft'),
-             ('confirm', 'Confirmed'),
-             ('cancel', 'Cancelled')], 'Status',
+             ('confirm', 'Confirmed')], 'Status',
             select=True, required=True,
             help=' * The \'Draft\' status is used when a user is encoding '
                  'a new and unconfirmed resource plan line. '
                  '\n* The \'Confirmed\' status is used for to confirm the '
-                 'resource plan line by the user.'
-                 '\n* The \'Cancelled\' status is used to cancel '
-                 'the resource plan line.'),
+                 'resource plan line by the user.'),
     }
 
     def change_state_confirm(self, cr, uid, ids, context=None):
@@ -52,9 +49,6 @@ class resource_plan_line_change_state(osv.osv_memory):
         if new_state == 'draft':
             line_plan_obj.action_button_draft(cr, uid, record_ids,
                                               context=context)
-        elif new_state == 'cancel':
-            line_plan_obj.action_button_cancel(cr, uid, record_ids,
-                                               context=context)
         elif new_state == 'confirm':
             line_plan_obj.action_button_confirm(cr, uid, record_ids,
                                                 context=context)
