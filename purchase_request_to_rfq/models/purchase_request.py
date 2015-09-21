@@ -192,7 +192,7 @@ class PurchaseRequestLine(orm.Model):
                         cr, uid, supplierinfo_ids, context=context).min_qty
 
         if supplierinfo_min_qty == 0.0:
-            qty += request_line.product_qty
+            qty += po_line.product_qty
         else:
             # Recompute quantity by adding existing running procurements.
             for rl in po_line.purchase_request_lines:
