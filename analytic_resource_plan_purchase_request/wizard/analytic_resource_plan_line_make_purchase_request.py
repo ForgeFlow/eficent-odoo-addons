@@ -185,7 +185,7 @@ class AnalyticResourcePlanLineMakePurchaseRequestItem(orm.TransientModel):
                                      relation='product.product',
                                      string='Product',
                                      readonly=True),
-        'product_qty': fields.float(string='Quantity to deliver',
+        'product_qty': fields.float(string='Quantity to request',
                                     digits_compute=dp.get_precision(
                                         'Product UoS')),
         'product_uom_id': fields.related('line_id',
