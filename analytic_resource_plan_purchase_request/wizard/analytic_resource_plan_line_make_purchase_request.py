@@ -29,6 +29,8 @@ class AnalyticResourcePlanLineMakePurchaseRequest(orm.TransientModel):
     _description = "Resource plan make purchase request"
 
     _columns = {
+        'origin': fields.char('Origin', size=32, required=True),
+        'description': fields.text('Description'),
         'item_ids': fields.one2many(
             'analytic.resource.plan.line.make.purchase.request.item',
             'wiz_id', 'Items'),
@@ -66,6 +68,8 @@ class AnalyticResourcePlanLineMakePurchaseRequest(orm.TransientModel):
                                   company_id, context=None):
         data = {
             'company_id': company_id,
+            'origin': make_purchase_request.origin,
+            'description': make_purchase_request.description,
             }
         return data
 

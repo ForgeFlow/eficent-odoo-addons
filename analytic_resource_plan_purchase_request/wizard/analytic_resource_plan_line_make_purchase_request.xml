@@ -8,6 +8,11 @@
             <field name="arch" type="xml">
                  <form string="Create Purchase Request">
                      <group>
+                         <field name="origin"/>
+                         <field name="description"/>
+                     </group>
+                     <newline/>
+                     <group>
                          <field name="item_ids" nolabel="1">
                               <tree string="Details" create="false" editable="bottom">
                                 <field name="line_id" options="{'no_open': true}"/>
