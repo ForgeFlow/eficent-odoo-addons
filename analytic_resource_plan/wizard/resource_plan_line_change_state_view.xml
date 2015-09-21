@@ -20,7 +20,7 @@
         </record>
 
         <record id="action_resource_plan_line_change_state_form" model="ir.actions.act_window">
-            <field name="name">Change status of Resource Plan Lines</field>
+            <field name="name">Change status</field>
             <field name="res_model">resource.plan.line.change.state</field>
             <field name="view_type">form</field>
             <field name="view_mode">form,tree</field>
@@ -28,7 +28,7 @@
             <field name="target">new</field>
         </record>
 
-        <act_window name="Change status of Resource Plan Lines"
+        <act_window name="Change status"
             res_model="resource.plan.line.change.state"
             src_model="analytic.resource.plan.line"
             view_mode="form"
