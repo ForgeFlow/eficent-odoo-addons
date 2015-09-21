@@ -24,10 +24,18 @@ from openerp.tools.translate import _
 import time
 
 
-class analytic_resource_plan_line(orm.Model):
+class AnalyticResourcePlanLine(orm.Model):
 
     _name = 'analytic.resource.plan.line'
     _description = "Analytic Resource Planning lines"
+
+    def _has_child(self, cr, uid, ids, field_names, arg, context=None):
+        res = {}
+        for line in self.browse(cr, uid, ids, context=context):
+            res[line.id] = False
+            if line.child_ids:
+                res[line.id] = True
+        return res
 
     _columns = {
         'account_id': fields.many2one('account.analytic.account',
@@ -45,32 +53,52 @@ class analytic_resource_plan_line(orm.Model):
                             states={'draft': [('readonly', False)]}),
         'state': fields.selection(
             [('draft', 'Draft'),
-             ('confirm', 'Confirmed'),
-             ('cancel', 'Cancelled')], 'Status',
+             ('confirm', 'Confirmed')], 'Status',
             select=True, required=True, readonly=True,
             help=' * The \'Draft\' status is used when a user is encoding '
                  'a new and unconfirmed resource plan line. '
                  '\n* The \'Confirmed\' status is used for to confirm the '
-                 'resource plan line by the user.'
-                 '\n* The \'Cancelled\' status is used to cancel '
-                 'the resource plan line.'),
+                 'execution of the resource plan lines.'),
         'product_id': fields.many2one('product.product', 'Product',
                                       readonly=True, required=True,
                                       states={'draft': [('readonly', False)]}),
         'product_uom_id': fields.many2one('product.uom', 'UoM', required=True,
                                           readonly=True,
                                           states={'draft': [('readonly', False)]}),
-        'unit_amount': fields.float('Quantity', readonly=True, required=True,
+        'unit_amount': fields.float('Planned Quantity', readonly=True,
+                                    required=True,
                                     states={'draft': [('readonly', False)]},
-                                    help='Specifies the amount of '
-                                         'quantity to count.'),
+                                    help='Specifies the quantity that has '
+                                         'been planned.'),
         'notes': fields.text('Notes'),
+        'parent_id': fields.many2one('analytic.resource.plan.line',
+                                     'Parent',
+                                     readonly=True),
+        'child_ids': fields.one2many('analytic.resource.plan.line',
+                                     'parent_id', 'Child lines'),
+        'has_child': fields.function(_has_child, type='boolean',
+                                     string="Child lines"),
+        'analytic_line_plan_ids': fields.one2many(
+            'account.analytic.line.plan', 'resource_plan_id',
+            'Planned costs', readonly=True),
     }
 
     _defaults = {
         'state': 'draft',
         'date': lambda *a: time.strftime('%Y-%m-%d'),
+        'unit_amount': 1,
     }
+
+    def copy(self, cr, uid, id, default=None, context=None):
+        if context is None:
+            context = {}
+        if default is None:
+            default = {}
+        default['parent_id'] = False
+        default['analytic_line_plan_ids'] = []
+        res = super(AnalyticResourcePlanLine, self).copy(
+            cr, uid, id, default, context)
+        return res
 
     def _prepare_analytic_lines(self, cr, uid, line, context=None):
         plan_version_obj = self.pool.get('account.analytic.plan.version')
@@ -143,17 +171,23 @@ class analytic_resource_plan_line(orm.Model):
 
     def action_button_draft(self, cr, uid, ids, context=None):
         for line in self.browse(cr, uid, ids, context=context):
+            for child in line.child_ids:
+                if child.state not in ('draft', 'plan'):
+                    raise orm.except_orm(
+                        _('Error'),
+                        _('All the child resource plan lines must be in '
+                          'Draft state.'))
             self._delete_analytic_lines(cr, uid, line, context=context)
         return self.write(cr, uid, ids, {'state': 'draft'}, context=context)
 
-    def action_button_cancel(self, cr, uid, ids, context=None):
-        for line in self.browse(cr, uid, ids, context=context):
-            self._delete_analytic_lines(cr, uid, line, context=context)
-        return self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
-
     def action_button_confirm(self, cr, uid, ids, context=None):
         for line in self.browse(cr, uid, ids, context=context):
-            self.create_analytic_lines(cr, uid, line, context=context)
+            if line.unit_amount == 0:
+                raise orm.except_orm(
+                        _('Error'),
+                        _('Quantity should be greater than 0.'))
+            if not line.child_ids:
+                self.create_analytic_lines(cr, uid, line, context=context)
         return self.write(cr, uid, ids, {'state': 'confirm'}, context=context)
 
     def on_change_product_id(self, cr, uid, id, product_id, context=None):
@@ -190,15 +224,5 @@ class analytic_resource_plan_line(orm.Model):
             if not vals.get('date', False):
                 vals['date'] = analytic.date
 
-        return super(analytic_resource_plan_line, self).write(
+        return super(AnalyticResourcePlanLine, self).write(
             cr, uid, ids, vals, context=context)
-
-
-class account_analytic_line_plan(orm.Model):
-    _inherit = 'account.analytic.line.plan'
-
-    _columns = {
-        'resource_plan_id': fields.many2one('analytic.resource.plan.line',
-                                            'Resource Plan Line',
-                                            ondelete='cascade'),
-        }
