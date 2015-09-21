@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+       <record id="view_analytic_resource_plan_line" model="ir.ui.view">
+            <field name="name">analytic.resource.plan.line.form</field>
+            <field name="model">analytic.resource.plan.line</field>
+            <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr='//field[@name="product_uom_id"]' position='after'>
+                    <field name="stock_reservation_id"/>
+                    <field name="reserved_qty"/>
+                </xpath>
+            </field>
+       </record>
+
+        <record id="view_analytic_resource_plan_line_tree" model="ir.ui.view">
+            <field name="name">analytic.resource.plan.line.tree</field>
+            <field name="model">analytic.resource.plan.line</field>
+            <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_tree"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <xpath expr='//field[@name="product_uom_id"]' position='after'>
+                    <field name="reserved_qty"/>
+                    <button name="button_stock_reserve"
+                            icon="STOCK_DIALOG_AUTHENTICATION"
+                            attrs="{'invisible': ['|', ('reserved_qty', '!=', 0),
+                            ('state','=', 'draft')]}"
+                            string="Reserve stock"
+                            type="object"/>
+                    <button name="button_stock_release"
+                            icon="gtk-undo"
+                            attrs="{'invisible': ['|', ('reserved_qty', '=', 0),
+                            ('state','=', 'draft')]}"
+                            string="Release reserved stock"
+                            type="object"/>
+                </xpath>
+            </field>
+        </record>
+
+	</data>
+</openerp>

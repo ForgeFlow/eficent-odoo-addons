@@ -19,4 +19,4 @@
 #
 ##############################################################################
 from . import analytic_resource_plan_line
-from . import procurement
+from . import procurement_order

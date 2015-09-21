@@ -2,43 +2,12 @@
 <openerp>
     <data>
         <act_window name="Create Delivery Order"
-		    res_model="analytic.resource.plan.line.make.stock.picking.out"
+		    res_model="analytic.resource.plan.line.stock.picking.out"
 		    view_mode="form"
 		    view_type="form"
 		    target="new"        
             key2="client_action_multi"    
-		    id="action_analytic_resource_plan_line_make_stock_picking_out"
-		    view_id="view_resource_plan_line_make_stock_picking_out"/>
-
-        <record id="view_analytic_resource_plan_line_stock_picking_out_move_form" model="ir.ui.view">
-            <field name="name">analytic.resource.plan.line.stock.picking.out.move.form</field>
-            <field name="model">analytic.resource.plan.line</field>
-            <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_form"/>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <xpath expr='//page[@name="notes"]' position='after'>
-                    <page string="Delivery" name="picking_out_move">
-                        <group>
-                            <field name="picking_out_move_id" context="{'form_view_ref':'stock.view_move_form', 'tree_view_ref':'stock.view_move_tree'}"/>
-                            <field name="picking_out_move_state"/>
-                        </group>
-                    </page>
-                </xpath>
-            </field>
-        </record>
-
-        <record id="view_analytic_resource_plan_line_tree" model="ir.ui.view">
-            <field name="name">analytic.resource.plan.line.tree</field>
-            <field name="model">analytic.resource.plan.line</field>
-            <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_tree"/>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <xpath expr='//field[@name="state"]' position='after'>
-                    <field name="picking_out_move_id"/>
-                    <field name="picking_out_move_state"/>
-                </xpath>
-            </field>
-        </record>
-
+		    id="action_analytic_resource_plan_line_stock_picking_out"
+		    view_id="view_resource_plan_line_stock_picking_out"/>
 	</data>
 </openerp>

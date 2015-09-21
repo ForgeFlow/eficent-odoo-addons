@@ -25,7 +25,8 @@
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
-    "depends": ["analytic_resource_plan_procurement", "stock", "analytic_location"],
+    "depends": ["analytic_resource_plan_procurement", "stock",
+                "analytic_location", "analytic_resource_plan_stock"],
     "description": """
 Create Delivery Orders from Planned Resource Lines
 ==================================================

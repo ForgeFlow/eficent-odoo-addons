@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_resource_plan_line_change_stock_reserved_quantity" model="ir.ui.view">
+            <field name="name">Resource plan Change Stock Reserved Quantity</field>
+            <field name="model">analytic.rpl.change.stock.reserved.quantity</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                 <form string="Change reserved quantity">
+                     <group>
+                         <field name="item_ids" nolabel="1">
+                              <tree string="Details" create="false" editable="bottom">
+                                  <field name="line_id" options="{'no_open': true}"/>
+                                  <field name="product_id" readonly="1"/>
+                                  <field name="product_qty"/>
+                              </tree>
+                         </field>
+                     </group>
+                     <newline/>
+                     <group colspan="2">
+                         <button name="change_stock_reserved_quantity"
+                                 string="Change" type="object"
+                                 class="oe_highlight"/>
+                         <button special="cancel" string="Cancel" class="oe_link"/>
+                     </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_resource_plan_line_change_stock_reserved_quantity"
+                model="ir.actions.act_window">
+            <field name="name">Change Stock Reserved Quantity</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">analytic.rpl.change.stock.reserved.quantity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_resource_plan_line_change_stock_reserved_quantity"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="analytic_resource_plan_line_change_stock_reserved_quantity">
+            <field name="model_id" ref="analytic_resource_plan.model_analytic_resource_plan_line" />
+            <field name="object" eval="1" />
+            <field name="name">Change Stock Reserved Quantity</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_resource_plan_line_change_stock_reserved_quantity'))" />
+            <field name="key">action</field>
+            <field name="model">analytic.resource.plan.line</field>
+        </record>
+   
+    </data>
+</openerp>
+

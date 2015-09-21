@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_analytic_bom_to_resource_plan"
+                model="ir.ui.view">
+            <field name="name">Transfer BOM components to Resource Plan</field>
+            <field name="model">analytic.bom.to.resource.plan</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                 <form string="Explode BOM" version="7.0">
+                     <header>
+                     </header>
+                     <footer>
+                         <button name="make_bom_explode"
+                                 string="Confirm" type="object"
+                                 class="oe_highlight"/>
+                         <button special="cancel" string="Cancel"
+                                 class="oe_link"/>
+                     </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_analytic_bom_to_resource_plan" model="ir.actions.act_window">
+            <field name="name">Transfer BOM components to Resource Plan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">analytic.bom.to.resource.plan</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_analytic_bom_to_resource_plan"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="analytic_bom_to_resource_plan">
+            <field name="model_id"
+                   ref="analytic_bom.model_analytic_bom" />
+            <field name="object" eval="1" />
+            <field name="name">Transfer BOM components to Resource Plan</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_view_analytic_bom_to_resource_plan'))" />
+            <field name="key">action</field>
+            <field name="model">analytic.bom</field>
+        </record>
+   
+    </data>
+</openerp>
+

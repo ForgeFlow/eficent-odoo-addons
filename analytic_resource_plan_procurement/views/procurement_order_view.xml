@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record model="ir.ui.view" id="procurement_normal_form_view">
+        <field name="name">procurement.form</field>
+        <field name="model">procurement.order</field>
+        <field name="inherit_id" ref="procurement.procurement_form_view"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="resource_plan_lines" string="Resource Plan Lines">
+                      <group>
+                          <field name="analytic_resource_plan_lines"
+                                 nolabel="1"/>
+                      </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    </data>
+</openerp>

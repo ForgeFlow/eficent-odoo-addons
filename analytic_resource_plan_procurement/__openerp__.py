@@ -25,7 +25,8 @@
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
-    "depends": ["analytic_resource_plan", "analytic_location", "procurement_analytic"],
+    "depends": ["analytic_resource_plan", "analytic_location",
+                "procurement_analytic", "analytic_resource_plan_stock"],
     "description": """
 Analytic Resource Planning - Procurement Orders
 ===============================================
@@ -36,8 +37,8 @@ Module features:
     "init_xml": [],
     "update_xml": [
         "wizard/analytic_resource_plan_line_make_procurement.xml",
-        "view/analytic_resource_plan_line_view.xml",
-
+        "views/procurement_order_view.xml",
+        "views/analytic_resource_plan_view.xml",
     ],
     'demo_xml': [],
     'test':[],

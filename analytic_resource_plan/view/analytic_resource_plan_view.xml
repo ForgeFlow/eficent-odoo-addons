@@ -13,28 +13,45 @@
             <field name="arch" type="xml">
 				<form string="Analytic resource plan line" version="7.0">
                     <header>
-                        <button name="action_button_confirm" states="draft" string="Confirm" type="object" class="oe_highlight"/>
-                        <button name="action_button_draft" states="confirm,cancel" string="Reset to Draft" type="object"/>
-                        <button name="action_button_cancel" states="draft,confirm" string="Cancel" type="object"/>
+                        <button name="action_button_draft" states="confirm"
+                                string="Draft" type="object"
+                                class="oe_highlight"/>
+                        <button name="action_button_confirm" states="draft"
+                                string="Confirm" type="object" class="oe_highlight"/>
                         <field name="state" widget="statusbar"/>
                     </header>
-                    <group>
-                        <group colspan="3" col="4">
-                            <field name="account_id" on_change="on_change_account_id(account_id)"/>
-                            <field name="name"/>
-                            <field name="date" readonly="True"/>
+                    <sheet string="Resource Plan Lines">
+                        <div class="oe_right oe_button_box" name="buttons">
+                        </div>
+                        <group>
+                            <group colspan="3" col="4">
+                                <field name="account_id" on_change="on_change_account_id(account_id)"/>
+                                <field name="name"/>
+                                <field name="date" readonly="True"/>
+                            </group>
+                            <group colspan="2" col="4" string="Product Information">
+                                <field name="product_id" on_change="on_change_product_id(product_id)"/>
+                                <field name="unit_amount"/>
+                                <field name="product_uom_id"/>
+                            </group>
                         </group>
-                        <group colspan="2" col="4" string="Product Information">
-                            <field name="product_id" on_change="on_change_product_id(product_id)"/>
-                            <field name="unit_amount"/>
-                            <field name="product_uom_id"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Notes" name="notes">
-                            <field name="notes"/>
-                        </page>
-                    </notebook>
+                        <notebook>
+                            <page string="Notes" name="notes">
+                                <field name="notes"/>
+                            </page>
+                            <page string="Hierarchy" name="hierarchy">
+                                <group>
+                                    <field name="parent_id"/>
+                                </group>
+                                <group>
+                                    <field name="child_ids"/>
+                                </group>
+                            </page>
+                            <page string="Costs" name="costs">
+                                <field name="analytic_line_plan_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -43,17 +60,24 @@
             <field name="model">analytic.resource.plan.line</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-				<tree string="Analytic resource plan line" editable="top">
+				<tree string="Analytic resource plan line" editable="top"
+                      colors = "darkmagenta:has_child == True;blue:state=='draft'">
                     <field name="account_id" on_change="on_change_account_id(account_id)"/>
                     <field name="date" readonly="True"/>
                     <field name="name" invisible="True"/>
 	                <field name="product_id" on_change="on_change_product_id(product_id)"/>
+                    <field name="name"/>
 					<field name="unit_amount"/>
                     <field name="product_uom_id"/>
-                    <button name="action_button_confirm" icon="gtk-apply" states="draft" string="Confirm" type="object" class="oe_highlight"/>
-                    <button name="action_button_draft" icon="gtk-convert" states="confirm,cancel" string="Reset to Draft" type="object"/>
-                    <button name="action_button_cancel" icon="gtk-cancel" states="draft,confirm" string="Cancel" type="object"/>
+                    <button name="action_button_draft" states="confirm"
+                            string="Draft" type="object"
+                            icon="gtk-ok"/>
+                    <button name="action_button_confirm" states="draft"
+                            string="Confirm" type="object"
+                            icon="gtk-go-forward"/>
                     <field name="state"/>
+                    <field name="has_child"/>
+                    <field name="parent_id"/>
 	            </tree>
             </field>
         </record>
@@ -67,6 +91,7 @@
                         <field name="account_id"/>
                         <field name="product_id"/>
                         <field name="name"/>
+                        <field name="parent_id"/>
                     </group>
                 </search>
             </field>
