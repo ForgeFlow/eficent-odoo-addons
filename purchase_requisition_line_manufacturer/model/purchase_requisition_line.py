@@ -1,14 +1,13 @@
-# -*- encoding: utf-8 -*-
-########################################################################
+# -*- coding: utf-8 -*-
+##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>). All Rights Reserved
-#    $Id$
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
+#              <contact@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,12 +17,12 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-########################################################################
-
+##############################################################################
 from openerp.osv import orm, fields
 from openerp.tools.translate import _
 
-class purchase_requisition_line(orm.Model):
+
+class PurchaseRequisitionLine(orm.Model):
     _inherit = "purchase.requisition.line"
 
     _columns = {
@@ -38,7 +37,7 @@ class purchase_requisition_line(orm.Model):
                             product_uom_id, context=None):
         context = context or {}
         product_obj = self.pool.get('product.product')
-        res = super(purchase_requisition_line, self).onchange_product_id(
+        res = super(PurchaseRequisitionLine, self).onchange_product_id(
             cr, uid, ids, product_id, product_uom_id, context=context)
         res['value'].update({'manufacturer': False})
         if product_id:
@@ -59,8 +58,8 @@ class purchase_requisition_line(orm.Model):
         if product_id:
             product = product_obj.browse(cr, uid, product_id, context=context)
             if (
-                product.manufacturer
-                and product.manufacturer.id != manufacturer
+                product.manufacturer and product.manufacturer.id !=
+                manufacturer
             ):
                 raise orm.except_orm(_('Invalid Action!'),
                                      _('The Manufacturer does not match with '
