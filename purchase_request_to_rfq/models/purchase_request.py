@@ -189,7 +189,7 @@ class PurchaseRequestLine(orm.Model):
                                po_line.product_id.id)], context=context)
                 if supplierinfo_ids:
                     supplierinfo_min_qty = supplierinfo_obj.browse(
-                        cr, uid, supplierinfo_ids, context=context).min_qty
+                        cr, uid, supplierinfo_ids[0], context=context).min_qty
 
         if supplierinfo_min_qty == 0.0:
             qty += po_line.product_qty
