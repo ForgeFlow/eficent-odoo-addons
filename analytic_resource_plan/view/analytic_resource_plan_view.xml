@@ -92,6 +92,7 @@
                         <field name="product_id"/>
                         <field name="name"/>
                         <field name="parent_id"/>
+                        <field name="state"/>
                     </group>
                     <group expand="0" string="Group By...">
                         <filter string="Parent"
@@ -102,6 +103,9 @@
                         <filter string="Product"
                                 domain="[]"
                                 context="{'group_by':'product_id'}"/>
+                        <filter string="Status"
+                                domain="[]"
+                                context="{'group_by':'state'}"/>
                     </group>
                 </search>
             </field>
