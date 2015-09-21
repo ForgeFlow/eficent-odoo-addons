@@ -8,17 +8,15 @@
             <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_form"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <xpath expr='//div[@name="buttons"]' position='inside'>
+                <xpath expr='//field[@name="product_uom_id"]' position='after'>
+                    <field name="bom_id"/>
+                    <field name="show_button_bom_explode" invisible="1" />
                     <button name="button_bom_explode_to_resource_plan"
                             icon="gtk-convert"
                             string="Explode BOM"
                             attrs="{'invisible':[('show_button_bom_explode','=',False)]}"
                             type="object"
                             class="oe_highlight"/>
-                </xpath>
-                <xpath expr='//field[@name="product_uom_id"]' position='after'>
-                    <field name="bom_id"/>
-                    <field name="show_button_bom_explode" invisible="1" />
                 </xpath>
             </field>
        </record>
