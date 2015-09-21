@@ -17,6 +17,8 @@
                     <page name="procurement_orders"
                           string="Procurement Orders">
                           <group>
+                              <field name="procurement_id" invisible="1"/>
+                              <field name="procurement_state" invisible="1"/>
                               <field name="procurement_orders"
                                      nolabel="1"/>
                           </group>
