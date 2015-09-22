@@ -32,26 +32,33 @@ class AnalyticResourcePlanLine(orm.Model):
         res = {}
         for line in self.browse(cr, uid, ids, context=context):
             res[line.id] = 0.0
-            if line.stock_reservation_id and \
-                    line.stock_reservation_id.move_id.state == 'assigned':
-                res[line.id] = line.stock_reservation_id.product_qty
+            for sr in line.stock_reservation_ids:
+                if sr.state == 'assigned':
+                    res[line.id] += sr.product_qty
         return res
 
     _columns = {
-        'stock_reservation_id': fields.many2one(
-            'stock.reservation', 'Stock Reservation', readonly=True,
-            ondelete='cascade'),
+        'stock_reservation_ids': fields.one2many(
+            'stock.reservation',
+            'analytic_resource_plan_line_id',
+            readonly=True),
         'reserved_qty': fields.function(_get_reserved_qty, method=True,
                                         type='float',
                                         readonly=True,
                                         string='Reserved quantity'),
     }
 
+    def copy(self, cr, uid, id, default=None, context=None):
+        if context is None:
+            context = {}
+        if default is None:
+            default = {}
+        default['stock_reservation_ids'] = []
+        return super(AnalyticResourcePlanLine, self).copy(cr, uid, id, default,
+                                                          context)
+
     def action_button_draft(self, cr, uid, ids, context=None):
-        for line in self.browse(cr, uid, ids, context=context):
-            if line.stock_reservation_id:
-                self.change_reserved_stock_quantity(cr, uid, line, 0,
-                                                    context=context)
+        self.release_stock_reservation(cr, uid, ids, context=context)
         return super(AnalyticResourcePlanLine, self).action_button_draft(
             cr, uid, ids, context=context)
 
@@ -71,6 +78,7 @@ class AnalyticResourcePlanLine(orm.Model):
                 'name': name,
                 'location_id': line.account_id.location_id.id,
                 'analytic_account_id': line.account_id.id,
+                'analytic_resource_plan_line_id': line.id
             }
 
     def _create_reservation(self, cr, uid, data, context=None):
@@ -83,55 +91,39 @@ class AnalyticResourcePlanLine(orm.Model):
                                        context=context)
 
     def action_button_confirm(self, cr, uid, ids, context=None):
-        for line in self.browse(cr, uid, ids, context=context):
-            if line.product_id.type in ('consu', 'product') and \
-                    line.unit_amount > 0:
-                reservation_data = self._prepare_reservation(
-                    cr, uid, line, context=context)
-                reservation_id = self._create_reservation(cr, uid,
-                                                          reservation_data,
-                                                          context=context)
-                self.write(cr, uid, [line.id],
-                           {'stock_reservation_id': reservation_id},
-                           context=context)
-                self._confirm_reservation(cr, uid, reservation_id,
-                                          context=context)
+        self.reserve_stock(cr, uid, ids, context=context)
         return super(AnalyticResourcePlanLine, self).action_button_confirm(
             cr, uid, ids, context=context)
 
     def button_stock_reserve(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            product_qty = line.unit_amount
-            self.change_reserved_stock_quantity(cr, uid, line, product_qty,
-                                                context=context)
+        self.reserve_stock(cr, uid, ids, context=context)
+        return True
 
     def button_stock_release(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            self.change_reserved_stock_quantity(cr, uid, line, 0,
-                                                context=context)
+        self.release_stock_reservation(cr, uid, ids, context=context)
+        return True
 
-    def change_reserved_stock_quantity(self, cr, uid, line, product_qty,
-                                       context=None):
+    def release_stock_reservation(self, cr, uid, ids, context=None):
         reservation_obj = self.pool['stock.reservation']
-        # Check if there's enough quantity reserved
-        if not line.stock_reservation_id:
-            raise orm.except_orm(
-                _('Error'),
-                _('No stock reservation exists.'))
-        if product_qty < 0:
-            raise orm.except_orm(
-                _('Error'),
-                _('Cannot set a negative reservation quantity.'))
-        if line.stock_reservation_id.move_id.state != 'assigned':
-            raise orm.except_orm(
-                _('Error'),
-                _('Reservation is not active'))
-        # Change reserved quantity
-        reservation_obj.write(cr, uid, [line.stock_reservation_id.id],
-                              {'product_qty': product_qty},
-                              context=context)
+        for line in self.browse(cr, uid, ids, context=context):
+            if line.reserved_qty > 0:
+                sr_ids = [sr.id for sr in line.stock_reservation_ids]
+                reservation_obj.release(cr, uid, sr_ids, context=context)
+        return True
+
+    def reserve_stock(self, cr, uid, ids, context=None):
+        for line in self.browse(cr, uid, ids, context=context):
+            if line.product_id.type in ('consu', 'product') and \
+                    line.unit_amount > 0 and not line.reserved_qty:
+                reservation_data = self._prepare_reservation(
+                    cr, uid, line, context=context)
+                reservation_id = self._create_reservation(cr, uid,
+                                                          reservation_data,
+                                                          context=context)
+                self._confirm_reservation(cr, uid, reservation_id,
+                                          context=context)
         return True

@@ -33,7 +33,9 @@ Analytic Resource Plan MRP
     "init_xml": [],
     "update_xml": [
         "views/analytic_resource_plan_line_view.xml",
-        "wizard/change_stock_reserved_quantity_view.xml",
+        "views/stock_reserve_view.xml",
+        "wizard/do_stock_reserve_view.xml",
+        "wizard/do_stock_release_view.xml"
     ],
     'demo_xml': [
 

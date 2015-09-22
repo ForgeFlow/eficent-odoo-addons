@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
 #              <contact@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,5 +18,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import do_stock_reserve
-from . import do_stock_release
+from openerp.osv import fields, orm
+
+
+class StockReservation(orm.Model):
+    
+    _inherit = 'stock.reservation'
+
+    _columns = {
+        'analytic_resource_plan_line_id': fields.many2one(
+            'analytic.resource.plan.line',
+            string='Analytic Resource Plan Line',
+            ondelete='cascade'),
+    }
+
+    def copy(self, cr, uid, id, default=None, context=None):
+        if context is None:
+            context = {}
+        if default is None:
+            default = {}
+        default['analytic_resource_plan_line_id'] = False
+        return super(StockReservation, self).copy(cr, uid, id, default,
+                                                  context)

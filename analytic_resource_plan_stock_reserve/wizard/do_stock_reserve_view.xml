@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_resource_plan_line_do_stock_reserve"
+                model="ir.ui.view">
+            <field name="name">Resource plan reserve stock</field>
+            <field name="model">analytic.rpl.do.stock.reserve</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                 <form string="Reserve stock">
+                     <group colspan="2">
+                         <button name="do_stock_reserve"
+                                 string="Reserve" type="object"
+                                 class="oe_highlight"/>
+                         <button special="cancel" string="Cancel" class="oe_link"/>
+                     </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_resource_plan_line_do_stock_reserve"
+                model="ir.actions.act_window">
+            <field name="name">Reserve Stock</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">analytic.rpl.do.stock.reserve</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_resource_plan_line_do_stock_reserve"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values"
+                id="analytic_resource_plan_line_do_stock_reserve">
+            <field name="model_id" ref="analytic_resource_plan.model_analytic_resource_plan_line" />
+            <field name="object" eval="1" />
+            <field name="name">Reserve Stock</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_resource_plan_line_do_stock_reserve'))" />
+            <field name="key">action</field>
+            <field name="model">analytic.resource.plan.line</field>
+        </record>
+   
+    </data>
+</openerp>
+

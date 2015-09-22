@@ -33,6 +33,15 @@ class procurement_order(orm.Model):
                                       'Latest Purchase Request')
     }
 
+    def copy(self, cr, uid, id, default=None, context=None):
+        if context is None:
+            context = {}
+        if default is None:
+            default = {}
+        default['request_id'] = False
+        return super(procurement_order, self).copy(cr, uid, id, default,
+                                                   context)
+
     def _get_warehouse(self, procurement, user_company):
         """
             Return the warehouse containing the procurment stock location

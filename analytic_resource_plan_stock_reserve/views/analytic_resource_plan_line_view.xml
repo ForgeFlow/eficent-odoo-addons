@@ -8,10 +8,17 @@
             <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_form"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <xpath expr='//field[@name="product_uom_id"]' position='after'>
-                    <field name="stock_reservation_id"/>
-                    <field name="reserved_qty"/>
-                </xpath>
+                <notebook position='inside'>
+                    <page name="stock_reservations"
+                          string="Stock Reservations">
+                        <group>
+                            <field name="reserved_qty"/>
+                        </group>
+                        <group>
+                            <field name="stock_reservation_ids" nolabel="1"/>
+                        </group>
+                    </page>
+                </notebook>
             </field>
        </record>
 

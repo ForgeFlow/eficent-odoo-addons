@@ -18,5 +18,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import do_stock_reserve
-from . import do_stock_release
+from openerp.osv import fields, orm
+
+
+class AnalyticRPLDoStockRelease(orm.TransientModel):
+    _name = "analytic.rpl.do.stock.release"
+    _description = "Resource plan release stock quantity"
+
+    def do_stock_release(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        resource_plan_obj = self.pool['analytic.resource.plan.line']
+        resource_plan_line_ids = context.get('active_ids', [])
+        active_model = context.get('active_model')
+
+        if not resource_plan_line_ids:
+            return True
+        assert active_model == 'analytic.resource.plan.line', \
+            'Bad context propagation'
+        resource_plan_obj.release_stock_reservation(cr, uid,
+                                                    resource_plan_line_ids,
+                                                    context=context)
+        return True
