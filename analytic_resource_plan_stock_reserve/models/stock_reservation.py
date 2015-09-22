@@ -28,8 +28,7 @@ class StockReservation(orm.Model):
     _columns = {
         'analytic_resource_plan_line_id': fields.many2one(
             'analytic.resource.plan.line',
-            string='Analytic Resource Plan Line',
-            ondelete='cascade'),
+            string='Analytic Resource Plan Line'),
     }
 
     def copy(self, cr, uid, id, default=None, context=None):
