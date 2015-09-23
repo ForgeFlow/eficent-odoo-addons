@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp.osv import fields, orm
+from openerp.tools.translate import _
 
 
 class AnalyticResourcePlanLine(orm.Model):
@@ -46,3 +47,13 @@ class AnalyticResourcePlanLine(orm.Model):
             'purchase_request_line_id',
             'Purchase Request Lines', readonly=True),
     }
+
+    def unlink(self, cr, uid, ids, context=None):
+        for line in self.browse(cr, uid, ids, context=context):
+            if line.purchase_request_lines:
+                raise orm.except_orm(
+                    _('Error!'),
+                    _('You cannot delete a record that refers to purchase '
+                      'purchase request lines!'))
+        return super(AnalyticResourcePlanLine, self).unlink(cr, uid, ids,
+                                                            context=context)

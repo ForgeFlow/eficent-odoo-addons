@@ -23,10 +23,6 @@ from openerp.tools.translate import _
 
 
 class Procurement(orm.Model):
-    _inherit = "procurement.order"
-
-
-class procurement_order(orm.Model):
     _inherit = 'procurement.order'
     _columns = {
         'request_id': fields.many2one('purchase.request',
@@ -39,7 +35,7 @@ class procurement_order(orm.Model):
         if default is None:
             default = {}
         default['request_id'] = False
-        return super(procurement_order, self).copy(cr, uid, id, default,
+        return super(Procurement, self).copy(cr, uid, id, default,
                                                    context)
 
     def _get_warehouse(self, procurement, user_company):
@@ -114,6 +110,6 @@ class procurement_order(orm.Model):
                 non_request.append(procurement.id)
 
         if non_request:
-            res.update(super(procurement_order, self).make_po(
+            res.update(super(Procurement, self).make_po(
                 cr, uid, non_request, context=context))
         return res

@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp.osv import fields, orm
+from openerp.tools.translate import _
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -212,3 +213,13 @@ class PurchaseRequestLine(orm.Model):
                 {'uom': request_line.product_id.uom_po_id.id})[pricelist_id]
 
         return qty, price
+
+    def unlink(self, cr, uid, ids, context=None):
+        for line in self.browse(cr, uid, ids, context=context):
+            if line.purchase_lines:
+                raise orm.except_orm(
+                    _('Error!'),
+                    _('You cannot delete a record that refers to purchase '
+                      'lines!'))
+        return super(PurchaseRequestLine, self).unlink(cr, uid, ids,
+                                                       context=context)
