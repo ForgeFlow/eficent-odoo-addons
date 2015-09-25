@@ -20,6 +20,7 @@
 ##############################################################################
 from openerp.osv import fields, orm
 import openerp.addons.decimal_precision as dp
+from openerp import SUPERUSER_ID
 
 
 class AnalyticResourcePlanLine(orm.Model):
@@ -40,7 +41,9 @@ class AnalyticResourcePlanLine(orm.Model):
         for id in ids:
             res[id] = {}.fromkeys(field_names, 0.0)
 
-        for line in self.browse(cr, uid, ids, context=context):
+        for line in self.browse(cr, SUPERUSER_ID, ids, context=context):
+            if line.product_id.type == 'service':
+                continue
             location_id = line.account_id.location_id and \
                           line.account_id.location_id.id or False
             if not field_names:
