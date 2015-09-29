@@ -82,7 +82,7 @@ class AnalyticResourcePlanLineMakePurchaseRequest(orm.TransientModel):
             'product_qty': item.product_qty,
             'product_id': item.product_id.id,
             'product_uom_id': item.product_uom_id.id,
-            'date_required': item.line_id.account_id.date_start or False,
+            'date_required': item.line_id.date or False,
             'analytic_account_id': item.line_id.account_id.id,
             'analytic_resource_plan_lines': [(4, item.line_id.id)]
         }
@@ -148,6 +148,9 @@ class AnalyticResourcePlanLineMakePurchaseRequest(orm.TransientModel):
             }
             line_plan_obj.write(cr, uid, [line.id],
                                 values, context=context)
+            project_manager_id = line.account_id.user_id.partner_id.id
+            request_obj.write(cr, uid, line.request_id.id, {
+                'message_follower_ids': (4, project_manager_id)})
             res.append(request_line_id)
 
         return {
