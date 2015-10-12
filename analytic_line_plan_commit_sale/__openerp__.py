@@ -21,20 +21,18 @@
 
 {
     "name": "Analytic committed revenues on sales orders",
-    "version": "1.0",
+    "version": "1.1",
     "author": "Eficent",
     "website": "http://www.eficent.com",
     "category": "Generic Modules/Projects & Services",
     "depends": ["analytic_plan", "sale"],
-    "description": """Maintain analytic committed revenues associated to sales orders
+    "description": """
+    Maintain analytic committed revenues associated to sales orders
     """,
-    "init_xml": [],
-    "update_xml": [                          
+    "data": [
+        "sale_filters.xml"
     ],
-    'demo_xml': [
-
-    ],
-    'test':[
+    'test': [
     ],
     'installable': True,
     'active': False,

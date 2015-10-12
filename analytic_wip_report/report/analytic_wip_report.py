@@ -19,18 +19,21 @@
 #
 ##############################################################################
 import time
-import operator
 from openerp.report import report_sxw
 
 
 class analytic_wip_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(analytic_wip_report, self).__init__(cr, uid, name, context=context)
+        super(analytic_wip_report, self).__init__(
+            cr, uid, name, context=context
+        )
         self.localcontext.update({
             'time': time,
         })
 
-report_sxw.report_sxw('report.analytic.wip',
-                      'account.analytic.account',
-                      'addons/analytic_wip_report/report/analytic_wip_report.rml',
-                      parser=analytic_wip_report, header="internal landscape")
+report_sxw.report_sxw(
+    'report.analytic.wip',
+    'account.analytic.account',
+    'addons/analytic_wip_report/report/analytic_wip_report.rml',
+    parser=analytic_wip_report, header="internal landscape"
+)

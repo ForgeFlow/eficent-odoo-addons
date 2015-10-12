@@ -21,20 +21,18 @@
 
 {
     "name": "Project Cost committed costs on purchases",
-    "version": "1.0",
+    "version": "1.1",
     "author": "Eficent",
     "website": "http://www.eficent.com",
     "category": "Generic Modules/Projects & Services",
     "depends": ["analytic_plan", "purchase"],
-    "description": """Eficent Project Management. Maintain analytic commitments associated to purchase orders         
+    "description": """
+    Eficent Project Management. Maintain analytic commitments associated to
+    purchase orders
     """,
-    "init_xml": [],
-    "update_xml": [                          
+    "data": [
     ],
-    'demo_xml': [
-
-    ],
-    'test':[
+    'test': [
     ],
     'installable': True,
     'active': False,

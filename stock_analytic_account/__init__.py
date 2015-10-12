@@ -18,5 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import stock
-import stock_picking
+from . import model
+from . import report
+from . import wizard

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
-#               <contact@eficent.com>
-#
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
 #    published by the Free Software Foundation, either version 3 of the
@@ -19,7 +16,4 @@
 #
 ##############################################################################
 
-import analytic_account_stage
-import account_analytic_account
-import project_project
-import project_task
+from . import model

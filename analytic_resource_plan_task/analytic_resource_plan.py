@@ -28,56 +28,109 @@ class analytic_resource_plan_line(osv.osv):
     _inherit = 'analytic.resource.plan.line'
 
     _columns = {
-        'task_id': fields.many2one('project.task', 'Task', required=False, ondelete='cascade'),
+        'task_id': fields.many2one(
+            'project.task',
+            'Task',
+            required=False,
+            ondelete='cascade'
+        ),
     }
 
-    def on_change_task_id_resource(self,
-                                   cr, uid, ids, account_id,
-                                   task_id, name, date, supplier_id,
-                                   pricelist_id, product_id, unit_amount,
-                                   product_uom_id, price_unit, amount_currency,
-                                   currency_id, version_id, journal_id,
-                                   ref, company_id, amount, general_account_id, context=None):
-        res = {}
-        res['value'] = {}
-        #Change in task_id affects:
-        #  - account_id
+    def on_change_task_id_resource(
+        self,
+        cr,
+        uid,
+        ids,
+        account_id,
+        task_id,
+        name,
+        date,
+        supplier_id,
+        pricelist_id,
+        product_id,
+        unit_amount,
+        product_uom_id,
+        price_unit,
+        amount_currency,
+        currency_id,
+        version_id,
+        journal_id,
+        ref,
+        company_id,
+        amount,
+        general_account_id,
+        context=None
+    ):
 
-        task_obj = self.pool.get('project.task')
+            res = {}
+            res['value'] = {}
+            # Change in task_id affects:
+            #  - account_id
 
-        if task_id:
-            task = task_obj.browse(cr, uid, task_id, context=context)
-            account_id = task.project_id and task.project_id.analytic_account_id and task.project_id.analytic_account_id.id or False
-            if account_id:
-                res['value'].update({'account_id': account_id})
-                res_account_id = self._on_change_account_id_resource(cr, uid, ids, account_id,
-                                                                     name, date, supplier_id,
-                                                                     pricelist_id, product_id, unit_amount,
-                                                                     product_uom_id, price_unit, amount_currency,
-                                                                     currency_id, version_id, journal_id,
-                                                                     ref, company_id, amount, general_account_id, context=None)
-                if res_account_id:
-                    res['value'].update(res_account_id)
+            task_obj = self.pool.get('project.task')
 
-        if res['value']:
-            return res
-        else:
-            return {}
+            if task_id:
+                task = task_obj.browse(cr, uid, task_id, context=context)
+                account_id = (
+                    task.project_id and
+                    task.project_id.analytic_account_id and
+                    task.project_id.analytic_account_id.id or
+                    False
+                )
+                if account_id:
+                    res['value'].update({'account_id': account_id})
+                    res_account_id = self._on_change_account_id_resource(
+                        cr,
+                        uid,
+                        ids,
+                        account_id,
+                        name,
+                        date,
+                        supplier_id,
+                        pricelist_id,
+                        product_id,
+                        unit_amount,
+                        product_uom_id,
+                        price_unit,
+                        amount_currency,
+                        currency_id,
+                        version_id,
+                        journal_id,
+                        ref,
+                        company_id,
+                        amount,
+                        general_account_id,
+                        context=None
+                    )
+                    if res_account_id:
+                        res['value'].update(res_account_id)
 
-    def create(self, cr, uid, vals, *args, **kwargs):
+            if res['value']:
+                return res
+            else:
+                return {}
+
+    def create(
+        self, cr, uid, vals, *args, **kwargs
+    ):
         context = kwargs.get('context', {})
         task_obj = self.pool.get('project.task')
 
         if 'task_id' in vals and vals['task_id']:
             task = task_obj.browse(cr, uid, vals['task_id'], context=context)
-            vals['account_id'] = \
-                task.project_id \
-                and task.project_id.analytic_account_id \
-                and task.project_id.analytic_account_id.id \
-                or False
-        return super(analytic_resource_plan_line, self).create(cr, uid, vals, *args, **kwargs)
+            vals['account_id'] = (
+                task.project_id and
+                task.project_id.analytic_account_id and
+                task.project_id.analytic_account_id.id or
+                False
+            )
+        return super(analytic_resource_plan_line, self).create(
+            cr, uid, vals, *args, **kwargs
+        )
 
-    def write(self, cr, uid, ids, vals, context=None):
+    def write(
+        self, cr, uid, ids, vals, context=None
+    ):
         if context is None:
             context = {}
 
@@ -95,12 +148,19 @@ class analytic_resource_plan_line(osv.osv):
                 task = task_obj.browse(cr, uid, task_id, context=context)
 
                 if 'unit_amount' in vals:
-                    if task.default_resource_plan_line and task.default_resource_plan_line.id == p.id:
+                    if (
+                        task.default_resource_plan_line and
+                        task.default_resource_plan_line.id
+                    ) == p.id:
                         if task.planned_hours != vals['unit_amount']:
-                            raise osv.except_osv(_('Error !'),
-                                                 _('The quantity is different to the number of planned hours '
-                                                   'in the associated task.'))
+                            raise osv.except_osv(
+                                _('Error !'),
+                                _('The quantity is different to the number of '
+                                  'planned hours in the associated task.')
+                            )
 
-        return super(analytic_resource_plan_line, self).write(cr, uid, ids, vals, context=context)
+        return super(analytic_resource_plan_line, self).write(
+            cr, uid, ids, vals, context=context
+        )
 
 analytic_resource_plan_line()

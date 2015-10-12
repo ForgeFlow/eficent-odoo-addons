@@ -21,39 +21,40 @@
 
 {
     "name": "Analytic billing plan",
-    "version": "1.0",
+    "version": "1.1",
     "author": "Eficent",
     "website": "",
     "category": "Generic Modules/Projects & Services",
     "depends": ["account", "sale", "analytic_plan"],
     "description": """
-    
+
   == Record planned sales and create sales orders  ==
-    
-    Eficent brings you this module to automatically record the analytic planned sales associated to sales orders.
-    
+
+    Eficent brings you this module to automatically record the analytic
+    planned sales associated to sales orders.
+
     You can create sales orders out of the planned sales.
 
-            
+
    == More information and assistance ==
-   
-   If you are interested in this module and seek further assistance to use it please visit us at www.eficent.com or conact us at contact@eficent.com
-        
+
+   If you are interested in this module and seek further assistance to use it
+   please visit us at www.eficent.com or conact us at contact@eficent.com
+
     """,
-    "init_xml": [],
-    "update_xml": [
+    "data": [
         "wizard/analytic_billing_plan_line_make_sale.xml",
         "analytic_billing_plan_view.xml",
         "analytic_account_view.xml",
         "product_view.xml",
         "project_view.xml",
         "security/ir.model.access.csv",
-        
-    ],
-    'demo_xml': [
 
     ],
-    'test':[
+    'demo': [
+
+    ],
+    'test': [
     ],
     'installable': True,
     'active': False,

@@ -21,17 +21,19 @@
 
 from openerp.osv import fields, osv
 
-#----------------------------------------------------------
+# ----------------------------------------------------------
 # Products
-#----------------------------------------------------------
+# ----------------------------------------------------------
 
 
 class product_template(osv.osv):
     _inherit = "product.template"
     _columns = {
-        'revenue_analytic_plan_journal_id': fields.many2one('account.analytic.plan.journal',
-                                                            'Revenue Planning Analytic Journal',
-                                                            ondelete='restrict'),
+        'revenue_analytic_plan_journal_id': fields.many2one(
+            'account.analytic.plan.journal',
+            'Revenue Planning Analytic Journal',
+            ondelete='restrict'
+        ),
     }
 
 product_template()

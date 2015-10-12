@@ -22,30 +22,27 @@
 
 {
     "name": "Analytic Plan-Actual Analysis",
-    "version": "1.0",
+    "version": "1.1",
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
     "depends": ["analytic_plan"],
     "description": """
-    
+
     == Analyze the plan vs. actuals of your project ==
-    Eficent brings you this module to better analyze the costs of your projects.
-    
+    Eficent brings you this module to better analyze the costs of your
+    projects.
     """,
-    "init_xml": [
-                ],
-    "update_xml": [        
-        "security/ir.model.access.csv",               
+    "data": [
+        "security/ir.model.access.csv",
         "report/account_analytic_plan_actual_view.xml",
     ],
-    'demo_xml': [
+    'demo': [
 
     ],
-    'test':[
+    'test': [
     ],
     'installable': True,
     'active': False,
     'certificate': '',
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

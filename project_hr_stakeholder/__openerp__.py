@@ -22,23 +22,24 @@
 
 {
     "name": "Project Stakeholder Management",
-    "version": "2.0",
+    "version": "2.0.6",
     "author": "Eficent",
     "website": "",
     "category": "Generic Modules/Projects & Services",
     "depends": [
-                "base",
-                "project",                       
-                ],
-    "description": """ This module offers the possibility to register at project level the stakeholders involved in a project.
-        - It adds a 'Stakeholders' tab in the project form.
-        - The stakeholder can be registered as a partner, or a contact person. 
-        - You can specify the roles and responsibilities of the stakeholders in this project.
-        - You can maintain a master data for roles and responsibilities.
+        "base",
+        "project",
+        "analytic_plan",
+        "project_charter"
+    ],
+    "description": """
+This module offers the possibility to register at project level the stakeholders involved in a project.
+    - It adds a 'Stakeholders' tab in the project form.
+    - The stakeholder can be registered as a partner, or a contact person.
+    - You can specify the roles and responsibilities of the stakeholders in this project.
+    - You can maintain a master data for roles and responsibilities.
     """,
-    "init_xml": [
-                ],
-    "update_xml": [    
+    "data": [
         "project_hr_role.xml",
         "project_hr_responsibility.xml",
         "project_hr_stakeholder.xml",
@@ -47,13 +48,12 @@
         "security/project_security.xml",
         "project_hr_stakeholder_data.xml",
     ],
-    'demo_xml': [
+    'demo': [
 
     ],
-    'test':[
+    'test': [
     ],
     'installable': True,
     'active': False,
     'certificate': '',
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
