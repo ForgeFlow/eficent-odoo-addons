@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="mail_message_partner_tree_view" model="ir.ui.view">
+            <field name="name">mail.message.tree</field>
+            <field name="model">mail.message</field>
+            <field name="arch" type="xml">
+                 <tree string="Messages" create="false">
+                     <field name="date"/>
+                     <field name="author_id"/>
+                     <field name="subject"/>
+                     <field name="partner_ids" widget="many2many_tags"/>
+                     <field name="notified_partner_ids" widget="many2many_tags"/>
+                     <field name="type"/>
+                     <field name="subtype_id"/>
+                     <field name="model"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="mail_message_partner" model="ir.actions.act_window">
+            <field name="name">Messages</field>
+            <field name="src_model">res.partner</field>
+            <field name="res_model">mail.message</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="mail.view_message_tree"/>
+            <field name="search_view_id" ref="mail.view_message_search"/>
+            <field name="context">{'partner_ids': active_id}</field>
+            <field name="view_id" ref="mail_message_partner_tree_view"/>
+            <field name="domain">['|', '|', ('author_id', '=', active_id), ('notified_partner_ids', '=', active_id),('partner_ids', '=', active_id), ('type','!=', 'notification')]</field>
+        </record>
+
+        <record model="ir.ui.view" id="res_partner_view_buttons">
+            <field name="name">res.partner.view.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="priority" eval="10"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <button type="action" string="Messages"
+                        name="%(mail_message_partner)d"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

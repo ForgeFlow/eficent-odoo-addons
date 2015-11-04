@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
-#              <contact@eficent.com>
+#             <contact@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,25 +20,25 @@
 ##############################################################################
 
 {
-    "name": "Purchase Request Webkit Report",
+    "name": "Mail Messages in Partners",
     "version": "1.0",
     "author": "Eficent",
     "website": "www.eficent.com",
-    "category": "Purchase Management",
-    "depends": ["purchase_request",
-                "base_headers_webkit"],
+    "category": "Social Network",
+    "depends": ["mail"],
     "description": """
-Purchase Request Webkit
-=======================
-Report to print purchase requests.
+Mail Messages in Partners
+=========================
+This module provides a button to view the messatges that a partner has
+received or sent. System notifications are excluded.
 
     """,
     "init_xml": [],
-    "update_xml": [
-        "report/purchase_request_report_view.xml",
+    'data': [
+        'views/res_partner_view.xml'
     ],
-    'demo_xml': [],
-    'test': [],
+    'test':[
+    ],
     'installable': True,
     'active': False,
     'certificate': '',
