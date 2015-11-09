@@ -1,3 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-"access_project_progress_measurement_project_user","project.progress.measurement project user","model_project_progress_measurement","project.group_project_user",1,1,1,1
-"access_project_progress_measurement_project_manager","project.progress.measurement project manager","model_project_progress_measurement","project.group_project_manager",1,1,1,1
