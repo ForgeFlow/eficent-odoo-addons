@@ -359,8 +359,14 @@ class AccountAnalyticAccount(base_stage, orm.Model):
         return res
 
     def write(self, cr, uid, ids, values, context=None):
+        # Find the previous stage
+        old_stage_id = {}
+        for acc in self.browse(cr, uid, ids, context=context):
+            old_stage_id[acc.id] = acc.stage_id and acc.stage_id.id or False
+
         res = super(AccountAnalyticAccount, self).write(
             cr, uid, ids, values, context=context)
+
         if values.get('stage_id'):
             project_obj = self.pool.get('project.project')
             stage_obj = self.pool.get('analytic.account.stage')
@@ -369,18 +375,27 @@ class AccountAnalyticAccount(base_stage, orm.Model):
                 project_ids = project_obj.search(
                     cr, uid, [('analytic_account_id', '=', acc_id)],
                     context=context)
-                stage = stage_obj.browse(cr, uid, values.get('stage_id'),
-                                         context=context)
-                if stage.project_state == 'close':
+                if old_stage_id[acc_id]:
+                    old_stage = stage_obj.browse(cr, uid, old_stage_id[acc_id],
+                                                 context=context)
+                else:
+                    old_stage = False
+
+                new_stage = stage_obj.browse(cr, uid, values.get('stage_id'),
+                                             context=context)
+                if old_stage and old_stage.project_state == \
+                        new_stage.project_state:
+                    continue
+                if new_stage.project_state == 'close':
                     project_obj.set_done(cr, uid, project_ids,
                                          context=context)
-                elif stage.project_state == 'cancelled':
+                elif new_stage.project_state == 'cancelled':
                     project_obj.set_cancel(cr, uid, project_ids,
                                            context=context)
-                elif stage.project_state == 'pending':
+                elif new_stage.project_state == 'pending':
                     project_obj.set_pending(cr, uid, project_ids,
                                             context=context)
-                elif stage.project_state == 'open':
+                elif new_stage.project_state == 'open':
                     project_obj.set_open(cr, uid, project_ids,
                                          context=context)
         return res
