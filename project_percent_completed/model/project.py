@@ -48,42 +48,56 @@ class project(orm.Model):
             cr, uid, ids, context=context)
         # Remove from the list the projects that have been cancelled
         for project_id in wbs_projects_data.keys():
-            total_dur = 0.0
-            ev = 0.0
+            all_pids = wbs_projects_data[project_id].keys()
             cr.execute("""
                 WITH progress AS (
                     SELECT p.id as pid,
-                    COALESCE(abs(date_part('day',
-                    age(a1.date_start::timestamp, a1.date::timestamp))), '0')
-                    as duration, COALESCE(pm.value, '0') as value,
+                    a1.date as date_end,
+                    a1.date_start as date_start,
+                    COALESCE(abs(a1.date::date - a1.date_start::date), 0) as
+                    duration,
+                    COALESCE(pm.value, '0') as value,
                     COALESCE(pm.progress_measurement_type, %s) as mt,
                     COALESCE (pm.communication_date, %s) as cdate
                     FROM project_project p
                     INNER JOIN account_analytic_account a1
                     ON a1.id = p.analytic_account_id
-                    LEFT OUTER JOIN project_progress_measurement pm
-                    ON p.id = pm.project_id
+                    LEFT OUTER JOIN (
+                        SELECT * FROM (
+                            SELECT
+                                ROW_NUMBER() OVER
+                                (PARTITION BY project_id
+                                ORDER BY communication_date DESC) AS r,
+                                value, project_id, communication_date,
+                                progress_measurement_type
+                                FROM project_progress_measurement
+                                WHERE progress_measurement_type = %s
+                                AND project_id in %s
+                                AND communication_date <= %s
+                        ) x
+                        WHERE x.r <= 1
+                    ) AS pm ON pm.project_id = p.id
                     WHERE a1.id NOT IN
                     (SELECT parent_id from account_analytic_account a2
                     WHERE a2.parent_id = a1.id)
                     AND p.id in %s
-                    AND p.state <> 'cancelled'
+                    AND p.state NOT IN ('cancelled', 'pending')
                     ORDER BY p.id
                 )
-                SELECT DISTINCT(pid) pid, duration, value, cdate
+                SELECT DISTINCT(pid) pid, duration, value, cdate,
+                date_start, date_end
                 FROM progress
-                WHERE cdate <= %s
-                AND mt = %s
                 ORDER BY pid, cdate DESC
-                LIMIT 1
 
-            """, (def_meas_type_ids[0], date_today,
-                  tuple(wbs_projects_data[project_id].keys()),
-                  date_today, def_meas_type_ids[0]),)
-            for r in cr.fetchall():
-                duration = r[1] + 1
-                total_dur += duration
-                ev += duration * r[2] / progress_max_value
+            """, (def_meas_type_ids[0], date_today, def_meas_type_ids[0],
+                  tuple(all_pids), date_today, tuple(all_pids,)))
+            total_dur = 0.0
+            ev = 0.0
+            for pid, duration, value, cdate, date_start, date_end in \
+                    cr.fetchall():
+                if date_start and date_end:
+                    total_dur += duration
+                    ev += duration * value / progress_max_value
             if total_dur > 0:
                 res[project_id] = round(ev / total_dur * 100)
             else:
