@@ -386,6 +386,8 @@ class AccountAnalyticAccount(base_stage, orm.Model):
                 if old_stage and old_stage.project_state == \
                         new_stage.project_state:
                     continue
+                if not old_stage and new_stage:
+                    continue
                 if new_stage.project_state == 'close':
                     project_obj.set_done(cr, uid, project_ids,
                                          context=context)
