@@ -66,12 +66,28 @@ class ProgressMeasurementsQuickEntry(orm.TransientModel):
         }
         return vals
 
+    def _prepare_measurement_search(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        record_id = context and context.get('active_id', False)
+        data = self.browse(cr, uid, ids, context=context)[0]
+        communication_date = data.communication_date
+        return [('project_id', '=', record_id),
+                ('communication_date', '=', communication_date),
+                ('progress_measurement_type', '=',
+                 data.progress_measurement_type_id.id)]
+
     def progress_measurements_quick_entry_open_window(self, cr, uid, ids,
                                                       context=None):
         if context is None:
             context = {}
-        meas_obj = self.pool.get('project.progress.measurement')
+        meas_obj = self.pool['project.progress.measurement']
         meas_vals = self._prepare_measurement_data(cr, uid, ids,
                                                    context=context)
+        search_domain = self._prepare_measurement_search(cr, uid, ids,
+                                                         context=context)
+        del_meas_ids = meas_obj.search(cr, uid, search_domain, context=context)
+        if del_meas_ids:
+            meas_obj.unlink(cr, uid, del_meas_ids, context=context)
         meas_obj.create(cr, uid, meas_vals, context=context)
         return True
