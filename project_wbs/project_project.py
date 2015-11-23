@@ -394,6 +394,21 @@ class project(base_stage, osv.osv):
         res['nodestroy'] = False
         return res
 
+    def action_open_view_project_form(self, cr, uid, ids, context=None):
+        context['view_buttons'] = True
+        view = {
+            'name': _('Details'),
+            'view_type': 'form',
+            'view_mode': 'form,tree,kanban,gantt',
+            'res_model': 'project.project',
+            'view_id': False,
+            'type': 'ir.actions.act_window',
+            'target': 'current',
+            'res_id': ids[0],
+            'context': context
+        }
+        return view
+
     def on_change_parent(self, cr, uid, ids, parent_id, context=None):
         return self.pool.get('account.analytic.account').on_change_parent(
             cr, uid, ids, parent_id)

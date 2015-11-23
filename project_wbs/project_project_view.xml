@@ -44,6 +44,10 @@
                             name="action_openChildTreeView"
                             type="object"
                             icon="STOCK_GO_DOWN"/>
+                        <button string="Project Form View"
+                            name="action_open_view_project_form"
+                            type="object"
+                            icon="gtk-edit"/>
                         <field name="complete_wbs_code" string="Code"/>
                         <field name="wbs_indent"/>
                         <field name="name" string="Name"/>
@@ -167,7 +171,13 @@
                                     </ul>
                                 </div>
                                 <div class="oe_kanban_content">
-
+                                     <a type="button">
+                                        <button string="Project Form View"
+                                            name="action_open_view_project_form"
+                                            type="object">
+                                            <span>Enter</span>
+                                        </button>
+                                    </a>
                                     <h4><field name="complete_wbs_name"/></h4>
                                     <field name="complete_wbs_code"/>
                                     <field name="account_class"/>
