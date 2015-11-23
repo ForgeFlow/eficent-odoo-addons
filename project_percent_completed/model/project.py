@@ -75,6 +75,7 @@ class project(orm.Model):
                 WHERE cdate <= %s
                 AND mt = %s
                 ORDER BY pid, cdate DESC
+                LIMIT 1
 
             """, (def_meas_type_ids[0], date_today,
                   tuple(wbs_projects_data[project_id].keys()),
