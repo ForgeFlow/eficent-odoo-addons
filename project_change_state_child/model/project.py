@@ -82,5 +82,5 @@ class project(orm.Model):
             child_ids = self.search(cr, uid, [('parent_id', '=',
                                                proj.analytic_account_id.id)])
             if child_ids:
-                self.set_open(cr, uid, child_ids, context=None)
+                self.set_open(cr, uid, child_ids, context=context)
         return True
