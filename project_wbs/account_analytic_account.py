@@ -361,8 +361,10 @@ class AccountAnalyticAccount(base_stage, orm.Model):
     def write(self, cr, uid, ids, values, context=None):
         # Find the previous stage
         old_stage_id = {}
+        old_state_id = {}
         for acc in self.browse(cr, uid, ids, context=context):
             old_stage_id[acc.id] = acc.stage_id and acc.stage_id.id or False
+            old_state_id[acc.id] = acc.state
 
         res = super(AccountAnalyticAccount, self).write(
             cr, uid, ids, values, context=context)
@@ -370,23 +372,33 @@ class AccountAnalyticAccount(base_stage, orm.Model):
         if values.get('stage_id'):
             project_obj = self.pool.get('project.project')
             stage_obj = self.pool.get('analytic.account.stage')
-            for acc_id in ids:
+            for acc in self.browse(cr, uid, ids, context=context):
                 # Search if there's an associated project
                 project_ids = project_obj.search(
-                    cr, uid, [('analytic_account_id', '=', acc_id)],
+                    cr, uid, [('analytic_account_id', '=', acc.id)],
                     context=context)
-                if old_stage_id[acc_id]:
-                    old_stage = stage_obj.browse(cr, uid, old_stage_id[acc_id],
+                if old_stage_id[acc.id]:
+                    old_stage = stage_obj.browse(cr, uid, old_stage_id[acc.id],
                                                  context=context)
                 else:
                     old_stage = False
 
                 new_stage = stage_obj.browse(cr, uid, values.get('stage_id'),
                                              context=context)
+                context.update({
+                    'stage_updated': True
+                })
+                # If the new stage is found in the child accounts, then set
+                # it as well.
+                if new_stage.id in [st.id for st in acc.child_stage_ids]:
+                    child_ids = self.search(cr, uid,
+                                            [('parent_id', '=', acc.id)])
+
+                    self.write(cr, uid, child_ids, {'stage_id': new_stage.id},
+                               context=context)
+
                 if old_stage and old_stage.project_state == \
                         new_stage.project_state:
-                    continue
-                if not old_stage and new_stage:
                     continue
                 if new_stage.project_state == 'close':
                     project_obj.set_done(cr, uid, project_ids,

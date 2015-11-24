@@ -417,8 +417,10 @@ class project(base_stage, osv.osv):
         if context is None:
             context = {}
         for p in self.browse(cr, uid, ids, context=context):
-            if values.get('state') and not values.get('stage_id'):
-                if not context.get('change_project_stage_from_status'):
+            if values.get('state', False) and \
+                    (not values.get('stage_id', False) and not context.get(
+                        'stage_updated', False)):
+                if not context.get('change_project_stage_from_status', False):
                     context.update({
                         'change_project_stage_from_status': True
                     })
