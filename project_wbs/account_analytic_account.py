@@ -389,14 +389,17 @@ class AccountAnalyticAccount(base_stage, orm.Model):
                     'stage_updated': True
                 })
                 # If the new stage is found in the child accounts, then set
-                # it as well.
+                # it as well (only if the new stage sequence is greater than
+                #  the current)
                 if new_stage.id in [st.id for st in acc.child_stage_ids]:
                     child_ids = self.search(cr, uid,
                                             [('parent_id', '=', acc.id)])
-
-                    self.write(cr, uid, child_ids, {'stage_id': new_stage.id},
-                               context=context)
-
+                    for child in self.browse(cr, uid, child_ids,
+                                             context=context):
+                        if child.stage_id.sequence < new_stage.sequence:
+                            self.write(cr, uid, [child.id],
+                                       {'stage_id': new_stage.id},
+                                       context=context)
                 if old_stage and old_stage.project_state == \
                         new_stage.project_state:
                     continue
