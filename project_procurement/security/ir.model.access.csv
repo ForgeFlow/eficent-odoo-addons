@@ -1,2 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-"access_procurement_order_project_manager","procurement.order project manager","procurement.model_procurement_order","project.group_project_manager",1,1,1,1
