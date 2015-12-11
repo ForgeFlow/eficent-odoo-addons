@@ -18,18 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, orm
-
-
-class Product(orm.Model):
-    _inherit = "product.product"
-
-    _columns = {
-        'purchase_request': fields.boolean(
-            'Purchase Request',
-            help="Check this box to generate purchase request instead of "
-                 "generating requests for quotation from procurement.")
-    }
-    _defaults = {
-        'purchase_request': False
-    }
+from . import models

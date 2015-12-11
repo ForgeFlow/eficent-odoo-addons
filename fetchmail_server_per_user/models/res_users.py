@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
 #              <contact@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,4 +18,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import purchase_request_line_make_purchase_order
+from openerp.osv import orm, fields
+
+
+class ResUser(orm.Model):
+    _inherit = 'res.users'
+    
+    _columns = {
+        'fetchmail_server_id': fields.one2many('fetchmail.server',
+                                               'user_id', 'Fetchmail Server'),
+    }

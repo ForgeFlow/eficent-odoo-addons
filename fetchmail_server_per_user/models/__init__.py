@@ -18,4 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import report
+from . import fetchmail_server
+from . import res_users
+from . import mail_notification
