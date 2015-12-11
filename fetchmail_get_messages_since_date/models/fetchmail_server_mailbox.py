@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
-#              Jordi Ballester Alomar <jordi.ballester@eficent.com>
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
+#              <contact@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,4 +18,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import report
+from openerp.osv import fields
+from openerp.osv.orm import Model
+
+
+class FetchMailServerMailbox(Model):
+    _name = 'fetchmail.server.mailbox'
+    _rec_name = 'path'
+
+    _columns = {
+        'path': fields.char(
+            'Path', size=256, help='The path to your mail '
+            "folder. Typically would be something like 'INBOX.myfolder'",
+            required=True
+        ),
+        'server_id': fields.many2one('fetchmail.server', 'Server'),
+    }

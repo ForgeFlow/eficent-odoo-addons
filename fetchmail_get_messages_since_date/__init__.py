@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
-#              Jordi Ballester Alomar <jordi.ballester@eficent.com>
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
+#              <contact@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,22 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name': 'Check Writing using Remit-to address',
-    'version': '1.0',
-    'author': 'Eficent',
-    'category': 'Generic Modules/Accounting',
-    'description': """
-Module to show the remit-to address during the Check Writing and Check Printing.
-===============================================================================
-    """,
-    'website': 'http://www.eficent.com',
-    'depends': ['account_check_writing', 'account_voucher_remit_to'],
-    'data': [
-        'account_check_writing_report.xml',
-    ],
-    'demo': [],
-    'test': [],
-    'installable': True,
-    'active': False,
-}
+from . import models
