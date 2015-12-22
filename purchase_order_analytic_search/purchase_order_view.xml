@@ -37,7 +37,6 @@
             <field name="inherit_id" ref="purchase.purchase_order_line_form" />
             <field name="arch" type="xml">
             	<xpath expr="//form/sheet//field[@name='name']" position="after">
-            		<field name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
             		<field name="account_analytic_user_id" groups="analytic.group_analytic_accounting"/>
             	</xpath>
                </field>
@@ -49,7 +48,6 @@
             <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
             <field name="arch" type="xml">
             	<xpath expr="//tree//field[@name='name']" position="after">
-            		<field name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
             		<field name="account_analytic_user_id" groups="analytic.group_analytic_accounting"/>
                     <field name="state"/>
             	</xpath>
