@@ -106,6 +106,7 @@ More information and assistance:
         "analytic_wip_report.xml",
         "security/ir.model.access.csv",
         "account_analytic_account_view.xml",
+        "wizards/analytic_wip_report_view.xml"
     ],
     'demo_xml': [
 
