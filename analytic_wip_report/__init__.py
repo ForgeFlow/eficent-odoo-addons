@@ -19,6 +19,6 @@
 #
 ##############################################################################
 
-from . import report
 from . import account_analytic_account
 from . import wizards
+from . import report
