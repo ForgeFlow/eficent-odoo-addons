@@ -17,4 +17,5 @@ class SaleOrder(orm.Model):
                 move_id, date_planned,
                 context)
         res['sale_order_line_id'] = line.id
+        res['name'] = line.name
         return res
