@@ -58,7 +58,7 @@ class account_analytic_line_plan(orm.Model):
         'currency_id': fields.many2one('res.currency', 'Currency'),        
         'account_id': fields.many2one('account.analytic.account',
                                       'Analytic Account', required=True,
-                                      ondelete='cascade', select=True,
+                                      ondelete='restrict', select=True,
                                       domain=[('type', '<>', 'view')]),
         'user_id': fields.many2one('res.users', 'User'),
         'company_id': fields.related('account_id', 'company_id', 
