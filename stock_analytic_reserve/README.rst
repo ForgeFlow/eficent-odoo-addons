@@ -2,86 +2,61 @@
    :target: https://www.gnu.org/licenses/agpl.html
    :alt: License: AGPL-3
 
-===================================
-Stock Account Inventory Revaluation
-===================================
+======================
+Stock Analytic Reserve
+======================
 
-If your company runs a perpetual inventory system, you may need to perform
-inventory revaluation.
-
-You can re-valuate inventory values by:
-
-* Changing the price for a specific product. The inventory price is changed
-  and inventory value is recalculated according to the new price. In case of
-  real price, you can select which quants you want to change the price on.
-
-* Changing the value of the inventory. The quantity of inventory remains
-  unchanged, resulting in a change in the price.
-
+This module allows you to reserve / unreserve stock for a specific Analytic
+Account / Project.
 
 
 Configuration
 =============
 
 
-* Go to *Inventory / Configuration / Products / Product Categories* and
-  define, for each category, a Valuation Increase Account and a Valuation
-  Decrease Account. These accounts will be used as contra-accounts to the
-  Stock Valuation Account during the inventory re-valuation.
+* Go to *Warehouse / Configuration / Warehouses* and
+  define, for each warehouse, a Stock Analytic Reservation Location.
 
-* Users willing to access to the Inventory Revaluation menu should be
-  members of the group "Manage Inventory Valuation and Costing Methods".
+* The Stock Analytic Reservation Location must be of 'Location Type' =
+  'Inventory'
+
+* If you handle real time inventory valuation then must have as Stock
+  Valuation Accounts (Incoming and Outgoing) the same GL account, and must
+  be of type 'Asset'.
 
 
 Usage
 =====
 
-* Go to *Inventory / Inventory Control / Inventory Revaluation / Products*
-  to create a new Inventory Revaluation.
+* Go to *Inventory / Inventory Control / Stock Analytic Reservation*
+  and create a new entry.
 
-.. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
-   :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/154/8.0
+* If you select the reservation action 'Reserve', the product entered will
+  be reserved to the analytic account indicated.
 
-Bug Tracker
-===========
+* If you select the reservation action 'Unreserve', the product entered will
+  be unreserved from the analytic account indicated.
 
-Bugs are tracked on `GitHub Issues
-<https://github.com/OCA/stock_account_inventory_revaluation/issues>`_. In case
- of trouble, please
-check there if your issue has already been reported. If you spotted it first,
-help us smashing it by providing a detailed and welcomed `feedback
-<https://github.com/OCA/
-154/issues/new?body=module:%20
-stock_account_inventory_revaluation%0Aversion:%20
-8.0%0A%0A**Steps%20to%20reproduce**%0A-%20..
-.%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+* Press 'Prepare' to create the stock moves associated to each line.
+
+* Press 'Confirm' to confirm the stock moves. If some of the products that
+  have been requested to be reserved/unreserved are not available, you will
+  see in each line, in field 'Out Move Status', the value 'Waiting
+  Availability'.
+
+* Press 'Check Availability' to check again the availability of products for
+  the selected stock location. Press 'Force Availability' to force the
+  products to be withdrawn from the selected location, even when no stock is
+  available.
+
+* Press 'Complete' to complete the operation. The products will then be
+  reserved/unreserved to/from the selected analytic account.
+
 
 Credits
 =======
-
-Images
-------
-
-* Odoo Community Association: `Icon <https://github.com/OCA/maintainer-tools/blob/master/template/module/static/description/icon.svg>`_.
 
 Contributors
 ------------
 
 * Eficent Business and IT Consulting Services S.L. <contact@eficent.com>
-
-
-Maintainer
-----------
-
-.. image:: https://odoo-community.org/logo.png
-   :alt: Odoo Community Association
-   :target: http://odoo-community.org
-
-This module is maintained by the OCA.
-
-OCA, or the Odoo Community Association, is a nonprofit organization whose
-mission is to support the collaborative development of Odoo features and
-promote its widespread use.
-
-To contribute to this module, please visit http://odoo-community.org.

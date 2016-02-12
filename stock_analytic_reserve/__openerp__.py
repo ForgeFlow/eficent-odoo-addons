@@ -5,8 +5,8 @@
 
 {
     "name": "Stock Analytic Reserve",
-    "summary": "Introduces the option to reserve stock for a specific "
-               "analytic account.",
+    "summary": "Introduces the option to reserve / unreserve stock for a "
+               "specific analytic account / project.",
     "version": "8.0.1.0.0",
     "author": "Eficent Business and IT Consulting Services S.L.",
     "website": "http://www.eficent.com",
