@@ -19,7 +19,7 @@
                                 string="Confirm" type="object"
                                 class="oe_highlight"/>
                         <button name="action_assign" states="confirmed"
-                                string="Check Availability" type="object"
+                                string="Check Availability" type="object"/>
                         <button name="action_force_assign" states="confirmed"
                                 string="Force Availability" type="object"
                                 groups="stock.group_stock_manager"/>
