@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="location_analytic_reserve" model="stock.location">
+            <field name="name">Analytic Reservation</field>
+            <field name="location_id"
+                   ref="stock.stock_location_locations_virtual"/>
+            <field name="usage">inventory</field>
+            <field name="company_id"/>
+        </record>
+
+    </data>
+    <data noupdate="1">
+        <record id="stock.warehouse0" model="stock.warehouse">
+            <field name="wh_analytic_reserve_location_id"
+                   ref="location_analytic_reserve"/>
+        </record>
+    </data>
+
+</openerp>
