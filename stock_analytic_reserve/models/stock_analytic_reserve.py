@@ -238,7 +238,7 @@ class StockAnalyticReserveLine(orm.Model):
             'create_date': fields.datetime.now,
             'date': line.reserve_id.date,
             'product_id': line.product_id.id,
-            'product_uom_qty': line.product_uom_qty,
+            'product_qty': line.product_uom_qty,
             'product_uom': line.product_uom_id.id,
             'company_id': line.company_id.id,
             'type': 'internal'
