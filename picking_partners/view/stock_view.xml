@@ -13,7 +13,8 @@
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="partner_order_id" string="Customer"/>
-                    <field name="partner_invoice_id"/>
+                    <field name="partner_invoice_id"
+                           attrs="{'invisible':[('invoice_state', '=', 'none')]}"/>
                 </xpath>
             </field>
         </record>
