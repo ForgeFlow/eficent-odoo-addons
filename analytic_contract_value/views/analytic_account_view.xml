@@ -10,6 +10,7 @@
             <field name="arch" type="xml">
                 <group name="contract" position="before">
                     <group>
+                        <field name="total_contract_value"/>
                         <label for="contract_value"/>
                         <div>
                             <field name="contract_value" class="oe_inline"/>
@@ -21,6 +22,18 @@
                         </div>
                     </group>
                 </group>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_account_tree" model="ir.ui.view">
+            <field name="name">account.analytic.account.tree</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id"
+                   ref="account.view_account_analytic_account_tree"/>
+            <field name="arch" type="xml">
+                <field name="debit" position="before">
+                    <field name="total_contract_value"/>
+                </field>
             </field>
         </record>
 

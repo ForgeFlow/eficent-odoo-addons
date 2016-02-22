@@ -10,7 +10,7 @@ class AnalyticChangeContractValue(orm.TransientModel):
     _name = "analytic.change.contract.value"
     _description = "Change Contract Value"
     _columns = {
-        'new_value': fields.float('New Quantity on Hand',
+        'new_value': fields.float('New Contract Value',
                                   digits_compute=dp.get_precision('Account'),
                                   required=True)
     }
