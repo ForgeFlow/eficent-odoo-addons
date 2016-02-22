@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_account_analytic_account_form" model="ir.ui.view">
+            <field name="name">analytic.analytic.account.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id"
+                   ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <group name="contract" position="before">
+                    <group>
+                        <label for="contract_value"/>
+                        <div>
+                            <field name="contract_value" class="oe_inline"/>
+                            <button name="%(action_view_analytic_change_contract_value)d"
+                                    string="update"
+                            type="action"
+                            class="oe_link"
+                            groups="analytic_contract_value.group_analytic_accounting_contract_value"/>
+                        </div>
+                    </group>
+                </group>
+            </field>
+        </record>
+
+    </data>
+</openerp>

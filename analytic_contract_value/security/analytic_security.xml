@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record
+            id="analytic_contract_value.group_analytic_accounting_contract_value"
+            model="res.groups">
+        <field name="name">Analytic Accounting - Change Contract Value</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+</data>
+</openerp>
