@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="analytic_account_stage_edit" model="ir.ui.view">
+            <field name="name">analytic.account.stage.form</field>
+            <field name="model">analytic.account.stage</field>
+            <field name="inherit_id"
+                   ref="project_wbs.analytic_account_stage_edit"/>
+            <field name="arch" type="xml">
+                <field name="project_state" position="after">
+                    <field name="use_timesheets"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
