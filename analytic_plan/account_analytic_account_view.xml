@@ -2,27 +2,6 @@
 <openerp>
     <data>
 
-#---------------------------------------------------------------------------------------------------------
-#   Extend the menus
-#---------------------------------------------------------------------------------------------------------
-		<menuitem id="analytic_plan_analytic_account_menu"
-			name="Analytic Accounting" 
-			parent="project.menu_project_management"
-			groups="analytic.group_analytic_accounting"/>
-		
-		<menuitem action="account.action_account_analytic_account_form" id="account_analytic_def_account"
-            parent="analytic_plan_analytic_account_menu"
-            groups="analytic.group_analytic_accounting"/>
-
-		<menuitem groups="analytic.group_analytic_accounting"
-            action="action_account_analytic_plan_journal_open_form"
-            id="account_analytic_plan_journal_entries_2"
-            parent="analytic_plan_analytic_account_menu"/>
-			
-#---------------------------------------------------------------------------------------------------------
-#   Extend the analytic account
-#---------------------------------------------------------------------------------------------------------
-          
 
 		<record id="view_account_analytic_account_tree_inh" model="ir.ui.view">
             <field name="name">account.analytic.account.tree</field>
