@@ -2,19 +2,18 @@
    :target: https://www.gnu.org/licenses/agpl.html
    :alt: License: AGPL-3
 
-================
-Project WBS Open
-================
+=============================
+Analytic Stage Use Timesheets
+=============================
 
-Opens a single analytic account. The user can choose to list as well all the
- child accounts (the whole work breakdown structure).
+This module defaults the Use Timesheets field depending on the stage of
+the project/analytic account.
 
 
 Usage
 =====
 
-* Go to 'Accounting / Configuration / Analytic Accounting' and select menu
-entry 'Open Analytic Account'.
+* For each stage, set or clear the field 'Timesheets'
 
 
 Credits
