@@ -25,7 +25,7 @@ from openerp.osv import orm, fields
 from openerp import SUPERUSER_ID
 
 
-class hr_timesheet_sheet(orm.Model):
+class HrTimesheetSheet(orm.Model):
     _inherit = "hr_timesheet_sheet.sheet"
 
     def set_previous_timesheet_ids(self, cr, uid, ids, context=None):
@@ -66,20 +66,23 @@ class hr_timesheet_sheet(orm.Model):
                     if timesheet_id.line_id:
                         a_line_ids.append(timesheet_id.line_id.id)
             if a_line_ids:
-                cr.execute('SELECT DISTINCT account_id '
-                           'FROM account_analytic_line AS L '
-                           'WHERE L.id IN %s '
-                           'GROUP BY account_id', (tuple(a_line_ids),))
+                cr.execute("""SELECT DISTINCT account_id
+                FROM account_analytic_line AS L
+                INNER JOIN account_analytic_account as A
+                ON A.id = L.account_id
+                WHERE L.id IN %s
+                AND A.use_timesheets = True
+                GROUP BY account_id""", (tuple(a_line_ids),))
                 res = cr.dictfetchall()
                 timesheet_ids = []
                 for res_vals in res:
                     same_account_id = False
                     for timesheet_id in sheet.timesheet_ids:
                         if (
-                            timesheet_id.line_id
-                            and timesheet_id.line_id.account_id
-                            and timesheet_id.line_id.account_id.id
-                            == res_vals['account_id']
+                            timesheet_id.line_id and
+                            timesheet_id.line_id.account_id and
+                            timesheet_id.line_id.account_id.id ==
+                                res_vals['account_id']
                         ):
                             same_account_id = True
                     if same_account_id is True:
