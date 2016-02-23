@@ -7,7 +7,6 @@
         <record id="view_project_hr_role_search" model="ir.ui.view">
             <field name="name">project.hr.role.search</field>
             <field name="model">project.hr.role</field>
-            <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Project Role">
                 	<field name="code"/>                    
@@ -19,7 +18,6 @@
         <record id="view_project_hr_role_edit" model="ir.ui.view">
             <field name="name">project.hr.role.form</field>
             <field name="model">project.hr.role</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Project Role">
                     <field name="code"/>
@@ -33,7 +31,6 @@
         <record id="view_project_hr_role_tree" model="ir.ui.view">
             <field name="name">project.hr.role.tree</field>
             <field name="model">project.hr.role</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Project Role">                    
                     <field name="code"/>
