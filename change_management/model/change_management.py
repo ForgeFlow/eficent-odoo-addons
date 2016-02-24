@@ -104,9 +104,6 @@ class change_management_change(osv.osv):
     def set_state_deferred(self, cr, uid, ids, *args):
         return self.write(cr, uid, ids, {'state': 'deferred'})
 
-    #
-    # FIELDS
-    #
     _columns = {
         'name': fields.char('Request Id', size=64, required=True,
                             readonly=True,
@@ -192,9 +189,6 @@ class change_management_change(osv.osv):
         assigned to a managerial level, in case of business continuity to
         a C-level manager.'''),
     }
-    #
-    # DEFINITIONS
-    #
 
     _defaults = {
         'author_id': lambda s, cr, uid, c: uid,
