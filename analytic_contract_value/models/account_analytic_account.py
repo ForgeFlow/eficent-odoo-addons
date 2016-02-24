@@ -9,12 +9,13 @@ import openerp.addons.decimal_precision as dp
 class AccountAnalyticAccount(orm.Model):
     _inherit = 'account.analytic.account'
 
-    def _total_contract_value_calc(self, cr, uid, ids, prop, unknow_none,
-                                   unknow_dict):
+    def list_accounts_with_contract_value(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
         res = {}
         for curr_id in ids:
             all_acc = []
-            res[curr_id] = 0.0
+            res[curr_id] = {}
             # Now add the children
             cr.execute('''
             WITH RECURSIVE children AS (
@@ -32,8 +33,20 @@ class AccountAnalyticAccount(orm.Model):
             for x, y in cr_res:
                 all_acc.append(y)
             all_acc.append(curr_id)
-            for account in self.browse(cr, uid, all_acc, context=None):
-                res[curr_id] += account.contract_value
+            for account in self.browse(cr, uid, all_acc, context=context):
+                if account.contract_value:
+                    res[curr_id][account.id] = account.contract_value
+        return res
+
+    def _total_contract_value_calc(self, cr, uid, ids, prop, unknow_none,
+                                   unknow_dict):
+        res = {}
+        acc_list = self.list_accounts_with_contract_value(cr, uid, ids,
+                                                          context=None)
+        for acc_id in acc_list.keys():
+            res[acc_id] = 0.0
+            for ch_acc_id in acc_list[acc_id]:
+                res[acc_id] += acc_list[acc_id][ch_acc_id]
         return res
 
     _columns = {
