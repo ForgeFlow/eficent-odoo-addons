@@ -7,7 +7,6 @@
         <record id="view_project_hr_responsibility_search" model="ir.ui.view">
             <field name="name">project.hr.responsibility.search</field>
             <field name="model">project.hr.responsibility</field>
-            <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Project Responsibility">
                 	<field name="code"/>                     
@@ -19,7 +18,6 @@
         <record id="view_project_hr_responsibility_edit" model="ir.ui.view">
             <field name="name">project.hr.responsibility.form</field>
             <field name="model">project.hr.responsibility</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Project Responsibility">
                 	<field name="code"/> 
@@ -33,7 +31,6 @@
         <record id="view_project_hr_responsibility_tree" model="ir.ui.view">
             <field name="name">project.hr.responsibility.tree</field>
             <field name="model">project.hr.responsibility</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Project Responsibility">     
                 	<field name="code"/>                

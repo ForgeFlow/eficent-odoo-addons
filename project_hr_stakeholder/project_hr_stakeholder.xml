@@ -8,7 +8,6 @@
         <record id="project_hr_stakeholder_edit" model="ir.ui.view">
             <field name="name">project.hr.stakeholder.form</field>
             <field name="model">project.hr.stakeholder</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Stakeholders">
                 	<group colspan="4" col="4">
@@ -31,7 +30,6 @@
         <record id="project_hr_stakeholder_tree" model="ir.ui.view">
             <field name="name">project.hr.stakeholder.tree</field>
             <field name="model">project.hr.stakeholder</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Stakeholders">   
                 	<field name="project_id"/>                   	  
@@ -48,7 +46,6 @@
         <record id="project_hr_stakeholder_tree_2" model="ir.ui.view">
             <field name="name">project.hr.stakeholder.tree</field>
             <field name="model">project.hr.stakeholder</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Stakeholders">
                 	<field name="project_id"/>                 	         
@@ -65,7 +62,6 @@
         <record id="view_project_hr_stakeholder_search" model="ir.ui.view">
             <field name="name">project.hr.stakeholder.search</field>
             <field name="model">project.hr.stakeholder</field>
-            <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Project Stakeholders">
                 	<group col="3" colspan="3">
