@@ -36,6 +36,7 @@
         'data/change_management_data.xml',
         'data/change_management_sequence.xml',
         'security/ir.model.access.csv',
+        'view/project_view.xml',
         'view/project_task_view.xml',
         'view/change_management_view.xml',
         'view/change_management_category_view.xml',

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+         <record id="edit_project" model="ir.ui.view">
+            <field name="name">project.project.form</field>
+            <field name="model">project.project</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page name="changes" string="Changes">
+                        <group name="buttons">
+                            <button help="Change Management"
+                                    class="oe_inline oe_stat_button"
+                                    name="%(change_management.action_show_changes)d"
+                                    type="action"
+                                    context="{'default_project_id': active_id,'search_default_project_id': active_id}"
+                                    groups="project.group_project_manager"
+                                    string="Changes">
+                            </button>
+                            <newline/>
+                            <button help="Change Actions"
+                                    class="oe_inline oe_stat_button"
+                                    name="%(change_management.action_show_actions)d"
+                                    type="action"
+                                    context="{'default_project_id': active_id,'search_default_project_id': active_id}"
+                                    groups="project.group_project_manager"
+                                    string="Actions">
+                            </button>
+                        </group>
+                        <group name="changes">
+                            <label for="change_ids"/>
+                            <newline/>
+                            <field name="change_ids"
+                                   context="{'default_project_id': active_id}"
+                                   nolabel="1"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="change_form_view" model="ir.ui.view">
+            <field name="name">change.management.change.form.view</field>
+            <field name="model">change.management.change</field>
+            <field name="inherit_id" ref="change_management.change_form_view"/>
+            <field name="arch" type="xml">
+                <field name="change_category_id" position="after">
+                    <field name="change_value"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
