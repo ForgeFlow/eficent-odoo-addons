@@ -13,5 +13,16 @@
             </field>
         </record>
 
+        <record id="change_tree_view" model="ir.ui.view" >
+            <field name="name">change.management.change.tree.view</field>
+            <field name="model">change.management.change</field>
+            <field name="inherit_id" ref="change_management.change_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="change_value" sum="Total"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

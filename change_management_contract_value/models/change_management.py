@@ -9,8 +9,9 @@ class ChangeManagementChange(orm.Model):
     _inherit = 'change.management.change'
 
     _columns = {
-        'change_value': fields.float('Value of this Change',
+        'change_value': fields.float('Value',
                                      readonly=True,
+                                     help="Value of the Change",
                                      states={'draft': [('readonly', False)]})
     }
 
