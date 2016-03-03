@@ -9,7 +9,7 @@
                    ref="analytic_wip_report.view_account_analytic_account_wip_tree"/>
             <field name="arch" type="xml">
                 <field name="total_value" position="before">
-                    <field name="contract_value"/>
+                    <field name="total_contract_value"/>
                 </field>
             </field>
         </record>
