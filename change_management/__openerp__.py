@@ -39,7 +39,7 @@
         'view/change_management_view.xml',
         'view/change_management_category_view.xml',
         'view/change_management_proximity_view.xml',
-        'view/change_management_menus.xml'
+        'view/change_management_menus.xml',
         'view/project_view.xml',
         'view/project_task_view.xml',
     ],
