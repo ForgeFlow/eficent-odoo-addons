@@ -223,6 +223,10 @@ class AccountAnalyticAccount(base_stage, orm.Model):
         'wbs_indent': fields.function(_wbs_indent_calc, method=True,
                                       type='char', string='Level',
                                       size=32, readonly=True),
+        'complete_wbs_code_calc': fields.function(
+            _complete_wbs_code_calc, method=True, type='char',
+            string='Full WBS Code', size=250,
+            help='Computed WBS code'),
         'complete_wbs_code': fields.function(
             _complete_wbs_code_calc, method=True, type='char',
             string='Full WBS Code', size=250,
