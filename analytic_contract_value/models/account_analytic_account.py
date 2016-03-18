@@ -51,12 +51,12 @@ class AccountAnalyticAccount(orm.Model):
 
     _columns = {
         'contract_value': fields.float(
-            'Contract Value',
+            'Original Contract Value',
             digits_compute=dp.get_precision('Account'),
             track_visibility='onchange',
             readonly=True),
         'total_contract_value': fields.function(
             _total_contract_value_calc, method=True, type='float',
-            string='Total Contract Value',
-            help='Contract Value including child analytic accounts')
+            string='Current Total Contract Value',
+            help='Total Contract Value including child analytic accounts')
     }
