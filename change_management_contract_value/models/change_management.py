@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from openerp.osv import fields, orm
+from openerp.tools.translate import _
 
 
 class ChangeManagementChange(orm.Model):
@@ -20,6 +21,10 @@ class ChangeManagementChange(orm.Model):
             cr, uid, ids)
         analytic_obj = self.pool['account.analytic.account']
         for change in self.browse(cr, uid, ids, context=None):
+            if not change.change_project_id:
+                raise orm.except_orm(_("Error!"),
+                                     _("A Change Management Project must be "
+                                       "provided."))
             analytic_obj.write(
                 cr, uid, [change.change_project_id.analytic_account_id.id],
                 {'contract_value': change.change_value}, context=None)
