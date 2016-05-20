@@ -222,6 +222,15 @@ class AnalyticResourcePlanLine(orm.Model):
 
     def unlink(self, cr, uid, ids, context=None):
         for line in self.browse(cr, uid, ids, context=context):
+            child_ids = self.search(cr, uid, [('parent_id', '=', line.id),
+                                              ('state', '=', 'confirm')],
+                                    context=context)
+            if child_ids:
+                raise orm.except_orm(
+                    _('Error!'),
+                    _('You cannot delete a resource plan line that is '
+                      'parent to other resource plan lines that have been '
+                      'confirmed!'))
             if line.analytic_line_plan_ids:
                 raise orm.except_orm(
                     _('Error!'),
