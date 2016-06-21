@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="invoice_supplier_form">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sequence']" position="after">
+                   <field name="sequence2" string='Seq'/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="invoice_form">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sequence']" position="after">
+                   <field name="sequence2" string='Seq'/>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>
