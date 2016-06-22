@@ -25,6 +25,8 @@ class StockPicking(orm.Model):
     def write(self, cr, uid, ids, line_values, context=None):
         if context is None:
             context = {}
+        if isinstance(ids, (int, long)):
+            ids = [ids]
         res = super(StockPicking, self).write(cr, uid, ids, line_values,
                                               context=context)
         self._reset_sequence(cr, uid, ids, context=context)
