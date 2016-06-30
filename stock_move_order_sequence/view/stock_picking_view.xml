@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<openerp>
+    <data>
+        <record id="view_move_picking_tree" model="ir.ui.view">
+            <field name="name">stock.move.tree</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id"
+                   ref="stock_picking_reorder_lines.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                <field name='product_id' position="before">
+                    <field name="order_line_sequence"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
