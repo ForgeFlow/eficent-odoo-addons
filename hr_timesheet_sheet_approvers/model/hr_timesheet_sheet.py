@@ -19,10 +19,10 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
+from openerp.osv import fields, orm
 
 
-class hr_timesheet_sheet(osv.osv):
+class HrTimesheetSheet(orm.Model):
     _inherit = "hr_timesheet_sheet.sheet"
 
     _columns = {
@@ -48,5 +48,5 @@ class hr_timesheet_sheet(osv.osv):
                         cr, uid, [sheet.id],
                         user_ids=[sheet.department_id.manager_id.user_id.id],
                         context=context)
-        return super(hr_timesheet_sheet, self).button_confirm(cr, uid, ids,
-                                                              context=context)
+        return super(HrTimesheetSheet, self).button_confirm(cr, uid, ids,
+                                                            context=context)
