@@ -40,7 +40,11 @@ class PurchaseOrderLine(orm.Model):
         'sequence': fields.integer('Sequence',
                                    help="Gives the sequence "
                                         "order when displaying a list of "
-                                        "purchase order lines.", default=99999)
+                                        "purchase order lines.")
+    }
+
+    _defaults = {
+        'sequence': 9999,
     }
 
     def create(self, cr, uid, values, context=None):

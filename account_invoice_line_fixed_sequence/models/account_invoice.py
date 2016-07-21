@@ -40,8 +40,11 @@ class AccountInvoiceLine(orm.Model):
         'sequence': fields.integer('Sequence',
                                    help="Gives the sequence "
                                         "order when displaying a list of "
-                                        "invoice lines.",
-                                   default=99999)
+                                        "invoice lines.")
+    }
+
+    _defaults = {
+        'sequence': 9999,
     }
 
     def create(self, cr, uid, values, context=None):
