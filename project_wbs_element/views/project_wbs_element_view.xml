@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="act_project_wbs_element_2_project_task_all"
+                model="ir.actions.act_window">
+            <field name="name">Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+            <field name="context">{
+                'search_default_wbs_element_id': [active_id],
+                'default_wbs_element_id': active_id,
+            }</field>
+            <field name="search_view_id" ref="view_task_search_form"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create new tasks
+                </p>
+                <p>
+                    You can now manage your tasks in order to get things done efficiently. Track progress, discuss, attach documents, etc.
+                </p>
+            </field>
+        </record>
+
+        <!-- Opening task when double clicking on wbs element -->
+        <record id="dblc_wbs_element" model="ir.actions.act_window">
+            <field name="res_model">project.task</field>
+            <field name="name">WBS Element tasks</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph,kanban</field>
+            <field name="domain">[('wbs_element_id', 'child_of', [active_id])]</field>
+            <field name="context">{'wbs_element_id':active_id}</field>
+        </record>
+
+        <record id="ir_project_task_open" model="ir.values">
+            <field eval="'tree_but_open'" name="key2"/>
+            <field eval="'project.wbs_element'" name="model"/>
+            <field name="name">View WBS element tasks</field>
+            <field eval="'ir.actions.act_window,'+str(dblc_wbs_element)" name="value"/>
+        </record>
+
+
+        <!-- Project -->
+        <record id="project_wbs_element_form_view" model="ir.ui.view">
+            <field name="name">project.wbs_element.form</field>
+            <field name="model">project.wbs_element</field>
+            <field name="arch" type="xml">
+                <form string="WBS Element">
+                <sheet string="WBS Element">
+                    <div class="oe_button_box" name="button_box" groups="base.group_user">
+                         <button class="oe_stat_button" type="action"
+                            name="%(act_project_wbs_element_2_project_task_all)d" icon="fa-tasks">
+                            <field string="Tasks" name="nbr_tasks"
+                                   widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" placeholder="WBS Element Code"/>
+                            <field name="name"
+                                   placeholder="WBS Element Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="parent_id"/>
+                        <field name="project_id"/>
+                    </group>
+                    <notebook>
+                        <page name="description" string="Description">
+                            <field name="description" nolabel="True"/>
+                        </page>
+                        <page name="childs" string="Child WBS Elements">
+                            <field name="child_ids" nolabel="True"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" help="Follow this project to automatically track the events associated to tasks and issues of this project." groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_project_wbs_element_search_view" model="ir.ui.view">
+            <field name="name">project.wbs_element.search</field>
+            <field name="model">project.wbs_element</field>
+            <field name="arch" type="xml">
+                <search string="Search WBS Element">
+                    <field name="parent_id" string="Parent WBS Element"/>
+                    <field name="project_id" string="Project"/>
+                    <field name="name" string="WBS Element Name"/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <filter name="parent_false"
+                            domain="[('parent_id','=',False)]"
+                            string="Level 1 WBS"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_project_wbs_element_tree_view" model="ir.ui.view">
+            <field name="name">project.wbs_element.tree</field>
+            <field name="model">project.wbs_element</field>
+            <field name="field_parent">child_ids</field>
+            <field name="arch" type="xml">
+                <tree decoration-bf="message_needaction==True"
+                      string="WBS Elements">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="project_id"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="act_project_wbs_element_2_project_wbs_element_all"
+                model="ir.actions.act_window">
+            <field name="name">WBS Elements</field>
+            <field name="res_model">project.wbs_element</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{
+                'search_default_parent_id': [active_id],
+                'default_parent_id': active_id,
+            }</field>
+            <field name="search_view_id" ref="view_project_wbs_element_search_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here you can create new child WBS Elements
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="wbs_element_kanban_view">
+            <field name="name">project.wbs_element.kanban</field>
+            <field name="model">project.wbs_element</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="task_ids"/>
+                    <field name="nbr_tasks"/>
+                    <field name="child_ids"/>
+                    <field name="nbr_childs"/>
+                    <field name="nbr_docs"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+                                <div class="o_project_kanban_main">
+                                    <div class="o_kanban_card_content o_visible">
+                                        <div class="o_kanban_primary_left">
+                                            <div class="o_primary">
+                                                <span><t t-esc="record.code.value"/></span>
+                                                <span><t t-esc="record.name.value"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_card_manage_pane o_invisible">
+                                        <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                            <div groups="project.group_project_manager">
+                                                <a type="edit">Settings</a>
+                                            </div>
+                                        </div>
+                                        <div t-if="widget.editable" class="o_project_kanban_colorpicker">
+                                            <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                        </div>
+                                    </div>
+                                    <div class="o_project_kanban_manage">
+                                        <a class="o_kanban_manage_toggle_button" href="#">More <i class="fa fa-caret-down"/></a>
+                                    </div>
+                                </div>
+
+                                <div class="o_project_kanban_boxes">
+                                    <div class="o_project_kanban_box">
+                                        <a name="%(act_project_wbs_element_2_project_wbs_element_all)d" type="action">
+                                            <span class="o_value"><t t-esc="record.nbr_childs.value"/></span>
+                                            <span class="o_label">WBS Elements</span>
+                                        </a>
+                                    </div>
+                                    <a t-if="record.nbr_docs.raw_value"
+                                       class="o_project_kanban_box" name="attachment_tree_view" type="object">
+                                        <span class="o_value"><t t-esc="record.nbr_docs.value"/></span>
+                                        <span class="o_label">Documents</span>
+                                    </a>
+                                    <div t-if="record.nbr_childs.raw_value == 0" class="o_project_kanban_box">
+                                        <a name="%(act_project_wbs_element_2_project_task_all)d" type="action">
+                                            <span class="o_value"><t t-esc="record.nbr_tasks.value"/></span>
+                                            <span class="o_label">Tasks</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="act_project_project_2_project_wbs_element_all"
+                model="ir.actions.act_window">
+            <field name="name">WBS Elements</field>
+            <field name="res_model">project.wbs_element</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{
+                'search_default_project_id': [active_id],
+                'default_project_': active_id,
+                'search_default_parent_false': True,
+            }</field>
+            <field name="search_view_id"
+                   ref="view_project_wbs_element_search_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create new WBS Elements
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_project_wbs_element_all"
+                model="ir.actions.act_window">
+            <field name="name">WBS Elements</field>
+            <field name="res_model">project.wbs_element</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="search_view_id" ref="view_project_wbs_element_search_view"/>
+            <field name="context">{'search_default_Current': 1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new WBS element.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="open_view_project_wbs_element_all"
+                  id="menu_wbs_elements"
+                  name="WBS elements" parent="base.menu_main_pm" sequence="2"/>
+
+    </data>
+</openerp>

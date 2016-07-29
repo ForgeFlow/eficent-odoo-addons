@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_business_requirement_form" model="ir.ui.view">
+            <field name="name">business.requirement.form</field>
+            <field name="model">business.requirement</field>
+            <field name="inherit_id"
+                   ref="business_requirement.view_business_requirement_form"/>
+            <field name="arch" type="xml">
+                <field name="priority" position="after">
+                    <field name="story_points"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_business_requirement_tree" model="ir.ui.view">
+            <field name="name">business.requirement.tree</field>
+            <field name="model">business.requirement</field>
+            <field name="inherit_id"
+                   ref="business_requirement.view_business_requirement_tree"/>
+            <field name="arch" type="xml">
+                <field name="priority" position="after">
+                    <field name="story_points"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_business_requirement_pivot"
+                model="ir.ui.view">
+            <field name="name">business.requirement.pivot</field>
+            <field name="model">business.requirement</field>
+            <field name="inherit_id"
+                   ref="business_requirement.view_business_requirement_pivot"/>
+            <field name="arch" type="xml">
+                <field name="priority" position="after">
+                    <field name="story_points" type="measure"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

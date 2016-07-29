@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.actions.act_window"
+                id="act_project_task_2_procurement_order">
+            <field name="name">Procurement Orders</field>
+            <field name="res_model">procurement.order</field>
+            <field name="src_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="procurement_tree_view"/>
+        </record>
+
+        <record id="view_task_form2"
+                model="ir.ui.view">
+            <field name="name">project.task.form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id"
+                   ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr='//div[@name="button_box"]' position='inside'>
+                    <button string="Procurement Orders"
+                            name="%(act_project_task_2_procurement_order)d"
+                            class="oe_stat_button"
+                            icon="fa-truck"
+                            type="action"
+                            context="{'default_task_id': active_id,'search_default_task_id': [active_id]}"/>
+                </xpath>                              
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_project_kanban">
+            <field name="name">project.project.kanban</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_kanban"/>
+            <field name="arch" type="xml">
+                <field name="doc_count" position="after">
+                    <field name="displayed_image_id"/>
+                </field>
+                <xpath
+                        expr="//t[@t-name='kanban-box']"
+                       position="inside">
+                    <div t-if="record.displayed_image_id.value" t-attf-class="oe_kanban_card">
+                        <field name="displayed_image_id" widget="attachment_image"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_task_search_form" model="ir.ui.view">
+            <field name="name">project.task.search.form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id"
+                   ref="project.view_task_search_form"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="wbs_element_id"/>
+                </field>
+                <group position="inside">
+                    <filter string="WBS Element" name="wbs_element"
+                            context="{'group_by':'wbs_element_id'}"/>
+                </group>
+            </field>
+        </record>
+
+        <record id="view_task_form2" model="ir.ui.view">
+            <field name="name">project.task.form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="wbs_element_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_task_kanban">
+            <field name="name">project.task.kanban</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_kanban"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <div>
+                        <field name="wbs_element_id"/>
+                    </div>
+                </field>
+            </field>
+         </record>
+
+        <record id="view_task_tree2" model="ir.ui.view">
+            <field name="name">project.task.tree</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2"/>
+            <field name="arch" type="xml">
+                <field name="project_id"
+                       position="after">
+                    <field name="wbs_element_id"
+                           invisible="context.get('user_invisible', False)"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_task_calendar" model="ir.ui.view">
+            <field name="name">project.task.calendar</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_calendar"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="wbs_element_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_project_task_pivot" model="ir.ui.view">
+            <field name="name">project.task.pivot</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_project_task_pivot"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="wbs_element_id" type="row"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_project_task_graph" model="ir.ui.view">
+            <field name="name">project.task.graph</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_project_task_pivot"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="wbs_element_id"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.actions.act_window"
+                id="act_project_project_2_procurement_order">
+            <field name="name">Procurement Orders</field>
+            <field name="res_model">procurement.order</field>
+            <field name="src_model">project.project</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="procurement_tree_view"/>
+        </record>
+
+        <record id="edit_project"
+                model="ir.ui.view">
+            <field name="name">project.project.form.procurement</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id"
+                   ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr='//div[@name="button_box"]' position='inside'>
+                    <button string="Procurement Orders"
+                            name="%(act_project_project_2_procurement_order)d"
+                            class="oe_stat_button"
+                            icon="fa-truck"
+                            type="action"
+                            context="{'default_project_id': active_id,'search_default_project_id': [active_id]}"/>
+                </xpath>                              
+            </field>
+        </record>
+
+    </data>
+</openerp>

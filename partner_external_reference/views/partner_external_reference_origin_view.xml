@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_partner_external_reference_origin_tree"
+                model="ir.ui.view">
+            <field name="name">partner.external.reference.origin.tree</field>
+            <field name="model">partner.external.reference.origin</field>
+            <field name="arch" type="xml">
+                <tree string="Partner External Origin" editable="bottom">
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_partner_external_reference_origin_form"
+                model="ir.ui.view">
+            <field name="name">partner.external.reference.origin.form</field>
+            <field name="model">partner.external.reference.origin</field>
+            <field name="arch" type="xml">
+                <form string="Partner External Origin">
+                    <field name="code"/>
+                    <field name="name"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="partner_external_reference_origin_action"
+                model="ir.actions.act_window">
+            <field name="name">Partner External Reference Origin</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">partner.external.reference.origin</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="partner_external_reference_origin_action"
+                  id="menu_partner_external_reference_origin_form"
+                  name="Partner External Origins" sequence="1"
+                  parent="base.menu_config_address_book"
+                  groups="base.group_no_one"/>
+
+    </data>
+</openerp>

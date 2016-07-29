@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_partner_external_reference_origin_user,partner.external.reference.origin.user,model_partner_external_reference_origin,base.group_user,1,1,1,1
+access_partner_external_reference_origin_manager,partner.external.reference.origin.manager,model_partner_external_reference_origin,base.group_user,1,1,1,1
+access_partner_external_reference_user,partner.external.reference.user,model_partner_external_reference,base.group_user,1,1,1,1
+access_partner_external_reference_manager,partner.external.reference.manager,model_partner_external_reference,base.group_user,1,1,1,1

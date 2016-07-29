@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="plm_template_tree_inherit" model="ir.ui.view">
+        <field name="name">plm.product.template.extension</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="plm.plm_template_tree_inherit"/>
+        <field name="type">tree</field>
+        <field name="priority" eval="15"/>
+        <field name="arch" type="xml">
+            <field name="engineering_revision" position="before">
+				<field name="engineering_code" />
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>
+

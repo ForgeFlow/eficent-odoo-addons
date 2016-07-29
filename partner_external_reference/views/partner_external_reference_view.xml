@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_partner_external_reference_tree" model="ir.ui.view">
+            <field name="name">partner.external.reference.tree</field>
+            <field name="model">partner.external.reference</field>
+            <field name="arch" type="xml">
+                <tree string="Partner External Reference" editable="bottom">
+                    <field name="partner_id"/>
+                    <field name="origin_id"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_partner_external_reference_form" model="ir.ui.view">
+            <field name="name">partner.external.reference.form</field>
+            <field name="model">partner.external.reference</field>
+            <field name="arch" type="xml">
+                <form string="Partner External Reference">
+                    <field name="partner_id"/>
+                    <field name="origin_id"/>
+                    <field name="name"/>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

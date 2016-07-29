@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="stock.config.settings" id="stock_config_settings_defaults">
+            <field name="group_stock_multiple_locations" eval="1"/>
+            <field name="group_stock_adv_location" eval="1"/>
+        </record>
+        <function
+            model="stock.config.settings"
+            name="execute"
+            eval="[[ref('stock_config_settings_defaults')]]" />
+
+        <!-- #### Stock ###### -->
+        <record id="putaway_last_bin" model="product.putaway">
+            <field name="name">Last bin putaway strategy</field>
+            <field name="method">last</field>
+        </record>
+
+        <record id="stock_location_stock" model="stock.location">
+            <field name="name">Stock location</field>
+            <field name="location_id" ref="stock.stock_location_locations"/>
+            <field name="putaway_strategy_id" ref="putaway_last_bin"/>
+            <field name="active">1</field>
+            <field name="usage">internal</field>
+        </record>
+
+        <record id="stock_location_bin_1" model="stock.location">
+            <field name="name">Bin 1</field>
+            <field name="location_id" ref="stock_location_stock"/>
+            <field name="active">1</field>
+            <field name="usage">internal</field>
+        </record>
+
+        <record id="stock_location_bin_2" model="stock.location">
+            <field name="name">Bin 2</field>
+            <field name="location_id" ref="stock_location_stock"/>
+            <field name="active">1</field>
+            <field name="usage">internal</field>
+        </record>
+
+        <!-- ### Pickings ### -->
+        <record id="picking_to_stock" model="stock.picking">
+            <field name="move_type">direct</field>
+            <field name="priority">1</field>
+            <field name="picking_type_id" ref="stock.picking_type_internal"/>
+            <field name="location_id" ref="stock.stock_location_components"/>
+			<field name="location_dest_id" ref="stock_location_stock"/>
+        </record>
+
+        <record id="move_to_stock" model="stock.move">
+            <field name="name">Test move</field>
+            <field name="picking_id" ref="picking_to_stock"/>
+            <field name="product_id" ref="product.product_product_6"/>
+            <field name="product_uom" ref="product.product_uom_unit"/>
+            <field name="location_id" ref="stock.stock_location_components"/>
+            <field name="location_dest_id" ref="stock_location_stock"/>
+            <field name="product_uom_qty">2</field>
+        </record>
+
+    </data>
+</openerp>

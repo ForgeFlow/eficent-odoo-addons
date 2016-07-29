@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="edit_project" model="ir.ui.view">
+            <field name="name">project.project.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button class="oe_stat_button" type="action"
+                        name="%(act_project_project_2_project_wbs_element_all)d"
+                            icon="fa-tasks">
+                        <field string="WBS Elements" name="nbr_wbs_elements"
+                               widget="statinfo"/>
+                    </button>
+                </div>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_project_kanban">
+            <field name="name">project.project.kanban</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_kanban"/>
+            <field name="arch" type="xml">
+                <field name="task_count" position="after">
+                    <field name="nbr_wbs_elements"/>
+                    <field name="displayed_image_id"/>
+                </field>
+                <div class="o_project_kanban_boxes" position="inside">
+
+                    <div class="o_project_kanban_box">
+                        <a name="%(act_project_project_2_project_wbs_element_all)d"
+                           type="action">
+                            <span class="o_value"><t t-esc="record.nbr_wbs_elements.value"/></span>
+                            <span class="o_label">WBS Elements</span>
+                        </a>
+                    </div>
+                    <div t-if="record.displayed_image_id.value" t-attf-class="oe_kanban_card">
+                        <field name="displayed_image_id" widget="attachment_image"/>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</openerp>

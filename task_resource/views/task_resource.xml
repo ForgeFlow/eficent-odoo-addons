@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_task_resource_tree" model="ir.ui.view">
+            <field name="name">task.resource.tree</field>
+            <field name="model">task.resource</field>
+            <field name="arch" type="xml">
+                <tree string="Task Resource" editable="bottom" default_order="sequence">
+                    <field name="product_id"/>
+                    <field name="description"/>
+                    <field name="qty" sum="Total qty"/>
+                    <field name="uom_id"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- Task -->
+        <record id="view_task_form2" model="ir.ui.view">
+            <field name="name">project.task.form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page name="resources" string="Resources">
+                        <field name="resource_ids"
+                               context="{'tree_view_ref':'view_task_resource_tree'}" nolabel="1"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</openerp>

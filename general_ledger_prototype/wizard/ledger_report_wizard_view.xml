@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="ledger_report_wizard_view"
+                model="ir.ui.view">
+            <field name="name">General Ledger</field>
+            <field name="model">ledger.report.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                 <form string="General Ledger">
+                     <group>
+                        <field name="date"/>
+                     </group>
+                     <group colspan="2">
+                         <button name="process"
+                                 string="Process" type="object"
+                                 class="oe_highlight"/>
+                         <button special="cancel" string="Cancel" class="oe_link"/>
+                     </group>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="ledger_report_wizard_line_tree_view"
+                model="ir.ui.view">
+            <field name="name">General Ledger Line</field>
+            <field name="model">ledger.report.wizard.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                 <tree string="General Ledger">
+                     <field name="date"/>
+                     <field name="account_id"/>
+                     <field name="debit"/>
+                     <field name="credit"/>
+                     <field name="init_debit"/>
+                     <field name="init_credit"/>
+                     <field name="init_balance"/>
+                     <field name="cum_balance"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_ledger_report_wizard"
+                model="ir.actions.act_window">
+            <field name="name">General Ledger</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ledger.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id"
+                   ref="ledger_report_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem action="action_ledger_report_wizard"
+                  id="menu_action_ledger_report_wizard"
+                  parent="account.menu_finance_entries" sequence="20"/>
+
+   
+    </data>
+</openerp>
+
