@@ -26,7 +26,7 @@ class ProductSupplierinfoBid(models.Model):
                              copy=False, default='open',
                              track_visibility='onchange')
     tender_id = fields.Many2one(comodel_name='product.supplierinfo.tender',
-                                string='Tender', required=True,
+                                string='Tender', required=False,
                                 states=READONLY_STATES,
                                 domain=[('state', 'in', ['draft',
                                                          'in_progress'])],
