@@ -14,6 +14,7 @@ class PurchaseOrder(orm.Model):
                                                            order_line,
                                                            context=context)
         res['order_line_sequence'] = order_line.sequence
+        return res
 
     def _prepare_order_line_move(self, cr, uid, order, order_line, picking_id,
                                  context=None):
