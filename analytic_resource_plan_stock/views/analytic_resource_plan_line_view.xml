@@ -14,6 +14,11 @@
                     <field name="incoming_done_qty"/>
                     <field name="outgoing_qty"/>
                     <field name="outgoing_done_qty"/>
+                    <button
+                            name="action_openStockLocationTreeView"
+                            string="Stock by Location"
+                            type="object"
+                            icon="gtk-open"/>
                 </xpath>
             </field>
         </record>

@@ -44,16 +44,12 @@ class AnalyticResourcePlanLine(orm.Model):
         for line in self.browse(cr, SUPERUSER_ID, ids, context=context):
             if line.product_id.type == 'service':
                 continue
-            location_id = line.account_id.location_id and \
-                          line.account_id.location_id.id or False
             if not field_names:
                 field_names = []
             for f in field_names:
                 c = context.copy()
                 if line.account_id.use_reserved_stock:
                     c.update({'analytic_account_id': line.account_id.id})
-                if location_id:
-                    c.update({'location_id': location_id})
                 if f == 'qty_available':
                     c.update({'states': ('done',), 'what': ('in', 'out')})
                 if f == 'virtual_available':
@@ -156,3 +152,18 @@ class AnalyticResourcePlanLine(orm.Model):
             string='Delivered/Consumed',
             help="Quantity of products that have been consumed or delivered."),
     }
+
+    def action_openStockLocationTreeView(self, cr, uid, ids, context=None):
+        """
+        :return dict: dictionary value for created view
+        """
+        if context is None:
+            context = {}
+        request_line = self.browse(cr, uid, ids[0], context)
+        res = self.pool.get('ir.actions.act_window').for_xml_id(
+            cr, uid, 'stock_analytic_account',
+            'action_stock_analytic_reserved_inventory_report',
+            context)
+        res['domain'] = "[('product_id', '=',%s)]" % request_line.product_id.id
+        res['nodestroy'] = False
+        return res
