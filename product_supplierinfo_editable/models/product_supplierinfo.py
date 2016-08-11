@@ -12,7 +12,6 @@ class ProductSupplierinfo(models.Model):
                                  default=True)
 
     @api.multi
-    @api.depends('state')
     def _compute_is_editable(self):
         for rec in self:
             rec.is_editable = True
