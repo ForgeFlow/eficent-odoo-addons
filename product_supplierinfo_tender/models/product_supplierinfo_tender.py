@@ -82,6 +82,10 @@ class ProductSupplierinfoTender(models.Model):
             rec.bid_ids.button_open()
 
     @api.multi
+    def button_draft_cancel(self):
+        self.button_draft()
+
+    @api.multi
     def button_open(self):
         for rec in self:
             rec.state = 'open'

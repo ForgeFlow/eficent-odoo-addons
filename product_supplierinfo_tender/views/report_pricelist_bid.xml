@@ -28,30 +28,41 @@
                         <th class="text-center"><strong>Price</strong></th>
                         <th class="text-center"><strong>Start Date</strong></th>
                         <th class="text-center"><strong>End Date</strong></th>
+                        <p t-if="o.tender_id and o.tender_id.state == 'done'">
+                            <th class="text-center"><strong>Approved</strong></th>
+                        </p>
                     </tr>
                 </thead>
                 <tbody>
                     <t t-set="idx" t-value="0"/>
-                    <tr t-foreach="o.line_ids" t-as="bids">
+                    <tr t-foreach="o.line_ids" t-as="line">
                         <t t-set="idx" t-value="idx+1"/>
                         <td>
-                            <span t-field="bids.name"/>
+                            <span t-field="line.name"/>
                         </td>
                         <td class="text-center">
-                            <span t-field="bids.product_id"/>
+                            <span t-field="line.product_id"/>
                         </td>
                         <td class="text-center">
-                            <span t-field="bids.min_qty"/>
+                            <span t-field="line.min_qty"/>
                         </td>
                         <td class="text-center">
-                            <span t-field="bids.price"/>
+                            <span t-field="line.price"
+                                  t-field-options='{"widget": "monetary", "display_currency": "line.currency_id"}'/>
                         </td>
                         <td class="text-center">
-                            <span t-field="bids.date_start"/>
+                            <span t-field="line.date_start"/>
                         </td>
                         <td class="text-center">
-                            <span t-field="bids.date_end"/>
+                            <span t-field="line.date_end"/>
                         </td>
+                        <p t-if="o.tender_id and o.tender_id.state == 'done'">
+                            <td class="text-center">
+                                <p t-if="line.approved_tender">
+                                    <span>X</span>
+                                </p>
+                            </td>
+                        </p>
                     </tr>
                 </tbody>
             </table>
