@@ -9,11 +9,11 @@
                 <form string="Pricelist Tender">
                     <header>
                         <button name="button_draft"
-                            states="open,selection,done"
+                            states="open,selection"
                             string="Reset"
                             type="object"/>
-                        <button name="button_draft_cancel"
-                            states="cancel"
+                        <button name="button_draft_manager"
+                            states="done,cancel"
                             string="Reset"
                             type="object"
                             groups="product_supplierinfo_tender.group_pricelist_tender_manager"/>
@@ -28,7 +28,8 @@
                         <button name="button_done"
                             states="selection"
                             string="Close Selection"
-                            type="object"/>
+                            type="object"
+                            groups="product_supplierinfo_tender.group_pricelist_tender_manager"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>

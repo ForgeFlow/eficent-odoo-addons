@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <openerp>
 
-    <data noupdate="0">
+    <data noupdate="1">
         <record model="ir.module.category"
                 id="module_product_supplerinfo_tender_category">
             <field name="name">Pricelist Tenders</field>
@@ -21,14 +21,14 @@
 
     <data noupdate="1">
         <record id="product_supplierinfo_bid_user" model="ir.rule">
-            <field name="name">User can create/delete only supplierinfo records associated to open bids</field>
-            <field name="model_id" ref="model_product_supplierinfo"/>
+            <field name="name">Pricelist Tenders / User can create/delete only supplierinfo records associated to open bids</field>
+            <field name="model_id" ref="product.model_product_supplierinfo"/>
             <field name="groups" eval="[(4, ref('group_pricelist_tender_user'))]"/>
             <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('bid_id','!=', False), ('bid_id.state','=','open')]</field>
+            <field name="domain_force">[('bid_id','!=', False), ('bid_id.state','in',['draft', 'open'])]</field>
         </record>
 
     </data>

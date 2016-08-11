@@ -82,7 +82,7 @@ class ProductSupplierinfoTender(models.Model):
             rec.bid_ids.button_open()
 
     @api.multi
-    def button_draft_cancel(self):
+    def button_draft_manager(self):
         self.button_draft()
 
     @api.multi
