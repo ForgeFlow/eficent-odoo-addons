@@ -9,9 +9,14 @@
                 <form string="Pricelist Tender">
                     <header>
                         <button name="button_draft"
-                            states="open,selection,done,cancel"
+                            states="open,selection"
                             string="Reset"
                             type="object"/>
+                        <button name="button_draft_manager"
+                            states="done,cancel"
+                            string="Reset"
+                            type="object"
+                            groups="product_supplierinfo_tender.group_pricelist_tender_manager"/>
                         <button name="button_open"
                             states="draft"
                             string="Confirm"
@@ -23,7 +28,8 @@
                         <button name="button_done"
                             states="selection"
                             string="Close Selection"
-                            type="object"/>
+                            type="object"
+                            groups="product_supplierinfo_tender.group_pricelist_tender_manager"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -79,7 +85,12 @@
                                         <field name="product_tmpl_id"/>
                                         <field name="product_id"/>
                                         <field name="min_qty"/>
-                                        <field name="price" string="Price"/>
+                                        <field name="price"
+                                               string="Price"
+                                               widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="currency_id"
+                                               invisible="True"/>
                                         <field name="date_start"/>
                                         <field name="date_end"/>
                                         <field name="approved_tender"
@@ -159,7 +170,9 @@
         <menuitem action="open_view_product_supplierinfo_tender_all"
                   id="menu_product_supplierinfo_tender"
                   name="Pricelist Tenders"
-                  parent="purchase.menu_procurement_management"/>
+                  parent="purchase.menu_procurement_management"
+                  groups="product_supplierinfo_tender.group_pricelist_tender_user"/>
+        />
 
 
     </data>

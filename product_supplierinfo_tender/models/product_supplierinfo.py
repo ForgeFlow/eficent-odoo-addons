@@ -42,9 +42,7 @@ class ProductSupplierinfo(models.Model):
     def _compute_is_editable(self):
         super(ProductSupplierinfo, self)._compute_is_editable()
         for rec in self:
-            if (rec.bid_id and rec.bid_id.state == 'cancel') or \
-                    (rec.tender_id and rec.tender_id.state
-                    not in ['draft', 'open']):
+            if rec.bid_id and rec.bid_id.state in ['close', 'cancel']:
                 rec.is_editable = False
 
     @api.multi
@@ -52,6 +50,9 @@ class ProductSupplierinfo(models.Model):
         super(ProductSupplierinfo, self)._compute_state()
         for rec in self:
             if rec.bid_id.state == 'cancel':
+                rec.state = 'closed'
+            elif (rec.bid_id.state == 'close' and
+                    rec.approved_tender is False):
                 rec.state = 'closed'
 
     @api.multi

@@ -35,6 +35,7 @@
                             <field name="currency_id" groups="base.group_multi_currency"/>
                             <field name="company_id"
                                    groups="base.group_multi_company"/>
+                            <field name="date_received"/>
                         </group>
                         <notebook>
                             <page string="Products">
@@ -44,7 +45,9 @@
                                         <field name="name"/>
                                         <field name="product_id"/>
                                         <field name="min_qty"/>
-                                        <field name="price" string="Price"/>
+                                        <field name="price" string="Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="currency_id"
+                                               invisible="True"/>
                                         <field name="date_start"/>
                                         <field name="date_end"/>
                                     </tree>
@@ -119,7 +122,8 @@
         <menuitem action="open_view_product_supplierinfo_bid_all"
                   id="menu_product_supplierinfo_bid"
                   name="Pricelist Bids"
-                  parent="purchase.menu_procurement_management"/>
+                  parent="purchase.menu_procurement_management"
+                  groups="product_supplierinfo_tender.group_pricelist_tender_user"/>
 
 
     </data>

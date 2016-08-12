@@ -38,7 +38,9 @@ class ProductSupplierinfoBid(models.Model):
     partner_id = fields.Many2one('res.partner', string='Vendor', required=True,
                                  states=READONLY_STATES, change_default=True,
                                  track_visibility='always')
-    date_received = fields.Datetime('Received on', states=READONLY_STATES)
+    date_received = fields.Datetime('Received on', states=READONLY_STATES,
+                                    required=True,
+                                    default=fields.Date.context_today)
     currency_id = fields.Many2one('res.currency', 'Currency', required=True,
                                   states=READONLY_STATES,
                                   default=lambda self:

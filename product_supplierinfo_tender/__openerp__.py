@@ -12,8 +12,10 @@
     "license": "LGPL-3",
     "depends": ['purchase',
                 'product_supplierinfo_editable',
+                'product_supplierinfo_state'
                 ],
     "data": [
+        'security/product_supplierinfo_tender_security.xml',
         'security/ir.model.access.csv',
         'data/product_supplierinfo_tender_sequence.xml',
         'data/product_supplierinfo_bid_sequence.xml',
@@ -24,6 +26,9 @@
         'views/report_pricelist_bid.xml',
         'views/report_pricelist_tender.xml',
         'pricelist_report.xml',
+    ],
+    "demo": [
+        "demo/product_supplierinfo_tender_demo.xml",
     ],
     "installable": True,
 }

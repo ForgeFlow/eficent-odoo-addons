@@ -4,6 +4,7 @@
 from openerp import api, fields, models
 import datetime
 
+
 class ProductSupplierinfo(models.Model):
     _inherit = "product.supplierinfo"
 
