@@ -28,7 +28,7 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('bid_id','!=', False), ('bid_id.state','in',['draft', 'open'])]</field>
+            <field name="domain_force">[('bid_id','!=', False), ('bid_id.state','in',['draft', 'open', 'close'])]</field>
         </record>
 
     </data>
