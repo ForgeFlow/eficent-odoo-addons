@@ -67,8 +67,9 @@ class SaleOrderLine(orm.Model):
             context = {}
         line_id = super(SaleOrderLine, self).create(cr, uid, values,
                                                     context=context)
-        if 'order_id' in values and values['order_id']:
-            self.pool['sale.order']._reset_sequence(cr, uid,
-                                                    [values['order_id']],
-                                                    context=context)
+        if not 'sequence' in values:
+            if 'order_id' in values and values['order_id']:
+                self.pool['sale.order']._reset_sequence(cr, uid,
+                                                        [values['order_id']],
+                                                        context=context)
         return line_id
