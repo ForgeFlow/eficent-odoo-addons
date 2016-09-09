@@ -47,6 +47,16 @@ class SaleOrder(orm.Model):
         self._reset_sequence(cr, uid, ids, context=context)
         return res
 
+    def copy(self, cr, uid, ids, default=None, context=None):
+        if not default:
+            default = {}
+        if not context:
+            context = {}
+        newcontext = context.copy()
+        newcontext['keep_lines'] = True
+        return super(SaleOrder, self).copy(cr, uid, ids, default,
+                                           context=newcontext)
+
 
 class SaleOrderLine(orm.Model):
     _inherit = 'sale.order.line'
@@ -67,7 +77,7 @@ class SaleOrderLine(orm.Model):
             context = {}
         line_id = super(SaleOrderLine, self).create(cr, uid, values,
                                                     context=context)
-        if not 'sequence' in values:
+        if not 'keep_lines' in context:
             if 'order_id' in values and values['order_id']:
                 self.pool['sale.order']._reset_sequence(cr, uid,
                                                         [values['order_id']],
