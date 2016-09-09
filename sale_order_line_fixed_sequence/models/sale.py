@@ -53,7 +53,7 @@ class SaleOrder(orm.Model):
         if not context:
             context = {}
         newcontext = context.copy()
-        newcontext['keep_lines'] = True
+        newcontext['keep_line_sequence'] = True
         return super(SaleOrder, self).copy(cr, uid, ids, default,
                                            context=newcontext)
 
@@ -77,9 +77,20 @@ class SaleOrderLine(orm.Model):
             context = {}
         line_id = super(SaleOrderLine, self).create(cr, uid, values,
                                                     context=context)
-        if not 'keep_lines' in context:
+        # We do not reset the sequence if we are copying a complete sales order
+        if not 'keep_line_sequence' in context:
             if 'order_id' in values and values['order_id']:
                 self.pool['sale.order']._reset_sequence(cr, uid,
                                                         [values['order_id']],
                                                         context=context)
         return line_id
+
+    def copy(self, cr, uid, ids, default=None, context=None):
+        if not default:
+            default = {}
+        if not context:
+            context = {}
+        if not 'keep_line_sequence' in context:
+            default['sequence'] = 9999
+        return super(SaleOrderLine, self).copy(cr, uid, ids, default,
+                                                   context=context)
