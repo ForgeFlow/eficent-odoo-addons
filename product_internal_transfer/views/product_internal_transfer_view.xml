@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- Copyright 2015 Eficent Business and IT Consulting Services S.L.
+     Serpent Consulting Services Pvt. Ltd.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="product_normal_form_view_inherited">
+            <field name="name">Product variant Form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <header position="inside">
+                    <button name="internal_transfer" string="Create Internal Transfer" type="object"/>
+                </header>
+            </field>
+        </record>
+
+     </data>
+</openerp>
