@@ -4,14 +4,14 @@
 
 
 {
-    "name": "Work In Progress Statement for PRI",
+    "name": "Work In Progress Statement Extend",
     "version": "7.0.1.0.0",
     "author": "Eficent Business and IT Consulting Services S.L.",
-    "category": "Customizations for PRI",
+    "category": "Projects",
     "description": """
-Purchase for PRI
+
 ======================================
-Contains customizations for PRI on the work in progress statement module
+Add new fields to analytic wop statement report
 
 """,
     "website": "http://www.eficent.com/",
