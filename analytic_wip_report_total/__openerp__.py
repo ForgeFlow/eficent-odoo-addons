@@ -11,7 +11,6 @@
 Sale for PRI
 ============
 Contains customizations for PRI
-- In the order lines to invoice view add the product
 
 """, 
     "website": "http://www.eficent.com/",
