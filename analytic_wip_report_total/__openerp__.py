@@ -19,6 +19,7 @@ Contains customizations for PRI
     "depends": [
         "analytic_wip_report_fiscalyear",
         "analytic_wip_report_contract_value",
+        "analytic_wip_report_extend",
     ],
     "demo": [],
     "data": [
