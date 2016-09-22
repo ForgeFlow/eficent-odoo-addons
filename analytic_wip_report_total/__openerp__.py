@@ -8,9 +8,9 @@
     "author": "Eficent",
     "category": "Projects",
     "description": """
-Sale for PRI
+Totals in analytic wip report
 ============
-Contains customizations for PRI
+Add the totals in tree view
 
 """, 
     "website": "http://www.eficent.com/",
