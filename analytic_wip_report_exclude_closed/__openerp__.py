@@ -4,7 +4,7 @@
 
 
 {
-    "name": "Work In Progress Statement Exclude closed projects",
+    "name": "Work In Progress Statement Exclude Closed Projects",
     "version": "1.0",
     "author": "Eficent",
     "website": "",
@@ -25,8 +25,8 @@ More information and assistance:
 
     """,
 
-    'demo_xml': [
-
+    'data': [
+        "wizards/analytic_wip_report_view.xml"
     ],
     'test':[
     ],
