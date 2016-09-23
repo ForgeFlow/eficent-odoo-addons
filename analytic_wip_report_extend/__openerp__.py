@@ -9,7 +9,7 @@
     "author": "Eficent Business and IT Consulting Services S.L.",
     "category": "Projects",
     "description": """
-
+Work In Progress Statement
 ======================================
 Add new fields to analytic wop statement report
 
