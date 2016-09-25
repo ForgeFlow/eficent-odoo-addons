@@ -1,1 +1,2 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_analytic_wip_report_group_user","analytic.wip.report group_user","model_analytic_wip_report","base.group_user",1,1,1,1
