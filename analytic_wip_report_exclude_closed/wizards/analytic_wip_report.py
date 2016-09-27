@@ -17,6 +17,27 @@ class AnalyticWipReport(osv.osv):
         'filter_project': True,
     }
 
+    def _get_analytic_search_domain(self, cr, uid, ids, data, context=None):
+        data = self.read(cr, uid, ids, [])[0]
+        comparing_date = False
+        if context.get('fiscalyear_id', False):
+            fiscalyear_id = context['fiscalyear_id']
+            fiscalyear = self.pool.get('account.fiscalyear').browse(
+                cr, uid, fiscalyear_id, context)
+            comparing_date = fiscalyear.date_start
+
+        if data['filter_project'] and data['filter_project'] == True \
+                and comparing_date:
+            domain = ['&', '|', '&', ('date', '>=', comparing_date),
+                              ('state', '=', 'close'),
+                              ('state', '!=', 'close'),
+                              ('account_class', '=', 'project')]
+        else:
+            domain = ['|', '&', ('date', '>=', comparing_date),
+                              ('state', '=', 'close'),
+                              ('state', '!=', 'close')]
+        return domain
+
     def analytic_wip_report_open_window(self, cr, uid, ids, context=None):
         res = super(AnalyticWipReport, self). \
             analytic_wip_report_open_window(cr, uid, ids, context=context)
@@ -24,22 +45,8 @@ class AnalyticWipReport(osv.osv):
         data = self.read(cr, uid, ids, [])[0]
         ctx = ast.literal_eval(res['context'])
 
-        if ctx.get('fiscalyear_id', False):
-            fiscalyear_id = ctx['fiscalyear_id']
-            fiscalyear = self.pool.get('account.fiscalyear').browse(
-                cr, uid, fiscalyear_id, context)
-            comparing_date = fiscalyear.date_start
-        else:
+        if not ctx.get('fiscalyear_id', False):
             return res
-
-        if data['filter_project'] and data['filter_project'] == True:
-            domain = unicode(['&', '|', '&', ('date', '>=', comparing_date),
-                              ('state', '=', 'close'),
-                              ('state', '!=', 'close'),
-                              ('account_class', '=', 'project')])
-        else:
-            domain = unicode(['|', '&', ('date', '>=', comparing_date),
-                              ('state', '=', 'close'),
-                              ('state', '!=', 'close')])
-        res['domain'] = domain
+        res['domain'] = self._get_analytic_search_domain(cr, uid, ids, data,
+                                                         ctx)
         return res
