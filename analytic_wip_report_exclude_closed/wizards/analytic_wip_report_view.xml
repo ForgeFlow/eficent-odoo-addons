@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="analytic_wip_report_view" model="ir.ui.view">
+            <field name="name">Work In Progress Statement</field>
+            <field name="model">analytic.wip.report</field>
+            <field name="inherit_id"
+                   ref="analytic_wip_report_fiscalyear.analytic_wip_report_view"/>
+            <field name="arch" type="xml">
+                <field name="fiscalyear_id" position="after">
+                    <field name="filter_project"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
