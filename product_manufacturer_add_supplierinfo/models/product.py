@@ -20,7 +20,7 @@ class Product(orm.Model):
             'product_code': product.manufacturer_pref,
             'sequence': 99,
             'min_qty': 1,
-            'product_id': product.id
+            'product_id': product.product_tmpl_id.id
         }
         return res
 
@@ -41,7 +41,7 @@ class Product(orm.Model):
         for product in self.browse(cr, uid, ids, context=context):
             if 'manufacturer' in vals and vals['manufacturer']:
                 supp_ids = supplierinfo_obj.search(
-                    cr, uid, [('product_id', '=', product.id),
+                    cr, uid, [('product_id', '=', product.product_tmpl_id.id),
                               ('name', '=', vals['manufacturer'])],
                     context=context)
                 if not supp_ids:
