@@ -32,15 +32,6 @@ class AccountInvoice(models.Model):
     def _currency_rate_onchange(self):
         self.button_compute(set_total=False)
 
-    @api.one
-    @api.depends('currency_rate')
-    def _compute_residual(self):
-        if self.currency_rate:
-            obj = self.with_context(force_currency_rate=self.currency_rate)
-        else:
-            obj = self
-        super(AccountInvoice, obj)._compute_residual()
-
     @api.multi
     def action_move_create(self):
         if self.currency_rate:
