@@ -21,10 +21,11 @@ class StockMove(orm.Model):
                     for aml in aml_obj.browse(cr, uid, aml_ids,
                                               context=context):
                         am_id = aml.move_id.id
-                    move_date = fields.date.context_today(self, cr, uid,
-                                                          context=context)
-                    am_obj.create_reversal_move(
-                        cr, uid, am_id, move_date, context=context)
+                    if am_id:
+                        move_date = fields.date.context_today(self, cr, uid,
+                                                              context=context)
+                        am_obj.create_reversal_move(
+                            cr, uid, am_id, move_date, context=context)
 
         return super(StockMove, self).write(cr, uid, ids, vals,
                                             context=context)
