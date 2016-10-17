@@ -13,9 +13,10 @@ class project_project(osv.osv):
     def set_done(self, cr, uid, ids, context=None):
         res = super(project_project, self). \
             set_done(cr, uid, ids, context=context)
-        project = self.browse(cr, uid, ids, context)
+        projects = self.browse(cr, uid, ids, context)
 
-        if project[0].state == 'close' and not project[0].date:
-            now = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
-            self.write(cr, uid, ids, {'date': now}, context=context)
+        for project in projects:
+            if project.state == 'close' and not project.date:
+                now = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
+                self.write(cr, uid, ids, {'date': now}, context=context)
         return res
