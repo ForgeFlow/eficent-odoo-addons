@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_stock_analytic_reserve_form" model="ir.ui.view">
+            <field name="name">stock.analytic.reserve.form</field>
+            <field name="model">stock.analytic.reserve</field>
+            <field name="arch" type="xml">
+                <form string="Stock Analytic Reservation" version="7.0">
+                    <header>
+                        <button name="action_draft"
+                                states="cancel"
+                                string="Back to Draft"
+                                type="object"/>
+                        <button name="action_prepare" states="draft"
+                                string="Prepare" type="object"
+                                class="oe_highlight"/>
+                        <button name="action_confirm" states="prepared"
+                                string="Confirm" type="object"
+                                class="oe_highlight"/>
+                        <button name="action_assign" states="confirmed"
+                                string="Check Availability" type="object"/>
+                        <button name="action_force_assign" states="confirmed"
+                                string="Force Availability" type="object"
+                                groups="stock.group_stock_manager"/>
+                        <button name="action_done" states="confirmed"
+                                string="Complete" type="object"
+                                class="oe_highlight"/>
+                        <button name="action_cancel"
+                                states="draft,prepared,confirmed"
+                                string="Cancel" type="object"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,prepared,confirmed,done,cancel"
+                               statusbar_colors='{"done":"blue"}'/>
+                    </header>
+                    <sheet>
+                        <div class="oe_edit_only">
+                            <label for="name" class="oe_inline"/>
+                        </div>
+                        <h1>
+                            <field name="name" class="oe_inline"/>
+                        </h1>
+                        <group name="main">
+                            <group name="basic">
+                                <field name="date"/>
+                                <field name="action"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="warehouse_id" groups="stock.group_locations"/>
+                                <field name="wh_analytic_reserve_location_id" groups="stock.group_locations"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="products" string="Products">
+                                <field name="line_ids" nolabel="1">
+                                    <tree string="Stock Analytic Reservation Lines" editable="bottom">
+                                        <field name="product_id"
+                                               on_change="onchange_product_id(product_id)"/>
+                                        <field name="product_uom_qty"/>
+                                        <field name="product_uom_id"/>
+                                        <field name="location_id"/>
+                                        <field name="analytic_account_id"/>
+                                        <field name="out_move_id"/>
+                                        <field name="out_move_status"/>
+                                        <field name="in_move_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_stock_analytic_reserve_line_tree"
+                model="ir.ui.view">
+            <field name="name">stock.analytic.reserve.line.tree</field>
+            <field name="model">stock.analytic.reserve.line</field>
+            <field name="arch" type="xml">
+                <tree string="Stock Analytic Reservation Lines">
+                    <field name="product_id"/>
+                    <field name="product_uom_qty"/>
+                    <field name="product_uom_id"/>
+                    <field name="location_id" groups="stock.group_locations"/>
+                    <field name="analytic_account_id"
+                           groups="analytic.group_analytic_accounting"/>
+                    <field name="out_move_id"/>
+                    <field name="out_move_status"/>
+                    <field name="in_move_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_stock_analytic_reserve_line_form"
+                model="ir.ui.view">
+            <field name="name">stock.analytic.reserve.line.form</field>
+            <field name="model">stock.analytic.reserve.line</field>
+            <field name="arch" type="xml">
+                <form string="Stock Analytic Reservation Lines">
+                    <group>
+                        <field name="product_id"/>
+                        <field name="product_uom_qty"/>
+                        <field name="product_uom_id"/>
+                        <field name="location_id" groups="stock.group_locations"/>
+                        <field name="analytic_account_id"
+                               groups="analytic.group_analytic_accounting"/>
+                    </group>
+                    <group name="moves">
+                        <field name="out_move_id"/>
+                        <field name="out_move_status"/>
+                        <field name="in_move_id"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_stock_analytic_reserve_tree" model="ir.ui.view">
+            <field name="name">stock.analytic.reserve.tree</field>
+            <field name="model">stock.analytic.reserve</field>
+            <field name="arch" type="xml">
+                <tree string="Stock Analytic Reservation">
+                    <field name="name"/>
+                    <field name="state"/>
+                    <field name="date"/>
+                    <field name="action"/>
+                    <field name="warehouse_id" groups="stock.group_locations"/>
+                    <field name="wh_analytic_reserve_location_id" groups="stock.group_locations"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_stock_analytic_reserve_search" model="ir.ui.view">
+            <field name="name">stock.analytic.reserve.search</field>
+            <field name="model">stock.analytic.reserve</field>
+            <field name="arch" type="xml">
+                <search string="Search Stock Analytic Reservation">
+                    <field name="name"/>
+                    <field name="state"/>
+                    <field name="date"/>
+                    <field name="action"/>
+                    <field name="warehouse_id" groups="stock.group_locations"/>
+                    <field name="wh_analytic_reserve_location_id" groups="stock.group_locations"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_stock_analytic_reserve_tree" model="ir.actions.act_window">
+            <field name="name">Stock Analytic Reservation</field>
+            <field name="res_model">stock.analytic.reserve</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to start a new Stock Analytic Reservation.
+              </p>
+            </field>
+        </record>
+
+       <menuitem action="action_stock_analytic_reserve_tree"
+                 id="menu_action_stock_analytic_reserve_tree"
+                 parent="stock.menu_stock_inventory_control"
+                 groups="stock.group_stock_manager,stock.group_stock_user"/>
+    </data>
+</openerp>
