@@ -28,6 +28,8 @@ class AnalyticWipReport(orm.TransientModel):
         'fiscalyear_id': fields.many2one(
                 'account.fiscalyear', 'Fiscalyear',
                 required=True),
+        'from_date_fy': fields.date('From (within the fiscal year)'),
+        'to_date_fy': fields.date('To (within the fiscal year)'),
     }
 
     def analytic_wip_report_open_window(self, cr, uid, ids, context=None):
@@ -41,5 +43,9 @@ class AnalyticWipReport(orm.TransientModel):
             result_context.update({'to_date': data['to_date']})
         if data['fiscalyear_id']:
             result_context.update({'fiscalyear_id': data['fiscalyear_id'][0]})
+        if data['from_date_fy']:
+            result_context.update({'from_date_fy': data['from_date_fy']})
+        if data['to_date_fy']:
+            result_context.update({'to_date_fy': data['to_date_fy']})
         res['context'] = str(result_context)
         return res

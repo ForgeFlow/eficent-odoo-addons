@@ -46,11 +46,32 @@ class account_analytic_account(orm.Model):
                 fiscalyear = self.pool['account.fiscalyear'].browse(
                         cr, uid, context.get('fiscalyear_id'),
                         context=context)
+                if context.get('from_date_ty', False):
+                    fromdate = self.pool['account.fiscalyear'].browse(
+                        cr, uid, context.get('from_date_fy'),
+                        context=context)
+                else:
+                    fromdate = None
 
-                where_date += " AND l.date >= %s"
-                query_params += [fiscalyear.date_start]
-                where_date += " AND l.date <= %s"
-                query_params += [fiscalyear.date_stop]
+                if context.get('from_date_ty', False):
+                    todate = self.pool['account.fiscalyear'].browse(
+                        cr, uid, context.get('to_date_fy'),
+                        context=context)
+                else:
+                    todate = None
+
+                if fromdate:
+                    where_date += " AND l.date >= %s"
+                    query_params += [fromdate]
+                else:
+                    where_date += " AND l.date >= %s"
+                    query_params += [fiscalyear.date_start]
+                if todate:
+                    where_date += " AND l.date <= %s"
+                    query_params += [todate]
+                else:
+                    where_date += " AND l.date <= %s"
+                    query_params += [fiscalyear.date_stop]
             else:
                 orm.except_orm(_('Error'),
                                _('The Fiscal year has not been provided.'))
