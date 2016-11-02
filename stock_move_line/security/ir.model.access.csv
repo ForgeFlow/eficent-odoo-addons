@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_account_account_type,account.account.type stock user,account.model_account_account_type,stock.group_stock_user,1,0,0,0
