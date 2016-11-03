@@ -42,18 +42,25 @@ class account_analytic_account(orm.Model):
 
             query_params = [tuple(all_ids)]
             where_date = ''
-            if context.get('fiscalyear_id', False):
-                fiscalyear = self.pool['account.fiscalyear'].browse(
-                        cr, uid, context.get('fiscalyear_id'),
-                        context=context)
 
-                where_date += " AND l.date >= %s"
-                query_params += [fiscalyear.date_start]
-                where_date += " AND l.date <= %s"
-                query_params += [fiscalyear.date_stop]
+            if context.get('from_date_fy', False):
+                fromdate = context.get('from_date_fy')
             else:
-                orm.except_orm(_('Error'),
-                               _('The Fiscal year has not been provided.'))
+                raise orm.except_orm(_('Error'),
+                               _('The start date for the fiscal year has'
+                                 ' not been provided.'))
+            if context.get('from_date_fy', False):
+                todate = context.get('to_date_fy')
+            else:
+                raise orm.except_orm(_('Error'),
+                               _('The end date form the fiscal year has'
+                                 ' not been provided.'))
+
+            where_date += " AND l.date >= %s"
+            query_params += [fromdate]
+
+            where_date += " AND l.date <= %s"
+            query_params += [todate]
 
             # Actual billings for the fiscal year
             cr.execute(

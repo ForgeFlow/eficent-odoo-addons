@@ -11,7 +11,9 @@
                 <footer position="before">
                     <group string="Select the Fiscal Year for Analysis"
                            col="4">
-                        <field name="fiscalyear_id"/>
+                        <field name="fiscalyear_id" on_change="onchange_fiscalyear_id(fiscalyear_id)"/>
+                        <field name="from_date_fy"/>
+                        <field name="to_date_fy"/>
                     </group>
                 </footer>
             </field>
