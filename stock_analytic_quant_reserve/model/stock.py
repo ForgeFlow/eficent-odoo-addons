@@ -70,7 +70,7 @@ class StockQuant(orm.Model):
         cannot create moves
         '''
         quants2 = []
-        req_analytic_account = move.account_analytic_id
+        req_analytic_account = move.analytic_account_id
         for quant in quants:
             if quant[0]:
                 if req_analytic_account:

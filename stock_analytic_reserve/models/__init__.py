@@ -5,3 +5,4 @@
 
 from . import stock_warehouse
 from . import stock_analytic_reserve
+from . import stock_inventory

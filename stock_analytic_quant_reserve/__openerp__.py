@@ -31,7 +31,7 @@
     'website': 'http://project.expert',
     'category': 'Project Management',
     'license': 'AGPL-3',
-    'depends': ['stock', 'analytic', 'stock_analytic',],
+    'depends': ['stock', 'analytic', 'stock_analytic_account'],
     'data': ['view/stock_view.xml',
              'view/analytic_account_view.xml',
     ],
