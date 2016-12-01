@@ -11,7 +11,7 @@
     "author": "Eficent Business and IT Consulting Services S.L.",
     "website": "http://www.eficent.com",
     "category": "Warehouse",
-    "depends": ["stock", "analytic", "stock_analytic_account"],
+    "depends": ["stock", "analytic"],
     "license": "AGPL-3",
     "data": [
         "security/stock_analytic_reserve_security.xml",
