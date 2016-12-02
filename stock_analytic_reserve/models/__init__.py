@@ -2,7 +2,5 @@
 # © 2015 Eficent Business and IT Consulting Services S.L.
 # - Jordi Ballester Alomar
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 from . import stock_warehouse
 from . import stock_analytic_reserve
-from . import stock_inventory
