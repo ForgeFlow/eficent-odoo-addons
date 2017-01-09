@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="project_stock_location_view" model="ir.ui.view">
+            <field name="name">project.project.form.stock.move</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project_stock.edit_project_stock_move"/>
+            <field name="arch" type="xml">
+                <xpath expr='//field[@name="use_reserved_stock"]' position='attributes'>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
