@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_order_location_form" model="ir.ui.view">
+            <field name="name">Sale Order Location</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="after">
+                    <field name="location_id"
+                    attrs="{'invisible': ['|', ('project_id', '=', False), ('state', 'not in', ('draft', 'sent'))]}"
+                    domain="[('analytic_account_id', '=', project_id)]"
+                    options="{'limit': 10, 'create': false, 'create_edit': false}"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
