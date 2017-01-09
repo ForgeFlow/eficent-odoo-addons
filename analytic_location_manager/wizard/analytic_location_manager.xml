@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_stock_location_analytic_create" model="ir.ui.view">
+            <field name="name">stock.location.analytic.create</field>
+            <field name="model">location.analytic.create</field>
+            <field name="arch" type="xml">
+                <form string="Admin locations for project">
+                    <group colspan="4">
+                        <field name="name"/>
+                        <field name="type"/>
+                        <field name="location_id"/>
+                    </group>
+                    <group>
+                        <button name="create_location"
+                             string="Create" type="object"
+                             class="oe_highlight"/>
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_analytic_location_manager" model="ir.ui.view">
+            <field name="name">analytic.location.manager</field>
+            <field name="model">analytic.location.manager</field>
+            <field name="arch" type="xml">
+                <form string="Admin locations for project">
+                    <group colspan="4">
+                        <field name="recursive"/>
+                    </group>
+                    <group>
+                        <button name="show_analytic_locations"
+                             string="View Locations" type="object"
+                             class="oe_highlight"/>
+                        <button name="open_location_manager"
+                             string="New Location" type="object"
+                             class="oe_highlight"/>
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_analytic_location_manager" model="ir.actions.act_window">
+            <field name="name">See Locations For Project</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">analytic.location.manager</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_analytic_location_manager"/>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_account_analytic_account_form" model="ir.ui.view">
+            <field name="name">account.analytic.account.form.analytic.location</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr='//div[@name="buttons"]' position='inside'>
+                    <button string="See Locations For Project"
+                        name="%(act_analytic_location_manager)d"
+                        type="action"
+                        context="{'default_analytic_account_id': active_id,'search_default_analytic_account_id': [active_id]}"
+                        groups="project.group_project_manager"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
+    </data>
+</openerp>

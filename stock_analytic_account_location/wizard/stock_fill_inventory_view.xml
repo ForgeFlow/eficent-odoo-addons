@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_stock_fill_inventory" model="ir.ui.view">
+            <field name="name">Import Inventory</field>
+            <field name="model">stock.fill.inventory</field>
+            <field name="inherit_id" ref="stock.view_stock_fill_inventory"/>
+            <field name="arch" type="xml">
+                <field name="location_id" position="attributes">
+                    <attribute name="attrs">{'invisible':[('analytic_inventory', '=', True)]}</attribute>
+                </field>
+                <field name="location_id" position="after">
+                    <field name="analytic_inventory"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_stock_fill_inventory2" model="ir.ui.view">
+            <field name="name">Import Inventory</field>
+            <field name="model">stock.fill.inventory</field>
+            <field name="inherit_id" ref="stock_analytic_account.view_stock_fill_inventory"/>
+            <field name="arch" type="xml">
+                <field name="analytic_account_id" position="attributes">
+                    <attribute name="attrs">{'invisible':[('analytic_inventory', '=', False)]}</attribute>
+                    <attribute name="required">[('amount_select','=','percentage')]</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
