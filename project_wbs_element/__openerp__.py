@@ -13,6 +13,7 @@
     'license': 'AGPL-3',
     'depends': [
         'project',
+        'project_image'
     ],
     'data': [
         'views/project_task_view.xml',
