@@ -10,7 +10,6 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='company_id']" position="after">
                 	<field name="analytic_account_id" />
-                    <field name="analytic_reserved"/>
                 </xpath>
             </field>
         </record>
@@ -23,7 +22,6 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='location_id']" position="after">
                 	<field name="analytic_account_id" />
-                    <field name="analytic_reserved"/>
                 </xpath>
             </field>
         </record>
@@ -48,7 +46,6 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='location_id']" position="after">
                 	<field name="analytic_account_id"/>
-                    <field name="analytic_reserved"/>
                 </xpath>
             </field>
         </record>
@@ -62,7 +59,6 @@
             <field name="arch" type="xml">        
                 <xpath expr="//field[@name='name']" position="after">
                 	<field name="analytic_account_id"/>
-                    <field name="analytic_reserved"/>
                 </xpath>
             </field>
         </record>   
@@ -75,7 +71,6 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='origin']" position="after">
                 	<field name="analytic_account_id"/>
-                    <field name="analytic_reserved"/>
                 </xpath>
             </field>
         </record>
@@ -91,7 +86,6 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='tracking_id']" position="after">
                 	<field name="analytic_account_id"/>
-                    <field name="analytic_reserved"/>
                 </xpath>
             </field>
         </record>

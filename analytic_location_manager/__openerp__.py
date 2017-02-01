@@ -3,14 +3,12 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Stock Location Analytic',
+    'name': 'Manage Locations for projects',
     'version': '7.0.1.0.0',
     'category': 'Logistics',
-    'summary': 'Introduces the analytic account to the locations',
+    'summary': 'Manage Locations for projects',
     'description': """
-    Introduces the analytic account to the locations.
-    This allows to have dedicated locations for projects. This is useful when
-    adding the analytic account to stock moves.
+    Manage Locations for projects
 """,
     'author': 'Eficent',
     'website': 'http://www.eficent.com',
