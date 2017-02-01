@@ -15,6 +15,7 @@
     'website': 'http://www.eficent.com',
     'depends': ['stock_analytic_account_location', 'purchase',
                 'purchase_stock_analytic'],
+    'data': ['views/purchase.xml'],
     'installable': True,
     'auto_install': False,
     

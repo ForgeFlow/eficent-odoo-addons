@@ -48,6 +48,8 @@ class AnalyticResourcePlanLine(orm.Model):
                 field_names = []
             for f in field_names:
                 c = context.copy()
+                if line.account_id.location_id:
+                    c.update({'location': line.account_id.location_id.id})
                 if line.account_id.use_reserved_stock:
                     c.update({'analytic_account_id': line.account_id.id})
                 if f == 'qty_available':

@@ -125,6 +125,7 @@ class StockLocation(orm.Model):
     }
 
     def _check_moves(self, cr, uid, ids, context=None):
+        #Todo change the method to write and check only if analytic_id changed
         if context is None:
             context = {}
         location_obj = self.pool.get('stock.location')
@@ -178,9 +179,6 @@ class StockLocation(orm.Model):
                         return False
         return True
 
-    _constraints = [(_check_moves, "This location contains products of "
-                                   "different projects, move them out first",
-                     ['analytic_account_id']),
-                    (_check_analytic_account, "Sublocations can only be related"
+    _constraints = [(_check_analytic_account, "Sublocations can only be related"
                                               " to the same project",
                     ['analytic_account_id'])]

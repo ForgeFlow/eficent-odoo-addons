@@ -30,7 +30,7 @@ class AnalyticResourcePlanLine(orm.Model):
                 continue
             c = context.copy()
             c.update({'states': ('done',), 'what': ('in', 'out'),
-                      'location_id': location})
+                      'location': location})
 
             stock = product_obj.get_product_available(cr, uid,
                                                       [line.product_id.id],
@@ -59,6 +59,7 @@ class AnalyticResourcePlanLine(orm.Model):
             'location_id': line.account_id.warehouse_id.lot_stock_id.id,
             'location_dest_id': line.account_id.location_id.id,
             'analytic_resource_plan_line_id': line.id,
+            'stock_journal_id': 1,
             'note': 'Resource Plan Line %s %s' % (line.account_id.id, line.name),
         }
 
@@ -78,11 +79,12 @@ class AnalyticResourcePlanLine(orm.Model):
             'partner_id': line.account_id.partner_id.id,
             'picking_id': picking_id,
             'state': 'draft',
+            'analytic_account_id': line.account_id.id,
             'price_unit': line.product_id.price,
             'company_id': line.account_id.company_id.id,
             'location_id': line.account_id.warehouse_id.lot_stock_id.id,
             'location_dest_id': line.account_id.location_id.id,
-            'note': 'RMA move',
+            'note': 'Move for project',
         }
 
     def _prepare_purchase_request_auto(self, cr, uid, line, company_id,
@@ -189,8 +191,6 @@ class AnalyticResourcePlanLine(orm.Model):
         return res
 
     def action_button_confirm(self, cr, uid, ids, context=None):
-        res = super(AnalyticResourcePlanLine, self).action_button_confirm(
-            cr, uid, ids, context=context)
         to_purchase = []
         for line in self.browse(cr, uid, ids, context=context):
             if not line.account_id.warehouse_id:
@@ -210,18 +210,29 @@ class AnalyticResourcePlanLine(orm.Model):
                     cr, uid, warehouses, context):
                 if warehouse.lot_stock_id:
                     locations.append(warehouse.lot_stock_id)
+                    # locations = list(set(locations))
+
+            # locations_ids = []
+            # for loc in locations:
+            #     locations_ids.append(loc.id)
+            # child_location_ids = self.pool.get('stock.location').search(cr, uid, [
+            #     ('location_id', 'child_of', locations_ids)])
+            # locations = self.pool.get('stock.location').search(cr, uid, [
+            #     ('name', 'like', 'Stock')])
             qty_fetched = 0
             for location in locations:
-                qty_available = self._get_product_available(
-                    cr, uid, ids, location, context)[line.id]
-                picking = self._prepare_picking_vals(
-                    cr, uid, ids, context)
-                picking_id = self.pool.get('stock.picking').create(
-                    cr, uid, picking)
-                move = self._prepare_move_vals(
-                    cr, uid, line, qty_available, picking_id, context)
-                qty_fetched += move['product_qty']
-                self.pool.get('stock.move').create(cr, uid, move)
+                if qty_fetched < line.unit_amount:
+                    qty_available = self._get_product_available(
+                        cr, uid, ids, location.id, context)[line.id]
+                    if qty_available > 0:
+                        picking = self._prepare_picking_vals(
+                            cr, uid, ids, context)
+                        picking_id = self.pool.get('stock.picking').create(
+                            cr, uid, picking)
+                        move = self._prepare_move_vals(
+                            cr, uid, line, qty_available, picking_id, context)
+                        qty_fetched += move['product_qty']
+                        self.pool.get('stock.move').create(cr, uid, move)
 
             qty_left = line.unit_amount - qty_fetched
             if qty_left > 0:
@@ -229,7 +240,8 @@ class AnalyticResourcePlanLine(orm.Model):
             if len(to_purchase) > 0:
                 self._make_auto_purchase_request(cr, uid, to_purchase,
                                                  context)
-        return res
+        return super(AnalyticResourcePlanLine, self).action_button_confirm(
+            cr, uid, ids, context=context)
 
     def unlink(self, cr, uid, ids, context=None):
         for line in self.browse(cr, uid, ids, context=context):
