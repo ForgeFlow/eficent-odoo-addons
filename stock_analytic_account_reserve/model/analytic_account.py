@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
-#              <contact@eficent.com>
+#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
+#              Jordi Ballester Alomar <jordi.ballester@eficent.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,3 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp.osv import fields, osv, orm
+import openerp.addons.decimal_precision as dp
+
+
+class account_analytic_account(orm.Model):
+
+    _inherit = "account.analytic.account"
+
+    _columns = {
+
+        'use_reserved_stock': fields.boolean(
+            'Use reserved stock',
+            help="Stock with reference to this analytic account "
+                 "is considered to be reserved.")
+    }

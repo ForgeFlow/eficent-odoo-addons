@@ -16,7 +16,7 @@
     'website': 'http://www.eficent.com',
     'depends': ['stock', 'analytic', 'analytic_location'],
     'data': ['views/stock_view.xml'],
-    'demo': ['demo/stock_data.xml'],
+    'demo': ['data/stock_data.xml'],
     'installable': True,
     'auto_install': False,
 }

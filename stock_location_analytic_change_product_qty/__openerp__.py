@@ -13,7 +13,6 @@
 """,
     'author': 'Eficent',
     'website': 'http://www.eficent.com',
-    'data': ['wizard/stock_change_product_qty_view.xml'],
     'depends': ['analytic', 'stock', 'stock_analytic_account_location'],
     'installable': True,
     'auto_install': False,
