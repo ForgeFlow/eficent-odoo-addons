@@ -18,32 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-
-{
-    "name": "Stock Analytic Account",
-    "version": "1.0",
-    "author": "Eficent",
-    "website": "www.eficent.com",
-    'summary': 'Adds the analytic account to stock moves',
-    "depends": ["stock", "analytic"],
-    "description": """
-Project Procurement
-===================
-Features of this module:
-    - Adds the analytic account to the stock move
-    - Makes it possible to search stock moves by analytic account or its project manager
-    - Makes it possible to search picking lists by analytic account or its project manager
-    - Adds button in the Project Form and an Action from Project's 'More' menu to list the
-    Procurement Orders associated to the selected project.
-    """,
-    "init_xml": [],
-    'data': [
-             'view/stock_view.xml',
-             'view/stock_picking_view.xml',
-             'view/analytic_account_view.xml'
-    ],
-    'installable': True,
-    'active': False,
-    'certificate': '',
-}
+from . import wizard
