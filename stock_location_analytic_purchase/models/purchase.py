@@ -8,20 +8,20 @@ from openerp.tools.translate import _
 class PurchaseOrderLine(orm.Model):
     _inherit = "purchase.order.line"
 
-    def write(self, cr, uid, ids, vals, context=None):
+    def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
-        res = super(PurchaseOrderLine, self).write(cr, uid, ids, vals, context)
+        res = super(PurchaseOrderLine, self).create(cr, uid, vals, context)
         if vals.get('account_analytic_id'):
             account_analytic_id = vals['account_analytic_id']
             location_id = self.pool.get('stock.location').search(
                 cr, uid, [('analytic_account_id', '=', account_analytic_id)])
-            for line in self.browse(cr, uid, ids, context):
-                if line.order_id:
-                    self.pool.get('purchase.order').write(cr, uid, {'location_id': location_id})
+            if len(location_id):
+                for line in self.browse(cr, uid, [res], context):
+                    if line.order_id:
+                        self.pool.get('purchase.order').write(cr, uid, line.order_id.id, {'location_id': location_id[0]})
 
         return res
-
 
     def action_confirm(self, cr, uid, ids, context=None):
         if context is None:
