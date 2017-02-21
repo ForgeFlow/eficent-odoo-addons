@@ -8,13 +8,18 @@ from openerp.tools.translate import _
 class PurchaseOrderLine(orm.Model):
     _inherit = "purchase.order.line"
 
-    def onchange_analytic_account_id(self, cr, uid, ids, account_analytic_id):
-        res = {}
-        if account_analytic_id:
+    def write(self, cr, uid, ids, vals, context=None):
+        if context is None:
+            context = {}
+        res = super(PurchaseOrderLine, self).write(cr, uid, ids, vals, context)
+        if vals.get('account_analytic_id'):
+            account_analytic_id = vals['account_analytic_id']
             location_id = self.pool.get('stock.location').search(
                 cr, uid, [('analytic_account_id', '=', account_analytic_id)])
-            if location_id:
-                res.update(location_id=location_id[0])
+            for line in self.browse(cr, uid, ids, context):
+                if line.order_id:
+                    self.pool.get('purchase.order').write(cr, uid, {'location_id': location_id})
+
         return res
 
 
