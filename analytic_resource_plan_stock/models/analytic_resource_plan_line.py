@@ -50,8 +50,6 @@ class AnalyticResourcePlanLine(orm.Model):
                 c = context.copy()
                 if line.account_id.location_id:
                     c.update({'location': line.account_id.location_id.id})
-                if line.account_id.use_reserved_stock:
-                    c.update({'analytic_account_id': line.account_id.id})
                 if f == 'qty_available':
                     c.update({'states': ('done',), 'what': ('in', 'out')})
                 if f == 'virtual_available':

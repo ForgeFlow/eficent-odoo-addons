@@ -8,9 +8,11 @@
             <field name="arch" type="xml">
                 <xpath expr="//page[@string='Stock']"
                        position="inside">
+                    <group>
                         <field name="warehouse_id"/>
                         <field name="location_id"/>
                         <field name="dest_address_id"/>
+                    </group>
                 </xpath>
             </field>
         </record>
