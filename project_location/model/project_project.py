@@ -35,23 +35,11 @@ class project(orm.Model):
                     cr, uid, [('analytic_account_id', '=',
                                context['default_parent_id'])]):
                 project = project_obj.browse(cr, uid, project_id, context=context)
-                res['warehouse_id'] = project.warehouse_id and \
-                    project.warehouse_id.id or False
                 res['location_id'] = project.location_id and \
                     project.location_id.id or False
                 res['dest_address_id'] = project.dest_address_id and \
                     project.dest_address_id.id or False
         return res
-
-    def _get_parent_warehouse(self, cr, uid, context=None):
-        if context is None:
-            context = {}
-        res = self.pool.get('project.project').get_parent_stock_data(
-            cr, uid, context=context)
-        if 'warehouse_id' in res:
-            return res['warehouse_id']
-        else:
-            return False
 
     def _get_parent_location(self, cr, uid, context=None):
         if context is None:
@@ -74,7 +62,6 @@ class project(orm.Model):
             return False
 
     _defaults = {
-        'warehouse_id': _get_parent_warehouse,
         'location_id': _get_parent_location,
         'dest_address_id': _get_parent_dest_address,
     }
