@@ -45,6 +45,9 @@ class AccountInvoice(osv.osv):
             return super(AccountInvoice, self).name_get(cr, uid, ids, context)
         else:
             for value in self.browse(cr, uid, ids, context=context):
-                res.append([value.id, "%s: %s" % (
-                    value.number, value.supplier_invoice_number)])
+                if value.supplier_invoice_number:
+                    res.append([value.id, "%s: %s" % (
+                        value.number, value.supplier_invoice_number)])
+                else:
+                    res.append([value.id, "%s" % value.number])
         return res
