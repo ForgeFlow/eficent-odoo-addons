@@ -1,44 +1,23 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# Copyright 2014-17 Eficent Business and IT Consulting Services, S.L.
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.osv import orm, fields
-from openerp.tools.translate import _
+from openerp import api, fields, models, _
 from openerp import netsvc
+from openerp.exceptions import UserError
 
 
-class hr_timesheet_sheet(orm.Model):
+class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet_sheet.sheet"
 
-    _columns = {
-        'validator_user_ids': fields.many2many('res.users', string='Validators',
-                                               required=False),
-    }
+    validator_user_ids = fields.Many2many(
+        'res.users', string='Validators')
 
-    def _default_department(self, cr, uid, context=None):
-        emp_obj = self.pool.get('hr.employee')
-        emp_ids = emp_obj.search(cr, uid, [('user_id', '=', uid)],
-                                 context=context)
-        emps = emp_obj.browse(cr, uid, emp_ids, context=context)
-
-        for emp in emps:
+    @api.model
+    def _default_department(self):
+        employees = self.env['hr.employee'].search([
+            ('user_id', '=', self.env.uid)])
+        for emp in employees:
             return emp.department_id and emp.department_id.id or False
         return False
 
@@ -46,107 +25,74 @@ class hr_timesheet_sheet(orm.Model):
         'department_id': _default_department,
     }
 
-    def _get_validator_user_ids(self, cr, uid, ids, context=None):
-        res = {}
-        users = {}
-        for timesheet in self.browse(cr, uid, ids):
-            res[timesheet.id] = []
-            users[timesheet.id] = []
-            if (
-                timesheet.employee_id
-                and timesheet.employee_id.parent_id
-                and timesheet.employee_id.parent_id.user_id
-            ):
-                users[timesheet.id].append(
+    @api.multi
+    def _get_validator_user_ids(self):
+        """Return the list of user_ids that can validate a given timesheet."""
+        self.ensure_one()
+        for timesheet in self:
+            users = []
+            if (timesheet.employee_id and timesheet.employee_id.parent_id
+                    and timesheet.employee_id.parent_id.user_id):
+                users.append(
                     timesheet.employee_id.parent_id.user_id.id)
-            if (
-                timesheet.department_id
-                and timesheet.department_id.manager_id
-                and timesheet.department_id.manager_id.user_id
-                and timesheet.department_id.manager_id.user_id.id != uid
-            ):
-                users[timesheet.id].append(
+            if (timesheet.department_id and timesheet.department_id.manager_id
+                    and timesheet.department_id.manager_id.user_id
+                    and timesheet.department_id.manager_id.user_id.id !=
+                    self.env.uid):
+                users.append(
                     timesheet.department_id.manager_id.user_id.id)
-            elif (
-                timesheet.department_id
-                and timesheet.department_id.parent_id
-                and timesheet.department_id.parent_id.manager_id
-                and timesheet.department_id.parent_id.manager_id.user_id
-                and timesheet.department_id.parent_id.
-                    manager_id.user_id.id != uid
-            ):
-                users[timesheet.id].append(
+            elif (timesheet.department_id and timesheet.department_id.parent_id
+                    and timesheet.department_id.parent_id.manager_id
+                    and timesheet.department_id.parent_id.manager_id.user_id
+                    and timesheet.department_id.parent_id.manager_id.
+                        user_id.id != self.env.uid):
+                users.append(
                     timesheet.department_id.manager_id.user_id.id)
+            return list(set(users)) if users else []
 
-            [res[timesheet.id].append(item) for item in users[timesheet.id]
-             if item not in res[timesheet.id]]
-        return res
+    @api.multi
+    def button_confirm(self):
+        for sheet in self:
+            validators = sheet._get_validator_user_ids()
+            sheet.write({'validator_user_ids': [(6, 0, validators)]})
+        return super(HrTimesheetSheet, self).button_confirm()
 
-    def button_confirm(self, cr, uid, ids, context=None):
-        validators = self._get_validator_user_ids(cr, uid,
-                                                  ids, context=context)
-        for sheet in self.browse(cr, uid, ids, context=context):
-            self.write(cr, uid, sheet.id,
-                       {'validator_user_ids':
-                           [(4, user_id) for user_id
-                            in validators[sheet.id]]})
-        return super(hr_timesheet_sheet, self).button_confirm(cr, uid, ids,
-                                                              context=context)
+    @api.multi
+    def _check_authorised_validator(self):
+        group_hr_manager = self.env.ref('base.group_hr_manager')
+        group_hr_user = self.env.ref('base.group_hr_user')
+        for timesheet in self:
+            if group_hr_manager and self.env.uid in group_hr_manager.users.ids:
+                continue
 
-    def _check_authorised_validator(self, cr, uid, ids, *args):
-        model_data_obj = self.pool.get('ir.model.data')
-        res_groups_obj = self.pool.get("res.groups")
-        group_hr_manager_id = model_data_obj._get_id(
-            cr, uid, 'base', 'group_hr_manager')
-        group_hr_user_id = model_data_obj._get_id(
-            cr, uid, 'base', 'group_hr_user')
+            if group_hr_user and self.env.uid in group_hr_user.users.ids:
+                continue
 
-        for timesheet in self.browse(cr, uid, ids):
-            if group_hr_manager_id:
-                    res_id = model_data_obj.read(cr, uid, [group_hr_manager_id],
-                                                 ['res_id'])[0]['res_id']
-                    group_hr_manager = res_groups_obj.browse(
-                        cr, uid, res_id)
-                    group_hr_manager_ids = [user.id for user
-                                            in group_hr_manager.users]
-                    if uid in group_hr_manager_ids:
-                        continue
+            # TODO: check this:
+            # TODO: this is not raising, why?:
+            if self.env.uid not in timesheet.validator_user_ids.ids:
+                raise UserError(_('You are not authorised to approve  or '
+                                  'refuse this Timesheet.'))
 
-            if group_hr_user_id:
-                    res_id = model_data_obj.read(cr, uid, [group_hr_user_id],
-                                                 ['res_id'])[0]['res_id']
-                    group_hr_user = res_groups_obj.browse(
-                        cr, uid, res_id)
-                    group_hr_user_ids = [user.id for user
-                                         in group_hr_user.users]
-                    if uid in group_hr_user_ids:
-                        continue
+    @api.multi
+    def action_set_to_draft(self):
+        self._check_authorised_validator()
+        return super(HrTimesheetSheet, self).action_set_to_draft()
 
-            validator_user_ids = []
-            for validator_user_id in timesheet.validator_user_ids:
-                validator_user_ids.append(validator_user_id.id)
-            if uid not in validator_user_ids:
-                raise orm.except_orm(_('Invalid Action!'),
-                                     _('You are not authorised to approve'
-                                       ' or refuse this Timesheet.'))
-
-    def action_set_to_draft(self, cr, uid, ids, *args):
-        self._check_authorised_validator(cr, uid, ids, *args)
-        return super(hr_timesheet_sheet, self).action_set_to_draft(
-            cr, uid, ids, *args)
-
-    def action_done(self, cr, uid, ids, *args):
-        self._check_authorised_validator(cr, uid, ids, *args)
+    @api.multi
+    def action_done(self):
+        self._check_authorised_validator()
         wf_service = netsvc.LocalService('workflow')
-        for id in ids:
-            wf_service.trg_validate(uid, 'hr_timesheet_sheet.sheet',
-                                    id, 'done', cr)
+        for id in self.ids:
+            wf_service.trg_validate(self.env.uid, 'hr_timesheet_sheet.sheet',
+                                    id, 'done', self.env.cr)
         return True
 
-    def action_cancel(self, cr, uid, ids, *args):
-        self._check_authorised_validator(cr, uid, ids, *args)
+    @api.multi
+    def action_cancel(self):
+        self._check_authorised_validator()
         wf_service = netsvc.LocalService('workflow')
-        for id in ids:
-            wf_service.trg_validate(uid, 'hr_timesheet_sheet.sheet',
-                                    id, 'cancel', cr)
+        for id in self.ids:
+            wf_service.trg_validate(self.env.uid, 'hr_timesheet_sheet.sheet',
+                                    id, 'cancel', self.env.cr)
         return True
