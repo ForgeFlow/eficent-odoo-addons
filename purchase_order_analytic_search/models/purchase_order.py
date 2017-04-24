@@ -21,7 +21,6 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def _search_analytic_accounts(self, operator, value):
-
         po_line_obj = self.env['purchase.order.line']
         res = []
         po_lines = po_line_obj.search(
