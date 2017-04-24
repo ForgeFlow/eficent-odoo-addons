@@ -15,8 +15,8 @@ account.
 It also introduces a new menu entry in Purchasing to list purchase order lines.
 
 
-Usage
-=====
+Configuration
+=============
 
 To use this module, you need to:
 

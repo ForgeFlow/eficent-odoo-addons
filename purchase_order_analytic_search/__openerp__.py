@@ -4,18 +4,16 @@
 
 {
     "name": "Purchase Order Analytic Search",
-    "version": "9.0.1.0",
-    "author": "Eficent",
-    "website": "www.eficent.com",
-    "category": "Generic Modules/Projects & Services",
+    "summary": """"
+        Search purchase orders by analytic account. New menu entry in
+        Purchasing to list purchase order lines.
+        """,
+    "version": "9.0.1.0.0",
+    "website": "https://odoo-community.org/",
+    "category": "Purchase Workflow",
+    "author": "Eficent, Odoo Community Association (OCA)",
+    "license": "LGPL-3",
+    "installable": True,
     "depends": ["analytic", "purchase"],
-    "description": """
-Search purchase orders by analytic account. New menu entry in Purchasing to
-list purchase order lines.
-""",
-    "data": [
-        "views/purchase_order_view.xml",
-    ],
-    'installable': True,
-    'active': False,
+    "data": ["views/purchase_order_view.xml"],
 }
