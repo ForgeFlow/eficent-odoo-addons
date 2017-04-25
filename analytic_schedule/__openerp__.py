@@ -1,48 +1,18 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2015 Eficent (<http://www.eficent.com/>)
-#             <contact@eficent.com>
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-
+# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Analytic Schedule",
-    "version": "1.0",
+    "version": "9.0.1.0.0",
+    "summary": "Automatically computes start and end dates for analytic "
+               "accounts based on the earliest start and latest finish date "
+               "of the children.",
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
-    "depends": ["analytic"],
-    "description": """
-Analytic Schedule
-=================
-The project / analytic account's start and end dates are automatically
-computed based on the earliest start and latest finish date of the
-children.
-    """,
-    "init_xml": [],
-    "update_xml": [],
-    'demo_xml': [
-
-    ],
-    'test':[
-    ],
+    "depends": ["analytic", "account_analytic_parent"],
+    "data": ['views/analyltic_account_view.xml'],
     'installable': True,
-    'active': False,
-    'certificate': '',
-    'application': True,
+    'application': False,
 }
