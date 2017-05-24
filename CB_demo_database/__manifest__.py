@@ -10,9 +10,11 @@
     'category': '',
     'depends': [
         'medical_careplan',
+        'workflow_plandefinition',
     ],
     'demo': [
         'demo/careplan_demo.xml',
+        'demo/workflow_types_demo.xml',
     ],
     'website': '',
     'licence': 'LGPL-3',

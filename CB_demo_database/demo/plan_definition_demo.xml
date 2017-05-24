@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 LasLabs Inc.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="workflow_plan_definition_01" model="workflow.plan.definition">
+        <field name="title">RMN de rodilla</field>
+        <field name="state">draft</field>
+        <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+    </record>
+
+</odoo>

@@ -3,8 +3,10 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
-    <record id="workflow_type_01" model="workflow.type">
+
+    <record id="medical_careplan_1" model="medical.careplan">
         <field name="title">Test Care Plan</field>
-        <field name="patient_id"></field>
+        <field name="patient_id" ref="medical.medical_patient_patient_1" />
     </record>
+
 </odoo>
