@@ -3,16 +3,17 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
+    <data noupdate="0">
+        <record id="workflow_type_05" model="workflow.type">
+            <field name="name">Medical Test</field>
+            <field name="description">Medical related workflow</field>
+            <field name="model_id" ref="auditlog.model_auditlog_log" />
+        </record>
 
-    <record id="workflow_type_05" model="workflow.type">
-        <field name="name">Medical Test</field>
-        <field name="description">Medical related workflow</field>
-        <field name="model_id" ref="auditlog.model_auditlog_log" />
-    </record>
-
-    <record id="workflow_type_model_01" model="workflow.type.model">
-        <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
-        <field name="model_id" ref="auditlog.model_auditlog_log" />
-    </record>
+        <record id="workflow_type_model_01" model="workflow.type.model">
+            <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+            <field name="model_id" ref="auditlog.model_auditlog_log" />
+        </record>
+    </data>
 
 </odoo>

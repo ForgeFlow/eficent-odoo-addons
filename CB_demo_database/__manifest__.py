@@ -13,8 +13,10 @@
         'workflow_plandefinition',
     ],
     'demo': [
-        'demo/careplan_demo.xml',
         'demo/workflow_types_demo.xml',
+        'demo/activity_definitions_demo.xml',
+        'demo/plan_definition_demo.xml',
+        'demo/careplan_demo.xml',
     ],
     'website': '',
     'licence': 'LGPL-3',

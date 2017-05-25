@@ -4,10 +4,60 @@
 
 <odoo>
 
-    <record id="workflow_plan_definition_01" model="workflow.plan.definition">
-        <field name="title">RMN de rodilla</field>
-        <field name="state">draft</field>
-        <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
-    </record>
+    <data noupdate="0">
+        <record id="workflow_plan_definition_01" model="workflow.plan.definition">
+            <field name="name">RMN de rodilla</field>
+            <field name="state">draft</field>
+            <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+        </record>
+
+        <record id="workflow_plan_definition_action_01"
+                model="workflow.plan.definition.action">
+            <field name="name">RMNRod</field>
+            <field name="direct_plan_definition_id" ref="CB_demo_database.workflow_plan_definition_01"/>
+            <field name="activity_definition_id"
+                   ref="CB_demo_database.workflow_activity_definition_06"/>
+        </record>
+
+        <record id="workflow_plan_definition_action_02"
+                model="workflow.plan.definition.action">
+            <field name="name">WL RM</field>
+            <field name="parent_id" ref="CB_demo_database.workflow_plan_definition_action_01"/>
+            <field name="activity_definition_id"
+                   ref="CB_demo_database.workflow_activity_definition_01"/>
+        </record>
+
+        <record id="workflow_plan_definition_action_03"
+                model="workflow.plan.definition.action">
+            <field name="name">MAQ</field>
+            <field name="parent_id" ref="CB_demo_database.workflow_plan_definition_action_01"/>
+            <field name="activity_definition_id"
+                   ref="CB_demo_database.workflow_activity_definition_02"/>
+        </record>
+
+        <record id="workflow_plan_definition_action_04"
+                model="workflow.plan.definition.action">
+            <field name="name">INF</field>
+            <field name="parent_id" ref="CB_demo_database.workflow_plan_definition_action_01"/>
+            <field name="activity_definition_id"
+                   ref="CB_demo_database.workflow_activity_definition_03"/>
+        </record>
+
+        <record id="workflow_plan_definition_action_05"
+                model="workflow.plan.definition.action">
+            <field name="name">CTRL</field>
+            <field name="parent_id" ref="CB_demo_database.workflow_plan_definition_action_01"/>
+            <field name="activity_definition_id"
+                   ref="CB_demo_database.workflow_activity_definition_04"/>
+        </record>
+
+        <record id="workflow_plan_definition_action_06"
+                model="workflow.plan.definition.action">
+            <field name="name">CRRM</field>
+            <field name="parent_id" ref="CB_demo_database.workflow_plan_definition_action_01"/>
+            <field name="activity_definition_id"
+                   ref="CB_demo_database.workflow_activity_definition_05"/>
+        </record>
+    </data>
 
 </odoo>

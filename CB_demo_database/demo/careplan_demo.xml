@@ -3,10 +3,19 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
+    <data noupdate="0">
+        <record id="medical_careplan_1" model="medical.careplan">
+            <field name="title">Test Care Plan</field>
+            <field name="patient_id" ref="medical.medical_patient_patient_1" />
+        </record>
 
-    <record id="medical_careplan_1" model="medical.careplan">
-        <field name="title">Test Care Plan</field>
-        <field name="patient_id" ref="medical.medical_patient_patient_1" />
-    </record>
+        <record id="medical_careplan_activity_1"
+                model="medical.careplan.activity">
+            <field name="careplan_id"
+                   ref="CB_demo_database.medical_careplan_1" />
+            <field name="plandefinition_ids"
+                   ref="CB_demo_database.workflow_plan_definition_01" />
+        </record>
 
+    </data>
 </odoo>

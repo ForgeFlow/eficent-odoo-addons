@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 LasLabs Inc.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <data noupdate="0">
+        <record id="workflow_activity_definition_01"
+                model="workflow.activity.definition">
+            <field name="name">Generación del Worklist para la modalidad RM</field>
+            <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+            <field name="model_id" ref="auditlog.model_auditlog_log" />
+        </record>
+
+        <record id="workflow_activity_definition_02"
+                model="workflow.activity.definition">
+            <field name="name">Tiempo en Máquina</field>
+            <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+            <field name="model_id" ref="auditlog.model_auditlog_log" />
+        </record>
+
+        <record id="workflow_activity_definition_03"
+                model="workflow.activity.definition">
+            <field name="name">Informe del profesional</field>
+            <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+            <field name="model_id" ref="auditlog.model_auditlog_log" />
+        </record>
+
+        <record id="workflow_activity_definition_04"
+                model="workflow.activity.definition">
+            <field name="name">Control del responsable del departamento (autoasignado y autofinalizado)</field>
+            <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+            <field name="model_id" ref="auditlog.model_auditlog_log" />
+        </record>
+
+        <record id="workflow_activity_definition_05"
+                model="workflow.activity.definition">
+            <field name="name">Contraste RM</field>
+            <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+            <field name="model_id" ref="auditlog.model_auditlog_log" />
+        </record>
+
+        <record id="workflow_activity_definition_06"
+                model="workflow.activity.definition">
+            <field name="name">Diagnóstico por la Imágen</field>
+            <field name="type_id" ref="CB_demo_database.workflow_type_05"/>
+            <field name="model_id" ref="auditlog.model_auditlog_log" />
+        </record>
+    </data>
+</odoo>
