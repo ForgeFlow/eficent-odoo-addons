@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2015 Eficent Business and IT Consulting Services S.L. <contact@eficent.com>
+# Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Change Management Customer Ref',
-    'version': '7.0.1.0.0',
+    'name': 'Change Management Customer Reference',
+    'version': '9.0.1.0.0',
     'author':   'Eficent Business and IT Consulting Services S.L.',
     'website': 'www.eficent.com',
     'category': 'Project Management',
