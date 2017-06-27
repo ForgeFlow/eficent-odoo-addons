@@ -13,6 +13,6 @@
     "category": "Generic Modules/Projects & Services",
     "depends": ["analytic", "account_analytic_parent"],
     "data": ['views/analyltic_account_view.xml'],
-    'installable': True,
+    'installable': False,
     'application': False,
 }
