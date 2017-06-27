@@ -12,5 +12,5 @@
     "website": "www.eficent.com",
     "category": "Purchase Management",
     "depends": ["product", "product_manufacturer"],
-    'installable': True,
+    'installable': False,
 }
