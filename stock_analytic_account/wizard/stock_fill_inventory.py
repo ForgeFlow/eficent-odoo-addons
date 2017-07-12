@@ -32,15 +32,19 @@ class StockFillInventory(orm.TransientModel):
                                                required=False)
     }
 
+    def _get_search_criteria(self, cr, uid, ids, location, context):
+        for fill_inventory in self.browse(cr, uid, ids, context=context):
+            search_criteria = ['|', ('location_dest_id', '=', location),
+                               ('location_id', '=', location),
+                               ('state', '=', 'done')]
+            if fill_inventory.analytic_account_id:
+                search_criteria.extend(
+                    [('analytic_account_id', '=',
+                      fill_inventory.analytic_account_id.id)])
+            return search_criteria
+
     def fill_inventory(self, cr, uid, ids, context=None):
-        """ To Import stock inventory according to products available
-        in the selected locations.
-        @param self: The object pointer.
-        @param cr: A database cursor
-        @param uid: ID of the user currently logged in
-        @param ids: the ID or list of IDs if we want more than one
-        @param context: A standard dictionary
-        @return:
+        """ WARNING THIS METHOD OVERRIDES STANDARD
         """
         if context is None:
             context = {}
@@ -69,14 +73,7 @@ class StockFillInventory(orm.TransientModel):
         for location in location_ids:
             datas = {}
             res[location] = {}
-            search_criteria = ['|', ('location_dest_id', '=', location),
-                               ('location_id', '=', location),
-                               ('state', '=', 'done')]
-            if fill_inventory.analytic_account_id:
-                search_criteria.extend(
-                    [('analytic_account_id', '=',
-                      fill_inventory.analytic_account_id.id)])
-
+            search_criteria = fill_inventory._get_search_criteria(location)
             move_ids = move_obj.search(cr, uid, search_criteria,
                                        context=context)
             local_context = dict(context)
