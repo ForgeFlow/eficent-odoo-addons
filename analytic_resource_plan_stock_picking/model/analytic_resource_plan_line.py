@@ -64,7 +64,7 @@ class AnalyticResourcePlanLine(orm.Model):
         }
 
     def _prepare_move_vals(self, cr, uid, line, qty_available,
-                           picking_id, context=None):
+                           picking_id, src_location, context=None):
         product_qty = line.unit_amount
         if line.unit_amount > qty_available:
             product_qty = qty_available
@@ -82,7 +82,7 @@ class AnalyticResourcePlanLine(orm.Model):
             'analytic_account_id': line.account_id.id,
             'price_unit': line.product_id.price,
             'company_id': line.account_id.company_id.id,
-            'location_id': line.account_id.warehouse_id.lot_stock_id.id,
+            'location_id': src_location,
             'location_dest_id': line.account_id.location_id.id,
             'note': 'Move for project',
         }
@@ -230,7 +230,8 @@ class AnalyticResourcePlanLine(orm.Model):
                         picking_id = self.pool.get('stock.picking').create(
                             cr, uid, picking)
                         move = self._prepare_move_vals(
-                            cr, uid, line, qty_available, picking_id, context)
+                            cr, uid, line, qty_available, picking_id, location,
+                            context)
                         qty_fetched += move['product_qty']
                         self.pool.get('stock.move').create(cr, uid, move)
 
