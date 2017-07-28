@@ -10,8 +10,7 @@
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
     "depends": ["analytic_resource_plan", "analytic_location",
-                "purchase_request", "project_location",
-                "analytic_resource_plan_purchase_request"],
+                "purchase_request", "project_location"],
     "description": """
         Fetch stock for projects
     """,

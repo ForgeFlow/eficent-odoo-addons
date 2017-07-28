@@ -14,7 +14,7 @@ class AccountAnalyticAccount(models.Model):
         for project in self:
             if project.location_id and \
                     project.location_id.analytic_account_id != \
-                        project.analytic_account_id:
+                        project.project_analytic_id:
                 raise ValidationError(_("The location does not contain the "
                                         "same analytic account"))
 
