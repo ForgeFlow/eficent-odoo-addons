@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="0">
+
         <record model="ir.rule" id="timesheet_validator_rule">
             <field name="name">Timesheet by manager</field>
             <field name="model_id" search="[('model','=','hr_timesheet_sheet.sheet')]" model="ir.model"/>
@@ -13,13 +14,14 @@
             <field name="model_id" search="[('model','=','hr_timesheet_sheet.sheet')]" model="ir.model"/>
             <field name="global" eval="True"/>
             <field name="domain_force">[(1,'=',1)]</field>
-            <field name="groups" eval="[(4,ref('base.group_hr_user'))]"/>
+            <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
         </record>
-        <record id="hr_timesheet.property_rule_timesheet_employee" model="ir.rule">
+        <!-- <record id="hr_timesheet.property_rule_timesheet_employee" model="ir.rule">
             <field name="name">Employee HR Analytic Timesheet</field>
             <field model="ir.model" name="model_id" ref="hr_timesheet.model_hr_analytic_timesheet"/>
             <field name="domain_force">['|',('sheet_id.validator_user_ids', 'in', [user.id]),('user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4,ref('base.group_user'))]"/>
-        </record>
+        </record> -->
+
     </data>
-</openerp>
+</odoo>
