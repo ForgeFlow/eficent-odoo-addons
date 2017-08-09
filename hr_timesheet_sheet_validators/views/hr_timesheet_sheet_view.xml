@@ -10,22 +10,22 @@
                 <attribute name="invisible">False</attribute>
                 <attribute name="readonly">True</attribute>
             </field>
-            <xpath expr='//button[@name="done"]' position="attributes">
+            <xpath expr='//button[@name="action_timesheet_done"]' position="attributes">
                 <attribute name="invisible">True</attribute>
             </xpath>
-            <xpath expr='//button[@name="done"]' position="after">
-                <button name="action_done" states="confirm" string="Approve" type="object"
-                        groups="base.group_user,base.group_hr_user" class="oe_highlight"/>
+            <xpath expr='//button[@name="action_timesheet_done"]' position="after">
+                <button name="action_timesheet_done" states="confirm" string="Approve" type="object"
+                        groups="base.group_user,hr.group_hr_user" class="oe_highlight"/>
             </xpath>
-            <xpath expr='//button[@name="cancel"]' position="attributes">
+            <xpath expr='//button[@name="action_timesheet_draft"][2]' position="attributes">
                 <attribute name="invisible">True</attribute>
             </xpath>
-            <xpath expr='//button[@name="cancel"]' position="after">
-                <button name="action_cancel" states="confirm" string="Refuse" type="object"
-                        groups="base.group_user,base.group_hr_user" class="oe_highlight"/>
+            <xpath expr='//button[@name="action_timesheet_draft"][2]' position="after">
+                <button name="action_timesheet_draft" states="confirm" string="Refuse" type="object"
+                        groups="base.group_user,hr.group_hr_user" class="oe_highlight"/>
             </xpath>
-            <xpath expr='//page[3]' position="after">
-                <page string="Validators" groups="base.group_hr_user">
+            <xpath expr='//page[2]' position="after">
+                <page string="Validators" groups="hr.group_hr_user">
                      <group>
                          <field name="validator_user_ids"/>
                      </group>
@@ -63,8 +63,10 @@
         </field>
     </record>
 
-    <menuitem action="hr_timesheet_sheet.act_hr_timesheet_sheet_form" id="hr_timesheet_sheet.menu_act_hr_timesheet_sheet_form" parent="hr_attendance.menu_hr_time_tracking"
-         sequence="2" groups="base.group_user,base.group_hr_user"/>
-
+    <menuitem action="hr_timesheet_sheet.act_hr_timesheet_sheet_form"
+              id="hr_timesheet_sheet.menu_act_hr_timesheet_sheet_form"
+              parent="hr_timesheet.menu_hr_time_tracking"
+              sequence="2"
+              groups="base.group_user,hr.group_hr_user"/>
 
 </odoo>
