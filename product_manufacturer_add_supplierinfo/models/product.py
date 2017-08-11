@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 # © 2015-17 Eficent Business and IT Consulting Services S.L.
 # - Jordi Ballester Alomar
+# Copyright 2017 Serpent Consulting Services Pvt. Ltd.
+#   (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
+from odoo import api, models
 
 
 class ProductTemplate(models.Model):
@@ -43,4 +45,5 @@ class ProductTemplate(models.Model):
                     supplierinfo_vals = self._prepare_supplierinfo(
                        product)
                     supplierinfo_obj.create(supplierinfo_vals)
+                    print "\n\n-----supplierinfo_vals-----", supplierinfo_vals
         return res
