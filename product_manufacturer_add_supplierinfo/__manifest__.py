@@ -5,12 +5,16 @@
 
 {
     "name": "Product manufacturer add supplier info",
-    "summary": "The manufacturer indicated in the product is automatically "
-               "added as a vendor in the supplier info.",
-    "version": "9.0.1.0.0",
-    "author": "Eficent Business and IT Consulting Services S.L",
+    "summary": """ The manufacturer indicated in the product is automatically
+               added as a vendor in the supplier info.""",
+    "version": "10.0.1.0.0",
+    "author": "Eficent Business and IT Consulting Services S.L,"
+              "Serpent Consulting Services Pvt. Ltd.,",
     "website": "www.eficent.com",
     "category": "Purchase Management",
-    "depends": ["product", "product_manufacturer"],
-    'installable': False,
+    "depends": [
+        "product",
+        "product_manufacturer"
+    ],
+    'installable': True,
 }

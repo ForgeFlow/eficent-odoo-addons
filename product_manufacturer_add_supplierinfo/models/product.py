@@ -3,7 +3,7 @@
 # - Jordi Ballester Alomar
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
+from odoo import api, models
 
 
 class ProductTemplate(models.Model):
@@ -43,4 +43,5 @@ class ProductTemplate(models.Model):
                     supplierinfo_vals = self._prepare_supplierinfo(
                        product)
                     supplierinfo_obj.create(supplierinfo_vals)
+                    print "\n\n-----supplierinfo_vals-----", supplierinfo_vals
         return res
