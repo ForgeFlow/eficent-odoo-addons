@@ -6,7 +6,7 @@
 {
     'name': 'HR Timesheet Sheet Validators',
     'version': '10.0.1.0.0',
-    'author': 'Eficent, Serpent Consulting Services Pvt. Ltd.',
+    'author': 'Eficent',
     'category': 'Human Resources',
     'summary': """This module allows a user outside of the Human Resources
                groups to validate timesheets. A rule is predefined, but it
