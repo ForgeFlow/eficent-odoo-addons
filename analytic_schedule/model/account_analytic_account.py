@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models
+from odoo import api, fields, models
 
 
 class AccountAnalyticAccount(models.Model):
@@ -33,9 +34,14 @@ class AccountAnalyticAccount(models.Model):
         analytic.write(vals)
         return True
 
-    date_start = fields.Date('Start Date')
-    date = fields.Date('Expiration Date', index=True,
-                       track_visibility='onchange')
+    date_start = fields.Date(
+        'Start Date'
+    )
+    date = fields.Date(
+        'Expiration Date',
+        index=True,
+        track_visibility='onchange'
+    )
 
     @api.model
     def create(self, vals):
