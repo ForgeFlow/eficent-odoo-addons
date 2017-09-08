@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models
+from odoo import api, fields, models
 
 
 class ChangeManagementChange(models.Model):
@@ -10,7 +11,7 @@ class ChangeManagementChange(models.Model):
 
     def _get_change_orders_project(self, cr, uid, ids, context=None):
         result = set()
-        project_obj = self.pool['project.project']
+        project_obj = self.env['project.project']
         for order in project_obj.browse(cr, uid, ids, context=context):
             for change in order.change_ids:
                 result.add(change.id)
@@ -32,12 +33,17 @@ class ChangeManagementChange(models.Model):
         else:
             return []
 
-    customer_id = fields.Many2one(compute='_get_project_customer',
-                                  search='_search_by_project_customer',
-                                  comodel_name='res.partner',
-                                  string='Customer', readonly=True,
-                                  store=False)
-
-    customer_ref = fields.Char('Customer ref.', help="Reference of the Change "
-                               "as indicated by the Customer", readonly=True,
-                               states={'draft': [('readonly', False)]})
+    customer_id = fields.Many2one(
+        compute='_get_project_customer',
+        search='_search_by_project_customer',
+        comodel_name='res.partner',
+        string='Customer',
+        readonly=True,
+        store=False
+    )
+    customer_ref = fields.Char(
+        'Customer ref.',
+        help="Reference of the Change as indicated by the Customer",
+        readonly=True,
+        states={'draft': [('readonly', False)]}
+    )
