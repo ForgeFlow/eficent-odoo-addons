@@ -1,3 +1,4 @@
+=======================
 Stock Analytic Location
 =======================
     Introduces the analytic account to the locations.
