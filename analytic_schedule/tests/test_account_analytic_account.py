@@ -3,7 +3,7 @@
 # Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo.tests.common import TransactionCase
-from odoo import fields
+import time
 
 
 class TestAccountAnalyticAccount(TransactionCase):
@@ -19,17 +19,22 @@ class TestAccountAnalyticAccount(TransactionCase):
             'code': '01',
         })
         self.analytic_son = self.analytic_account_obj.create({
-            'name': 'Test Son',
+            'name': 'Test First Son',
             'code': '02',
             'parent_id': self.analytic_parent.id,
-            'date_start': fields.Date.today(),
-            'date': fields.Date.today(),
+            'date_start': time.strftime('%Y-%m-21'),
+            'date': time.strftime('%Y-%m-20'),
         })
-        self.analytic_parent.write({'partner_id': self.partner1.id})
-        self.analytic_son.write({'partner_id': self.partner2.id})
+        self.analytic_son_1 = self.analytic_account_obj.create({
+            'name': 'Test Second Son ',
+            'code': '02',
+            'parent_id': self.analytic_parent.id,
+            'date_start': time.strftime('%Y-%m-11'),
+            'date': time.strftime('%Y-%m-10'),
+        })
 
     def test_methods(self):
         self.assertEqual(self.analytic_parent.date_start,
-                         self.analytic_son.date_start)
+                         self.analytic_son_1.date_start)
         self.assertEqual(self.analytic_parent.date,
                          self.analytic_son.date)
