@@ -15,3 +15,14 @@ Usage
 
 Select the analytic account in the PO. The picking type must be one with a
 good destination location
+
+
+Credits
+=======
+
+Contributors
+------------
+
+* Eficent <http://www.eficent.com>
+* Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
+
