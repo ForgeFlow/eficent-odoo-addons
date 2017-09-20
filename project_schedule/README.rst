@@ -2,7 +2,7 @@
     :alt: License AGPL-3
 
 =================
-Analytic Schedule
+Project Schedule
 =================
 
 The project / analytic account's start and end dates are automatically
@@ -15,4 +15,6 @@ Credits
 Contributors
 ------------
 
-* Eficent <http://www.eficent.com>
+* Jordi Ballester Alomar <jordi.ballester@eficent.com>
+* Aaron Henriquez <aheficent@eficent.com>
+* Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
