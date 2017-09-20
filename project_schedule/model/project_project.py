@@ -2,15 +2,16 @@
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models
+from odoo import api, fields, models
 
 
-class AccountAnalyticAccount(models.Model):
-    _inherit = "account.analytic.account"
+class ProjectProject(models.Model):
+    _inherit = "project.project"
 
     @api.model
-    def _compute_scheduled_dates(self, analytic):
+    def _compute_scheduled_dates(self, parent):
         """Obtains the earliest and latest dates of the children."""
+        analytic = parent.analytic_account_id
         start_dates = []
         end_dates = []
         if not analytic.child_ids:
@@ -30,22 +31,19 @@ class AccountAnalyticAccount(models.Model):
             'date_start': min_start_date,
             'date': max_end_date,
         }
-        analytic.write(vals)
+        project.write(vals)
         return True
 
-    date_start = fields.Date('Start Date')
-    date = fields.Date('Expiration Date', index=True,
-                       track_visibility='onchange')
 
     @api.model
     def create(self, vals):
-        acc = super(AccountAnalyticAccount, self).create(vals)
+        acc = super(ProjectProject, self).create(vals)
         self._compute_scheduled_dates(acc.parent_id)
         return acc
 
     @api.multi
     def write(self, vals):
-        res = super(AccountAnalyticAccount, self).write(vals)
+        res = super(ProjectProject, self).write(vals)
         if 'date_start' in vals or 'date' in vals:
             for acc in self:
                 if not acc.parent_id:
