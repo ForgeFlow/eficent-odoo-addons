@@ -38,7 +38,13 @@ class account_invoice_line(orm.Model):
             or line.product_id.valuation != 'real_time'
         ):
             return res
+        is_dropship = False
+        if any(move.location_dest_id and not move.location_dest_id.company_id
+               for move in line.move_line_ids):
+            is_dropship = True
         if line.move_line_ids:
+            if is_dropship:
+                return res
             for move in line.move_line_ids:
                 qty = uom_obj._compute_qty(cr, uid, move.product_uom.id,
                                            move.product_qty,
