@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="project_project_stage_edit" model="ir.ui.view">
+            <field name="name">project.project.stage.form</field>
+            <field name="model">project.project.stage</field>
+            <field name="inherit_id"
+                   ref="project_wbs_stage.project_project_stage_edit"/>
+            <field name="arch" type="xml">
+                <field name="case_default" position="after">
+                    <field name="allow_timesheets"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
