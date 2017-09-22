@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
-# Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models
@@ -32,6 +31,10 @@ class AccountAnalyticAccount(models.Model):
             'date': max_end_date,
         }
         analytic.write(vals)
+        project_ids = self.env['project.project'].\
+            search([('analytic_account_id', '=', analytic.id)])
+        for project in project_ids:
+            project.write(vals)
         return True
 
     date_start = fields.Date(
