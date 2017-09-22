@@ -65,6 +65,12 @@ class stock_picking(orm.Model):
                 total_price += price
                 total_qty += move.product_qty
             price = total_price / total_qty
+            if not picking.carrier_id.product_id:
+                raise orm.except_orm(
+                    _('The delivery carrier is not configured'),
+                    _('Please select a different carrier to the shipment or '
+                      'add a product to carrier %s '
+                      % picking.carrier_id.name))
             account_id = picking.carrier_id.product_id.\
                 property_account_expense.id
             if not account_id:
