@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
-# Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests import common
@@ -61,5 +60,5 @@ class TestAccountAnalyticPost(common.TransactionCase):
         valid_to_post_id = self.move_line_obj.\
             search([('id', 'in', move_id.line_ids.ids),
                     ('account_id.user_type_id.name', 'in', ['Income',
-                                                            'Expense'])])
+                                                            'Expenses'])])
         self.assertEqual(len(valid_to_post_id), 2)
