@@ -10,9 +10,13 @@
     'author': 'Eficent',
     'website': 'http://www.eficent.com',
     'depends': [
+        'analytic',
         'stock_analytic_account_location',
         'purchase',
         'purchase_stock_analytic'
+    ],
+    'data': [
+        'views/purchase_views.xml',
     ],
     'installable': True,
 }

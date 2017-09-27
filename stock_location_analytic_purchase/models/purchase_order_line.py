@@ -1,8 +1,25 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import api, models, _
+from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
+
+
+class PurchaseOrder(models.Model):
+    _inherit = "purchase.order"
+
+    @api.depends('order_line.account_analytic_id')
+    def _compute_check_analytic_id(self):
+        if all(line.account_analytic_id for line in self.order_line):
+            self.check_analytic_id = True
+        else:
+            self.check_analytic_id = False
+
+    check_analytic_id = fields.Boolean(
+        'Check Account Analytic',
+        compute='_compute_check_analytic_id',
+        store=True
+    )
 
 
 class PurchaseOrderLine(models.Model):
