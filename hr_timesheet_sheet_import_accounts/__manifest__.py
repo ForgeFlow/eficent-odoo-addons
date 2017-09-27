@@ -4,7 +4,7 @@
 
 {
     'name': 'HR Timesheet Sheet Import Accounts',
-    'version': '9.0.1.0.0',
+    'version': '10.0.1.0.0',
     'author': 'Eficent',
     'category': 'Human Resources',
     'summary': "This module lets the user import the analytic accounts from "
