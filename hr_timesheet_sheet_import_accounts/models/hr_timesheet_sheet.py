@@ -4,7 +4,7 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models
+from odoo import api, fields, models
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
@@ -37,14 +37,20 @@ class HrTimesheetSheet(models.Model):
                 ('date_from', '>=', date_from_lw),
                 ('employee_id', '=', emp_id)])
             a_line_ids = lw_sheet_ids.mapped('timesheet_ids').ids
+            ga_id = sheet.employee_id.product_id.\
+                property_account_expense_id.id
+            if not ga_id:
+                ga_id = sheet.employee_id.product_id.\
+                    categ_id.property_account_expense_categ_id.id
             if a_line_ids:
-                self.env.cr.execute("""SELECT DISTINCT account_id
+                self.env.cr.execute("""SELECT DISTINCT L.account_id
                 FROM account_analytic_line AS L
+                INNER JOIN account_move_line AML
+                ON AML.id = L.move_id
                 INNER JOIN account_analytic_account as A
-                ON A.id = L.account_id
+                ON A.id = AML.analytic_account_id
                 WHERE L.id IN %s
-                AND L.is_timesheet = True
-                GROUP BY account_id""", (tuple(a_line_ids),))
+                GROUP BY L.account_id""", (tuple(a_line_ids),))
                 res = self.env.cr.dictfetchall()
                 for account_id in [a['account_id'] for a in res]:
                     vals = {
@@ -53,15 +59,20 @@ class HrTimesheetSheet(models.Model):
                         'date': sheet.date_from,
                         'account_id': account_id,
                         'name': '/',
-                        # 'product_id': sheet.employee_id.product_id.id,
-                        # 'product_uom_id':
-                        #     sheet.employee_id.product_id.uom_id.id,
-                        # TODO: is a general account needed? general_account_id
-                        # TODO: is now related='move_id.account_id'.
-                        # 'general_account_id': ga_id,
+                        'product_id': sheet.employee_id.product_id.id,
+                        'product_uom_id':
+                            sheet.employee_id.product_id.uom_id.id,
+                        'general_account_id': ga_id,
                         'user_id': self.env.uid,
                         'sheet_id': sheet.id,
-                        'is_timesheet': True,
+                        'allow_timesheets': True,
                     }
                     timesheet_obj.create(vals)
         return True
+
+
+class HrEmployee(models.Model):
+    _inherit = "hr.employee"
+
+    product_id = fields.Many2one(
+        comodel_name='product.product', string='Product', required=True)
