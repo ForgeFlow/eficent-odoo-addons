@@ -12,7 +12,8 @@
     "category": "Generic Modules/Projects & Services",
     "depends": [
         "project_location",
-        "analytic_resource_plan_purchase_request"
+        "analytic_resource_plan_purchase_request",
+        "analytic_resource_plan",
     ],
     "data": [
         "views/stock_picking_view.xml",
