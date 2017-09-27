@@ -6,11 +6,13 @@
         <field name="model">hr_timesheet_sheet.sheet</field>
         <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
         <field name="arch" type="xml">
-            <xpath expr='//button[@name="cancel"]' position="after">
-                <button name="set_previous_timesheet_ids" states="new,draft"
-                        string="Import Accounts from Previous Timesheet"
-                        type="object" class="oe_highlight"/>
-            </xpath>
+            <div class="oe_title" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="set_previous_timesheet_ids"
+                            string="Import Accounts from Previous Timesheet"
+                            type="object" class="oe_highlight"/>
+                </div>
+            </div>
         </field>
     </record>
 
