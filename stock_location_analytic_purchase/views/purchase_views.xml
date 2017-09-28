@@ -11,9 +11,8 @@
             </field>
             <field name="dest_address_id" position="attributes">
                 <attribute name="attrs">{
-                    'invisible': ['|',('default_location_dest_id_usage', '!=', 'customer'), ('check_analytic_id', '==', 'True')],
-                    'required': ['|',('default_location_dest_id_usage', '=', 'customer'),('check_analytic_id', '==', 'False')],
-                    'required': [('check_analytic_id', '==', 'True')]
+                    'invisible': ['|',('default_location_dest_id_usage', '!=', 'customer'), ('check_analytic_id', '=', 'True')],
+                    'required': [('default_location_dest_id_usage', '=', 'customer'),('check_analytic_id', '=', 'False')]
                     }
                 </attribute>
             </field>
