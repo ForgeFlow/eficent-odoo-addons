@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-=============================
-Procurement Location Analytic
-=============================
+=================================
+Purchasing For Analytic Locations
+=================================
 
 When Purchasing and the analytic account is set in the line, the destination
 location should contain that analytic account
