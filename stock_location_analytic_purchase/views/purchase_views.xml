@@ -10,7 +10,12 @@
                 <field name="check_analytic_id" invisible="1"/>
             </field>
             <field name="dest_address_id" position="attributes">
-                <attribute name="attrs">{'required': [('check_analytic_id', '==', 'True')]}</attribute>
+                <attribute name="attrs">{
+                    'invisible': ['|',('default_location_dest_id_usage', '!=', 'customer'), ('check_analytic_id', '==', 'True')],
+                    'required': ['|',('default_location_dest_id_usage', '=', 'customer'),('check_analytic_id', '==', 'False')],
+                    'required': [('check_analytic_id', '==', 'True')]
+                    }
+                </attribute>
             </field>
         </field>
     </record>
