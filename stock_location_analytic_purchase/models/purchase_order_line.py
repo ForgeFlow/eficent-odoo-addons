@@ -8,12 +8,15 @@ from odoo.exceptions import ValidationError
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
+    @api.multi
     @api.depends('order_line.account_analytic_id')
     def _compute_check_analytic_id(self):
-        if all(line.account_analytic_id for line in self.order_line):
-            self.check_analytic_id = True
-        else:
-            self.check_analytic_id = False
+        for po in self:
+            if all(line.account_analytic_id for line in po.order_line):
+                a = all(line.account_analytic_id for line in self.order_line)
+                self.check_analytic_id = True
+            else:
+                self.check_analytic_id = False
 
     check_analytic_id = fields.Boolean(
         'Check Account Analytic',
