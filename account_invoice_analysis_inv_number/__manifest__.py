@@ -4,17 +4,19 @@
 
 {
     "name": "Invoices Analysis by invoice number",
-    "version": "9.0.1.0.0",
-    "depends": ['account'],
+    "version": "10.0.1.0.0",
+    "Summary": """This module is meant to extend the report 'Invoices Analysis'
+        adding the invoice internal number, the supplier invoice number and
+        the journal entry.This is useful to allow the user to drill down.""",
+    "category": "Accounting & Finance",
     "author": "Eficent,"
               "Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "category": "Accounting & Finance",
-    'Summary': """
-This module is meant to extend the report 'Invoices Analysis' adding the
-invoice internal number, the supplier invoice number and the journal entry.
-This is useful to allow the user to drill down.
-    """,
-    "installable": False,
-    "data": ["report/account_invoice_report_view.xml"],
+    "depends": [
+        "account",
+    ],
+    "data": [
+        "report/account_invoice_report_view.xml",
+    ],
+    "installable": True,
 }
