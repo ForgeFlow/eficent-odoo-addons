@@ -25,6 +25,7 @@ Contributors
 ------------
 * Jordi Ballester <jordi.ballester@eficent.com>
 * Aaron Henriquez <ahenriquez@eficent.com>
+* Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
 
 Maintainer
 ----------
