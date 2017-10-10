@@ -13,10 +13,9 @@ class PurchaseOrder(models.Model):
     def _compute_check_analytic_id(self):
         for po in self:
             if all(line.account_analytic_id for line in po.order_line):
-                a = all(line.account_analytic_id for line in self.order_line)
-                self.check_analytic_id = True
+                po.check_analytic_id = True
             else:
-                self.check_analytic_id = False
+                po.check_analytic_id = False
 
     check_analytic_id = fields.Boolean(
         'Check Account Analytic',
