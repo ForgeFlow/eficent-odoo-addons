@@ -4,7 +4,7 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from odoo import api, fields, models
+from odoo import _, api, exceptions, fields, models
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
@@ -16,6 +16,7 @@ class HrTimesheetSheet(models.Model):
         sheet_obj = self.env['hr_timesheet_sheet.sheet']
         timesheet_obj = self.env['account.analytic.line']
         for sheet in self:
+            res = []
             date_from = datetime.strptime(sheet.date_from,
                                           DEFAULT_SERVER_DATE_FORMAT)
             user = self.env.user
@@ -38,24 +39,21 @@ class HrTimesheetSheet(models.Model):
                 ('employee_id', '=', emp_id)])
             a_line_ids = lw_sheet_ids.mapped('timesheet_ids').ids
             ga_id = sheet.employee_id.product_id.\
-                property_account_expense_id.id
-            if not ga_id:
-                ga_id = sheet.employee_id.product_id.\
+                property_account_expense_id.id or sheet.employee_id.product_id.\
                     categ_id.property_account_expense_categ_id.id
+            if not ga_id:
+                raise exceptions.ValidationError(
+                    'Please set a general expense '
+                    'account in your employee view')
             if a_line_ids:
                 self.env.cr.execute("""SELECT DISTINCT L.account_id
                 FROM account_analytic_line AS L
-                INNER JOIN account_move_line AML
-                ON AML.id = L.move_id
-                INNER JOIN account_analytic_account as A
-                ON A.id = AML.analytic_account_id
                 WHERE L.id IN %s
                 GROUP BY L.account_id""", (tuple(a_line_ids),))
-                res = self.env.cr.dictfetchall()
-                for account_id in [a['account_id'] for a in res]:
+                query = self.env.cr.dictfetchall()
+                for account_id in [a['account_id'] for a in query]:
                     vals = {
                         'employee_id': sheet.employee_id.id,
-                        # 'journal_id': sheet.employee_id.journal_id.id,
                         'date': sheet.date_from,
                         'account_id': account_id,
                         'name': '/',
@@ -63,16 +61,18 @@ class HrTimesheetSheet(models.Model):
                         'product_uom_id':
                             sheet.employee_id.product_id.uom_id.id,
                         'general_account_id': ga_id,
-                        'user_id': self.env.uid,
+                        'user_id': self.env.user.partner_id.id,
                         'sheet_id': sheet.id,
-                        'allow_timesheets': True,
                     }
-                    timesheet_obj.create(vals)
-        return True
-
-
-class HrEmployee(models.Model):
-    _inherit = "hr.employee"
-
-    product_id = fields.Many2one(
-        comodel_name='product.product', string='Product', required=True)
+                    ts_id = timesheet_obj.create(vals)
+                res.append(ts_id.id)
+        return {
+            'domain': "[('id','in', ["+','.join(map(str, res))+"])]",
+            'name': _('Employee Timesheets'),
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'hr_timesheet_sheet.sheet',
+            'view_id': False,
+            'context': False,
+            'type': 'ir.actions.act_window'
+        }
