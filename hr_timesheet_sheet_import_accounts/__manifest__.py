@@ -10,9 +10,11 @@
     'summary': "This module lets the user import the analytic accounts from "
                "the previous timesheet, with a simple click.",
     'website': 'http://www.eficent.com',
-    'depends': ['hr_timesheet_sheet'],
+    'depends': ['hr_timesheet_sheet',
+                'hr_employee_product'],
     'data': [
         'views/hr_timesheet_sheet_view.xml',
+        'views/hr_employee_view.xml',
     ],
     'installable': True,
     'auto_install': False,
