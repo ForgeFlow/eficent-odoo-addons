@@ -157,7 +157,7 @@ class AnalyticResourcePlanLineMakeProcurement(orm.TransientModel):
                 procurement_obj.write(
                     cr, uid, [procurement.id],
                     {'product_qty': new_qty,
-                     'procurement_orders': [(4, [line.id])]},
+                     'analytic_resource_plan_lines': [(4, [line.id])]},
                     context=context)
             else:
                 procurement_id = procurement_obj.create(
@@ -166,7 +166,10 @@ class AnalyticResourcePlanLineMakeProcurement(orm.TransientModel):
                         procure_method=make_procurement.procure_method,
                         direct_ship=make_procurement.direct_ship,
                         move_id=False, context=context))
-
+                procurement_obj.write(
+                    cr, uid, [procurement_id],
+                    {'analytic_resource_plan_lines': [(4, [line.id])]},
+                    context=context)
                 wf_service = netsvc.LocalService("workflow")
                 wf_service.trg_validate(uid, 'procurement.order',
                                         procurement_id, 'button_confirm',
