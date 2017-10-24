@@ -7,8 +7,8 @@
     "name": "Purchase Delivery Costs",
     "version": "10.0.1.0.0",
     "category": "Purchase Management",
-    "description": """Allows you to add delivery methods in purchase orders
-        and picking.""",
+    "summary": """Allows you to add delivery methods in purchase orders
+    and pickings""",
     "author": "Eficent",
     "website": "www.eficent.com",
     "license": "AGPL-3",
@@ -17,6 +17,7 @@
         "purchase"
     ],
     "data": [
+        "view/purchase_view.xml",
         "view/delivery_view.xml",
     ],
     "installable": True,

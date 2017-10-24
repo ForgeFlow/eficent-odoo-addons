@@ -13,6 +13,8 @@ class StockPicking(models.Model):
     def do_transfer(self):
         self.ensure_one()
         res = super(StockPicking, self).do_transfer()
+        if self.purchase_id.order_line.filtered(lambda p: p.delivery_line):
+            return res
         self._add_delivery_cost_to_po()
         return res
 
