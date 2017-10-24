@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
-#        <contact@eficent.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models, _
@@ -75,25 +74,9 @@ class PurchaseOrder(models.Model):
             'price_unit': price_unit,
             'taxes_id': [(6, 0, taxes_ids)],
             'date_planned': order.date_order,
+            'delivery_line': True,
         }
         if self.order_line:
             values['sequence'] = self.order_line[-1].sequence + 1
         pol = PurchaseOrderLine.sudo().create(values)
         return pol
-
-
-class PurchaseOrderLine(models.Model):
-    _inherit = 'purchase.order.line'
-
-    @api.multi
-    def _prepare_stock_moves(self, picking):
-        res = super(PurchaseOrderLine, self)._prepare_stock_moves(picking)
-        if self.order_id.picking_type_id.warehouse_id and not\
-                self.order_id.dest_address_id:
-            if not self.order_id.picking_type_id.warehouse_id.partner_id:
-                raise ValidationError(_('''Error! The warehouse must have an
-                address.'''))
-        if res:
-            res[0]['partner_id'] = self.order_id.picking_type_id.warehouse_id.\
-                partner_id.id or False
-        return res
