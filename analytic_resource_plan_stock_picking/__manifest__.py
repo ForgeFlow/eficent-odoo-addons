@@ -14,6 +14,7 @@
         "project_location",
         "analytic_resource_plan_purchase_request",
         "analytic_resource_plan",
+        "analytic_resource_plan_stock",
     ],
     "data": [
         "views/stock_picking_view.xml",
