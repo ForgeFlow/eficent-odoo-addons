@@ -30,9 +30,9 @@ class Project(models.Model):
             self._cr.execute("""
                 WITH progress AS (
                     SELECT p.id as pid,
-                    a1.date as date_end,
-                    a1.date_start as date_start,
-                    COALESCE(abs(a1.date::date - a1.date_start::date), 0) as
+                    p.date as date_end,
+                    p.date_start as date_start,
+                    COALESCE(abs(p.date::date - p.date_start::date), 0) as
                     duration,
                     COALESCE(pm.value, '0') as value,
                     COALESCE(pm.progress_measurement_type, %s) as mt,
