@@ -70,14 +70,32 @@ class TestAnalyticResourcePlanStockPicking(TransactionCase):
         with self.assertRaises(UserError):
             self.analytic_resource_plan.action_button_confirm()
         self.analytic_resource_plan_1.action_button_confirm()
-        self.purchase_request_line = self.purchase_request_line_obj.search([
-            ('product_id', '=', self.analytic_resource_plan_1.product_id.id),
-            ('analytic_account_id', '=',
-             self.analytic_resource_plan_1.account_id.id),
-        ])
+        self.purchase_request_line = self.purchase_request_line_obj.\
+            search([('product_id', '=',
+                     self.analytic_resource_plan_1.product_id.id),
+                    ('analytic_account_id', '=',
+                     self.analytic_resource_plan_1.account_id.id)])
+
+        # check qty purchase request and analytic resource plan
         self.assertEqual(self.purchase_request_line.product_qty,
                          self.analytic_resource_plan_1.unit_amount)
         self.purchase_request = self.purchase_request_obj.\
             search([('line_ids', 'in', self.purchase_request_line.ids)])
         self.purchase_request.button_to_approve()
         self.purchase_request.button_approved()
+
+        self.move = self.env['stock.move'].\
+            search([('product_id', '=',
+                     self.analytic_resource_plan_1.product_id.id),
+                    ('analytic_account_id', '=',
+                     self.analytic_resource_plan_1.account_id.id),
+                    ('location_id', '=', self.location_id.id)])
+
+        self.stock_picking = self.env['stock.picking'].\
+            search([('analytic_resource_plan_line_id', '=',
+                     self.analytic_resource_plan_1.id),
+                    ('move_lines', 'in', self.move.ids)])
+
+        # check picking analytic resource plan and analytic resource plan
+        self.assertEqual(self.stock_picking.analytic_resource_plan_line_id,
+                         self.analytic_resource_plan_1)
