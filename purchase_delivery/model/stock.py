@@ -23,6 +23,7 @@ class StockPicking(models.Model):
         self.ensure_one()
         purchase_order = self.purchase_id
         if purchase_order:
-            price_unit = self.carrier_id.get_price_available(purchase_order)
+            price_unit = self.env['delivery.carrier'].get_price_available(
+                purchase_order)
             purchase_order._create_delivery_line(self.purchase_id,
                                                  self.carrier_id, price_unit)
