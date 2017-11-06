@@ -78,8 +78,7 @@ class DeliveryCarrier(models.Model):
 
     @api.multi
     def get_price_available(self, order):
-        self.ensure_one()
-        total = weight = volume = quantity = 0
+        weight = volume = quantity = 0
         total_delivery = 0.0
         for line in order.order_line:
             if not line.product_id:
