@@ -74,7 +74,7 @@ class AnalyticResourcePlanLine(models.Model):
     @api.model
     def get_picking_type(self, dest_loc):
         domain = [('default_location_dest_id', '=', dest_loc.id)]
-        picking_type = self.env['stock.picking.type'].search(domain)
+        picking_type = self.env['stock.picking.type'].search(domain, limit=1)
         if not picking_type:
             raise UserError(_('''Please define a picking type for the
                 destination the project location'''))
