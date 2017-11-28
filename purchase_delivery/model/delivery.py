@@ -24,35 +24,6 @@ class DeliveryCarrier(models.Model):
             self._context = {}
         return [(r['id'], r['name']) for r in self.read(['name'])]
 
-    @api.multi
-    def grid_src_dest_get(self, src_id, dest_id):
-        dest = self.env['res.partner'].browse(dest_id)
-        src = self.env['res.partner'].browse(src_id)
-        for carrier in self:
-            get_id = lambda x: x.id
-            country_ids = map(get_id, carrier.country_ids)
-            state_ids = map(get_id, carrier.state_ids)
-            src_country_ids = map(get_id, carrier.src_country_ids)
-            src_state_ids = map(get_id, carrier.src_state_ids)
-            if country_ids and dest.country_id.id not in country_ids:
-                continue
-            if state_ids and dest.state_id.id not in state_ids:
-                continue
-            if carrier.zip_from and (dest.zip or '') < carrier.zip_from:
-                continue
-            if carrier.zip_to and (dest.zip or '') > carrier.zip_to:
-                continue
-            if src_country_ids and src.country_id.id not in \
-                    src_country_ids:
-                continue
-            if src_state_ids and src.state_id.id not in src_state_ids:
-                continue
-            if carrier.src_zip_from and (src.zip or '') < carrier.src_zip_from:
-                continue
-            if carrier.src_zip_to and (src.zip or '') > carrier.src_zip_to:
-                continue
-        return carrier
-
     src_country_ids = fields.Many2many(
         'res.country',
         'delivery_grid_src_country_rel',

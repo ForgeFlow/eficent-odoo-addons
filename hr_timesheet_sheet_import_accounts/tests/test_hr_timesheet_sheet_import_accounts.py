@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 # Copyright 2014-17 Eficent Business and IT Consulting Services, S.L.
-# Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
 import time
+from odoo.tools.safe_eval import safe_eval as eval
 
 
-class TestComputeWorkdays(TransactionCase):
+class TestHRTimesheetSheetImportAccounts(TransactionCase):
 
     def setUp(self):
-        super(TestComputeWorkdays, self).setUp()
+        super(TestHRTimesheetSheetImportAccounts, self).setUp()
 
         self.timesheet_sheet = self.env['hr_timesheet_sheet.sheet']
+        self.analytic_line = self.env['account.analytic.line']
         self.project_2 = self.env.ref('project.project_project_2')
         self.dept = self.env.ref('hr.dep_management')
         self.dept_1 = self.env.ref('hr.dep_rd')
@@ -23,7 +24,8 @@ class TestComputeWorkdays(TransactionCase):
             'parent_id': self.dept_1.id,
             'manager_id': self.root.id
         })
-
+        self.product = self.env.ref('product.product_product_11')
+        self.product.write({'is_employee': True})
         # create user
         user_dict = {
             'name': 'User 1',
@@ -38,12 +40,19 @@ class TestComputeWorkdays(TransactionCase):
             'user_id': self.user_test.id,
             'address_id': self.user_test.partner_id.id,
             'parent_id': self.root.id,
+            'product_id': self.product.id
         }
         self.employee = self.env['hr.employee'].create(employee_dict)
 
-        self.timesheet_sheet = self.timesheet_sheet.create({
-            'date_from': time.strftime('%Y-%m-11'),
-            'date_to': time.strftime('%Y-%m-17'),
+        self.timesheet_sheet_1 = self._create_timesheet_sheet(
+            time.strftime('%Y-%m-11'), time.strftime('%Y-%m-17'), qty=5)
+        self.timesheet_sheet_2 = self._create_timesheet_sheet(
+            time.strftime('%Y-%m-18'), time.strftime('%Y-%m-24'), qty=10)
+
+    def _create_timesheet_sheet(self, date_from, date_to, qty):
+        timesheet_sheet = self.timesheet_sheet.create({
+            'date_from': date_from,
+            'date_to': date_to,
             'name': 'Employee 1',
             'state': 'new',
             'user_id': self.user_test.id,
@@ -52,17 +61,21 @@ class TestComputeWorkdays(TransactionCase):
         })
 
         # I add 5 hours of work timesheet
-        self.timesheet_sheet.write({'timesheet_ids': [(0, 0, {
+        timesheet_sheet.write({'timesheet_ids': [(0, 0, {
             'project_id': self.project_2.id,
-            'date': time.strftime('%Y-%m-11'),
+            'date': date_from,
             'name': 'Develop UT for hr module(1)',
             'user_id': self.user_test.id,
-            'unit_amount': 5.00,
+            'unit_amount': qty,
         })]})
+        return timesheet_sheet
 
     def test_timesheet_methods(self):
-        self.timesheet_sheet.action_timesheet_confirm()
-        self.assertEqual(self.timesheet_sheet.validator_user_ids,
-                         self.timesheet_sheet.employee_id.parent_id.user_id)
-        self.timesheet_sheet.action_timesheet_done()
-        self.timesheet_sheet.action_timesheet_draft()
+        vals = self.timesheet_sheet_2.set_previous_timesheet_ids()
+        self.timesheet_sheet_1.action_timesheet_confirm()
+        analytic_id_1 = self.analytic_line.\
+            search([('product_id', '=', self.product.id),
+                    ('name', 'ilike', '/')])
+        domain = eval(vals['domain'])
+        analytic_id = self.analytic_line.browse(domain[0][2][0])
+        self.assertEqual(analytic_id_1, analytic_id)

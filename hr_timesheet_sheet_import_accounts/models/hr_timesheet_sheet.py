@@ -4,7 +4,7 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from odoo import _, api, exceptions, fields, models
+from odoo import _, api, exceptions, models
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
@@ -39,12 +39,13 @@ class HrTimesheetSheet(models.Model):
                 ('employee_id', '=', emp_id)])
             a_line_ids = lw_sheet_ids.mapped('timesheet_ids').ids
             ga_id = sheet.employee_id.product_id.\
-                property_account_expense_id.id or sheet.employee_id.product_id.\
-                    categ_id.property_account_expense_categ_id.id
+                property_account_expense_id.id or \
+                sheet.employee_id.product_id.\
+                categ_id.property_account_expense_categ_id.id
             if not ga_id:
-                raise exceptions.ValidationError(
+                raise exceptions.ValidationError(_(
                     'Please set a general expense '
-                    'account in your employee view')
+                    'account in your employee view'))
             if a_line_ids:
                 self.env.cr.execute("""SELECT DISTINCT L.account_id
                 FROM account_analytic_line AS L
@@ -67,7 +68,7 @@ class HrTimesheetSheet(models.Model):
                     ts_id = timesheet_obj.create(vals)
                 res.append(ts_id.id)
         return {
-            'domain': "[('id','in', ["+','.join(map(str, res))+"])]",
+            'domain': "[('id','in', [" + ','.join(map(str, res)) + "])]",
             'name': _('Employee Timesheets'),
             'view_type': 'form',
             'view_mode': 'tree,form',

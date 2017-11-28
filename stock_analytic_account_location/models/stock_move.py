@@ -24,7 +24,6 @@ class StockMove(models.Model):
 
     @api.multi
     def write(self, vals):
-        check_analytic = False
         for move in self:
             if 'location_id' in vals:
                 src_loc =\
