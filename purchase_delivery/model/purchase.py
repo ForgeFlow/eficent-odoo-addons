@@ -32,7 +32,6 @@ class PurchaseOrder(models.Model):
     def delivery_set(self):
         for order in self:
             carrier = order.carrier_id
-            src_address_id = order.partner_id
             dest_address_id = order.dest_address_id or False
             if (not dest_address_id and order.picking_type_id.warehouse_id and
                     order.picking_type_id.warehouse_id.partner_id):
