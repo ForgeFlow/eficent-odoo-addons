@@ -9,7 +9,7 @@
     "category": "Purchase Management",
     "summary": """Allows you to add delivery methods in purchase orders
     and pickings""",
-    "author": "Eficent",
+    "author": "Eficent, Odoo Community Association (OCA)",
     "website": "www.eficent.com",
     "license": "AGPL-3",
     "depends": [
