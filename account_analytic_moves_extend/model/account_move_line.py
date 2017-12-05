@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import api, models, _
-from odoo.exceptions import UserError
+from odoo import api, models
 
 
 class AccountMoveLine(models.Model):
@@ -10,7 +9,6 @@ class AccountMoveLine(models.Model):
 
     @api.multi
     def create_analytic_lines(self):
-        acc_ana_line_obj = self.env['account.analytic.line']
         for obj_line in self:
             # Only create analytic line if the associated account is
             # Expense or Income.
