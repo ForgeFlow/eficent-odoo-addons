@@ -5,7 +5,7 @@
 {
     "name": "Stock Project",
     "summary": "Adds an project in stock move",
-    "version": "9.0.1.0.0",
+    "version": "9.0.1.0.1",
     "author": "Eficent Business and IT Consulting Services S.L.,"
     "Odoo Community Association (OCA)",
     "website": "https://www.odoo-community.org",
@@ -19,6 +19,6 @@
         "views/stock_move_views.xml",
         "views/stock_inventory_views.xml",
     ],
-    'installable': True,
+    'installable': False,
     'active': False,
 }
