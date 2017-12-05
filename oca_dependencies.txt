@@ -4,3 +4,4 @@ purchase-workflow
 sale-workflow
 hr
 hr-timesheet
+hr-timesheet2 https://github.com/Eficent/hr-timesheet 10.0-mig-hr_employee_product
