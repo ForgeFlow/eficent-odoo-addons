@@ -1,3 +1,6 @@
 pmis https://github.com/eficent/pmis 10.0
 project https://github.com/eficent/project 10.0-mig-project_wbs
 purchase-workflow
+sale-workflow
+hr
+hr-timesheet
