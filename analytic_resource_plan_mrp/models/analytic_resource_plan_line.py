@@ -9,7 +9,7 @@ from odoo.exceptions import ValidationError
 class AnalyticResourcePlanLine(models.Model):
     _inherit = 'analytic.resource.plan.line'
 
-    def _show_button_bom_explode(self):
+    def _compute_show_button_bom_explode(self):
         for line in self:
             if not line.bom_id:
                 line.show_button_bom_explode = False
@@ -24,7 +24,7 @@ class AnalyticResourcePlanLine(models.Model):
     )
     show_button_bom_explode = fields.Boolean(
         string='show button bom explode',
-        compute='_show_button_bom_explode',
+        compute='_compute_show_button_bom_explode',
     )
 
     @api.onchange('product_id')

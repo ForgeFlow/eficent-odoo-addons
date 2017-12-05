@@ -5,7 +5,7 @@
 {
     "name": "Stock Location in Project",
     "version": "10.0.1.0.0",
-    "author": "Eficent",
+    "author": "Eficent, Odoo Community Association (OCA)",
     "license": 'AGPL-3',
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",

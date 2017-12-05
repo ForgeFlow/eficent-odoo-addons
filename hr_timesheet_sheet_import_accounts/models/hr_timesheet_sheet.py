@@ -43,9 +43,9 @@ class HrTimesheetSheet(models.Model):
                 sheet.employee_id.product_id.\
                 categ_id.property_account_expense_categ_id.id
             if not ga_id:
-                raise exceptions.ValidationError(
+                raise exceptions.ValidationError(_(
                     'Please set a general expense '
-                    'account in your employee view')
+                    'account in your employee view'))
             if a_line_ids:
                 self.env.cr.execute("""SELECT DISTINCT L.account_id
                 FROM account_analytic_line AS L
