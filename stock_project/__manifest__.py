@@ -19,6 +19,6 @@
         "views/stock_move_views.xml",
         "views/stock_inventory_views.xml",
     ],
-    'installable': False,
+    'installable': True,
     'active': False,
 }
