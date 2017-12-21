@@ -15,7 +15,7 @@ class ProjectProject(models.Model):
         if 'default_parent_id' in context and context['default_parent_id']:
             for project in self.search(
                     [('analytic_account_id', '=',
-                    context['default_parent_id'])]):
+                      context['default_parent_id'])]):
                 res['location_id'] = project.location_id
                 res['dest_address_id'] = project.dest_address_id
         return res

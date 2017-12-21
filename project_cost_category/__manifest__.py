@@ -6,8 +6,8 @@
 {
     "name": "Project Cost Category",
     "version": "10.0.1.0.0",
-    "description": """Adds the cost category to projects.""",
-    "author": "Eficent",
+    "summary": """Adds the cost category to projects.""",
+    "author": "Eficent, Odoo Community Association (OCA)",
     "website": "http://www.eficent.com",
     "category": "Generic Modules/Projects & Services",
     "license": "AGPL-3",

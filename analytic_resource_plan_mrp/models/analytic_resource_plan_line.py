@@ -9,7 +9,7 @@ from odoo.exceptions import ValidationError
 class AnalyticResourcePlanLine(models.Model):
     _inherit = 'analytic.resource.plan.line'
 
-    def _show_button_bom_explode(self):
+    def _compute_show_button_bom_explode(self):
         for line in self:
             if not line.bom_id:
                 line.show_button_bom_explode = False
@@ -24,7 +24,7 @@ class AnalyticResourcePlanLine(models.Model):
     )
     show_button_bom_explode = fields.Boolean(
         string='show button bom explode',
-        compute='_show_button_bom_explode',
+        compute='_compute_show_button_bom_explode',
     )
 
     @api.onchange('product_id')
@@ -38,7 +38,7 @@ class AnalyticResourcePlanLine(models.Model):
     def button_bom_explode_to_resource_plan(self):
         res = self.bom_explode_to_resource_plan()
         return {
-            'domain': "[('id','in', ["+','.join(map(str, res))+"])]",
+            'domain': "[('id','in', [" + ','.join(map(str, res)) + "])]",
             'name': _('New Resource Plan Lines'),
             'view_type': 'form',
             'view_mode': 'tree,form',
@@ -73,33 +73,33 @@ class AnalyticResourcePlanLine(models.Model):
         res = []
         for plan in self:
                 # Search for child resource plan lines.
+            plan_line_ids = plan_line_obj.\
+                search([('parent_id', '=', plan.id),
+                        ('state', '=', 'draft')])
+            plan_line_ids.unlink()
+            factor = plan.product_uom_id.\
+                _compute_quantity(plan.unit_amount,
+                                  plan.bom_id.product_uom_id)
+            bom_res = plan.bom_id.explode(plan.product_id,
+                                          factor / plan.bom_id.product_qty,
+                                          picking_type=False)
+            components = [bom_res[0][0][1]]  # product_lines
+            for line in components:
                 plan_line_ids = plan_line_obj.\
                     search([('parent_id', '=', plan.id),
-                            ('state', '=', 'draft')])
-                plan_line_ids.unlink()
-                factor = plan.product_uom_id.\
-                    _compute_quantity(plan.unit_amount,
-                                      plan.bom_id.product_uom_id)
-                bom_res = plan.bom_id.explode(plan.product_id,
-                                              factor / plan.bom_id.product_qty,
-                                              picking_type=False)
-                components = [bom_res[0][0][1]]  # product_lines
-                for line in components:
-                    plan_line_ids = plan_line_obj.\
-                        search([('parent_id', '=', plan.id),
-                                ('product_id', '=', line['product'].id),
-                                ])
-                    total_qty = 0.0
-                    for plan_line in plan_line_obj.browse(plan_line_ids):
-                        total_qty += plan_line.unit_amount
+                            ('product_id', '=', line['product'].id),
+                            ])
+                total_qty = 0.0
+                for plan_line in plan_line_obj.browse(plan_line_ids):
+                    total_qty += plan_line.unit_amount
 
-                    if line['qty'] > total_qty:
-                        new_qty = line['qty'] - total_qty
-                        resource_line_data =\
-                            self._prepare_resource_plan_line(plan, line,
-                                                             new_qty)
-                        plan_id = plan_line_obj.create(resource_line_data)
-                        res.append(plan_id)
+                if line['qty'] > total_qty:
+                    new_qty = line['qty'] - total_qty
+                    resource_line_data =\
+                        self._prepare_resource_plan_line(plan, line,
+                                                         new_qty)
+                    plan_id = plan_line_obj.create(resource_line_data)
+                    res.append(plan_id)
         return res
 
     def _prepare_consume_move(self, line, product_qty):
