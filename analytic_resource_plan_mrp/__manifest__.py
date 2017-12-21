@@ -6,7 +6,7 @@
     "name": "Analytic Resource Plan MRP",
     "version": "10.0.1.0.0",
     "description": """Analytic Resource Plan MRP""",
-    "author": "Eficent",
+    "author": "Eficent, Odoo Community Association (OCA)",
     "website": "www.eficent.com",
     "license": "AGPL-3",
     "category": "Generic Modules/Projects & Services",
