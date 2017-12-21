@@ -1,0 +1,10 @@
+pmis https://github.com/eficent/pmis 10.0
+project https://github.com/eficent/project 10.0-mig-project_wbs
+purchase-workflow
+sale-workflow
+hr
+hr-timesheet
+hr-timesheet2 https://github.com/Eficent/hr-timesheet 10.0-mig-hr_employee_product
+account-invoicing
+account-analytic
+account-analytic2 https://github.com/Eficent/account-analytic 10.0-mig-mrp_analytic
