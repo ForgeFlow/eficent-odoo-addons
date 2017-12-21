@@ -35,20 +35,23 @@ class HrTimesheetSheet(models.Model):
         self.ensure_one()
         for timesheet in self:
             users = []
-            if (timesheet.employee_id and timesheet.employee_id.parent_id
-                    and timesheet.employee_id.parent_id.user_id):
+            if (timesheet.employee_id and
+                    timesheet.employee_id.parent_id and
+                    timesheet.employee_id.parent_id.user_id):
                 users.append(
                     timesheet.employee_id.parent_id.user_id.id)
-            if (timesheet.department_id and timesheet.department_id.manager_id
-                    and timesheet.department_id.manager_id.user_id
-                    and timesheet.department_id.manager_id.user_id.id !=
+            if (timesheet.department_id and
+                    timesheet.department_id.manager_id and
+                    timesheet.department_id.manager_id.user_id and
+                    timesheet.department_id.manager_id.user_id.id !=
                     self.env.uid):
                 users.append(
                     timesheet.department_id.manager_id.user_id.id)
-            elif (timesheet.department_id and timesheet.department_id.parent_id
-                    and timesheet.department_id.parent_id.manager_id
-                    and timesheet.department_id.parent_id.manager_id.user_id
-                    and timesheet.department_id.parent_id.manager_id.
+            elif (timesheet.department_id and
+                    timesheet.department_id.parent_id and
+                    timesheet.department_id.parent_id.manager_id and
+                    timesheet.department_id.parent_id.manager_id.user_id and
+                    timesheet.department_id.parent_id.manager_id.
                     user_id.id != self.env.uid):
                 users.append(
                     timesheet.department_id.manager_id.user_id.id)
