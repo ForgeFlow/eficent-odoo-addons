@@ -7,8 +7,9 @@
     'version': '10.0.1.0.0',
     'category': 'Logistics',
     'summary': 'Stock analytic account using analytic locations',
-    'author': 'Eficent',
+    'author': 'Eficent, Odoo Community Association (OCA)',
     'website': 'http://www.eficent.com',
+    "license": "AGPL-3",
     'depends': [
         'stock',
         'analytic',
