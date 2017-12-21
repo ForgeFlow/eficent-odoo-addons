@@ -5,10 +5,11 @@
 {
     "name": "Work In Progress Statement Exclude Closed Projects",
     "version": "10.0.1.0.0",
-    "author": "Eficent Business and IT Consulting Services S.L.",
-    "category": "Projects",
+    "author": "Eficent Business and IT Consulting Services S.L.,"
+              "Odoo Community Association (OCA)",
     "summary": """Filter closed projects in analytic wip report""",
     "category": "Generic Modules/Projects & Services",
+    "license": "LGPL-3",
     "depends": [
         "analytic_wip_report",
         "project_wbs_stage",
