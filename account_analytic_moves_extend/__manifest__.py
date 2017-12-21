@@ -5,10 +5,10 @@
 {
     "name": "Analytic moves only for expenses and revenues",
     "version": "10.0.1.0.0",
-    "author": "Eficent",
+    "author": "Eficent, Odoo Community Association (OCA)",
     "license": 'AGPL-3',
     "website": "www.eficent.com",
-    "description": """Limits the creation of analytic lines associated to
+    "summary": """Limits the creation of analytic lines associated to
         invoices accepted only when the move is associated to an expense or
         revenue account.
     """,
