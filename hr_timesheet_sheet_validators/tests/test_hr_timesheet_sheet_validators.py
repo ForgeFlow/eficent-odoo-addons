@@ -66,4 +66,3 @@ class TestComputeWorkdays(TransactionCase):
                          self.timesheet_sheet.employee_id.parent_id.user_id)
         self.timesheet_sheet.action_timesheet_done()
         self.timesheet_sheet.action_timesheet_draft()
-        

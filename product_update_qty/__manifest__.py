@@ -14,8 +14,8 @@
     "category": "Warehouse Management",
     "depends": ["stock"],
     "data": [
-             "security/product_qty_security.xml",
-             "views/product_qty.xml"
-             ],
+        "security/product_qty_security.xml",
+        "views/product_qty.xml"
+    ],
     'installable': True
 }

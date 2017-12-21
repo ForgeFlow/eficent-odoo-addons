@@ -40,8 +40,6 @@ class ProductTemplate(models.Model):
                     ('product_id', '=', product.id),
                     ('name', '=', vals['manufacturer'])])
                 if not supp_ids:
-                    supplierinfo_vals = self._prepare_supplierinfo(
-                       product)
+                    supplierinfo_vals = self._prepare_supplierinfo(product)
                     supplierinfo_obj.create(supplierinfo_vals)
-                    print "\n\n-----supplierinfo_vals-----", supplierinfo_vals
         return res
