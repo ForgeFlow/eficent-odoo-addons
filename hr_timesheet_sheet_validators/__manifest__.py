@@ -6,12 +6,13 @@
 {
     'name': 'HR Timesheet Sheet Validators',
     'version': '10.0.1.0.0',
-    'author': 'Eficent',
+    'author': 'Eficent, Odoo Community Association (OCA)',
     'category': 'Human Resources',
     'summary': """This module allows a user outside of the Human Resources
                groups to validate timesheets. A rule is predefined, but it
                is flexible enough to accept extensions.""",
     'website': 'http://www.eficent.com',
+    "license": "LGPL-3",
     'depends': [
         'hr_timesheet_sheet'
     ],
