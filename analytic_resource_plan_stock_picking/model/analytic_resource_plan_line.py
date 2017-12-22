@@ -82,7 +82,7 @@ class AnalyticResourcePlanLine(orm.Model):
             'analytic_account_id': line.account_id.id,
             'price_unit': line.product_id.price,
             'company_id': line.account_id.company_id.id,
-            'location_id': src_location,
+            'location_id': src_location.id,
             'location_dest_id': line.account_id.location_id.id,
             'note': 'Move for project',
         }
