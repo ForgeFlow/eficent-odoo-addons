@@ -33,37 +33,12 @@ class StockMove(orm.Model):
     _columns = {        
         'analytic_account_id': fields.many2one('account.analytic.account',
                                                'Analytic Account'),
-        'analytic_reserved': fields.boolean(
-            'Reserved',
-            help="Reserved for the Analytic Account"),
         'analytic_account_user_id': fields.related(
             'analytic_account_id', 'user_id', type='many2one',
             relation='res.users', string='Project Manager', store=True,
             readonly=True),
     }
 
-    def _get_analytic_reserved(self, cr, uid, vals, context=None):
-        context = context or {}
-        analytic_obj = self.pool['account.analytic.account']
-        aaid = vals['analytic_account_id']
-        if aaid:
-            aa = analytic_obj.browse(cr, uid, aaid, context=context)
-            return aa.use_reserved_stock
-        else:
-            return False
-
-    def create(self, cr, uid, vals, context=None):
-        if 'analytic_account_id' in vals:
-            vals['analytic_reserved'] = self._get_analytic_reserved(
-                cr, uid, vals, context=context)
-        return super(StockMove, self).create(cr, uid, vals, context=context)
-
-    def write(self, cr, uid, ids, vals, context=None):
-        if 'analytic_account_id' in vals:
-            vals['analytic_reserved'] = self._get_analytic_reserved(
-                cr, uid, vals, context=context)
-        return super(StockMove, self).write(cr, uid, ids, vals,
-                                            context=context)
 
     def action_scrap(self, cr, uid, ids, quantity, location_id, context=None):
         """ Move the scrap/damaged product into scrap location
@@ -126,60 +101,6 @@ class StockMove(orm.Model):
 
         self.action_done(cr, uid, res, context=context)
         return res
-
-    def check_assign(self, cr, uid, ids, context=None):
-        """ Checks the product type and accordingly writes the state.
-        @return: No. of moves done
-        """
-        done = []
-        count = 0
-        pickings = {}
-        if context is None:
-            context = {}
-        for move in self.browse(cr, uid, ids, context=context):
-            if move.product_id.type == 'consu' or move.location_id.usage == 'supplier':
-                if move.state in ('confirmed', 'waiting'):
-                    done.append(move.id)
-                pickings[move.picking_id.id] = 1
-                continue
-            if move.state in ('confirmed', 'waiting'):
-                # Important: we must pass lock=True to _product_reserve() to avoid race conditions and double reservations
-                if move.analytic_reserved:
-                    analytic_account_id = move.analytic_account_id.id
-                else:
-                    analytic_account_id = False
-                res = self.pool.get(
-                    'stock.location')._product_reserve(
-                    cr, uid, [move.location_id.id], move.product_id.id,
-                    move.product_qty, {'uom': move.product_uom.id,
-                                       'analytic_account_id':
-                                           analytic_account_id}, lock=True)
-                if res:
-                    #_product_available_test depends on the next status for correct functioning
-                    #the test does not work correctly if the same product occurs multiple times
-                    #in the same order. This is e.g. the case when using the button 'split in two' of
-                    #the stock outgoing form
-                    self.write(cr, uid, [move.id], {'state':'assigned'})
-                    done.append(move.id)
-                    pickings[move.picking_id.id] = 1
-                    r = res.pop(0)
-                    product_uos_qty = self.pool.get('stock.move').onchange_quantity(cr, uid, [move.id], move.product_id.id, r[0], move.product_id.uom_id.id, move.product_id.uos_id.id)['value']['product_uos_qty']
-                    cr.execute('update stock_move set location_id=%s, product_qty=%s, product_uos_qty=%s where id=%s', (r[1], r[0],product_uos_qty, move.id))
-
-                    while res:
-                        r = res.pop(0)
-                        product_uos_qty = self.pool.get('stock.move').onchange_quantity(cr, uid, [move.id], move.product_id.id, r[0], move.product_id.uom_id.id, move.product_id.uos_id.id)['value']['product_uos_qty']
-                        move_id = self.copy(cr, uid, move.id, {'product_uos_qty': product_uos_qty, 'product_qty': r[0], 'location_id': r[1]})
-                        done.append(move_id)
-        if done:
-            count += len(done)
-            self.write(cr, uid, done, {'state': 'assigned'})
-
-        if count:
-            for pick_id in pickings:
-                wf_service = netsvc.LocalService("workflow")
-                wf_service.trg_write(uid, 'stock.picking', pick_id, cr)
-        return count
 
 
 class stock_location(orm.Model):

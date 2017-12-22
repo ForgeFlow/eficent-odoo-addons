@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+           <record id="view_stock_change_analytic_account" model="ir.ui.view">
+               <field name="name">Stock Change Analytic Account</field>
+               <field name="model">stock.change.analytic.account</field>
+               <field name="arch" type="xml">
+                   <form string="Change analytic account in stock">
+                     <group>
+                         <field name="src_analytic_account_id"/>
+                         <field name="dest_analytic_account_id"/>
+                         <field name="location_id"/>
+                         <field name="location_dest_id"/>
+                         <field name="quantity"/>
+                     </group>
+                     <group>
+                         <button name="do_process"
+                                 string="Process" type="object"
+                                 class="oe_highlight"/>
+                         <button special="cancel" string="Cancel" class="oe_link"/>
+                     </group>
+                    </form>
+               </field>
+            </record>
+    </data>
+</openerp>
