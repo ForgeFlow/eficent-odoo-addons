@@ -29,7 +29,11 @@ class account_analytic_account(orm.Model):
     _columns = {
         'move_ids': fields.one2many('stock.move', 'analytic_account_id',
                                     'Moves for this analytic account',
-                                    readonly=True)
+                                    readonly=True),
+        'use_reserved_stock': fields.boolean(
+            'Use reserved stock',
+            help="Stock with reference to this analytic account "
+                 "is considered to be reserved.")
     }
 
     def copy(self, cr, uid, id, default=None, context=None):

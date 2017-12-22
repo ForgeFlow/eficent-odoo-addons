@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+        <act_window
+        context="{'product_id': active_id, 'analytic_account_id': False}"
+        id="act_stock_product_location_unrestricted_open"
+        name="Unrestricted Stock by Location"
+        res_model="stock.location"
+        src_model="product.product"/>
+
+</data>
+</openerp>
