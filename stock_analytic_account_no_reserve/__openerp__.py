@@ -41,20 +41,7 @@ Features of this module:
     'data': [
              'view/stock_view.xml',
              'view/stock_picking_view.xml',
-             'view/analytic_account_view.xml',
-             'report/report_stock_analytic_account_view.xml',
-             'report/report_stock_move_view.xml',
-             'report/report_stock_view.xml',
-             'wizard/stock_change_product_qty_view.xml',
-             'wizard/stock_fill_inventory_view.xml',
-    ],
-    'test':[
-        'test/stock_users.yml',
-        'demo/stock_demo.yml',
-        'test/opening_stock.yml',
-        'test/shipment.yml',
-        'test/stock_report.yml',
-        'test/setlast_tracking.yml',
+             'view/analytic_account_view.xml'
     ],
     'installable': True,
     'active': False,
