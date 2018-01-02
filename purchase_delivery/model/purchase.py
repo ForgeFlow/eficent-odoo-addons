@@ -41,36 +41,30 @@ class PurchaseOrder(models.Model):
                 raise ValidationError(_('''
                     No destination address available! An address must be added
                     to the purchase order or the warehouse.'''))
-            grid_id = carrier.grid_src_dest_get(src_address_id.id,
-                                                dest_address_id.id)
-            if not grid_id:
-                raise ValidationError(_('''No Grid Available! No grid matching
-                    for this carrier!.'''))
-
             if order.state not in ('draft', 'sent'):
                 raise ValidationError(_('''
                     Order not in Draft State! The order state have to be
                     draft to add delivery lines.'''))
-            price_unit = grid_id.get_price_available(order)
-            self._create_delivery_line(order, grid_id, price_unit)
+            price_unit = carrier.get_price_available(order)
+            self._create_delivery_line(order, carrier, price_unit)
         return True
 
-    def _create_delivery_line(self, order, grid_id, price_unit):
+    def _create_delivery_line(self, order, carrier, price_unit):
         PurchaseOrderLine = self.env['purchase.order.line']
 
-        taxes = grid_id.product_id.taxes_id.\
-            filtered(lambda t: t.company_id.id == grid_id.company_id.id)
+        taxes = carrier.product_id.taxes_id.\
+            filtered(lambda t: t.company_id.id == carrier.company_id.id)
         taxes_ids = taxes.ids
         if self.partner_id and self.fiscal_position_id:
             taxes_ids = self.fiscal_position_id.\
-                map_tax(taxes, grid_id.product_id, self.partner_id).ids
+                map_tax(taxes, carrier.product_id, self.partner_id).ids
         # create the purchase order line
         values = {
             'order_id': order.id,
-            'name': grid_id.name,
+            'name': carrier.name,
             'product_qty': 1,
-            'product_uom': grid_id.product_id.uom_id.id,
-            'product_id': grid_id.product_id.id,
+            'product_uom': carrier.product_id.uom_id.id,
+            'product_id': carrier.product_id.id,
             'price_unit': price_unit,
             'taxes_id': [(6, 0, taxes_ids)],
             'date_planned': order.date_order,
