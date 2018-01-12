@@ -79,6 +79,7 @@ class AnalyticResourcePlanLine(models.Model):
             plan_line_ids.unlink()
             factor = plan.product_uom_id.\
                 _compute_quantity(plan.unit_amount,
+                                  plan.product_uom_id,
                                   plan.bom_id.product_uom_id)
             bom_res = plan.bom_id.explode(plan.product_id,
                                           factor / plan.bom_id.product_qty,
@@ -90,7 +91,7 @@ class AnalyticResourcePlanLine(models.Model):
                             ('product_id', '=', line['product'].id),
                             ])
                 total_qty = 0.0
-                for plan_line in plan_line_obj.browse(plan_line_ids):
+                for plan_line in plan_line_ids:
                     total_qty += plan_line.unit_amount
 
                 if line['qty'] > total_qty:
