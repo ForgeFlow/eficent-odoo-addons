@@ -30,13 +30,13 @@ class account_analytic_account(models.Model):
         return res
 
     estimated_gross_profit_per = fields.Float(
-        compute='_wip_report',
+        compute='_compute_wip_report',
         string='Total Value',
         help="""Estimated gros profit percentage
              (estimated gross profit/total contract value)""",
         digits=dp.get_precision('Account')
     )
     under_over = fields.Float(
-        compute='_wip_report',
+        compute='_compute_wip_report',
         help="""Total under/over (under_billed-over_billed)"""
     )
