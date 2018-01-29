@@ -37,6 +37,8 @@ class account_analytic_account(osv.osv):
             res[account.id] = {'total_value': 0,
                                'actual_billings': 0,
                                'actual_costs': 0,
+                               'actual_material_cost': 0,
+                               'actual_labor_cost': 0,
                                'total_estimated_costs': 0,
                                'estimated_costs_to_complete': 0,
                                'estimated_gross_profit': 0,
@@ -91,18 +93,27 @@ class account_analytic_account(osv.osv):
 
             # Actual costs to date
             cr.execute(
-                """SELECT COALESCE(-1*sum(amount),0.0)
-                FROM account_analytic_line L
-                INNER JOIN account_account AC
-                ON L.general_account_id = AC.id
-                INNER JOIN account_account_type AT
-                ON AT.id = AC.user_type
-                WHERE AT.report_type = 'expense'
-                AND L.account_id IN %s
+                """
+                SELECT COALESCE(-1*sum(amount),0.0) total, AAJ.cost_type
+                                FROM account_analytic_line L
+                                INNER JOIN account_analytic_journal AAJ
+                                ON AAJ.id = L.journal_id
+                                INNER JOIN account_account AC
+                                ON L.general_account_id = AC.id
+                                INNER JOIN account_account_type AT
+                                ON AT.id = AC.user_type
+                                WHERE AT.report_type = 'expense'
+                                AND L.account_id in %s
                 """ + where_date + """
+                """ + "GROUP BY AAJ.cost_type" + """
                 """, query_params)
-            val = cr.fetchone()[0] or 0
-            res[account.id]['actual_costs'] = val
+            res[account.id]['actual_costs'] = 0
+            for (total, cost_type) in cr.fetchall():
+                if cost_type == 'material':
+                    res[account.id]['actual_material_cost'] = total
+                elif cost_type == 'labor':
+                    res[account.id]['actual_labor_cost'] = total
+                res[account.id]['actual_costs'] += total
 
             # Total estimated costs
             cr.execute("""
@@ -169,6 +180,16 @@ class account_analytic_account(osv.osv):
                 _wip_report, method=True, type='float',
                 string='Actual Costs to date', multi='wip_report',
                 digits_compute=dp.get_precision('Account')),
+
+        'actual_material_cost': fields.function(
+            _wip_report, method=True, type='float',
+            string='Actual Material Costs to date', multi='wip_report',
+            digits_compute=dp.get_precision('Account')),
+
+        'actual_labor_cost': fields.function(
+            _wip_report, method=True, type='float',
+            string='Actual Labor Costs to date', multi='wip_report',
+            digits_compute=dp.get_precision('Account')),
 
         'total_estimated_costs': fields.function(
                 _wip_report, method=True, type='float',

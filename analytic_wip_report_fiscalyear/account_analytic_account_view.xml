@@ -12,6 +12,9 @@
                     <field name="fy_revenue"/>
                     <field name="fy_costs"/>
                     <field name="fy_gross_profit"/>
+                    <field name="fy_actual_costs"/>
+                    <field name="fy_actual_material_cost"/>
+                    <field name="fy_actual_labor_cost"/>
                 </field>
             </field>
         </record>

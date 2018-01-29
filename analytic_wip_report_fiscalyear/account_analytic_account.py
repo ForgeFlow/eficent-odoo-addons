@@ -38,6 +38,9 @@ class account_analytic_account(orm.Model):
             res[account.id] = {'fy_revenue': 0,
                                'fy_costs': 0,
                                'fy_gross_profit': 0,
+                               'fy_actual_costs': 0,
+                               'fy_actual_material_cost': 0,
+                               'fy_actual_labor_cost': 0,
                                }
 
             query_params = [tuple(all_ids)]
@@ -96,6 +99,30 @@ class account_analytic_account(orm.Model):
             res[account.id]['fy_gross_profit'] = \
                 res[account.id]['fy_revenue'] - res[account.id]['fy_costs']
 
+            # Actual costs to date
+            cr.execute(
+                """
+                SELECT COALESCE(-1*sum(amount),0.0) total, AAJ.cost_type
+                                FROM account_analytic_line L
+                                INNER JOIN account_analytic_journal AAJ
+                                ON AAJ.id = L.journal_id
+                                INNER JOIN account_account AC
+                                ON L.general_account_id = AC.id
+                                INNER JOIN account_account_type AT
+                                ON AT.id = AC.user_type
+                                WHERE AT.report_type = 'expense'
+                                AND L.account_id in %s
+                """ + where_date + """
+                """ + "GROUP BY AAJ.cost_type" + """
+                """, query_params)
+            res[account.id]['fy_actual_costs'] = 0
+            for (total, cost_type) in cr.fetchall():
+                if cost_type == 'material':
+                    res[account.id]['fy_actual_material_cost'] = total
+                elif cost_type == 'labor':
+                    res[account.id]['fy_actual_labor_cost'] = total
+                res[account.id]['fy_actual_costs'] += total
+
         return res
 
     _columns = {
@@ -117,4 +144,19 @@ class account_analytic_account(orm.Model):
                 _wip_report_fy, method=True, type='float',
                 string='Fiscal Year Gross Profit', multi='wip_report_fy',
                 digits_compute=dp.get_precision('Account')),
+
+        'fy_actual_costs': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Actual Costs to date', multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
+
+        'fy_actual_material_cost': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Actual Material Costs to date', multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
+
+        'fy_actual_labor_cost': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Actual Labor Costs to date', multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
         }

@@ -21,6 +21,8 @@
                     <field name="total_value"/>
                     <field name="actual_billings"/>
                     <field name="actual_costs"/>
+                    <field name="actual_material_cost"/>
+                    <field name="actual_labor_cost"/>
                     <field name="total_estimated_costs"/>
                     <field name="estimated_costs_to_complete"/>
                     <field name="estimated_gross_profit"/>
