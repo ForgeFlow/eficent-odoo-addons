@@ -12,8 +12,8 @@ class account_analytic_account(models.Model):
     _inherit = 'account.analytic.account'
 
     @api.multi
-    def _wip_report(self):
-        res = super(account_analytic_account, self)._wip_report()
+    def _compute_wip_report(self):
+        res = super(account_analytic_account, self)._compute_wip_report()
         for account in self:
             # Estimated gross profit percentage
             try:
