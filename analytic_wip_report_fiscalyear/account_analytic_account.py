@@ -67,7 +67,7 @@ class account_analytic_account(orm.Model):
 
             # Actual billings for the fiscal year
             cr.execute(
-                """SELECT COALESCE(sum(amount),0.0)
+                """SELECT amount, L.id
                 FROM account_analytic_line L
                 INNER JOIN account_account AC
                 ON L.general_account_id = AC.id
@@ -77,8 +77,10 @@ class account_analytic_account(orm.Model):
                 AND L.account_id IN %s
                 """ + where_date + """
                 """, query_params)
-            val = cr.fetchone()[0] or 0
-            res[account.id]['fy_revenue'] = val
+            res[account.id]['fy_revenue_line_ids'] = []
+            for (val, line_id) in cr.fetchall():
+                res[account.id]['fy_revenue'] += val
+                res[account.id]['fy_revenue_line_ids'].append(line_id)
 
             # Actual costs for the fiscal year
             cr.execute(
@@ -102,7 +104,7 @@ class account_analytic_account(orm.Model):
             # Actual costs to date
             cr.execute(
                 """
-                SELECT COALESCE(-1*sum(amount),0.0) total, AAJ.cost_type
+                SELECT amount, L.id, AAJ.cost_type
                                 FROM account_analytic_line L
                                 INNER JOIN account_analytic_journal AAJ
                                 ON AAJ.id = L.journal_id
@@ -113,15 +115,20 @@ class account_analytic_account(orm.Model):
                                 WHERE AT.report_type = 'expense'
                                 AND L.account_id in %s
                 """ + where_date + """
-                """ + "GROUP BY AAJ.cost_type" + """
                 """, query_params)
             res[account.id]['fy_actual_costs'] = 0
-            for (total, cost_type) in cr.fetchall():
+            res[account.id]['fy_actual_cost_line_ids'] = []
+            res[account.id]['fy_actual_material_line_ids'] = []
+            res[account.id]['fy_actual_labor_line_ids'] = []
+            for (total, line_id, cost_type) in cr.fetchall():
                 if cost_type == 'material':
-                    res[account.id]['fy_actual_material_cost'] = total
+                    res[account.id]['fy_actual_material_cost'] -=total
+                    res[account.id]['fy_actual_material_line_ids'].append(line_id)
                 elif cost_type == 'labor':
-                    res[account.id]['fy_actual_labor_cost'] = total
-                res[account.id]['fy_actual_costs'] += total
+                    res[account.id]['fy_actual_labor_cost'] -= total
+                    res[account.id]['fy_actual_labor_line_ids'].append(line_id)
+                res[account.id]['fy_actual_costs'] -= total
+                res[account.id]['fy_actual_cost_line_ids'].append(line_id)
 
         return res
 
@@ -159,4 +166,77 @@ class account_analytic_account(orm.Model):
             _wip_report_fy, method=True, type='float',
             string='Actual Labor Costs to date', multi='wip_report_fy',
             digits_compute=dp.get_precision('Account')),
+        'fy_actual_cost_line_ids': fields.function(
+            _wip_report_fy, method=True, type='many2many',
+            relation="account.analytic.line", string="Detail",
+            multi='wip_report'),
+        'fy_actual_labor_line_ids': fields.function(
+            _wip_report_fy, method=True, type='many2many',
+            relation="account.analytic.line", string="Detail",
+            multi='wip_report'),
+        'fy_actual_material_line_ids': fields.function(
+            _wip_report_fy, method=True, type='many2many',
+            relation="account.analytic.line", string="Detail",
+            multi='wip_report'),
+        'fy_revenue_line_ids': fields.function(
+            _wip_report_fy, method=True, type='many2many',
+            relation="account.analytic.line", string="Detail",
+            multi='wip_report'),
         }
+
+
+    def action_open_fy_cost_lines(self, cr, uid, ids, context=None):
+        """
+        :return dict: dictionary value for created view
+        """
+        if context is None:
+            context = {}
+        line = self.browse(cr, uid, ids[0], context)
+        bill_lines = [x.id for x in line.fy_actual_cost_line_ids]
+        res = self.pool.get('ir.actions.act_window').for_xml_id(
+            cr, uid, 'account', 'action_account_tree1', context)
+        res['domain'] = "[('id', 'in', ["+','.join(
+                    map(str, bill_lines))+"])]"
+        return res
+
+    def action_open_fy_material_lines(self, cr, uid, ids, context=None):
+        """
+        :return dict: dictionary value for created view
+        """
+        if context is None:
+            context = {}
+        line = self.browse(cr, uid, ids[0], context)
+        bill_lines = [x.id for x in line.fy_actual_material_line_ids]
+        res = self.pool.get('ir.actions.act_window').for_xml_id(
+            cr, uid, 'account', 'action_account_tree1', context)
+        res['domain'] = "[('id', 'in', ["+','.join(
+                    map(str, bill_lines))+"])]"
+        return res
+
+    def action_open_fy_labor_lines(self, cr, uid, ids, context=None):
+        """
+        :return dict: dictionary value for created view
+        """
+        if context is None:
+            context = {}
+        line = self.browse(cr, uid, ids[0], context)
+        bill_lines = [x.id for x in line.fy_actual_labor_line_ids]
+        res = self.pool.get('ir.actions.act_window').for_xml_id(
+            cr, uid, 'account', 'action_account_tree1', context)
+        res['domain'] = "[('id', 'in', ["+','.join(
+                    map(str, bill_lines))+"])]"
+        return res
+
+    def action_open_fy_revenue_lines(self, cr, uid, ids, context=None):
+        """
+        :return dict: dictionary value for created view
+        """
+        if context is None:
+            context = {}
+        line = self.browse(cr, uid, ids[0], context)
+        bill_lines = [x.id for x in line.fy_revenue_line_ids]
+        res = self.pool.get('ir.actions.act_window').for_xml_id(
+            cr, uid, 'account', 'action_account_tree1', context)
+        res['domain'] = "[('id', 'in', ["+','.join(
+                    map(str, bill_lines))+"])]"
+        return res
