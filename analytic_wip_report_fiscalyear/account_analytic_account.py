@@ -154,17 +154,17 @@ class account_analytic_account(orm.Model):
 
         'fy_actual_costs': fields.function(
             _wip_report_fy, method=True, type='float',
-            string='Actual Costs to date', multi='wip_report_fy',
+            string='Fiscal Year Actual Costs', multi='wip_report_fy',
             digits_compute=dp.get_precision('Account')),
 
         'fy_actual_material_cost': fields.function(
             _wip_report_fy, method=True, type='float',
-            string='Actual Material Costs to date', multi='wip_report_fy',
+            string='Fiscal Year Material Costs', multi='wip_report_fy',
             digits_compute=dp.get_precision('Account')),
 
         'fy_actual_labor_cost': fields.function(
             _wip_report_fy, method=True, type='float',
-            string='Actual Labor Costs to date', multi='wip_report_fy',
+            string='Fiscal Year Labor Costs', multi='wip_report_fy',
             digits_compute=dp.get_precision('Account')),
         'fy_actual_cost_line_ids': fields.function(
             _wip_report_fy, method=True, type='many2many',
