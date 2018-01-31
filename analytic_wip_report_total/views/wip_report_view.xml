@@ -17,6 +17,12 @@
             <field name="actual_costs" position="attributes">
                 <attribute name="sum">Total</attribute>
             </field>
+            <field name="actual_material_cost" position="attributes">
+              <attribute name="sum">Total</attribute>
+            </field>
+            <field name="actual_labor_cost" position="attributes">
+              <attribute name="sum">Total</attribute>
+            </field>
             <field name="total_estimated_costs" position="attributes">
                 <attribute name="sum">Total</attribute>
             </field>
