@@ -67,7 +67,6 @@ class DeliveryCarrier(models.Model):
 
     def get_price_from_picking(self, total, weight, volume, quantity):
         price = 0.0
-        criteria_found = False
         price_dict = {
             'price': total,
             'volume': volume,
@@ -81,9 +80,4 @@ class DeliveryCarrier(models.Model):
             if test:
                 price = line.list_base_price + line.list_price * price_dict[
                     line.variable_factor]
-                criteria_found = True
-                break
-        if not criteria_found:
-            raise UserError(_("""Selected product in the delivery method
-                doesn't fulfill any of the delivery carrier(s) criteria."""))
         return price
