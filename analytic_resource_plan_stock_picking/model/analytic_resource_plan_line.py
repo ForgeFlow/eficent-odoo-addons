@@ -136,6 +136,9 @@ class AnalyticResourcePlanLine(models.Model):
             if not line.account_id.location_id:
                 raise UserError(_('''Could not fetch stock. You have to set a
                     location for the project'''))
+            if not line.account_id.picking_type_id:
+                raise UserError(_('''Could not fetch stock. You have to set a
+                    picking type for the project'''))
             company_id = line.account_id.company_id.id
             warehouses = self.env['stock.warehouse'].search(
                 [('company_id', '=', company_id)])
