@@ -91,10 +91,12 @@ class StockMove(orm.Model):
     def _check_analytic(self, cr, uid, ids, context=None):
         for move in self.browse(cr, uid, ids):
             if move.analytic_account_id:
-                if ((move.location_id.analytic_account_id !=
+                if ((move.location_id.analytic_account_id ==
                         move.analytic_account_id)
-                    or (move.location_dest_id.analytic_account_id !=
+                    or (move.location_dest_id.analytic_account_id ==
                         move.analytic_account_id)):
+                    return True
+                else:
                     return False
         return True
 
