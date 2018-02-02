@@ -7,18 +7,6 @@ from openerp.osv import fields, orm
 class SaleOrder(orm.Model):
     _inherit = "sale.order"
 
-    def _get_default_location(self, cr, uid, id, context=None):
-        if context is None:
-            context = {}
-        res = False
-        project = self.browse(cr, uid, id, context)
-        if project:
-            location_id = self.pool.get('stock.location').search(
-                cr, uid, [('analytic_account_id', '=', project.id)])
-            if location_id:
-                res['location_id'] = location_id[0]
-        return res
-
     def _check_location(self, cr, uid, ids, context=None):
         for sale in self.browse(cr, uid, ids):
             if sale.location_id:
@@ -40,14 +28,14 @@ class SaleOrder(orm.Model):
                                       " project",
                      ['analytic_account_id'])]
 
-    # def _prepare_order_line_move(self, cr, uid, order, line, picking_id,
-    #                              date_planned, context=None):
-    #     res = super(SaleOrder, self)._prepare_order_line_move(
-    #         cr, uid, order, line, picking_id, date_planned, context)
-    #     res['analytic_account_id'] = \
-    #         line.order_id and line.order_id.project_id \
-    #         and line.order_id.project_id.id
-    #     if order.project_id:
-    #         res['location_id'] = order.location_id.id or \
-    #                              order.project_id.location_id.id
-    #     return res
+    def _prepare_order_line_move(self, cr, uid, order, line, picking_id,
+                                 date_planned, context=None):
+        res = super(SaleOrder, self)._prepare_order_line_move(
+            cr, uid, order, line, picking_id, date_planned, context)
+        res['analytic_account_id'] = \
+            line.order_id and line.order_id.project_id \
+            and line.order_id.project_id.id
+        if order.project_id:
+            res['location_id'] = order.location_id.id or \
+                                 order.project_id.location_id.id
+        return res
