@@ -94,7 +94,7 @@ class StockMove(orm.Model):
                 if move.location_dest_id.analytic_account_id:
                     if move.analytic_account_id.id != move.location_dest_id.analytic_account_id.id:
                         return False
-            if move.analytic_account_id and not move.location_dest_id.analytic_account_id:
+            if move.analytic_account_id and not move.location_dest_id.analytic_account_id and not move.location_id.analytic_account_id:
                 return False
         return True
 
