@@ -40,14 +40,14 @@ class SaleOrder(orm.Model):
                                       " project",
                      ['analytic_account_id'])]
 
-    # def _prepare_order_line_move(self, cr, uid, order, line, picking_id,
-    #                              date_planned, context=None):
-    #     res = super(SaleOrder, self)._prepare_order_line_move(
-    #         cr, uid, order, line, picking_id, date_planned, context)
-    #     res['analytic_account_id'] = \
-    #         line.order_id and line.order_id.project_id \
-    #         and line.order_id.project_id.id
-    #     if order.project_id:
-    #         res['location_id'] = order.location_id.id or \
-    #                              order.project_id.location_id.id
-    #     return res
+    def _prepare_order_line_move(self, cr, uid, order, line, picking_id,
+                                 date_planned, context=None):
+        res = super(SaleOrder, self)._prepare_order_line_move(
+            cr, uid, order, line, picking_id, date_planned, context)
+        res['analytic_account_id'] = \
+            line.order_id and line.order_id.project_id \
+            and line.order_id.project_id.id
+        if order.project_id:
+            res['location_id'] = order.location_id.id or \
+                                 order.project_id.location_id.id
+        return res
