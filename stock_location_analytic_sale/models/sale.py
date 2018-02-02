@@ -7,6 +7,18 @@ from openerp.osv import fields, orm
 class SaleOrder(orm.Model):
     _inherit = "sale.order"
 
+    def _get_default_location(self, cr, uid, id, context=None):
+        if context is None:
+            context = {}
+        res = False
+        project = self.browse(cr, uid, id, context)
+        if project:
+            location_id = self.pool.get('stock.location').search(
+                cr, uid, [('analytic_account_id', '=', project.id)])
+            if location_id:
+                res['location_id'] = location_id[0]
+        return res
+
     def _check_location(self, cr, uid, ids, context=None):
         for sale in self.browse(cr, uid, ids):
             if sale.location_id:
