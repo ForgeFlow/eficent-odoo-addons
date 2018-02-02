@@ -130,8 +130,7 @@ CREATE OR REPLACE view report_stock_inventory AS (
         m.prodlot_id as prodlot_id,
         coalesce(sum(-pt.standard_price * m.product_qty * pu.factor / pu2.factor)::decimal, 0.0) as value,
         coalesce(sum(-m.product_qty * pu.factor / pu2.factor)::decimal, 0.0) as product_qty,
-        m.analytic_account_id,
-        m.analytic_reserved
+        m.analytic_account_id
     FROM
         stock_move m
             LEFT JOIN stock_picking p ON (m.picking_id=p.id)
@@ -160,7 +159,7 @@ CREATE OR REPLACE view report_stock_inventory AS (
         m.state as state, m.prodlot_id as prodlot_id,
         coalesce(sum(pt.standard_price * m.product_qty * pu.factor / pu2.factor)::decimal, 0.0) as value,
         coalesce(sum(m.product_qty * pu.factor / pu2.factor)::decimal, 0.0) as product_qty,
-        m.analytic_account_id, m.analytic_reserved
+        m.analytic_account_id
     FROM
         stock_move m
             LEFT JOIN stock_picking p ON (m.picking_id=p.id)
@@ -175,8 +174,7 @@ CREATE OR REPLACE view report_stock_inventory AS (
         m.id, m.product_id, m.product_uom, pt.categ_id, m.partner_id,
         m.location_id, m.location_dest_id, m.prodlot_id, m.date, m.state,
         l.usage, l.scrap_location, m.company_id, pt.uom_id,
-        to_char(m.date, 'YYYY'), to_char(m.date, 'MM'), analytic_account_id,
-        analytic_reserved
+        to_char(m.date, 'YYYY'), to_char(m.date, 'MM'), m.analytic_account_id
     )
 );
         """)

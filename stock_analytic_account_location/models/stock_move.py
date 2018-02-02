@@ -88,7 +88,19 @@ class StockMove(orm.Model):
                         return False
         return True
 
+    def _check_analytic(self, cr, uid, ids, context=None):
+        for move in self.browse(cr, uid, ids):
+            if move.analytic_account_id and move.location_dest_id:
+                if move.location_dest_id.analytic_account_id:
+                    if move.analytic_account_id.id != move.location_dest_id.analytic_account_id.id:
+                        return False
+        return True
+
     _constraints = [(_check_analytic_account,
                      "Cannot move between different projects locations, "
                      "please move first to general stock",
-                     ['location_io', 'location_dest_id'])]
+                     ['location_id', 'location_dest_id']),
+                    (_check_analytic,
+                     "The analytic account in the move and in"
+                     " the destination location does not match",
+                     ['analytic_account_id', 'location_dest_id'])]
