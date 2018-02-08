@@ -136,9 +136,9 @@ class account_analytic_account(orm.Model):
 
         'fy_revenue': fields.function(
                 _wip_report_fy, method=True, type='float',
-                string='Fiscal Year Revenue',
+                string='Fiscal Year Billings',
                 multi='wip_report_fy',
-                help="Revenue for the provided Fiscal Year",
+                help="Billings for the provided Fiscal Year",
                 digits_compute=dp.get_precision('Account')),
 
         'fy_costs': fields.function(
