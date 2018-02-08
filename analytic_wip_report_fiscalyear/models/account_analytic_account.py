@@ -25,13 +25,12 @@ class AccountAnalyticAccount(models.Model):
             where_date = ''
             context = self._context
             cr = self._cr
-            if context.get('fiscalyear_id', False):
-                fiscalyear_id = context['fiscalyear_id'][0]
-                fiscalyear = self.env['date.range'].browse([fiscalyear_id])
-                from_date = fiscalyear.date_start
+            if self._context.get('from_date_fy', False):
+                from_date = context['from_date_fy']
                 where_date += " AND l.date >= %s"
                 query_params += [from_date]
-                to_date = fiscalyear.date_end
+            if self._context.get('to_date_fy', False):
+                to_date = context['to_date_fy']
                 where_date += " AND l.date <= %s"
                 query_params += [to_date]
             cr.execute(
