@@ -17,20 +17,29 @@ class AnalyticWipReport(models.TransientModel):
     def _get_analytic_search_domain(self):
         comparing_date = self.from_date
         project_stage = self.env['project.project.stage'].\
-            search([('name', 'ilike', 'Closed')]) or []
-        if self.filter_project and self.filter_project is True \
-                and comparing_date:
+            search([('name', 'ilike', 'close')]).mapped('id') or []
+        if self.filter_project and not comparing_date:
+            project_ids = self.env['project.project'].\
+                search([('account_class', '=', 'project'),
+                        ('stage_id', 'not in', project_stage)])
+            domain = [('project_ids', 'in', project_ids.ids)] or []
+        elif self.filter_project and comparing_date:
             project_ids = self.env['project.project'].\
                 search([('date_start', '>=', comparing_date),
                         ('account_class', '=', 'project'),
-                        ('stage_id', 'in', project_stage.ids)])
+                        ('stage_id', 'not in', project_stage)])
+            domain = [('project_ids', 'in', project_ids.ids)] or []
+        elif not self.filter_project and comparing_date:
+            project_ids = self.env['project.project'].\
+                search([('date_start', '>=', comparing_date),
+                        ('stage_id', 'not in', project_stage)])
             domain = [('project_ids', 'in', project_ids.ids)] or []
         else:
             project_ids = self.env['project.project'].\
-                search([('date_start', '>=', comparing_date),
-                        ('stage_id', 'in', project_stage.ids)])
+                search([('stage_id', 'not in', project_stage)])
             domain = [('project_ids', 'in', project_ids.ids)] or []
         return domain
+
 
     @api.multi
     def analytic_wip_report_open_window(self):
