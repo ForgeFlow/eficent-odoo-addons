@@ -7,7 +7,9 @@ from odoo import api, fields, models
 class AnalyticWipReport(models.TransientModel):
     _inherit = 'analytic.wip.report'
 
-    fiscalyear_id = fields.Many2one('date.range')
+    fiscalyear_id = fields.Many2one('date.range', required=True)
+    from_date_fy = fields.Date('From (within the fiscal year)', required=True)
+    to_date_fy = fields.Date('To (within the fiscal year)', required=True)
 
     @api.multi
     def analytic_wip_report_open_window(self):
@@ -27,5 +29,16 @@ class AnalyticWipReport(models.TransientModel):
             result_context.update({'to_date': data['to_date']})
         if data['fiscalyear_id']:
             result_context.update({'fiscalyear_id': data['fiscalyear_id']})
+        if data['from_date_fy']:
+            result_context.update({'from_date_fy': data['from_date_fy']})
+        if data['to_date_fy']:
+            result_context.update({'to_date_fy': data['to_date_fy']})
         result['context'] = str(result_context)
         return result
+
+    @api.onchange('fiscalyear_id')
+    def onchange_fiscalyear_id(self):
+        for rec in self:
+            if rec.fiscalyear_id:
+                rec.from_date_fy = rec.fiscalyear_id.date_start
+                rec.to_date_fy = rec.fiscalyear_id.date_end
