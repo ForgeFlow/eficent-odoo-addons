@@ -16,7 +16,11 @@ class AccountAnalyticAccount(models.Model):
         for account in self:
             all_ids = self.get_child_accounts().keys()
             res[account.id] = {
-                'fy_costs': 0,
+                'fy_actual_costs': 0,
+                'fy_actual_costs': 0,
+                'fy_actual_material_cost': 0,
+                'fy_actual_labor_cost': 0,
+                'fy_billings': 0,
                 'fy_revenue': 0,
                 'fy_gross_profit': 0,
             }
@@ -84,19 +88,19 @@ class AccountAnalyticAccount(models.Model):
                 res[account.id]['fy_revenue'] - res[account.id]['fy_costs']
         return res
 
-    fy_costs = fields.Float(
+    fy_actual_costs = fields.Float(
         compute='_fy_wip_report',
         string='Fiscal Year Costs',
         digits=dp.get_precision('Account')
     )
 
-    fy_material_cost = fields.Float(
+    fy_actual_material_cost = fields.Float(
         compute='_fy_wip_report',
         string='Fiscal Year Material Costs',
         digits=dp.get_precision('Account')
     )
 
-    fy_labor_cost = fields.Float(
+    fy_actual_labor_cost = fields.Float(
         compute='_fy_wip_report',
         string='Fiscal Year Labor Costs',
         digits=dp.get_precision('Account')
@@ -108,28 +112,33 @@ class AccountAnalyticAccount(models.Model):
         help="""Total Value – Total Estimated Costs""",
         digits=dp.get_precision('Account')
     )
+    fy_billings = fields.Float(
+        compute='_fy_wip_report',
+        string='Fiscal Year Billings',
+        digits=dp.get_precision('Account')
+    )
     fy_revenue = fields.Float(
         compute='_fy_wip_report',
         string='Fiscal Year Revenue',
         digits=dp.get_precision('Account')
     )
-    fy_actual_cost_line_ids = fields.Many2Many(
-        relation="account.analytic.line",
+    fy_actual_cost_line_ids = fields.Many2many(
+        comodel_name="account.analytic.line",
         compute='_fy_wip_report',
         string='Detail',
     )
-    fy_actual_labor_line_ids = fields.Many2Many(
-        relation="account.analytic.line",
+    fy_actual_labor_line_ids = fields.Many2many(
+        comodel_name="account.analytic.line",
         compute='_fy_wip_report',
         string='Detail',
     )
-    fy_actual_material_line_ids = fields.Many2Many(
-        relation="account.analytic.line",
+    fy_actual_material_line_ids = fields.Many2many(
+        comodel_name="account.analytic.line",
         compute='_fy_wip_report',
         string='Detail',
     )
-    fy_billings_line_ids = fields.Many2Many(
-        relation="account.analytic.line",
+    fy_billings_line_ids = fields.Many2many(
+        comodel_name="account.analytic.line",
         compute='_fy_wip_report',
         string='Detail',
     )
