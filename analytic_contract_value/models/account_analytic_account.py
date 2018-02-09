@@ -34,7 +34,7 @@ class AccountAnalyticAccount(orm.Model):
                 all_acc.append(y)
             all_acc.append(curr_id)
             for account in self.browse(cr, uid, all_acc, context=context):
-                if account.contract_value:
+                if account and account.contract_value:
                     res[curr_id][account.id] = account.contract_value
         return res
 

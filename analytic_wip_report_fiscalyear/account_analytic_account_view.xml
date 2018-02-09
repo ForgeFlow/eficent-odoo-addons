@@ -9,6 +9,7 @@
                    ref="analytic_wip_report.view_account_analytic_account_wip_tree"/>
             <field name="arch" type="xml">
                 <field name="under_billings" position="after">
+                    <field name="fy_billings"/>
                     <field name="fy_revenue"/>
                     <field name="fy_costs"/>
                     <field name="fy_gross_profit"/>

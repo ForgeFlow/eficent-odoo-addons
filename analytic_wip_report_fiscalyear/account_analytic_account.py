@@ -28,20 +28,21 @@ class account_analytic_account(orm.Model):
     _inherit = 'account.analytic.account'
 
     def _wip_report_fy(self, cr, uid, ids, fields, arg, context=None):
-        res = {}
+        res = self._wip_report(cr, uid, ids, fields, arg, context)
         if context is None:
             context = {}
 
         for account in self.browse(cr, uid, ids, context=context):
             all_ids = self.get_child_accounts(cr, uid, [account.id], context=context).keys()
 
-            res[account.id] = {'fy_revenue': 0,
-                               'fy_costs': 0,
-                               'fy_gross_profit': 0,
-                               'fy_actual_costs': 0,
-                               'fy_actual_material_cost': 0,
-                               'fy_actual_labor_cost': 0,
-                               }
+            res[account.id].update(
+                {'fy_billings': 0,
+                 'fy_costs': 0,
+                 'fy_gross_profit': 0,
+                 'fy_actual_costs': 0,
+                 'fy_actual_material_cost': 0,
+                 'fy_actual_labor_cost': 0,
+                })
 
             query_params = [tuple(all_ids)]
             where_date = ''
@@ -77,10 +78,10 @@ class account_analytic_account(orm.Model):
                 AND L.account_id IN %s
                 """ + where_date + """
                 """, query_params)
-            res[account.id]['fy_revenue_line_ids'] = []
+            res[account.id]['fy_billings_line_ids'] = []
             for (val, line_id) in cr.fetchall():
-                res[account.id]['fy_revenue'] += val
-                res[account.id]['fy_revenue_line_ids'].append(line_id)
+                res[account.id]['fy_billings'] += val
+                res[account.id]['fy_billings_line_ids'].append(line_id)
 
             # Actual costs for the fiscal year
             cr.execute(
@@ -97,6 +98,8 @@ class account_analytic_account(orm.Model):
             val = cr.fetchone()[0] or 0
             res[account.id]['fy_costs'] = val
 
+            # Revenue (add the under over)
+            res[account.id]['fy_revenue'] = res[account.id]['fy_billings'] + res[account.id]['under_billings'] - res[account.id]['over_billings']
             # Gross margin
             res[account.id]['fy_gross_profit'] = \
                 res[account.id]['fy_revenue'] - res[account.id]['fy_costs']
@@ -121,7 +124,7 @@ class account_analytic_account(orm.Model):
             res[account.id]['fy_actual_material_line_ids'] = []
             res[account.id]['fy_actual_labor_line_ids'] = []
             for (total, line_id, cost_type) in cr.fetchall():
-                if cost_type == 'material':
+                if cost_type in ('material', 'revenue'):
                     res[account.id]['fy_actual_material_cost'] -=total
                     res[account.id]['fy_actual_material_line_ids'].append(line_id)
                 elif cost_type == 'labor':
@@ -135,6 +138,17 @@ class account_analytic_account(orm.Model):
     _columns = {
 
         'fy_revenue': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Fiscal Year Revenue',
+            multi='wip_report_fy',
+            help="""Revenue for the provided Fiscal Year. This calculated
+             by adding the billings for the fiscal year and the under/over 
+             billed for the contract. Thus, it will include the billings in 
+             excess of cost (under billed) and the costs in excess 
+             of billings (over billed).""",
+            digits_compute=dp.get_precision('Account')),
+
+        'fy_billings': fields.function(
                 _wip_report_fy, method=True, type='float',
                 string='Fiscal Year Billings',
                 multi='wip_report_fy',
@@ -178,7 +192,7 @@ class account_analytic_account(orm.Model):
             _wip_report_fy, method=True, type='many2many',
             relation="account.analytic.line", string="Detail",
             multi='wip_report'),
-        'fy_revenue_line_ids': fields.function(
+        'fy_billings_line_ids': fields.function(
             _wip_report_fy, method=True, type='many2many',
             relation="account.analytic.line", string="Detail",
             multi='wip_report'),
@@ -227,14 +241,14 @@ class account_analytic_account(orm.Model):
                     map(str, bill_lines))+"])]"
         return res
 
-    def action_open_fy_revenue_lines(self, cr, uid, ids, context=None):
+    def action_open_fy_billings_lines(self, cr, uid, ids, context=None):
         """
         :return dict: dictionary value for created view
         """
         if context is None:
             context = {}
         line = self.browse(cr, uid, ids[0], context)
-        bill_lines = [x.id for x in line.fy_revenue_line_ids]
+        bill_lines = [x.id for x in line.fy_billings_line_ids]
         res = self.pool.get('ir.actions.act_window').for_xml_id(
             cr, uid, 'account', 'action_account_tree1', context)
         res['domain'] = "[('id', 'in', ["+','.join(
