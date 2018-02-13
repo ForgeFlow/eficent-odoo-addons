@@ -140,7 +140,7 @@ class account_analytic_account(osv.osv):
 
             # Estimated gross profit
             res[account.id]['estimated_gross_profit'] = \
-                res[account.id]['total_value'] - res[account.id]['total_estimated_costs']
+                account.total_contract_value - res[account.id]['total_estimated_costs']
 
             # Percent complete
             try:
