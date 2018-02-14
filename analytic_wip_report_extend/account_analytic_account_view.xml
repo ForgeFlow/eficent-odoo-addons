@@ -12,6 +12,7 @@
             </xpath>
             <xpath expr="//field[@name='over_billings']" position="before">
                 <field name="under_over" string='Total under/over billed'/>
+                <field name="under_over_adj" string="Revenue Adjustment"/>
             </xpath>
       </field>
     </record>

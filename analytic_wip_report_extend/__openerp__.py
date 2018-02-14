@@ -17,10 +17,11 @@ Add new fields to analytic wop statement report
     "website": "http://www.eficent.com/",
     "license": "",
     "depends": [
-        "analytic_wip_report",
+        "analytic_wip_report", "account_move_category",
+        "analytic_wip_report_fiscalyear",
     ],
     "data": [
-        "account_analytic_account_view.xml"
+        "account_analytic_account_view.xml",
     ],
     "installable": True,
     "auto_install": False,
