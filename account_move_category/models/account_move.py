@@ -14,10 +14,3 @@ class AccountMove(orm.Model):
              ('close', 'Closing Fiscal Year')],
             'Category', select=True),
     }
-
-    # def _prepare_analytic_line(self, cr, uid, obj_line, context=None):
-    #     res = super(AccountMove, self)._prepare_analytic_line(
-    #         cr, uid, obj_line, context)
-    #     line = self.browse(cr, uid, obj_line, context=context)
-    #     res.update(category_id=line.category_id)
-    #     return res
