@@ -41,7 +41,7 @@ class AccountAnalyticAccount(models.Model):
             # Actual costs to date
             cr.execute(
                 """
-                SELECT amount, L.id, AAJ.cost_type
+                SELECT amount, L.id, AAJ.type
                                 FROM account_analytic_line L
                                 INNER JOIN account_analytic_journal AAJ
                                 ON AAJ.id = L.journal_id
@@ -85,7 +85,7 @@ class AccountAnalyticAccount(models.Model):
 
             # Gross margin
             res[account.id]['fy_gross_profit'] = \
-                res[account.id]['fy_revenue'] - res[account.id]['fy_costs']
+                res[account.id]['fy_revenue'] - res[account.id]['fy_actual_costs']
         return res
 
     fy_actual_costs = fields.Float(
