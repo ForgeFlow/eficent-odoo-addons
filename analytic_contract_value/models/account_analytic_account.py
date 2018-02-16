@@ -13,11 +13,11 @@ class AccountAnalyticAccount(models.Model):
     def list_accounts_with_contract_value(self):
         res = {}
         for rec in self:
-            curr_id = rec.d
+            curr_id = rec.id
             all_acc = []
             res[curr_id] = {}
             # Now add the children
-            cr.execute('''
+            self.env.cr.execute('''
             WITH RECURSIVE children AS (
             SELECT parent_id, id
             FROM account_analytic_account
@@ -29,7 +29,7 @@ class AccountAnalyticAccount(models.Model):
             )
             SELECT * FROM children order by parent_id
             ''', (curr_id,))
-            cr_res = cr.fetchall()
+            cr_res = self.env.cr.fetchall()
             for x, y in cr_res:
                 all_acc.append(y)
             all_acc.append(curr_id)
