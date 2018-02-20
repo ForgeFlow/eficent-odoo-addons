@@ -27,7 +27,7 @@ class AnalyticResourcePlanLine(models.Model):
                 continue
             c = self.env.context.copy()
             c.update({'states': ('done',), 'what': ('in', 'out'),
-                      'location': location})
+                      'location': location, 'compute_child': False})
             stock = line.with_context(c).product_id._product_available()
             res[line.id] = stock.get(line.product_id.id, 0.0)
         return res
