@@ -15,8 +15,8 @@ class AnalyticChangeContractValue(models.TransientModel):
     @api.multi
     def change_contract_value(self):
         self.ensure_one()
-        rec_id = context and context.get('active_id', False)
+        rec_id = self._context.get('active_id', False)
         assert rec_id, _('Active ID is not set in Context')
-        aa = self.env['account.analytic_account'].browse(rec_id)
+        aa = self.env['account.analytic.account'].browse(rec_id)
         aa.write({'contract_value': self.new_value})
         return {}

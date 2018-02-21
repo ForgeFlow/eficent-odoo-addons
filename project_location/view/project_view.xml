@@ -8,7 +8,6 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='move']" position="before">
                 <group name="stock">
-                    <field name="project_analytic_id" invisible="1"/>
                     <field name="location_id" context="{'default_analytic_account_id': project_analytic_id}"/>
                     <field name="picking_type_id"/>
                     <field name="dest_address_id"/>
