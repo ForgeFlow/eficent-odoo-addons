@@ -7,27 +7,32 @@ import odoo.addons.decimal_precision as dp
 from odoo import api, fields, models
 
 
-class account_analytic_account(models.Model):
+class AccountAnalyticAccount(models.Model):
 
     _inherit = 'account.analytic.account'
 
     @api.multi
     def _compute_wip_report(self):
-        res = super(account_analytic_account, self)._compute_wip_report()
+        res = super(AccountAnalyticAccount, self)._compute_wip_report()
         for account in self:
             # Estimated gross profit percentage
             try:
-                res[account.id]['estimated_gross_profit_per'] = \
-                    res[account.id]['estimated_gross_profit'] / \
-                    res[account.id]['total_value'] * 100
+                account.estimated_gross_profit_per = (
+                    account.estimated_gross_profit /
+                    account.total_value * 100)
             except ZeroDivisionError:
-                res[account.id]['estimated_gross_profit_per'] = 0
+                account.estimated_gross_profit_per = 0
             # Over/Under billings
             over_under_billings =\
-                res[account.id]['under_billings'] - res[account.id
-                                                        ]['over_billings']
-            res[account.id]['under_over'] = over_under_billings
+                account.under_billings - account.over_billings
+            account.under_over = over_under_billings
         return res
+
+    total_contract_value = fields.Float(
+        compute='_compute_wip_report',
+        string='Total Contract Value',
+        help="""Total estimated revenue of the contract""",
+        digits=dp.get_precision('Account'))
 
     estimated_gross_profit_per = fields.Float(
         compute='_compute_wip_report',

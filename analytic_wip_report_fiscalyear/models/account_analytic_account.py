@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2015 Eficent Business and IT Consulting Services S.L.
+# Copyright 2018 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.addons import decimal_precision as dp
@@ -12,18 +12,8 @@ class AccountAnalyticAccount(models.Model):
 
     @api.multi
     def _fy_wip_report(self):
-        res = {}
         for account in self:
-            all_ids = self.get_child_accounts().keys()
-            res[account.id] = {
-                'fy_actual_costs': 0,
-                'fy_actual_costs': 0,
-                'fy_actual_material_cost': 0,
-                'fy_actual_labor_cost': 0,
-                'fy_billings': 0,
-                'fy_revenue': 0,
-                'fy_gross_profit': 0,
-            }
+            all_ids = account.get_child_accounts().keys()
             # Total Value
             query_params = [tuple(all_ids)]
             where_date = ''
@@ -41,7 +31,7 @@ class AccountAnalyticAccount(models.Model):
             # Actual costs to date
             cr.execute(
                 """
-                SELECT amount, L.id, AAJ.type
+                SELECT amount, L.id, AAJ.cost_type
                                 FROM account_analytic_line L
                                 INNER JOIN account_analytic_journal AAJ
                                 ON AAJ.id = L.journal_id
@@ -53,40 +43,54 @@ class AccountAnalyticAccount(models.Model):
                                 AND L.account_id IN %s
                 """ + where_date + """
                 """, query_params)
-            res[account.id]['fy_actual_costs'] = 0
-            res[account.id]['fy_actual_cost_line_ids'] = []
-            res[account.id]['fy_actual_material_line_ids'] = []
-            res[account.id]['fy_actual_labor_line_ids'] = []
+            account.fy_actual_costs = 0
+            fy_actual_cost_line_ids = []
+            fy_actual_material_line_ids = []
+            fy_actual_labor_line_ids = []
             for (total, line_id, cost_type) in cr.fetchall():
                 if cost_type in ('material', 'revenue'):
-                    res[account.id]['fy_actual_material_cost'] -=total
-                    res[account.id]['fy_actual_material_line_ids'].append(line_id)
+                    account.fy_actual_material_cost -= total
+                    fy_actual_material_line_ids.append(line_id)
                 elif cost_type == 'labor':
-                    res[account.id]['fy_actual_labor_cost'] -= total
-                    res[account.id]['fy_actual_labor_line_ids'].append(line_id)
-                res[account.id]['fy_actual_costs'] -= total
-                res[account.id]['fy_actual_cost_line_ids'].append(line_id)
+                    account.fy_actual_labor_cost -= total
+                    fy_actual_labor_line_ids.append(line_id)
+                account.fy_actual_costs -= total
+                fy_actual_cost_line_ids.append(line_id)
+            account.fy_actual_cost_line_ids = [
+                (6, 0, [l for l in fy_actual_cost_line_ids])]
+            account.fy_actual_material_line_ids = [
+                (6, 0, [l for l in fy_actual_material_line_ids])]
+            account.fy_actual_labor_line_ids = [
+                (6, 0, [l for l in fy_actual_labor_line_ids])]
+
             # Actual billings to date
             cr.execute(
                 """
-                SELECT COALESCE(sum(amount),0.0)
+                SELECT amount, L.id
                 FROM account_analytic_line L
                 INNER JOIN account_account AC
                 ON L.general_account_id = AC.id
                 INNER JOIN account_account_type AT
                 ON AT.id = AC.user_type_id
-                WHERE AT.name in ('Income', 'Other Income', 'Other Current Asset')
+                WHERE AT.name in (
+                    'Income', 'Other Income', 'Other Current Asset')
                 AND L.account_id IN %s
                 """ + where_date + """
                 """, query_params
             )
-            val = cr.fetchone()[0] or 0
-            res[account.id]['fy_billings'] = val
+            fy_billings_line_ids = []
+            for (total, line_id) in cr.fetchall():
+                account.fy_billings += total
+                fy_billings_line_ids.append(line_id)
 
+            account.fy_revenue = (account.fy_billings + account.under_billings
+                                  - account.over_billings)
+            account.fy_billings_line_ids = [
+                (6, 0, [l for l in fy_billings_line_ids])]
             # Gross margin
-            res[account.id]['fy_gross_profit'] = \
-                res[account.id]['fy_revenue'] - res[account.id]['fy_actual_costs']
-        return res
+            account.fy_gross_profit = (account.fy_revenue -
+                                       account.fy_actual_costs)
+        return True
 
     fy_actual_costs = fields.Float(
         compute='_fy_wip_report',
@@ -147,8 +151,8 @@ class AccountAnalyticAccount(models.Model):
     def action_open_fy_cost_lines(self):
         line = self
         bill_lines = [x.id for x in line.fy_actual_cost_line_ids]
-        res = self.pool.get('ir.actions.act_window').for_xml_id(
-            cr, uid, 'account', 'action_account_tree1', context)
+        res = self.env['ir.actions.act_window'].for_xml_id(
+            'account', 'action_account_tree1')
         res['domain'] = "[('id', 'in', ["+','.join(
                     map(str, bill_lines))+"])]"
         return res
@@ -157,7 +161,7 @@ class AccountAnalyticAccount(models.Model):
     def action_open_fy_material_lines(self):
         line = self
         bill_lines = [x.id for x in line.fy_actual_material_line_ids]
-        res = self.pool.get('ir.actions.act_window').for_xml_id(
+        res = self.env['ir.actions.act_window'].for_xml_id(
             'account', 'action_account_tree1')
         res['domain'] = "[('id', 'in', ["+','.join(
                     map(str, bill_lines))+"])]"
@@ -167,7 +171,7 @@ class AccountAnalyticAccount(models.Model):
     def action_open_fy_labor_lines(self):
         line = self
         bill_lines = [x.id for x in line.fy_actual_labor_line_ids]
-        res = self.pool.get('ir.actions.act_window').for_xml_id(
+        res = self.env['ir.actions.act_window'].for_xml_id(
             'account', 'action_account_tree1')
         res['domain'] = "[('id', 'in', ["+','.join(
                     map(str, bill_lines))+"])]"
@@ -177,7 +181,7 @@ class AccountAnalyticAccount(models.Model):
     def action_open_fy_billings_lines(self):
         line = self
         bill_lines = [x.id for x in line.fy_billings_line_ids]
-        res = self.pool.get('ir.actions.act_window').for_xml_id(
+        res = self.env['ir.actions.act_window'].for_xml_id(
            'account', 'action_account_tree1')
         res['domain'] = "[('id', 'in', ["+','.join(
                     map(str, bill_lines))+"])]"
