@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-
+<odoo>
         <record id="view_account_analytic_account_wip_tree" model="ir.ui.view">
             <field name="name">account.analytic.account.wip.tree</field>
             <field name="model">account.analytic.account</field>
@@ -10,14 +8,29 @@
             <field name="arch" type="xml">
                 <field name="under_billings" position="after">
                     <field name="fy_billings"/>
+                    <button string="Detail"
+                        name="action_open_fy_billings_lines"
+                        type="object"
+                        icon="fa-search"/>
                     <field name="fy_revenue"/>
                     <field name="fy_actual_costs"/>
+                    <button string="Detail"
+                        name="action_open_fy_cost_lines"
+                        type="object"
+                        icon="fa-search"/>
                     <field name="fy_actual_material_cost"/>
+                    <button string="Detail"
+                        name="action_open_fy_material_lines"
+                        type="object"
+                        icon="fa-search"/>
                     <field name="fy_actual_labor_cost"/>
+                    <button string="Detail"
+                        name="action_open_fy_labor_lines"
+                        type="object"
+                        icon="fa-search"/>
                     <field name="fy_gross_profit"/>
                 </field>
             </field>
         </record>
 
-    </data>
-</openerp>
+</odoo>
