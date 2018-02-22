@@ -40,13 +40,12 @@ class AccountAnalyticAccount(models.Model):
 
     @api.multi
     def _total_contract_value_calc(self):
-        res = {}
         acc_list = self.list_accounts_with_contract_value()
         for acc_id in acc_list.keys():
-            res[acc_id] = 0.0
+            total_contract_value = 0.0
             for ch_acc_id in acc_list[acc_id]:
-                res[acc_id] += acc_list[acc_id][ch_acc_id]
-        return res
+                total_contract_value += acc_list[acc_id][ch_acc_id]
+            acc_id.total_contract_value = total_contract_value
 
     contract_value = fields.Float(
         'Original Contract Value',
