@@ -9,7 +9,7 @@
               "Odoo Community Association (OCA)",
     "summary": """Filter closed projects in analytic wip report""",
     "category": "Generic Modules/Projects & Services",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     "depends": [
         "analytic_wip_report",
         "project_wbs_stage",

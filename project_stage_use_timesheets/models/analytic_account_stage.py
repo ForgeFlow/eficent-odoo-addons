@@ -5,8 +5,8 @@
 from odoo import fields, models
 
 
-class ProjectProjectStage(models.Model):
-    _inherit = 'project.project.stage'
+class AnalyticAccountStage(models.Model):
+    _inherit = 'analytic.account.stage'
 
     allow_timesheets = fields.Boolean(
         'Timesheets', default=True,

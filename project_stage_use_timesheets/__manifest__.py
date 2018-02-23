@@ -13,7 +13,7 @@
     "depends": ["project_wbs_stage", "hr_timesheet"],
     "license": "AGPL-3",
     "data": [
-        "views/project_project_stage_view.xml",
+        "views/analytic_account_stage_view.xml",
     ],
     'installable': True,
 }
