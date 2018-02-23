@@ -45,7 +45,7 @@ class AccountAnalyticAccount(models.Model):
             total_contract_value = 0.0
             for ch_acc_id in acc_list[acc_id]:
                 total_contract_value += acc_list[acc_id][ch_acc_id]
-            acc_id.total_contract_value = total_contract_value
+            self.browse(acc_id).total_contract_value = total_contract_value
 
     contract_value = fields.Float(
         'Original Contract Value',
