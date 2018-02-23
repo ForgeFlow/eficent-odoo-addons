@@ -152,7 +152,7 @@ class AccountAnalyticAccount(models.Model):
         line = self
         bill_lines = [x.id for x in line.fy_actual_cost_line_ids]
         res = self.env['ir.actions.act_window'].for_xml_id(
-            'account', 'action_account_tree1')
+            'analytic', 'account_analytic_line_action_entries')
         res['domain'] = "[('id', 'in', ["+','.join(
                     map(str, bill_lines))+"])]"
         return res
@@ -162,7 +162,7 @@ class AccountAnalyticAccount(models.Model):
         line = self
         bill_lines = [x.id for x in line.fy_actual_material_line_ids]
         res = self.env['ir.actions.act_window'].for_xml_id(
-            'account', 'action_account_tree1')
+            'analytic', 'account_analytic_line_action_entries')
         res['domain'] = "[('id', 'in', ["+','.join(
                     map(str, bill_lines))+"])]"
         return res
@@ -172,7 +172,7 @@ class AccountAnalyticAccount(models.Model):
         line = self
         bill_lines = [x.id for x in line.fy_actual_labor_line_ids]
         res = self.env['ir.actions.act_window'].for_xml_id(
-            'account', 'action_account_tree1')
+            'analytic', 'account_analytic_line_action_entries')
         res['domain'] = "[('id', 'in', ["+','.join(
                     map(str, bill_lines))+"])]"
         return res
@@ -182,7 +182,7 @@ class AccountAnalyticAccount(models.Model):
         line = self
         bill_lines = [x.id for x in line.fy_billings_line_ids]
         res = self.env['ir.actions.act_window'].for_xml_id(
-           'account', 'action_account_tree1')
+           'analytic', 'account_analytic_line_action_entries')
         res['domain'] = "[('id', 'in', ["+','.join(
                     map(str, bill_lines))+"])]"
         return res

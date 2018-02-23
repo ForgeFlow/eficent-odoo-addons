@@ -13,15 +13,8 @@ class AnalyticWipReport(models.TransientModel):
 
     @api.multi
     def analytic_wip_report_open_window(self):
-        mod_obj = self.env['ir.model.data']
-        act_obj = self.env['ir.actions.act_window']
         result_context = {}
-        result = mod_obj.\
-            get_object_reference('analytic_wip_report',
-                                 'action_account_analytic_account_wip_form')
-        id = result and result[1] or False
-        result = act_obj.search([('id', '=', id)])
-        result = result.read()[0]
+        result = super(AnalyticWipReport, self).analytic_wip_report_open_window()
         data = self.read()[0]
         if data['from_date']:
             result_context.update({'from_date': data['from_date']})
