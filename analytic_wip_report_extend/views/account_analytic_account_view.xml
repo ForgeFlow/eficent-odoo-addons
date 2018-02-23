@@ -12,12 +12,6 @@
             <xpath expr="//field[@name='over_billings']" position="before">
                 <field name="under_over" string='Total under/over billed'/>
             </xpath>
-            <xpath expr="//field[@name='total_value']" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='total_value']" position="before">
-                <field name="total_contract_value"/>
-            </xpath>
         </field>
     </record>
 
