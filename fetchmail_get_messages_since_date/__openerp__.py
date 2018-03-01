@@ -33,6 +33,7 @@ Adds the possibility to fetch emails from IMAP from a specific date.
     "category": "Tools",
     "depends": ['fetchmail'],
     'data': [
+        'security/ir.model.access.csv',
         'views/fetchmail_server.xml',
     ],
     'js': [],

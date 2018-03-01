@@ -22,6 +22,7 @@ from datetime import datetime
 import logging
 import time
 import re
+
 try:
     import cStringIO as StringIO
 except ImportError:
@@ -75,12 +76,13 @@ class FetchMailServer(orm.Model):
                 try:
                     imap_server = server.connect()
                     for mailbox in server.mailbox_ids:
-                        if imap_server.select(mailbox.path)[0] != 'OK':
+                        mailbox_path = str(mailbox.path)
+                        if imap_server.select(mailbox_path)[0] != 'OK':
                             _logger.error('Could not open mailbox %s on %s',
-                                          mailbox.path, server.name)
+                                          mailbox_path, server.name)
                             imap_server.select()
                             continue
-                        imap_server.select(mailbox.path)
+                        imap_server.select(mailbox_path)
                         result, data = imap_server.search(
                             None, '(SINCE {date})'.format(date=fetch_date))
                         for message_uid in data[0].split():
@@ -112,7 +114,7 @@ class FetchMailServer(orm.Model):
                                      "and mailbox %s. %d succeeded, "
                                      "%d failed.",
                                      count, server.type,
-                                     server.name, mailbox.path,
+                                     server.name, mailbox_path,
                                      (count - failed), failed)
                 except Exception:
                     _logger.exception("General failure when trying to "
