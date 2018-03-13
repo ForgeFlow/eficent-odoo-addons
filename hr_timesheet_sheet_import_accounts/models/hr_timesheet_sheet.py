@@ -11,12 +11,12 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet_sheet.sheet"
 
-    @api.multi
     def set_previous_timesheet_ids(self):
         sheet_obj = self.env['hr_timesheet_sheet.sheet']
         timesheet_obj = self.env['account.analytic.line']
         for sheet in self:
-            res = []
+            if sheet.state not in ('draft', 'new'):
+                raise exceptions.ValidationError('Timesheet not open')
             date_from = datetime.strptime(sheet.date_from,
                                           DEFAULT_SERVER_DATE_FORMAT)
             user = self.env.user
@@ -54,7 +54,6 @@ class HrTimesheetSheet(models.Model):
                 query = self.env.cr.dictfetchall()
                 for account_id in [a['account_id'] for a in query]:
                     vals = {
-                        'employee_id': sheet.employee_id.id,
                         'date': sheet.date_from,
                         'account_id': account_id,
                         'name': '/',
@@ -62,18 +61,7 @@ class HrTimesheetSheet(models.Model):
                         'product_uom_id':
                             sheet.employee_id.product_id.uom_id.id,
                         'general_account_id': ga_id,
-                        'user_id': self.env.user.partner_id.id,
-                        'sheet_id': sheet.id,
+                        'amount': sheet.employee_id.product_id.standard_price,
+                        'user_id': sheet.user_id.id,
                     }
-                    ts_id = timesheet_obj.create(vals)
-                res.append(ts_id.id)
-        return {
-            'domain': "[('id','in', [" + ','.join(map(str, res)) + "])]",
-            'name': _('Employee Timesheets'),
-            'view_type': 'form',
-            'view_mode': 'tree,form',
-            'res_model': 'hr_timesheet_sheet.sheet',
-            'view_id': False,
-            'context': False,
-            'type': 'ir.actions.act_window'
-        }
+                    sheet.write({'timesheet_ids': [(0, 0, vals)]})
