@@ -48,13 +48,29 @@ class StockMove(models.Model):
         return super(StockMove, self).write(vals)
 
     @api.multi
-    @api.constrains('location_id', 'location_dest_id')
+    @api.constrains('analytic_account_id', 'location_id', 'location_dest_id')
     def _check_analytic_account(self):
         for move in self:
-            if move.location_id and move.location_dest_id:
-                if move.location_id.analytic_account_id and \
-                        move.location_dest_id.analytic_account_id:
-                    raise ValidationError(_("""
-                        Cannot move between different projects locations,
-                        please move first to general stock"""))
+            if move.analytic_account_id:
+                analytic = move.analytic_account_id
+                src_anal = move.location_id.analytic_account_id
+                dest_anal = move.location_dest_id.analytic_account_id
+                if analytic:
+                    if src_anal and dest_anal:
+                        raise ValidationError(_("""
+                            Cannot move between different projects locations,
+                            please move first to general stock"""))
+                    elif src_anal and not dest_anal:
+                        if src_anal != analytic:
+                            raise ValidationError(_(
+                                """Wrong analytic account in source or move"""))
+                    elif dest_anal and not src_anal:
+                        if dest_anal != analytic:
+                            raise ValidationError(_(
+                                """Wrong analytic account in destination or
+                                 move"""))
+                    else:
+                        raise ValidationError(_(
+                            """Wrong analytic account in move or one of the
+                             locations"""))
         return True
