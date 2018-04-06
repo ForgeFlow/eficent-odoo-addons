@@ -183,11 +183,15 @@ class AnalyticResourcePlanLine(orm.Model):
         res = super(AnalyticResourcePlanLine, self).action_button_draft(
             cr, uid, ids, context=context)
         wf_service = netsvc.LocalService("workflow")
+        request_obj = self.pool.get('purchase.request')
         for line in self.browse(cr, uid, ids, context=context):
             if line.picking_ids:
                 for picking in line.picking_ids:
                     wf_service.trg_validate(uid, 'stock.picking', picking.id,
                                             'button_cancel', cr)
+            for request_line in line.purchase_request_lines:
+                request = request_line.request_id
+                request_obj.button_rejected(cr, uid, [request.id], context)
         return res
 
     def action_button_confirm(self, cr, uid, ids, context=None):
