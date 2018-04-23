@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        <record id="group_partner_maintainer" model="res.groups">
+            <field name="name">Partner Maintainer</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+        <record model="res.groups" id="base.group_erp_manager">
+            <field name="implied_ids" eval="[(4, ref('group_partner_maintainer'))]"/>
+        </record>
+    </data>
+</openerp>
