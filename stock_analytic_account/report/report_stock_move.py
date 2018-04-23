@@ -175,7 +175,7 @@ CREATE OR REPLACE view report_stock_inventory AS (
         m.id, m.product_id, m.product_uom, pt.categ_id, m.partner_id,
         m.location_id, m.location_dest_id, m.prodlot_id, m.date, m.state,
         l.usage, l.scrap_location, m.company_id, pt.uom_id,
-        to_char(m.date, 'YYYY'), to_char(m.date, 'MM'), analytic_account_id,
+        to_char(m.date, 'YYYY'), to_char(m.date, 'MM'), m.analytic_account_id,
         analytic_reserved
     )
 );
