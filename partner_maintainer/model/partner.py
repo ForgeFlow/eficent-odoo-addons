@@ -11,12 +11,12 @@ class ResPartner(orm.Model):
     _inherit = "res.partner"
 
     def write(self, cr, uid, ids, vals, context=None):
-        if any([k in vals for k in ['street', 'street2','zip_id', 'street3', 'city', 'state_id', 'zip', 'country_id']]):
+        if any([k in vals for k in ['street', 'street2', 'zip_id', 'street3', 'city', 'state_id', 'zip', 'country_id']]):
             for partner_id in ids:
                 partner = self.browse(cr, uid, partner_id)
                 moves = self.pool.get('account.move').search(cr, uid, [('partner_id', '=', partner_id)])
                 invoices = self.pool.get('account.invoice').search(
-                    cr, uid, [('partner_id', '=', partner.commercial_partner_id.id),
+                    cr, uid, [('partner_id', '=', partner.id),
                               ('state', '!=', 'cancel')])
                 if moves or invoices:
                     if not self.pool['res.users'].has_group(cr, uid, 'partner_maintainer.group_partner_maintainer'):
