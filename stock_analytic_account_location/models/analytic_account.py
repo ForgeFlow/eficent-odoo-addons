@@ -9,9 +9,9 @@ class AccountAnalyticAccount(orm.Model):
 
 
     def _check_location(self, cr, uid, ids, context=None):
-        for analytic in self.browse(cr, uid, ids):
-            if analytic.location_id:
-                if analytic.location_id.analytic_account_id != analytic:
+        for project in self.browse(cr, uid, ids):
+            if project.location_id:
+                if project.location_id.analytic_account_id != project:
                     return False
         return True
 

@@ -13,15 +13,12 @@ class LocationAnalyticCreate(orm.TransientModel):
     def _prepare_location(self, cr, uid, wizard, context=None):
         if context is None:
             context = {}
-        res = {
+        return {
             'name': wizard.name,
             'location_id': wizard.location_id.id,
             'type': 'internal' if wizard.type == 'internal' else 'customer',
             'analytic_account_id': context['default_analytic_account_id'],
         }
-        if wizard.type == 'external':
-            res.update(company_id=False)
-        return  res
 
     def create_location(self, cr, uid, ids, context=None):
         if context is None:
@@ -69,8 +66,7 @@ class LocationAnalyticCreate(orm.TransientModel):
         'name': fields.char('Description', size=256, required=True),
         'location_id': fields.many2one('stock.location', 'Parent location',
                                        required=False,
-                                       domain="[('usage', '=', type),"
-                                              "('analytic_account_id', '=', context['default_analytic_account_id'])]"),
+                                       domain="[('usage', '=', type)]"),
         'type': fields.selection([('internal', 'Internal'),
                                   ('customer', 'External')],
                                  'Type', required=True),
@@ -82,7 +78,7 @@ class AnalyticocationManager(orm.TransientModel):
     _description = 'Manage analytic Locations'
 
     _columns = {
-        'recursive': fields.boolean("Include Children"),
+        'recursive': fields.boolean("Include Sublocations"),
     }
     def open_location_manager(self, cr, uid, ids, context=None):
         if context is None:
@@ -101,18 +97,15 @@ class AnalyticocationManager(orm.TransientModel):
             return
         if 'default_analytic_account_id' not in context:
             return
-        analytic_ids = [context['default_analytic_account_id']]
+        analytic_id = context['default_analytic_account_id']
+        location_ids = self.pool.get('stock.location').search(
+            cr, uid, [('analytic_account_id', '=', analytic_id)])
         for wiz_id in self.browse(cr, uid, ids, context=context):
             if wiz_id.recursive:
-                account = self.pool.get('account.analytic.account').browse(
-                    cr, uid, analytic_ids, context)
-                child_ids = [child.id for child in account[0].child_ids]
-                analytic_ids.extend(child_ids)
-            location_ids = self.pool.get('stock.location').search(
-                cr, uid, [('analytic_account_id', 'in', analytic_ids)])
-            ch_location_ids = self.pool.get(
-                'stock.location')._get_sublocations(cr, uid, location_ids)
-            location_ids.extend(ch_location_ids)
+                ch_location_ids = self.pool.get(
+                    'stock.location')._get_sublocations(
+                    cr, uid, location_ids)
+                location_ids.extend(ch_location_ids)
             res = list(set(location_ids))
 
         return {'type': 'ir.actions.act_window',
