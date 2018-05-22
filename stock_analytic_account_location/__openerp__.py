@@ -16,7 +16,7 @@
     'author': 'Eficent',
     'website': 'http://www.eficent.com',
     'depends': ['stock', 'analytic', 'stock_location_analytic'],
-    'data': ['views/location_view.xml'],
+    'data': [],
     'test': [
              ],
     'installable': True,
