@@ -18,5 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from . import product
 from . import stock
+from . import stock_picking
 from . import analytic_account
