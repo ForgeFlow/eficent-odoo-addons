@@ -28,13 +28,15 @@ class AnalyticWipReport(osv.osv):
 
         if data['filter_project'] and data['filter_project'] == True \
                 and comparing_date:
-            domain = ['&', '|', '&', ('date', '>=', comparing_date),
-                      ('state', '=', 'close'),
-                      ('state', '!=', 'close'),
-                      ('account_class', '=', 'project')]
+            domain = ['&', '|', ('state', '!=', 'close'),
+                      '&',
+                           ('state', '=', 'close'),
+                           ('date', '>=', comparing_date),
+                           ('account_class', '=', 'project')
+                      ]
         else:
             domain = ['|', '&', ('date', '>=', comparing_date),
-                      ('state', '=', 'close'),
+                      ('state', '=', '  close'),
                       ('state', '!=', 'close')]
         return domain
 
