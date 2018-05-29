@@ -53,23 +53,23 @@ class StockMove(orm.Model):
             cr, uid, ids, vals, context=context)
 
     def _check_analytic_account(self, cr, uid, ids, context=None):
-        for move in self.browse(cr, uid, ids):
-            if move.location_id and move.location_dest_id:
-                if move.location_id.analytic_account_id and move.location_dest_id.analytic_account_id:
-                    if move.location_id.analytic_account_id.id != move.location_dest_id.analytic_account_id.id:
-                        return False
+        # for move in self.browse(cr, uid, ids):
+        #     if move.location_id and move.location_dest_id:
+        #         if move.location_id.analytic_account_id and move.location_dest_id.analytic_account_id:
+        #             if move.location_id.analytic_account_id.id != move.location_dest_id.analytic_account_id.id:
+        #                 return False
         return True
 
     def _check_analytic(self, cr, uid, ids, context=None):
-        for move in self.browse(cr, uid, ids):
-            if move.analytic_account_id:
-                if ((move.location_id.analytic_account_id ==
-                        move.analytic_account_id)
-                    or (move.location_dest_id.analytic_account_id ==
-                        move.analytic_account_id)):
-                    return True
-                else:
-                    return False
+        # for move in self.browse(cr, uid, ids):
+        #     if move.analytic_account_id:
+        #         if ((move.location_id.analytic_account_id ==
+        #                 move.analytic_account_id)
+        #             or (move.location_dest_id.analytic_account_id ==
+        #                 move.analytic_account_id)):
+        #             return True
+        #         else:
+        #             return False
         return True
 
     _constraints = [(_check_analytic_account,
