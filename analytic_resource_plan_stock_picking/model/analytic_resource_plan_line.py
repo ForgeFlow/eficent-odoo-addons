@@ -197,6 +197,8 @@ class AnalyticResourcePlanLine(orm.Model):
     def action_button_confirm(self, cr, uid, ids, context=None):
         to_purchase = []
         for line in self.browse(cr, uid, ids, context=context):
+            if line.child_ids:
+                continue
             if not line.account_id.warehouse_id:
                 raise orm.except_orm(
                     _('Could not fetch stock!'),
