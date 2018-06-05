@@ -9,11 +9,13 @@ from odoo.exceptions import ValidationError
 class AnalyticResourcePlanLine(models.Model):
     _inherit = 'analytic.resource.plan.line'
 
+    @api.multi
     def _compute_show_button_bom_explode(self):
         for line in self:
-            if not line.bom_id:
+            if line.bom_id:
+                line.show_button_bom_explode = True
+            else:
                 line.show_button_bom_explode = False
-            line.show_button_bom_explode = True
 
     bom_id = fields.Many2one(
         'mrp.bom',
@@ -100,7 +102,7 @@ class AnalyticResourcePlanLine(models.Model):
                         self._prepare_resource_plan_line(plan, line,
                                                          new_qty)
                     plan_id = plan_line_obj.create(resource_line_data)
-                    res.append(plan_id)
+                    res.append(plan_id.id)
         return res
 
     def _prepare_consume_move(self, line, product_qty):
