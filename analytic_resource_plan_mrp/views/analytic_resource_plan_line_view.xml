@@ -7,14 +7,18 @@
         <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_form"/>
         <field name="type">form</field>
         <field name="arch" type="xml">
-            <xpath expr='//field[@name="date"]' position='after'>
-                <field name="show_button_bom_explode" invisible="1"/>
-                <field name="bom_id"/>
-                <button name="button_bom_explode_to_resource_plan"
-                        string="Explode BOM"
-                        attrs="{'invisible':[('show_button_bom_explode','=',False)]}"
-                        type="object"
-                        icon="fa-folder-open-o"/>
+            <xpath expr='//form/sheet/group[@name="account"]' position='after'>
+                <group name="bom0">
+                   <group name="bom">
+                        <field name="show_button_bom_explode" invisible="1"/>
+                        <field name="bom_id"/>
+                        <button name="button_bom_explode_to_resource_plan"
+                            string="Explode BOM"
+                            attrs="{'invisible':[('show_button_bom_explode','=',False)]}"
+                            class="oe_highlight"
+                            type="object"/>
+                   </group>
+                </group>
             </xpath>
         </field>
    </record>
@@ -26,13 +30,13 @@
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <xpath expr='//field[@name="product_uom_id"]' position='after'>
-                <field name="show_button_bom_explode" invisible="1"/>
                 <field name="bom_id"/>
+                <field name="show_button_bom_explode" invisible="1"/>
                 <button name="button_bom_explode_to_resource_plan"
-                        string="Explode BOM"
+                        icon="fa-sitemap"
                         attrs="{'invisible':[('show_button_bom_explode','=',False)]}"
                         type="object"
-                        icon="fa-folder-open-o"/>
+                        class="oe_highlight"/>
             </xpath>
         </field>
     </record>
