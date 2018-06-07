@@ -40,7 +40,7 @@ class AnalyticResourcePlanLine(models.Model):
                     lambda p: p.state != 'cancel'):
                 for move in picking.move_lines:
                     qty += move.product_uom_qty
-        self.qty_fetched = qty
+            line.qty_fetched = qty
 
     @api.multi
     def _compute_qty_left(self):
@@ -50,8 +50,8 @@ class AnalyticResourcePlanLine(models.Model):
                     lambda p: p.state != 'cancel'):
                 for move in picking.move_lines:
                     qty += move.product_uom_qty
-        self.qty_left = self.unit_amount - qty
-        return self.qty_left
+            line.qty_left = line.unit_amount - qty
+        return line.qty_left
 
     picking_ids = fields.One2many(
         'stock.picking',
