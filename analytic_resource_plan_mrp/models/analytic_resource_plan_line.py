@@ -69,6 +69,7 @@ class AnalyticResourcePlanLine(models.Model):
             'product_id': line.product_id.id,
             'product_uom_id': line.product_id.uom_id.id,
             'unit_amount': new_qty,
+            'price_unit': line.product_id.bom_standard_cost,
             'bom_id': bom_id.id,
             'parent_id': plan.id,
             'resource_type': 'procurement',
