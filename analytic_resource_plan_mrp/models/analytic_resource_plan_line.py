@@ -17,6 +17,14 @@ class AnalyticResourcePlanLine(models.Model):
             else:
                 line.show_button_bom_explode = False
 
+    @api.multi
+    def action_button_confirm(self):
+        res = self.bom_explode_to_resource_plan()
+        for line_id in res:
+            line = self.browse(line_id)
+            super(AnalyticResourcePlanLine, line).action_button_confirm()
+        super(AnalyticResourcePlanLine, self).action_button_confirm()
+
     bom_id = fields.Many2one(
         'mrp.bom',
         'Bill of Materials',
@@ -52,20 +60,20 @@ class AnalyticResourcePlanLine(models.Model):
 
     def _prepare_resource_plan_line(self, plan, line, new_qty):
         bom_obj = self.env['mrp.bom']
-        bom_id = bom_obj._bom_find(product=line['product'])
+        bom_id = bom_obj._bom_find(product=line.product_id)
         res = {
             'account_id': plan.account_id.id,
-            'name': line['product'].name,
+            'name': line.product_id.name,
             'date': plan.date,
             'state': 'draft',
-            'product_id': line['product'].id,
-            'product_uom_id': line['product'].uom_id.id,
+            'product_id': line.product_id.id,
+            'product_uom_id': line.product_id.uom_id.id,
             'unit_amount': new_qty,
             'bom_id': bom_id.id,
             'parent_id': plan.id,
             'resource_type': 'procurement',
         }
-        if line['product'].uom_id.name == 'Hour(s)':
+        if line.product_id.uom_id.name == 'Hour(s)':
             res.update({'resource_type': 'task'})
         return res
 
@@ -86,18 +94,18 @@ class AnalyticResourcePlanLine(models.Model):
             bom_res = plan.bom_id.explode(plan.product_id,
                                           factor / plan.bom_id.product_qty,
                                           picking_type=False)
-            components = [bom_res[0][0][1]]  # product_lines
-            for line in components:
+            for component in bom_res[1]:
+                line = component[0]
                 plan_line_ids = plan_line_obj.\
                     search([('parent_id', '=', plan.id),
-                            ('product_id', '=', line['product'].id),
-                            ])
+                            ('product_id', '=', line.product_id.id),
+                            ('state', '!=', 'draft')],)
                 total_qty = 0.0
                 for plan_line in plan_line_ids:
                     total_qty += plan_line.unit_amount
 
-                if line['qty'] > total_qty:
-                    new_qty = line['qty'] - total_qty
+                if line.product_qty > total_qty:
+                    new_qty = line.product_qty - total_qty
                     resource_line_data =\
                         self._prepare_resource_plan_line(plan, line,
                                                          new_qty)
