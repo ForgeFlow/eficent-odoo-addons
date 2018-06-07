@@ -110,9 +110,9 @@ class account_analytic_account(osv.osv):
             res[account.id]['actual_costs'] = 0
             for (total, cost_type) in cr.fetchall():
                 if cost_type in ('material', 'revenue'):
-                    res[account.id]['actual_material_cost'] = total
+                    res[account.id]['actual_material_cost'] += total
                 elif cost_type == 'labor':
-                    res[account.id]['actual_labor_cost'] = total
+                    res[account.id]['actual_labor_cost'] += total
                 res[account.id]['actual_costs'] += total
 
             # Total estimated costs
