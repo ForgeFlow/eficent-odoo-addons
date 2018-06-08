@@ -9,10 +9,10 @@ class AccountAnalyticAccount(orm.Model):
 
 
     def _check_location(self, cr, uid, ids, context=None):
-        for analytic in self.browse(cr, uid, ids):
-            if analytic.location_id:
-                if analytic.location_id.analytic_account_id != analytic:
-                    return False
+        # for analytic in self.browse(cr, uid, ids):
+        #     if analytic.location_id:
+        #         if analytic.location_id.analytic_account_id != analytic:
+        #             return False
         return True
 
     _constraints = [(_check_location, "The location does not belong to this "
