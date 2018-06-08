@@ -41,16 +41,6 @@ class project(orm.Model):
                     project.dest_address_id.id or False
         return res
 
-    def _get_parent_location(self, cr, uid, context=None):
-        if context is None:
-            context = {}
-        res = self.pool.get('project.project').get_parent_stock_data(
-            cr, uid, context=context)
-        if 'location_id' in res:
-            return res['location_id']
-        else:
-            return False
-
     def _get_parent_dest_address(self, cr, uid, context=None):
         if context is None:
             context = {}
@@ -62,6 +52,5 @@ class project(orm.Model):
             return False
 
     _defaults = {
-        'location_id': _get_parent_location,
         'dest_address_id': _get_parent_dest_address,
     }
