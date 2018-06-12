@@ -27,7 +27,7 @@ class AnalyticResourcePlanLine(orm.Model):
 
         for line in self.browse(cr, SUPERUSER_ID, ids, context=context):
             if line.product_id.type == 'service':
-                continue
+                res[line.id] = 0.0
             c = context.copy()
             c.update({'states': ('done',), 'what': ('in', 'out'),
                       'location': location})
