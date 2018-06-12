@@ -45,10 +45,9 @@ class AnalyticResourcePlanLine(orm.Model):
             'Pickings', readonly=True),
     }
 
-    def _prepare_picking_vals(self, cr, uid, line_id, context=None):
-        line = self.browse(cr, uid, line_id[0])
+    def _prepare_picking_vals(self, cr, uid, line, context=None):
         return {
-            'origin': line.name,
+            'origin': 'RPL:' + line.account_id.name,
             'type': 'internal',
             'move_type': 'one',  # direct
             'state': 'draft',
@@ -91,8 +90,8 @@ class AnalyticResourcePlanLine(orm.Model):
                                        context=None):
         data = {
             'company_id': company_id,
-            'origin': line.name,
-            'description': line.product_id.name_template,
+            'origin': 'RPL:' + line.account_id.name,
+            'description': 'RPL:' + line.account_id.name,
         }
         return data
 
@@ -229,10 +228,10 @@ class AnalyticResourcePlanLine(orm.Model):
             for location in locations:
                 if qty_fetched < line.unit_amount:
                     qty_available = self._get_product_available(
-                        cr, uid, ids, location.id, context)[line.id]
+                        cr, uid, [line.id], location.id, context)[line.id]
                     if qty_available > 0:
                         picking = self._prepare_picking_vals(
-                            cr, uid, ids, context)
+                            cr, uid, line, context)
                         picking_id = self.pool.get('stock.picking').create(
                             cr, uid, picking)
                         move = self._prepare_move_vals(
@@ -244,9 +243,9 @@ class AnalyticResourcePlanLine(orm.Model):
             qty_left = line.unit_amount - qty_fetched
             if qty_left > 0:
                 to_purchase.append((line, qty_left))
-            if len(to_purchase) > 0:
-                self._make_auto_purchase_request(cr, uid, to_purchase,
-                                                 context)
+        if len(to_purchase) > 0:
+            self._make_auto_purchase_request(cr, uid, to_purchase,
+                                             context)
         return super(AnalyticResourcePlanLine, self).action_button_confirm(
             cr, uid, ids, context=context)
 
