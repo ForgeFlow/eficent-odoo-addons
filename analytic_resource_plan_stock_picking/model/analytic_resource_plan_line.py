@@ -100,7 +100,7 @@ class AnalyticResourcePlanLine(models.Model):
         }
 
     @api.multi
-    def _prepare_move_vals(self, qty_available, picking_id, scr_location):
+    def _prepare_move_vals(self, qty, picking_id, scr_location):
         self.ensure_one()
         return {
             'name': self.product_id.product_tmpl_id.name,
@@ -108,7 +108,7 @@ class AnalyticResourcePlanLine(models.Model):
             'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
             'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
             'product_id': self.product_id.id,
-            'product_uom_qty': qty_available,
+            'product_uom_qty': qty,
             'product_uom': self.product_uom_id.id,
             'partner_id': self.account_id.partner_id.id,
             'picking_id': picking_id.id,
@@ -159,8 +159,12 @@ class AnalyticResourcePlanLine(models.Model):
                                                                location_id)
                                 picking_id = self.env['stock.picking'].create(
                                     picking)
+                                if qty_available > line.unit_amount:
+                                    qty_to_fetch = line.unit_amount
+                                else:
+                                    qty_to_fetch = qty_available
                                 move_vals = line._prepare_move_vals(
-                                    qty_available, picking_id, location_id)
+                                    qty_to_fetch, picking_id, location_id)
                                 move = self.env['stock.move'].create(move_vals)
                                 qty_fetched += move.product_uom_qty
         return super(AnalyticResourcePlanLine, self).action_button_confirm()
