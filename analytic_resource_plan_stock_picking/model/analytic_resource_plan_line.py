@@ -114,7 +114,7 @@ class AnalyticResourcePlanLine(models.Model):
             'picking_id': picking_id.id,
             'state': 'draft',
             'analytic_account_id': self.account_id.id,
-            'price_unit': self.product_id.price,
+            'price_unit': self.product_id.bom_standard_cost,
             'company_id': self.account_id.company_id.id,
             'location_id': scr_location.id,
             'location_dest_id': self.account_id.location_id.id,
