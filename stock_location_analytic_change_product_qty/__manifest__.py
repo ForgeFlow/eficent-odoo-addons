@@ -13,7 +13,7 @@
     'depends': [
         'analytic',
         'stock',
-        'stock_analytic_account_location'
+        'stock_analytic_account'
     ],
     'data': [
         'wizard/stock_change_product_qty.xml'
