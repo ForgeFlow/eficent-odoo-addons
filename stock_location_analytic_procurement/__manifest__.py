@@ -10,7 +10,7 @@
     'author': 'Eficent',
     'website': 'http://www.eficent.com',
     'depends': [
-        'stock_analytic_account_location'
+        'stock_analytic_account'
     ],
     'installable': True,
 }

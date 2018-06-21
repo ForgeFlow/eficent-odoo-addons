@@ -11,7 +11,7 @@
     'website': 'http://www.eficent.com',
     'depends': [
         'analytic',
-        'stock_analytic_account_location',
+        'stock_analytic_account',
         'purchase',
         'purchase_stock_analytic'
     ],
