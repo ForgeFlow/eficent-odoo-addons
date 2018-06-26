@@ -13,26 +13,6 @@ class AnalyticResourcePlanLine(models.Model):
     _inherit = 'analytic.resource.plan.line'
 
     @api.multi
-    def _get_product_available(self, location):
-
-        """ Finds the incoming and outgoing quantity of product on the
-        for that analytic account and the location defaulted in the analytic
-        account.
-        @return: Dictionary of values
-        """
-        res = {}
-
-        for line in self:
-            if line.product_id.type == 'service':
-                continue
-            c = self.env.context.copy()
-            c.update({'states': ('done',), 'what': ('in', 'out'),
-                      'location': location, 'compute_child': False})
-            stock = line.with_context(c).product_id._product_available()
-            res[line.id] = stock.get(line.product_id.id, 0.0)
-        return res
-
-    @api.multi
     def _compute_qty_fetched(self):
         qty = 0.0
         for line in self:
@@ -150,9 +130,9 @@ class AnalyticResourcePlanLine(models.Model):
                                  warehouse.lot_stock_id.ids)])
                     for location_id in get_sublocations:
                         if qty_fetched < line.unit_amount:
-                            qty_available = self._get_product_available(
-                                location_id.id
-                                )[line.id]['qty_available'] or 0.0
+                            stock = line._product_available()
+                            qty_available = stock[
+                                line.product_id.id]['qty_available']
                             if qty_available > 0:
                                 picking =\
                                     self._prepare_picking_vals(warehouse,
