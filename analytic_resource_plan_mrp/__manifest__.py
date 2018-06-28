@@ -11,7 +11,7 @@
     "license": "AGPL-3",
     "category": "Generic Modules/Projects & Services",
     "depends": [
-        "analytic_resource_plan",
+        "analytic_resource_plan_stock",
         "mrp",
         "analytic_location",
     ],
