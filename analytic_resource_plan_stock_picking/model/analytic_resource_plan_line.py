@@ -51,15 +51,6 @@ class AnalyticResourcePlanLine(models.Model):
         digits=dp.get_precision('Product Unit of Measure')
     )
 
-    @api.model
-    def get_picking_type(self, dest_loc):
-        domain = [('default_location_dest_id', '=', dest_loc.id)]
-        picking_type = self.env['stock.picking.type'].search(domain, limit=1)
-        if not picking_type:
-            raise UserError(_('''Please define a picking type for the
-                destination the project location'''))
-        return picking_type
-
     @api.multi
     def _prepare_picking_vals(self, warehouse, src_location):
         self.ensure_one()
@@ -68,7 +59,7 @@ class AnalyticResourcePlanLine(models.Model):
             'origin': self.name,
             'move_type': 'one',  # direct
             'state': 'draft',
-            'picking_type_id': self.get_picking_type(dest_location).id,
+            'picking_type_id': self.account_id.picking_type_id.id,
             'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
             'partner_id': self.account_id.partner_id.id,
             'company_id': self.account_id.company_id.id,
@@ -94,7 +85,7 @@ class AnalyticResourcePlanLine(models.Model):
             'picking_id': picking_id.id,
             'state': 'draft',
             'analytic_account_id': self.account_id.id,
-            'price_unit': self.product_id.bom_standard_cost,
+            'price_unit': self.product_id.standard_price,
             'company_id': self.account_id.company_id.id,
             'location_id': scr_location.id,
             'location_dest_id': self.account_id.location_id.id,
@@ -130,9 +121,7 @@ class AnalyticResourcePlanLine(models.Model):
                                  warehouse.lot_stock_id.ids)])
                     for location_id in get_sublocations:
                         if qty_fetched < line.unit_amount:
-                            stock = line._product_available()
-                            qty_available = stock[
-                                line.product_id.id]['qty_available']
+                            qty_available = line.with_context({'no_analytic': True}).product_id._product_available()
                             if qty_available > 0:
                                 picking =\
                                     self._prepare_picking_vals(warehouse,
