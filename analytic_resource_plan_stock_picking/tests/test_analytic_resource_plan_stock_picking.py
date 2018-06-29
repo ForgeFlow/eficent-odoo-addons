@@ -59,5 +59,4 @@ class TestAnalyticResourcePlanStockPicking(
         upd_qty.change_product_qty()
         cls.resource_plan_line.action_button_confirm()
         cls.assertEqual(
-            cls.resource_plan_line.qty_fetched, 1.0, cls.resource_plan_line)
-
+            cls.resource_plan_line.qty_fetched, 1.0, 'bad qty fetched')

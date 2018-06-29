@@ -52,7 +52,7 @@ class AnalyticResourcePlanLine(models.Model):
     )
 
     @api.multi
-    def _prepare_picking_vals(self, warehouse, src_location):
+    def _prepare_picking_vals(self, src_location_id):
         self.ensure_one()
         dest_location = self.account_id.location_id
         return {
@@ -63,7 +63,7 @@ class AnalyticResourcePlanLine(models.Model):
             'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
             'partner_id': self.account_id.partner_id.id,
             'company_id': self.account_id.company_id.id,
-            'location_id': src_location.id,
+            'location_id': src_location_id,
             'location_dest_id': dest_location.id,
             'analytic_resource_plan_line_id': self.id,
             'note': 'Resource Plan Line %s %s' % (
@@ -110,32 +110,25 @@ class AnalyticResourcePlanLine(models.Model):
             if not line.account_id.picking_type_id:
                 raise UserError(_('''Could not fetch stock. You have to set a
                     picking type for the project'''))
-            company_id = line.account_id.company_id.id
-            warehouses = self.env['stock.warehouse'].search(
-                [('company_id', '=', company_id)])
             qty_fetched = line.qty_fetched
-            for warehouse in warehouses:
-                if warehouse.lot_stock_id:
-                    get_sublocations = self.env['stock.location'].\
-                        search([('id', 'child_of',
-                                 warehouse.lot_stock_id.ids)])
-                    for location_id in get_sublocations:
-                        if qty_fetched < line.unit_amount:
-                            qty_available = line.with_context({'no_analytic': True}).product_id._product_available()
-                            if qty_available > 0:
-                                picking =\
-                                    self._prepare_picking_vals(warehouse,
-                                                               location_id)
-                                picking_id = self.env['stock.picking'].create(
-                                    picking)
-                                if qty_available > line.unit_amount:
-                                    qty_to_fetch = line.unit_amount
-                                else:
-                                    qty_to_fetch = qty_available
-                                move_vals = line._prepare_move_vals(
-                                    qty_to_fetch, picking_id, location_id)
-                                move = self.env['stock.move'].create(move_vals)
-                                qty_fetched += move.product_uom_qty
+            stock = line.with_context(
+                {'no_analytic': True}).product_id._product_available()
+            for location_id in stock:
+                if qty_fetched < line.unit_amount:
+                    qty_available = stock[location_id]['qty_available']
+                    if qty_available > 0:
+                        picking =\
+                            self._prepare_picking_vals(location_id)
+                        picking_id = self.env['stock.picking'].create(
+                            picking)
+                        if qty_available > line.unit_amount:
+                            qty_to_fetch = line.unit_amount
+                        else:
+                            qty_to_fetch = qty_available
+                        move_vals = line._prepare_move_vals(
+                            qty_to_fetch, picking_id, location_id)
+                        move = self.env['stock.move'].create(move_vals)
+                        qty_fetched += move.product_uom_qty
         return super(AnalyticResourcePlanLine, self).action_button_confirm()
 
     @api.multi
