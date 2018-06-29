@@ -18,8 +18,7 @@ class AnalyticResourcePlanLineConsume(models.TransientModel):
 
     def _prepare_item(self, line):
         return {
-            'product_id': line.product_id.id,
-            'product_uom_qty': line.unit_amount,
+            'product_qty': line.unit_amount,
             'product_uom_id': line.product_uom_id.id,
             'line_id': line.id,
         }
