@@ -13,10 +13,9 @@ class HrTimesheetSheet(models.Model):
 
     def set_previous_timesheet_ids(self):
         sheet_obj = self.env['hr_timesheet_sheet.sheet']
-        timesheet_obj = self.env['account.analytic.line']
         for sheet in self:
             if sheet.state not in ('draft', 'new'):
-                raise exceptions.ValidationError('Timesheet not open')
+                raise exceptions.ValidationError(_('Timesheet not opened'))
             date_from = datetime.strptime(sheet.date_from,
                                           DEFAULT_SERVER_DATE_FORMAT)
             user = self.env.user
