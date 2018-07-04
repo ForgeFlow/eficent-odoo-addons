@@ -8,14 +8,6 @@ from odoo import api, fields, models
 class ChangeManagementChange(models.Model):
     _inherit = 'change.management.change'
 
-    def _get_change_orders_project(self, cr, uid, ids, context=None):
-        result = set()
-        project_obj = self.env['project.project']
-        for order in project_obj.browse(cr, uid, ids, context=context):
-            for change in order.change_ids:
-                result.add(change.id)
-        return list(result)
-
     @api.multi
     @api.depends('project_id')
     def _get_project_customer(self):
