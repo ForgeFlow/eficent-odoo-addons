@@ -6,7 +6,7 @@
 {
     "name": "Project Percent Completed",
     "version": "10.0.1.0.0",
-    "description": """Calculates the % completed on a project, based on the
+    "summary": """Calculates the % completed on a project, based on the
         duration of the project and the progress measurement.""",
     "category": "Generic Modules/Projects & Services",
     "author": "Eficent",

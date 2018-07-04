@@ -10,7 +10,7 @@ class ChangeManagementChange(models.Model):
 
     @api.multi
     @api.depends('project_id')
-    def _get_project_customer(self):
+    def _compute_project_customer(self):
         for change in self:
             change.customer_id = change.project_id.partner_id.id
 
@@ -25,7 +25,7 @@ class ChangeManagementChange(models.Model):
             return []
 
     customer_id = fields.Many2one(
-        compute='_get_project_customer',
+        compute='_compute_project_customer',
         search='_search_by_project_customer',
         comodel_name='res.partner',
         string='Customer',

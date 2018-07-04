@@ -24,8 +24,12 @@ class Project(models.Model):
         date_today = time.strftime('%Y-%m-%d')
 
         wbs_projects_data = self._get_project_analytic_wbs()
+
         # Remove from the list the projects that have been cancelled
         for project_id in wbs_projects_data.keys():
+            if not def_meas_type_ids:
+                res[project_id] = 0.0
+                return res
             all_pids = wbs_projects_data[project_id].keys()
             self._cr.execute("""
                 WITH progress AS (
