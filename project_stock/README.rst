@@ -7,7 +7,7 @@ Project Location
 ================
 Features of this module:
     - Adds button in the Project Form and an Action from Project's 'More'
-    menu to list the Stock Moves associated to the selected project.
+      menu to list the Stock Moves associated to the selected project.
 
 
 Usage
