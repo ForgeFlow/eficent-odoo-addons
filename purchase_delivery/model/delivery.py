@@ -3,9 +3,8 @@
 #        <contact@eficent.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.tools.safe_eval import safe_eval
-from odoo.exceptions import UserError
 
 
 class DeliveryCarrier(models.Model):

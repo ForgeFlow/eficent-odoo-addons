@@ -39,7 +39,6 @@ install:
 
 script:
   - travis_run_tests
-  - coverage run --append ./travis/self_tests
 
 after_success:
-  - coveralls
+  - travis_after_tests_success

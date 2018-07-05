@@ -8,7 +8,6 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     category = fields.Selection(
-            [('normal', 'Normal'),
-             ('open', 'Opening Fiscal year'),
-             ('close', 'Closing Fiscal Year')],
-            'Category', index=True)
+        [('normal', 'Normal'),
+         ('open', 'Opening Fiscal year'),
+         ('close', 'Closing Fiscal Year')], 'Category', index=True)
