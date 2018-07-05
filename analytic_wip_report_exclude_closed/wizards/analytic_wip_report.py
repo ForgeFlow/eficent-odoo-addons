@@ -2,7 +2,6 @@
 # © 2016 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import api, fields, models
-from odoo.tools.safe_eval import safe_eval
 
 
 class AnalyticWipReport(models.TransientModel):
@@ -22,8 +21,8 @@ class AnalyticWipReport(models.TransientModel):
     @api.multi
     def _get_analytic_search_domain(self):
         comparing_date = self.from_date
-        project_stage = self.env['analytic.account.stage'].\
-            search([('name', 'in', ('Closed', 'Cancelled'))]).mapped('id') or []
+        project_stage = self.env['analytic.account.stage'].search(
+            [('name', 'in', ('Closed', 'Cancelled'))]).mapped('id') or []
         if self.filter_project and not comparing_date:
             project_ids = self.env['account.analytic.account'].\
                 search([('account_class', '=', 'project'),
