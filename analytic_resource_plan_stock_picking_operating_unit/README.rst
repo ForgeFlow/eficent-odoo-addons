@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==========================================
+============================================
 Analytic Resource Planning - operating units
-==========================================
+============================================
 Module features:
     - assign the OU to the picking created for the RPL
 
