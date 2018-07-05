@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="access_account_analytic_category_account_manager" model="ir.model.access">
+      <field name="name">account_analytic_category/account_manager</field>
+      <field name="model_id" ref="model_account_analytic_category"/>
+      <field name="group_id" ref="account.group_account_manager"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_write" eval="True"/>
+    </record>
+
+    <record id="access_account_analytic_category_user" model="ir.model.access">
+      <field name="name">account_analytic_category/user</field>
+      <field name="model_id" ref="model_account_analytic_category"/>
+      <field name="group_id" ref="base.group_user"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_unlink" eval="False"/>
+      <field name="perm_create" eval="False"/>
+      <field name="perm_write" eval="False"/>
+    </record>
+</odoo>
