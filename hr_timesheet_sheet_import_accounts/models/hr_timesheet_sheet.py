@@ -4,7 +4,7 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from odoo import _, api, exceptions, models
+from odoo import _, exceptions, models
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
