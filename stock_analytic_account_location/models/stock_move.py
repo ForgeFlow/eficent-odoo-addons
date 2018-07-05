@@ -63,14 +63,14 @@ class StockMove(models.Model):
                     elif src_anal and not dest_anal:
                         if src_anal != analytic:
                             raise ValidationError(_(
-                                """Wrong analytic account in source or move"""))
+                                "Wrong analytic account in source or move"))
                     elif dest_anal and not src_anal:
                         if dest_anal != analytic:
                             raise ValidationError(_(
-                                """Wrong analytic account in destination or
-                                 move"""))
+                                "Wrong analytic account in destination or "
+                                "move"))
                     else:
                         raise ValidationError(_(
-                            """Wrong analytic account in move or one of the
-                             locations"""))
+                            "Wrong analytic account in move or one of the "
+                            "locations"))
         return True
