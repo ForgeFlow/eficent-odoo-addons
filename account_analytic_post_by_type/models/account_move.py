@@ -9,7 +9,7 @@ class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
     @api.multi
-    def _check_type(self):
+    def _compute_valid_to_post(self):
         for rec in self:
             if rec.analytic_account_id:
                 if rec.account_id.user_type_id.name not in ('Income',
@@ -20,7 +20,7 @@ class AccountMoveLine(models.Model):
 
     valid_to_post = fields.Boolean(
         'Entry allowed to be post',
-        compute='_check_type'
+        compute='_compute_valid_to_post'
     )
 
     @api.multi
