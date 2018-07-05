@@ -6,7 +6,7 @@ from odoo.addons.analytic_resource_plan_stock.tests import \
 
 
 class TestAnalyticResourcePlanMrp(
-    test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock):
+        test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock):
     def setUp(cls):
         super(TestAnalyticResourcePlanMrp, cls).setUp()
         cls.analytic_account_obj = cls.env['account.analytic.account']
