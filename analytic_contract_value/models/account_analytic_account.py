@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models
-import odoo.addons.decimal_precision as dp
 
 
 class AccountAnalyticAccount(models.Model):
@@ -52,6 +51,6 @@ class AccountAnalyticAccount(models.Model):
         track_visibility='onchange',
         readonly=True)
     total_contract_value = fields.Float(
-            compute=_total_contract_value_calc,
-            string='Current Total Contract Value',
-            help='Total Contract Value including child analytic accounts')
+        compute=_total_contract_value_calc,
+        string='Current Total Contract Value',
+        help='Total Contract Value including child analytic accounts')
