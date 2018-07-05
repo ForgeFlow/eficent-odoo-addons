@@ -3,13 +3,12 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.exceptions import UserError
-from odoo import fields
 from odoo.addons.analytic_resource_plan_stock.tests import \
     test_analytic_resource_plan_stock
 
 
 class TestAnalyticResourcePlanStockPicking(
-    test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock):
+        test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock):
     def setUp(cls):
         super(TestAnalyticResourcePlanStockPicking, cls).setUp()
         cls.analytic_account_obj = cls.env['account.analytic.account']
@@ -42,7 +41,6 @@ class TestAnalyticResourcePlanStockPicking(
             'expense_analytic_plan_journal_id': cls.analytic_plan_journal.id
         })
 
-
     def test_analytic_resource_plan_stock_picking(cls):
         # error if no location
         with cls.assertRaises(UserError):
@@ -52,7 +50,8 @@ class TestAnalyticResourcePlanStockPicking(
         cls.unit_amount = 2.0
         upd_qty = cls.env['stock.change.product.qty'].create({
             'product_id': cls.resource_plan_line.product_id.id,
-            'product_tmpl_id': cls.resource_plan_line.product_id.product_tmpl_id.id,
+            'product_tmpl_id': cls.resource_plan_line.product_id.
+            product_tmpl_id.id,
             'new_quantity': 1.0,
             'location_id': cls.env.ref('stock.stock_location_stock').id
         })

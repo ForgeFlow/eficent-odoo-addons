@@ -122,8 +122,10 @@ class AnalyticResourcePlanLine(models.Model):
                     for location_id in get_sublocations:
                         if qty_fetched < line.unit_amount:
                             stock = line.with_context(
-                                {'location': location_id.id}).product_id._product_available()
-                            qty_available = stock[line.product_id.id]['qty_available']
+                                {'location': location_id.id}).product_id.\
+                                _product_available()
+                            qty_available = stock[
+                                line.product_id.id]['qty_available']
                             if qty_available > 0:
                                 picking = \
                                     self._prepare_picking_vals(location_id)
@@ -139,13 +141,14 @@ class AnalyticResourcePlanLine(models.Model):
                                 move = self.env['stock.move'].create(
                                     move_vals)
                                 qty_fetched += move.product_uom_qty
-            return super(AnalyticResourcePlanLine, self).action_button_confirm()
+            return super(AnalyticResourcePlanLine, self).\
+                action_button_confirm()
         return super(AnalyticResourcePlanLine, self).action_button_confirm()
 
     @api.multi
     def unlink(self):
         for line in self:
             if line.picking_ids:
-                raise UserError(_('''You cannot delete a record that refers
-                    to a picking'''))
+                raise UserError(_('You cannot delete a record that refers to '
+                                  'a picking'))
         return super(AnalyticResourcePlanLine, self).unlink()

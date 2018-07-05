@@ -8,7 +8,7 @@
     "author": "Eficent",
     "license": 'AGPL-3',
     "website": "www.eficent.com",
-    "description": """Fetch stock for projects""",
+    "summary": """Fetch stock for projects""",
     "category": "Generic Modules/Projects & Services",
     "depends": [
         "project_location",
