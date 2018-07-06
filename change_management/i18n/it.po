@@ -1,0 +1,848 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* risk_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-02-23 08:27+0100\n"
+"PO-Revision-Date: 2017-02-23 08:29+0100\n"
+"Last-Translator: Matjaz Mozetic <m.mozetic@matmoz.si>\n"
+"Language-Team: \n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.8.11\n"
+
+#. module: change_management
+#: help:change.management.change,description:0
+msgid ""
+"\n"
+"Short description of the change.\n"
+"\n"
+"Project changes are characteristics, circumstances or\n"
+"features of the project environment that may have an\n"
+"adverse effect on the project in the form of budget,\n"
+"schedule, deliverables and results.\n"
+"\n"
+"Stakeholder requirements can be considered and\n"
+"managed as changes, since we're changing the project\n"
+"charter and scope definition.\n"
+"\n"
+"The user requirements of the project must be defined and\n"
+"documented. Approval and confirmation must be obtained\n"
+"before the project can proceed. To obtain agreement about\n"
+"needs:\n"
+"\n"
+"* Separate needs from wants\n"
+"* Group the needs that are similar\n"
+"* Prioritise needs (eg essential, nice to have)\n"
+"* Identify any conflicting needs\n"
+"* Negotiate agreement between stakeholders with\n"
+"   conflicting needs\n"
+"\n"
+"This process often requires a number of meetings with\n"
+"stakeholders. Stakeholders often express their needs in\n"
+"terms of a particular product or solution to the problem,\n"
+"which has created the need for the project in the first\n"
+"place. It is important to re-state the agreed needs in\n"
+"terms of “what the end product/service(s) of the project\n"
+"should do”.\n"
+"Stating the agreed needs in functional terms permits the\n"
+"project manager to offer a range of solutions to the client\n"
+"or key stakeholders. If the project outcomes are restricted\n"
+"to solutions offered by key stakeholders too early in the\n"
+"analysis process important alternative options might be\n"
+"overlooked. Document the final set of agreed requirements\n"
+"and obtain sign-off from all key stakeholders.\n"
+"        "
+msgstr ""
+"\n"
+"Short description of the change.\n"
+"\n"
+"Project changes are characteristics, circumstances or\n"
+"features of the project environment that may have an\n"
+"adverse effect on the project in the form of budget,\n"
+"schedule, deliverables and results.\n"
+"\n"
+"I requisiti delle parti interessate si possono considerare\n"
+"e gestire come modifiche, visto che stiamo cambiando lo\n"
+"statuto del progetto e la definizione della portata.\n"
+"\n"
+"I requisiti progettuali dell'utente si devono definire e\n"
+"documentare. Si deve ottenere l'approvazione o conferma\n"
+"prima di procedere con il progetto. Per poter ottenere un\n"
+"accordo sulle necessità:\n"
+"\n"
+"* separate le necessità dai desideri\n"
+"* raggruppate le necessità simili\n"
+"* Stabilite le priorità delle necessità (es. essenziale,\n"
+"  farebbe comodo)\n"
+"* identificate i conflitti di necessità\n"
+"* negoziate un accordo tra le parti interessate con\n"
+"   necessità in conflitto\n"
+"\n"
+"Questo processo molte volte richiede diversi incontri con le\n"
+"parti interessate. Le parti spesso esprimono le loro necessità\n"
+"in termini di un particolare prodotto o una soluzione di un\n"
+"problema, che ha dato origine alla necessità progettuale.\n"
+"È importante ribadire le necessità accordate nei termini di\n"
+"\"cosa doverebbe fare il prodotto/servizio progettuale.\n"
+"\n"
+"La definizione delle necessità accordate in termini funzionali\n"
+"permette al gestore di offrire una gamma di soluzioni al cliente\n"
+"o parte interessata chiave. Se gli esiti del progetto si limitano alle\n"
+"soluzioni offerte dalle parti interessate troppo presto nel processo\n"
+"dell'analisi, si rischia di trascurare delle opzioni alternative "
+"importanti.\n"
+"Documentate la serie finale dei requisiti accordati e ottenete una\n"
+"firma da tutte le parti interessate chiave.\n"
+"        "
+
+#. module: change_management
+#: field:project.task,change_id:0
+msgid "Action on Change"
+msgstr "Azione per modifica"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_tree_view
+#: model:ir.actions.act_window,name:change_management.action_show_actions
+#: model:ir.ui.menu,name:change_management.menu_actions_on_change
+msgid "Actions"
+msgstr "Azioni"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_kanban_view
+msgid "Actions:"
+msgstr "Azioni:"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Active Changes"
+msgstr "Modifiche attive"
+
+#. module: change_management
+#: view:project.task:change_management.change_management_project_task_search_view
+msgid "Active Tasks"
+msgstr "Attività attive"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Active changes"
+msgstr "Modifiche attive"
+
+#. module: change_management
+#: view:project.task:change_management.change_management_project_task_search_view
+msgid "Active tasks"
+msgstr "Attività attive"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Appr. Date"
+msgstr "Approvato il"
+
+#. module: change_management
+#: field:change.management.change,date_approved:0
+msgid "Approval Date"
+msgstr "Data approvazione"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Approve"
+msgstr "Approva"
+
+#. module: change_management
+#: field:change.management.change,approved_id:0
+msgid "Approved by"
+msgstr "Approvato da"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Back to Draft"
+msgstr "Metti in bozza"
+
+#. module: change_management
+#: model:change.management.proximity,name:change_management.change_management_proximity_longterm
+msgid "Beyond project"
+msgstr "Oltre il progetto"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Category"
+msgstr "Categoria"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+#: field:change.management.change,description_cause:0
+#: model:ir.model,name:change_management.model_change_management_change
+#: view:project.task:change_management.change_management_project_task_search_view
+msgid "Change"
+msgstr "Modifica"
+
+#. module: change_management
+#: view:project.task:change_management.change_management_project_task_search_view
+msgid "Change Action"
+msgstr "Azione modifica"
+
+#. module: change_management
+#: model:mail.message.subtype,description:change_management.mt_change_accepted
+#: model:mail.message.subtype,name:change_management.mt_change_accepted
+msgid "Change Approved"
+msgstr "Modifica approvata"
+
+#. module: change_management
+#: model:mail.message.subtype,name:change_management.mt_change_draft
+msgid "Change Back to Draft"
+msgstr "Modifica in bozza"
+
+#. module: change_management
+#: model:ir.actions.act_window,name:change_management.action_show_categories
+#: model:ir.ui.menu,name:change_management.menu_change_categories
+msgid "Change Categories"
+msgstr "Categorie modifiche"
+
+#. module: change_management
+#: view:change.management.category:change_management.category_tree_view
+#: field:change.management.category,name:0
+#: field:change.management.change,change_category_id:0
+msgid "Change Category"
+msgstr "Categoria modifica"
+
+#. module: change_management
+#: help:change.management.change,change_category_id:0
+msgid ""
+"Change Category: The type of change in terms of the project's or "
+"businesschosen categories (e.g. Schedule, quality, legal etc.)"
+msgstr ""
+"Categoria modifica: il tipo di modifica nel senso di progetto o categorie "
+"di' attività commerciali (es. Pianifica, Qualità, Legale etc.)."
+
+#. module: change_management
+#: model:mail.message.subtype,description:change_management.mt_change_done
+#: model:mail.message.subtype,name:change_management.mt_change_done
+msgid "Change Completed"
+msgstr "Modifica completata"
+
+#. module: change_management
+#: model:mail.message.subtype,description:change_management.mt_change_active
+#: model:mail.message.subtype,name:change_management.mt_change_active
+msgid "Change Confirmed"
+msgstr "Modifica confermata"
+
+#. module: change_management
+#: model:mail.message.subtype,description:change_management.mt_change_deferred
+#: model:mail.message.subtype,name:change_management.mt_change_deferred
+msgid "Change Deferred"
+msgstr "Modifica posticipata"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Change Edition"
+msgstr "Edizione modifica"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Change Enforcing"
+msgstr "Applicazione modifica"
+
+#. module: change_management
+#: model:mail.message.subtype,description:change_management.mt_change_in_progress
+#: model:mail.message.subtype,name:change_management.mt_change_in_progress
+msgid "Change In Progress"
+msgstr "Modifica in corso"
+
+#. module: change_management
+#: view:project.project:change_management.edit_project
+msgid "Change Management"
+msgstr "Gestione modifiche"
+
+#. module: change_management
+#: field:change.management.change,change_owner_id:0
+msgid "Change Manager"
+msgstr "Responsabile modifica"
+
+#. module: change_management
+#: help:change.management.change,change_owner_id:0
+msgid ""
+"Change Manager: The person responsible for managing the change (there can "
+"beonly one change owner per change), change ownership is assignedto a "
+"managerial level, in case of business continuity to a C-level manager."
+msgstr ""
+"Responsabile modifica: la persona responsabile per la gestione della "
+"modifica (solo un proprietario per modifica), la proprietà della modifica "
+"viene assegnata al livello dirigenziale, nei casi di business continuity ad "
+"un manager di livello C."
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Change Owner"
+msgstr "Proprietario modifica"
+
+#. module: change_management
+#: model:mail.message.subtype,description:change_management.mt_change_rejected
+#: model:mail.message.subtype,name:change_management.mt_change_rejected
+msgid "Change Rejected"
+msgstr "Modifica rifiutata"
+
+#. module: change_management
+#: model:mail.message.subtype,description:change_management.mt_change_withdrawn
+#: model:mail.message.subtype,name:change_management.mt_change_withdrawn
+msgid "Change Withdrawn"
+msgstr "Bozza ritirata"
+
+#. module: change_management
+#: model:mail.message.subtype,description:change_management.mt_change_draft
+msgid "Change back in Draft"
+msgstr "Modifica in bozza"
+
+#. module: change_management
+#: field:project.project,change_count:0
+msgid "Change count"
+msgstr "Conteggio modifiche"
+
+#. module: change_management
+#: help:change.management.change,name:0
+msgid "Change label. Can be changed as long as change is in state 'draft'."
+msgstr "Nome modifica. Si può cambiare se in stato 'bozza'."
+
+#. module: change_management
+#: model:ir.model,name:change_management.model_change_management_category
+msgid "Change log category table"
+msgstr "Giornale modifiche categoria"
+
+#. module: change_management
+#: model:ir.model,name:change_management.model_change_management_proximity
+msgid "Change log proximity table"
+msgstr "Giornale modifiche prossimità"
+
+#. module: change_management
+#: field:change.management.change,change_response_count:0
+msgid "Change response count"
+msgstr "Conteggio azioni di modifica"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_tree_view
+#: model:ir.actions.act_window,name:change_management.action_show_changes
+#: model:ir.ui.menu,name:change_management.menu_change_management
+#: model:ir.ui.menu,name:change_management.menu_configuration_changes
+#: view:project.project:change_management.edit_project
+msgid "Changes"
+msgstr "Modifiche"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Changes without actions"
+msgstr "Modifiche senza azioni"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Changes without ownership"
+msgstr "Modifiche senza proprietari"
+
+#. module: change_management
+#: view:project.project:change_management.view_project_kanban
+msgid "Changes:"
+msgstr "Modifiche:"
+
+#. module: change_management
+#: field:change.management.change,color:0
+msgid "Color"
+msgstr "Colore"
+
+#. module: change_management
+#: field:change.management.change,company_id:0
+msgid "Company"
+msgstr "Società"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Conf. Date"
+msgstr "Confermato il"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Confirm"
+msgstr "Conferma"
+
+#. module: change_management
+#: field:change.management.change,date_confirmed:0
+msgid "Confirmation Date"
+msgstr "Data conferma"
+
+#. module: change_management
+#: field:change.management.change,confirmed_id:0
+msgid "Confirmed by"
+msgstr "Confermato da"
+
+#. module: change_management
+#: model:change.management.category,name:change_management.change_management_category_extra
+msgid "Cost"
+msgstr "Costo"
+
+#. module: change_management
+#: field:change.management.category,create_uid:0
+#: field:change.management.change,create_uid:0
+#: field:change.management.proximity,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: change_management
+#: field:change.management.category,create_date:0
+#: field:change.management.change,create_date:0
+#: field:change.management.proximity,create_date:0
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: change_management
+#: field:change.management.change,date_modified:0
+msgid "Date Revised"
+msgstr "Data revisione"
+
+#. module: change_management
+#: help:change.management.change,date_modified:0
+msgid "Date of last revision."
+msgstr "Data ultima revisione"
+
+#. module: change_management
+#: help:change.management.change,date_confirmed:0
+msgid "Date of the change confirmation. Auto populated."
+msgstr "Data conferma modifica - auto popolata."
+
+#. module: change_management
+#: help:change.management.change,message_last_post:0
+msgid "Date of the last message posted on the record."
+msgstr "Data pubblicazione ultimo messaggio sul record."
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Defer"
+msgstr "Rinvia"
+
+#. module: change_management
+#: model:change.management.category,name:change_management.change_management_deliverables
+msgid "Deliverables"
+msgstr "Consegnabili"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: change_management
+#: field:change.management.category,display_name:0
+#: field:change.management.change,display_name:0
+#: field:change.management.proximity,display_name:0
+msgid "Display Name"
+msgstr "Nome visualizzato"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Done"
+msgstr "Fatto"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_kanban_view
+msgid "Edit..."
+msgstr "Edita..."
+
+#. module: change_management
+#: field:change.management.change,description_effect:0
+msgid "Effect"
+msgstr "Effetto"
+
+#. module: change_management
+#: field:change.management.change,message_follower_ids:0
+msgid "Followers"
+msgstr "Seguaci"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Group By..."
+msgstr "Raggruppa per..."
+
+#. module: change_management
+#: help:change.management.change,message_summary:0
+msgid ""
+"Holds the Chatter summary (number of messages, ...). This summary is "
+"directly in html format in order to be inserted in kanban views."
+msgstr ""
+"Sommario dei messaggi (numero messaggi, ...). Questo sommario è direttamente "
+"in formato html per poter essere inserito nelle viste kanban."
+
+#. module: change_management
+#: field:change.management.category,id:0 field:change.management.change,id:0
+#: field:change.management.proximity,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: change_management
+#: help:change.management.change,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr ""
+"Quando segnato significa, che ci sono dei nuovi messaggi a richiedere la "
+"vostra attenzione."
+
+#. module: change_management
+#: model:change.management.proximity,name:change_management.change_management_proximity_imminent
+msgid "Imminent"
+msgstr "Imminente"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "In progress"
+msgstr "In Corso"
+
+#. module: change_management
+#: field:change.management.change,message_is_follower:0
+msgid "Is a Follower"
+msgstr "È un seguace"
+
+#. module: change_management
+#: field:change.management.change,message_last_post:0
+msgid "Last Message Date"
+msgstr "Data ultimo messaggio"
+
+#. module: change_management
+#: field:change.management.category,__last_update:0
+#: field:change.management.change,__last_update:0
+#: field:change.management.proximity,__last_update:0
+msgid "Last Modified on"
+msgstr "Ultimo aggiornamento"
+
+#. module: change_management
+#: field:change.management.category,write_uid:0
+#: field:change.management.change,write_uid:0
+#: field:change.management.proximity,write_uid:0
+msgid "Last Updated by"
+msgstr "Ultimo ad aggiornare"
+
+#. module: change_management
+#: field:change.management.category,write_date:0
+#: field:change.management.change,write_date:0
+#: field:change.management.proximity,write_date:0
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento"
+
+#. module: change_management
+#: field:change.management.change,message_ids:0
+msgid "Messages"
+msgstr "Messaggi"
+
+#. module: change_management
+#: help:change.management.change,message_ids:0
+msgid "Messages and communication history"
+msgstr "Messaggi e cronologia communicazioni"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Mod. Date"
+msgstr "Data mod."
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "My Projects"
+msgstr "I miei progetti"
+
+#. module: change_management
+#: code:addons/change_management/model/change_management.py:406
+#, python-format
+msgid "No Subject"
+msgstr "Senza soggetto"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+#: field:change.management.change,project_id:0
+#: model:ir.model,name:change_management.model_project_project
+msgid "Project"
+msgstr "Progetto"
+
+#. module: change_management
+#: field:project.project,change_ids:0
+msgid "Project changes"
+msgstr "Cambiamenti progettuali"
+
+#. module: change_management
+#: field:change.management.change,stakeholder_id:0
+msgid "Proposer"
+msgstr "Proponente"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+#: field:change.management.change,proximity_id:0
+#: view:change.management.proximity:change_management.proximity_tree_view
+#: field:change.management.proximity,name:0
+#: model:ir.actions.act_window,name:change_management.action_show_proximity
+#: model:ir.ui.menu,name:change_management.menu_change_proximity
+msgid "Proximity"
+msgstr "Prossimità"
+
+#. module: change_management
+#: help:change.management.change,proximity_id:0
+msgid ""
+"Proximity: This would typically state how close to the present time the "
+"change event is anticipated to happen (e.g. for project changes Imminent, "
+"within stage, within project, beyond project). Proximity should be recorded "
+"in accordance with the project's chosen scales or business continuity time "
+"scales."
+msgstr ""
+"Prossimità: di solito lo stato di quanto si è avvicinato l'avvenimento di "
+"modifica (es. modifiche progettuali imminenti, nel corso dello stadio, nel "
+"coso del progetto, oltre il progetto). La prossimità dovrebbe essere "
+"registrata in accordo con le scale progettuali scelte o scale business "
+"continuity."
+
+#. module: change_management
+#: field:change.management.change,description_event:0
+msgid "Reason"
+msgstr "Motivo"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Reg. Date"
+msgstr "Data reg."
+
+#. module: change_management
+#: model:change.management.category,name:change_management.change_management_regulatory
+msgid "Regulatory Requirement"
+msgstr "Regolamento"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Reject"
+msgstr "Rifiuta"
+
+#. module: change_management
+#: field:change.management.change,description:0
+msgid "Request Description"
+msgstr "Descrizione della richiesta"
+
+#. module: change_management
+#: field:change.management.change,name:0
+msgid "Request Id"
+msgstr "ID richiesta"
+
+#. module: change_management
+#: field:change.management.change,author_id:0
+msgid "Requestor"
+msgstr "Richiedente"
+
+#. module: change_management
+#: view:project.project:change_management.change_management_project_charter_tree_view
+msgid "Requirements"
+msgstr "Requisiti"
+
+#. module: change_management
+#: model:change.management.category,name:change_management.change_management_resources
+msgid "Resources"
+msgstr "Risorse"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Response Actions"
+msgstr "Azioni in risposta"
+
+#. module: change_management
+#: field:change.management.change,change_response_ids:0
+msgid "Response Ids"
+msgstr "ID risposte"
+
+#. module: change_management
+#: model:change.management.category,name:change_management.change_management_category_feature
+msgid "Schedule"
+msgstr "Scadenze"
+
+#. module: change_management
+#: model:change.management.category,name:change_management.change_management_category_plan
+msgid "Scope"
+msgstr "Portata"
+
+#. module: change_management
+#: view:project.task:change_management.change_management_project_task_search_view
+msgid "Show only tasks (actions) on change"
+msgstr "Mostra solo attività (azioni) su modifiche"
+
+#. module: change_management
+#: view:project.project:change_management.change_management_project_charter_tree_view
+msgid "Stakeholder Requests"
+msgstr "Richieste parti interessate"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+#: field:change.management.change,state:0
+msgid "State"
+msgstr "Stadio"
+
+#. module: change_management
+#: field:change.management.change,message_summary:0
+msgid "Summary"
+msgstr "Riepilogo"
+
+#. module: change_management
+#: model:ir.model,name:change_management.model_project_task
+msgid "Task"
+msgstr "Attività"
+
+#. module: change_management
+#: help:project.task,change_id:0
+msgid "Task is an action on a change identified by this label."
+msgstr "L'attività è una azione su modifica identificata da questo campo."
+
+#. module: change_management
+#: model:change.management.category,name:change_management.change_management_quality
+msgid "Testing/Quality"
+msgstr "Controllo qualità"
+
+#. module: change_management
+#: help:change.management.change,author_id:0
+msgid "The author of the initial request."
+msgstr "L'autore della richiesta iniziale."
+
+#. module: change_management
+#: help:change.management.change,approved_id:0
+msgid "The person that approved the change. Auto populated."
+msgstr "La persona che ha approvato la richiesta. Auto popolata."
+
+#. module: change_management
+#: help:change.management.change,confirmed_id:0
+msgid "The person that confirmed the change. Auto populated."
+msgstr "La persona che ha confermato la richiesta. Auto popolata."
+
+#. module: change_management
+#: help:change.management.change,project_id:0
+msgid "The project where the change request was initiated."
+msgstr "Il progetto, da dove è stata iniziata la richiesta."
+
+#. module: change_management
+#: help:change.management.change,stakeholder_id:0
+msgid "The stakeholder that proposes the processing of the request."
+msgstr "La parte interessata, che propone la procedura di richiesta."
+
+#. module: change_management
+#: model:change.management.category,name:change_management.change_management_new
+msgid "Uncategorized"
+msgstr "Non categorizzate"
+
+#. module: change_management
+#: field:change.management.change,message_unread:0
+msgid "Unread Messages"
+msgstr "Messaggi non letti"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_search_form_view
+msgid "Unread messages"
+msgstr "Messaggi non letti"
+
+#. module: change_management
+#: view:change.management.change:change_management.change_form_view
+msgid "Withdraw"
+msgstr "Ritira"
+
+#. module: change_management
+#: model:change.management.proximity,name:change_management.change_management_proximity_within_project
+msgid "Within project"
+msgstr "Entro progetto"
+
+#. module: change_management
+#: model:change.management.proximity,name:change_management.change_management_proximity_within_stage
+msgid "Within stage"
+msgstr "Entro stadio"
+
+#~ msgid "Website Messages"
+#~ msgstr "Messaggi della pagina web"
+
+#~ msgid "Website communication history"
+#~ msgstr "Cronologia comunicazioni pagina web"
+
+#~ msgid "Blocked"
+#~ msgstr "Bloccato"
+
+#~ msgid "Delete"
+#~ msgstr "Cancella"
+
+#~ msgid "In Progress"
+#~ msgstr "In Corso"
+
+#~ msgid "Normal"
+#~ msgstr "Normale"
+
+#~ msgid "Ready for next stage"
+#~ msgstr "Pronto per prossimo stadio"
+
+#~ msgid "Remaining Time"
+#~ msgstr "Tempo rimanente"
+
+#~ msgid "Validate planned time"
+#~ msgstr "Convalida tempo pianificato"
+
+#~ msgid "Very Important"
+#~ msgstr "Molto importante"
+
+#~ msgid "oe_kanban_text_red"
+#~ msgstr "oe_kanban_text_red"
+
+#~ msgid "Change Actions"
+#~ msgstr "Azioni modifiche"
+
+#~ msgid "Change approved"
+#~ msgstr "Modifica approvata"
+
+#~ msgid "Change deferred"
+#~ msgstr "Modifica posticipata"
+
+#~ msgid "Change in process"
+#~ msgstr "Modifica in corso"
+
+#~ msgid "Change rejected"
+#~ msgstr "Modifica rifiutata"
+
+#~ msgid "Changes In Draft"
+#~ msgstr "Bozze di modifica"
+
+#~ msgid "Error!"
+#~ msgstr "Errore!"
+
+#~ msgid "There is no default company for the current user!"
+#~ msgstr "L'utente attuale non contiene la società predefinita!"
+
+#~ msgid "Accept Change"
+#~ msgstr "Accetta modifica"
+
+#~ msgid "Accepted"
+#~ msgstr "Accettato"
+
+#~ msgid "Active"
+#~ msgstr "Attivo"
+
+#~ msgid "Date Registered"
+#~ msgstr "Data registrazione"
+
+#~ msgid "Defer Change"
+#~ msgstr "Rinvia modifica"
+
+#~ msgid "Draft"
+#~ msgstr "Bozza"
+
+#~ msgid "Reject Change"
+#~ msgstr "Rifiuta modifica"
+
+#~ msgid "Set Active"
+#~ msgstr "Attiva"
+
+#, fuzzy
+#~ msgid "Author"
+#~ msgstr "Autore"
+
+#, fuzzy
+#~ msgid "Opportunity"
+#~ msgstr "Lead/Opportunità"
+
+#, fuzzy
+#~ msgid "Risk"
+#~ msgstr "Rischio"
+
+#, fuzzy
+#~ msgid "Type"
+#~ msgstr "Tipo"
