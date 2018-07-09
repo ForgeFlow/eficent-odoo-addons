@@ -9,9 +9,9 @@ class AccountAnalyticJournal(models.Model):
     _inherit = 'account.analytic.journal'
 
     cost_type = fields.Selection(
-             [('labor', 'Labor Cost'),
-              ('material', 'Material Cost'),
-              ('revenue', 'Revenue')], "Type of cost")
+        [('labor', 'Labor Cost'),
+         ('material', 'Material Cost'),
+         ('revenue', 'Revenue')], "Type of cost")
 
 
 class AnalyticAccount(models.Model):
@@ -54,33 +54,39 @@ class AnalyticAccount(models.Model):
     def get_analytic_totals(self):
         journal_obj = self.env['account.analytic.journal']
 
-        labor_journal_ids = journal_obj.search([('cost_type', '=', 'labor')])
-        material_journal_ids = journal_obj.search([('cost_type', '=', 'material')])
-        revenue_journal_ids = journal_obj.search([('cost_type', '=', 'revenue')])
+        labor_journal_ids = journal_obj.search(
+            [('cost_type', '=', 'labor')])
+        material_journal_ids = journal_obj.search(
+            [('cost_type', '=', 'material')])
+        revenue_journal_ids = journal_obj.search(
+            [('cost_type', '=', 'revenue')])
 
         for account in self:
             analytic_account_ids = account._get_all_analytic_accounts()
-            account.labor_cost = -1*self._get_journal_item_totals(labor_journal_ids, analytic_account_ids)
-            account.material_cost =-1*self._get_journal_item_totals(material_journal_ids, analytic_account_ids)
-            account.revenue = self._get_journal_item_totals(revenue_journal_ids, analytic_account_ids)
+            account.labor_cost = -1*self._get_journal_item_totals(
+                labor_journal_ids, analytic_account_ids)
+            account.material_cost = -1*self._get_journal_item_totals(
+                material_journal_ids, analytic_account_ids)
+            account.revenue = self._get_journal_item_totals(
+                revenue_journal_ids, analytic_account_ids)
             account.total_cost = account.material_cost + account.labor_cost
             account.gross_profit = account.revenue - account.total_cost
         return True
 
     labor_cost = fields.Float(
-            compute=get_analytic_totals, string='Labor cost',
-            digits=dp.get_precision('Account'))
+        compute=get_analytic_totals, string='Labor cost',
+        digits=dp.get_precision('Account'))
     material_cost = fields.Float(
-            compute=get_analytic_totals,string='Material cost',
-            digits=dp.get_precision('Account'))
+        compute=get_analytic_totals, string='Material cost',
+        digits=dp.get_precision('Account'))
     total_cost = fields.Float(
-            compute=get_analytic_totals, string='Total cost',
-            multi='get_analytic_totals',
-            digits=dp.get_precision('Account'))
+        compute=get_analytic_totals, string='Total cost',
+        multi='get_analytic_totals',
+        digits=dp.get_precision('Account'))
     revenue = fields.Float(
-            compute=get_analytic_totals, string='Revenue',
-            digits=dp.get_precision('Account'))
+        compute=get_analytic_totals, string='Revenue',
+        digits=dp.get_precision('Account'))
     gross_profit = fields.Float(
-            compute=get_analytic_totals,
-            string='Gross Profit',
-            digits=dp.get_precision('Account'))
+        compute=get_analytic_totals,
+        string='Gross Profit',
+        digits=dp.get_precision('Account'))
