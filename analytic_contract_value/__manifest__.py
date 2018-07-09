@@ -8,11 +8,10 @@
     "version": "10.0.1.0.0",
     "summary": "Sets a Contract Value on the analytic account",
     "author": "Eficent",
-    'license': 'AGPL-3',
+    "license": "AGPL-3",
     "website": "http://www.eficent.com",
     "category": "Generic",
     "depends": ["analytic"],
-    "license": "AGPL-3",
     "data": [
         "security/analytic_security.xml",
         "wizards/analytic_change_contract_value_view.xml",
