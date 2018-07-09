@@ -33,7 +33,6 @@ virtualenv:
 
 install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
-  - git clone --depth=1 https://github.com/eficent/pmis.git ${HOME}/pmis -b 10.0
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
 
