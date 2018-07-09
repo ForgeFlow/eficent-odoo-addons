@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_analytic_account_tree" model="ir.ui.view">
+        <field name="name">account.analytic.account.tree</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id"
+               ref="analytic_plan.view_account_analytic_account_tree_inh"/>
+        <field name="arch" type="xml">
+            <field name="debit_plan" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+            <field name="credit_plan" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+            <field name="balance_plan" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+            <field name="credit" position="before">
+                <field name="labor_cost_plan"/>
+                <field name="material_cost_plan"/>
+                <field name="total_cost_plan"/>
+                <field name="revenue_plan"/>
+                <field name="gross_profit_plan"/>
+            </field>
+
+        </field>
+    </record>
+
+
+    #
+    # Analytic Planning Journal
+    #
+
+    <record id="view_account_analytic_plan_journal_form" model="ir.ui.view">
+        <field name="name">account.analytic.plan.journal.form</field>
+        <field name="model">account.analytic.plan.journal</field>
+        <field name="inherit_id"
+               ref="analytic_plan.view_account_analytic_plan_journal_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <field name="cost_type"/>
+            </field>
+        </field>
+    </record>
+</odoo>
