@@ -19,8 +19,9 @@ class AnalyticResourcePlanLine(models.Model):
 
     @api.multi
     def action_button_confirm(self):
-        if self.bom_id:
-            self.bom_explode_to_resource_plan()
+        for line in self:
+            if line.bom_id:
+                line.bom_explode_to_resource_plan()
         return super(AnalyticResourcePlanLine, self).action_button_confirm()
 
     bom_id = fields.Many2one(
