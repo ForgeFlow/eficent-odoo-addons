@@ -5,9 +5,10 @@
 
 {
     "name": "Analytic Contract Value",
-    "version": "7.0.1.0.0",
+    "version": "10.0.1.0.0",
     "summary": "Sets a Contract Value on the analytic account",
     "author": "Eficent",
+    'license': 'AGPL-3',
     "website": "http://www.eficent.com",
     "category": "Generic",
     "depends": ["analytic"],
@@ -19,5 +20,4 @@
 
     ],
     'installable': True,
-    'active': False,
 }
