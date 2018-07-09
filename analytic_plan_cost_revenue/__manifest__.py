@@ -10,7 +10,7 @@
     "Summary": """
 Panned analytic Cost and Revenue to analytic accounts
 
-""", 
+""",
     "website": "http://www.eficent.com/",
     "license": "AGPL-3",
     "depends": [
