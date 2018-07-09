@@ -1,5 +1,4 @@
 account-analytic https://github.com/OCA/account-analytic 10.0
-eficent https://github.com/eficent/eficent-odoo-addons 10.0-dependencies
 project https://github.com/OCA/project 10.0
 purchase-workflow https://github.com/OCA/purchase-workflow 10.0
 sale-workflow https://github.com/OCA/sale-workflow 10.0
