@@ -54,20 +54,20 @@ class AnalyticAccount(models.Model):
             if labor_journal_ids:
                 account.labor_cost_plan = -1 * \
                     self._get_plan_journal_item_totals(
-                        labor_journal_ids, analytic_account_ids)
+                        labor_journal_ids.ids, analytic_account_ids)
             else:
                 account.labor_cost_plan = 0.0
             if material_journal_ids:
                 account.material_cost_plan = -1 * \
                     self._get_plan_journal_item_totals(
-                        material_journal_ids, analytic_account_ids)
+                        material_journal_ids.ids, analytic_account_ids)
             else:
                 account.material_cost_plan = 0.0
 
             if revenue_journal_ids:
                 account.revenue_plan = \
                     self._get_plan_journal_item_totals(
-                        revenue_journal_ids, analytic_account_ids)
+                        revenue_journal_ids.ids, analytic_account_ids)
             else:
                 account.revenue_plan = 0.0
 
