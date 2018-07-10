@@ -39,6 +39,7 @@ class AnalyticAccount(models.Model):
         return res
 
     @api.multi
+    @api.depends('plan_line_ids')
     def get_analytic_plan_totals(self):
 
         journal_obj = self.env['account.analytic.plan.journal']
@@ -79,20 +80,25 @@ class AnalyticAccount(models.Model):
 
     labor_cost_plan = fields.Float(
         compute=get_analytic_plan_totals,
+        store=True,
         string='Planned Labor cost',
         digits=dp.get_precision('Account'))
     material_cost_plan = fields.Float(
         compute=get_analytic_plan_totals,
+        store=True,
         string='Planned Material cost',
         digits=dp.get_precision('Account'))
     total_cost_plan = fields.Float(
         compute=get_analytic_plan_totals,
+        store=True,
         string='Planned total cost',
         digits=dp.get_precision('Account'))
     revenue_plan = fields.Float(
+        store=True,
         compute=get_analytic_plan_totals, string='Planned Revenue',
         digits=dp.get_precision('Account'))
     gross_profit_plan = fields.Float(
+        store=True,
         compute=get_analytic_plan_totals,
         string='Planned Gross Profit',
         digits=dp.get_precision('Account'))
