@@ -4,7 +4,6 @@
 
 import time
 from odoo import _, api, fields, models
-from odoo.exceptions import Warning
 from odoo.exceptions import ValidationError
 
 
@@ -154,7 +153,7 @@ class AnalyticResourcePlanLine(models.Model):
             self.product_id.product_tmpl_id.property_account_expense_id.id
         )
         if not journal_id:
-            raise Warning(_(
+            raise ValidationError(_(
                 'There is no analytic plan journal for product %s'
             ) % self.product_id.name)
         if not general_account_id:
@@ -162,18 +161,18 @@ class AnalyticResourcePlanLine(models.Model):
                 self.product_id.categ_id.property_account_expense_categ_id.id
             )
         if not general_account_id:
-            raise Warning(_(
+            raise ValidationError(_(
                 'There is no expense account defined '
                 'for this product: "%s" (id:%d)'
             ) % (self.product_id.name, self.product_id.id,))
         default_plan = plan_version_obj.search(
-            [('default_resource_plan', '=', True)],
+            [('default_plan', '=', True)],
             limit=1
         )
 
         if not default_plan:
-            raise Warning(_('''No active planning version for resource plan
-                exists.'''))
+            raise ValidationError(_('No active planning version for resource'
+                                    ' plan exists.'))
 
         return [{
             'resource_plan_id': self.id,
@@ -235,8 +234,8 @@ class AnalyticResourcePlanLine(models.Model):
         for line in self:
             for child in line.child_ids:
                 if child.state not in ('draft', 'plan'):
-                    raise Warning(_('''All the child resource plan lines
-                        must be in Draft state.'''))
+                    raise ValidationError(_('All the child resource plan '
+                                            'lines must be in Draft state.'))
             line._delete_analytic_lines()
         return self.write({'state': 'draft'})
 
@@ -246,7 +245,8 @@ class AnalyticResourcePlanLine(models.Model):
             children = line._get_child_resource_plan_lines()
             for child in self.browse(children):
                 if child.unit_amount == 0:
-                    raise Warning(_('Quantity should be greater than 0.'))
+                    raise ValidationError(_('Quantity should be greater'
+                                            ' than 0.'))
                 if not child.child_ids:
                     child.create_analytic_lines()
                 child.write({'state': 'confirm'})
@@ -273,8 +273,9 @@ class AnalyticResourcePlanLine(models.Model):
     def unlink(self):
         for line in self:
             if line.analytic_line_plan_ids:
-                raise Warning(_('You cannot delete a record that refers to '
-                                'analytic plan lines'))
+                raise ValidationError(
+                    _('You cannot delete a record that refers to analytic plan'
+                      ' lines'))
         return super(AnalyticResourcePlanLine, self).unlink()
 
     # PRICE DEFINITIONS
