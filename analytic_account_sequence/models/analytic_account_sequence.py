@@ -45,7 +45,7 @@ class AnalyticAccountSequence(models.Model):
 
     @api.model
     def _code_get(self):
-        self._cr.execute('select code, name from ir_sequence_type')
+        self._cr.execute('select code, name from ir_sequence')
         return self._cr.fetchall()
 
     @api.model
