@@ -13,7 +13,7 @@
         <field name="view_type">form</field>
     </record>
 
-    <record id="view_account_analytic_account_form_stock_move" model="ir.ui.view">
+    <record id="view_account_analytic_account_form_stock_move_button" model="ir.ui.view">
         <field name="name">account.analytic.account.form.stock.move</field>
         <field name="model">account.analytic.account</field>
         <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
@@ -29,14 +29,18 @@
                     <span>Stock Moves</span>
                 </button>
             </xpath>
-            <xpath expr="//group[@name='main']" position="after">
-                <notebook>
-                    <page string="Stock" name="stock">
-                        <group name="stock">
-                            <field name="move_ids" nolabel="1"/>
-                        </group>
-                    </page>
-                </notebook>
+        </field>
+    </record>
+
+    <record id="view_account_analytic_account_form_stock_move" model="ir.ui.view">
+        <field name="name">account.analytic.account.form.stock.move</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic_location.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='location']" position="after">
+                <group name="stock">
+                    <field name="move_ids" nolabel="1"/>
+                </group>
             </xpath>
         </field>
     </record>
