@@ -17,7 +17,6 @@
         'analytic_journal',
     ],
     'data': [
-        'security/ir.model.access.csv',
         'views/account_analytic_account_view.xml',
         'wizards/analytic_wip_report_view.xml'
     ],
