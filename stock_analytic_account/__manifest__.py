@@ -14,6 +14,7 @@
     'depends': [
         'stock_analytic',
         'stock_location_analytic',
+        'analytic_location',
     ],
     'data': [
         'view/stock_view.xml',
