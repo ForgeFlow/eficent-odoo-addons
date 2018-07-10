@@ -17,12 +17,11 @@ class AnalyticResourcePlanLine(models.Model):
     @api.multi
     @api.depends('child_ids')
     def _compute_has_child(self):
-        res = {}
         for line in self:
-            res[line.id] = False
+            line.has_child = False
             if line.child_ids:
-                res[line.id] = True
-        return res
+                line.has_child = False
+        return True
 
     account_id = fields.Many2one(
         'account.analytic.account',
