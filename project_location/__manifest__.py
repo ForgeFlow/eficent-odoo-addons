@@ -9,7 +9,7 @@
     "license": 'AGPL-3',
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
-    "Summary": """stock location in the project.""",
+    "summary": """stock location in the project.""",
     "depends": [
         "project_stock",
         "analytic_location"
@@ -18,4 +18,5 @@
         "view/project_view.xml",
         "security/ir.model.access.csv",
     ],
+    "installable": True,
 }
