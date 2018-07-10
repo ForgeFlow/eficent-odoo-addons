@@ -9,11 +9,10 @@ class AccountAnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
 
     @api.multi
-    def list_accounts_with_contract_value(self):
+    def list_children_accounts(self):
         res = {}
         for rec in self:
             curr_id = rec.id
-            all_acc = []
             res[curr_id] = {}
             # Now add the children
             self.env.cr.execute('''
@@ -26,25 +25,19 @@ class AccountAnalyticAccount(models.Model):
             FROM account_analytic_account a
             JOIN children b ON(a.parent_id = b.id)
             )
-            SELECT * FROM children order by parent_id
+            SELECT id FROM children order by parent_id
             ''', (curr_id,))
             cr_res = self.env.cr.fetchall()
-            for x, y in cr_res:
-                all_acc.append(y)
-            all_acc.append(curr_id)
-            for account in self:
-                if account and account.contract_value:
-                    res[curr_id][account.id] = account.contract_value
-        return res
+        return cr_res
 
     @api.multi
     def _total_contract_value_calc(self):
-        acc_list = self.list_accounts_with_contract_value()
-        for acc_id in acc_list.keys():
+        for acc_id in self:
+            accs = acc_id.list_children_accounts()
             total_contract_value = 0.0
-            for ch_acc_id in acc_list[acc_id]:
-                total_contract_value += acc_list[acc_id][ch_acc_id]
-            self.browse(acc_id).total_contract_value = total_contract_value
+            for ch_acc_id in self.browse(accs):
+                total_contract_value += ch_acc_id.contract_value
+            acc_id.total_contract_value = total_contract_value
 
     contract_value = fields.Float(
         'Original Contract Value',
