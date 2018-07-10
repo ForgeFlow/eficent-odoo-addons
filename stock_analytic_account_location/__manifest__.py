@@ -11,9 +11,7 @@
     'website': 'http://www.eficent.com',
     "license": "AGPL-3",
     'depends': [
-        'stock',
-        'analytic',
-        'account_analytic_parent',
+        'stock_analytic_account',
         'stock_location_analytic'
     ],
     'installable': True,
