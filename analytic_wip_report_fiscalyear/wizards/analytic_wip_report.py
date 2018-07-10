@@ -7,7 +7,9 @@ from odoo import api, fields, models
 class AnalyticWipReport(models.TransientModel):
     _inherit = 'analytic.wip.report'
 
-    fiscalyear_id = fields.Many2one('date.range', required=True)
+    fiscalyear_id = fields.Many2one(
+        'date.range', required=True,
+        domain=[('type_id.fiscal_year', '=', True)])
     from_date_fy = fields.Date('From (within the fiscal year)', required=True)
     to_date_fy = fields.Date('To (within the fiscal year)', required=True)
 
