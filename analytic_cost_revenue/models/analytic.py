@@ -51,6 +51,7 @@ class AnalyticAccount(models.Model):
         return res
 
     @api.multi
+    @api.depends('balance')
     def get_analytic_totals(self):
         journal_obj = self.env['account.analytic.journal']
 
@@ -74,19 +75,24 @@ class AnalyticAccount(models.Model):
         return True
 
     labor_cost = fields.Float(
-        compute=get_analytic_totals, string='Labor cost',
+        compute=get_analytic_totals,
+        store=True,
+        string='Labor cost',
         digits=dp.get_precision('Account'))
     material_cost = fields.Float(
         compute=get_analytic_totals, string='Material cost',
+        store=True,
         digits=dp.get_precision('Account'))
     total_cost = fields.Float(
         compute=get_analytic_totals, string='Total cost',
-        multi='get_analytic_totals',
+        store=True,
         digits=dp.get_precision('Account'))
     revenue = fields.Float(
         compute=get_analytic_totals, string='Revenue',
+        store=True,
         digits=dp.get_precision('Account'))
     gross_profit = fields.Float(
         compute=get_analytic_totals,
+        store=True,
         string='Gross Profit',
         digits=dp.get_precision('Account'))
