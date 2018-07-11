@@ -11,7 +11,7 @@ class AccountAnalyticLine(models.Model):
     _inherit = "account.analytic.line"
 
     journal_id = fields.Many2one(
-        'account.analytic.journal', 'Analytic Journal', required=True,
+        'account.analytic.journal', 'Analytic Journal',
         ondelete='restrict', index=True)
 
 
