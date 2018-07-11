@@ -57,8 +57,9 @@ class TestAnalyticWipReport(common.TransactionCase):
                           self.project_id.parent_id.balance)
 
     def test_check_wip_report(self):
-        res = self.project_id.parent_id._compute_wip_report()
-        project = res.get(self.project_id.parent_id.id)
+        res = self.project_id.analytic_account_id.parent_id.\
+            _compute_wip_report()
+        project = res.get(self.project_id.analytic_account_id.parent_id.id)
         self.assertEquals(project.get('earned_revenue'), 0)
         self.assertEquals(project.get('total_value'), 0)
         self.assertEquals(project.get('actual_costs'), 0)
