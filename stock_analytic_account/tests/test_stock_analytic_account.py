@@ -23,7 +23,9 @@ class TestStockAnalyticAccount(common.TransactionCase):
         })
         self.analytic_account = self.env.ref('analytic.analytic_agrolait')
         self.warehouse = self.env.ref('stock.warehouse0')
-        self.location = self.warehouse.lot_stock_id
+        self.location = self.env['stock.location'].create(
+            {'name': self.analytic_account.name,
+             'analytic_account_id': self.analytic_account.id})
         self.dest_location = self.env.ref('stock.stock_location_customers')
         self.outgoing_picking_type = self.env.ref('stock.picking_type_out')
 
@@ -77,6 +79,12 @@ class TestStockAnalyticAccount(common.TransactionCase):
             self.move.quant_ids[1].analytic_account_id,
             self.analytic_account.move_ids.quant_ids[1].analytic_account_id)
 
+        product_qty = self.env['stock.change.product.qty'].create({
+            'location_id': self.location.id,
+            'product_id': self.product_icecream.id,
+            'new_quantity': 100.0,
+        })
+        product_qty.change_product_qty()
         wizard = self.Scrap.with_context(active_ids=[self.picking.id]).\
             create({
                 'product_id': self.product_icecream.id,
