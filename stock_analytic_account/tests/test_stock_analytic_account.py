@@ -13,7 +13,6 @@ class TestStockAnalyticAccount(common.TransactionCase):
         self.StockPicking = self.env['stock.picking']
         self.StockMove = self.env['stock.move']
         self.ProcurementOrder = self.env['procurement.order']
-        self.Scrap = self.env['stock.scrap']
         self.route_warehouse0_mto_id =\
             self.env.ref('stock.route_warehouse0_mto').id
         self.partner_id = self.env.ref('base.res_partner_1')
@@ -32,7 +31,7 @@ class TestStockAnalyticAccount(common.TransactionCase):
         product_qty = self.env['stock.change.product.qty'].create({
             'location_id': self.location.id,
             'product_id': self.product_icecream.id,
-            'new_quantity': 500,
+            'new_quantity': 20,
         })
         product_qty.change_product_qty()
 
@@ -60,12 +59,8 @@ class TestStockAnalyticAccount(common.TransactionCase):
         self.move = self.StockMove.create(move_data)
 
         self.picking.action_confirm()
-        self.picking.force_assign()
+        self.picking.action_assign()
         self.picking.action_done()
-        self.p_order = self.ProcurementOrder.search([
-            ('product_id', '=', self.product_icecream.id),
-        ], limit=1)
-        self.p_order.run()
 
     def test_stock_analytic_account(self):
         """Test Procurement Order And Move"""
@@ -78,21 +73,3 @@ class TestStockAnalyticAccount(common.TransactionCase):
         self.assertEqual(
             self.move.quant_ids[1].analytic_account_id,
             self.analytic_account.move_ids.quant_ids[1].analytic_account_id)
-
-        product_qty = self.env['stock.change.product.qty'].create({
-            'location_id': self.location.id,
-            'product_id': self.product_icecream.id,
-            'new_quantity': 100.0,
-        })
-        product_qty.change_product_qty()
-        wizard = self.Scrap.with_context(active_ids=[self.picking.id]).\
-            create({
-                'product_id': self.product_icecream.id,
-                'scrap_qty': 5,
-                'picking_id': self.picking.id,
-                'product_uom_id': self.product_icecream.uom_id.id,
-            })
-        wizard.with_context(active_ids=[self.picking.id]).action_done()
-
-        for line in self.picking.move_lines:
-            self.assertIn(line.product_uom_qty, [11, 5])
