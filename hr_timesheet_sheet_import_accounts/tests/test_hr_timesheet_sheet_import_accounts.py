@@ -70,11 +70,9 @@ class TestHRTimesheetSheetImportAccounts(TransactionCase):
         return timesheet_sheet
 
     def test_timesheet_methods(self):
-        self.timesheet_sheet_2.set_previous_timesheet_ids()
         self.timesheet_sheet_1.action_timesheet_confirm()
-        analytic_1 = self.analytic_line.\
-            search([('product_id', '=', self.product.id),
-                    ('name', 'ilike', '/')])
-        analytic_2 = self.timesheet_sheet_2.ttimesheet_ids.mapped('account_id')
+        self.timesheet_sheet_2.set_previous_timesheet_ids()
+        analytic_1 = self.timesheet_sheet_1.timesheet_ids.mapped('account_id')
+        analytic_2 = self.timesheet_sheet_2.timesheet_ids.mapped('account_id')
         self.assertEqual(len(analytic_2), 1)
-        self.assertEqual(analytic_1, analytic_2)
+        self.assertEqual(analytic_1.id, analytic_2.id)
