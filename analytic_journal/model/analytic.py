@@ -40,8 +40,8 @@ class AccountAnalyticJournal(models.Model):
     )
 
     @api.model
-    def find_journal(self, vals={}):
-        if vals.get('code', False):
+    def find_journal(self, vals=None):
+        if vals and vals.get('code', False):
             self.search([('code', '=', vals['code'])])
         return None
 
@@ -80,7 +80,7 @@ class AccountMoveLine(models.Model):
             raise ValidationError(_("Please define an analytic journal for "
                                     "journal %s" % self.journal_id.name))
         res[0]['journal_id'] = self.journal_id.analytic_journal_id.id
-        return res[0]
+        return res
 
 
 class AccountInvoice(models.Model):

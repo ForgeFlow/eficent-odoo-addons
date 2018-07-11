@@ -20,4 +20,5 @@ class AccountChartTemplate(models.Model):
             if not analytic_journal:
                 vals = anal_obj._prepare_analytic_journal(journal)
                 analytic_journal = anal_obj.create(vals)
-            journal.update(analytic_journal_id=analytic_journal)
+            journal.update(analytic_journal_id=analytic_journal.id)
+        return res
