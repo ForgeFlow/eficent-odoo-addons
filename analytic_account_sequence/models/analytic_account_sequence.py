@@ -273,8 +273,8 @@ class AnalyticAccountSequence(models.Model):
         if not force_company:
             force_company = self.env['res.users'].\
                 browse(self._uid).company_id.id
-        preferred_sequences = [s for s in self if s.company_id and
-                               s.company_id[0] == force_company]
+        preferred_sequences = [s for s in self if
+                               s.company_id.id == force_company]
         seq = preferred_sequences[0] if preferred_sequences else self[0]
         if seq.implementation == 'standard':
             # pylint: disable=sql-injection
@@ -339,10 +339,6 @@ class AnalyticAccountSequence(models.Model):
         argument, which can be a code or an id (as controlled by the
         ``code_or_id`` argument. This method is deprecated.
         """
-        # TODO: bump up to warning after 6.1 release
-        _logger.debug("ir_sequence.get() and ir_sequence.get_id() "
-                      "are deprecated. Please use ir_sequence.next_by_code() "
-                      "or ir_sequence.next_by_id().")
         if code_or_id == 'id':
             return self.next_by_id(sequence_code_or_id)
         else:
