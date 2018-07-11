@@ -4,7 +4,6 @@
 
 from odoo.tests.common import TransactionCase
 import time
-from odoo.tools.safe_eval import safe_eval as eval
 
 
 class TestHRTimesheetSheetImportAccounts(TransactionCase):
@@ -71,11 +70,11 @@ class TestHRTimesheetSheetImportAccounts(TransactionCase):
         return timesheet_sheet
 
     def test_timesheet_methods(self):
-        vals = self.timesheet_sheet_2.set_previous_timesheet_ids()
+        self.timesheet_sheet_2.set_previous_timesheet_ids()
         self.timesheet_sheet_1.action_timesheet_confirm()
-        analytic_id_1 = self.analytic_line.\
+        analytic_1 = self.analytic_line.\
             search([('product_id', '=', self.product.id),
                     ('name', 'ilike', '/')])
-        domain = eval(vals['domain'])
-        analytic_id = self.analytic_line.browse(domain[0][2][0])
-        self.assertEqual(analytic_id_1, analytic_id)
+        analytic_2 = self.timesheet_sheet_2.ttimesheet_ids.mapped('account_id')
+        self.assertEqual(len(analytic_2), 1)
+        self.assertEqual(analytic_1, analytic_2)
