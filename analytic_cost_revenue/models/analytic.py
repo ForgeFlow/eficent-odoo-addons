@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import api, fields, models
 from odoo.addons import decimal_precision as dp
+from itertools import chain
 
 
 class AccountAnalyticJournal(models.Model):
@@ -30,10 +31,11 @@ class AnalyticAccount(models.Model):
         FROM account_analytic_account a
         JOIN children b ON(a.parent_id = b.id)
         )
-        SELECT id FROM children order by parent_id
+        SELECT * FROM children order by parent_id
         ''', (tuple(self.ids),))
         res = self.env.cr.fetchall()
-        return res
+        res_list = list(chain(*res))
+        return list(set(res_list))
 
     def _get_journal_item_totals(self, journal_ids, analytic_account_ids):
         line_obj = self.env['account.analytic.line']
