@@ -49,9 +49,13 @@ class AnalyticAccount(models.Model):
             domain.append(('date', '>=', self.env.context['from_date']))
         if self.env.context.get('to_date', False):
             domain.append(('date', '<=', self.env.context['to_date']))
-        accs = line_obj.read_group(domain, ['amount'], ['amount'])
-        am_list = [a['amount'] for a in accs]
-        res = sum(am_list)
+        domain.append(
+            ('company_id', '=', self.browse(analytic_account_ids[0]).
+             company_id.id))
+        accs = line_obj.read_group(
+            domain, fields=['amount', 'company_id'], groupby='company_id')
+        if accs:
+            res = accs[0]['amount']
         return res
 
     @api.multi
