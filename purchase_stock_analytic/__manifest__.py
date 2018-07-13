@@ -15,7 +15,8 @@
     "license": "AGPL-3",
     "depends": [
         "purchase",
-        "stock_analytic"
+        "stock_analytic_account",
+        "purchase_analytic",
     ],
     "installable": True,
 }
