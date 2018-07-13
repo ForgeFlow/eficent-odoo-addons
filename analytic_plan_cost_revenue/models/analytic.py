@@ -28,9 +28,13 @@ class AnalyticAccount(models.Model):
             return res
         if version_id:
             domain.append(('version_id', '=', version_id))
-        accs = line_obj.read_group(domain, ['amount'], ['amount'])
-        am_list = [a['amount'] for a in accs]
-        res = sum(am_list)
+        domain.append(
+            ('company_id', '=', self.browse(analytic_account_ids[0]).
+             company_id.id))
+        accs = line_obj.read_group(
+            domain, fields=['amount', 'company_id'], groupby='company_id')
+        if accs:
+            res = accs[0]['amount']
         return res
 
     @api.multi
@@ -56,7 +60,6 @@ class AnalyticAccount(models.Model):
         journal_obj = self.env['account.analytic.plan.journal']
         material_journal_ids = journal_obj.search(
             [('cost_type', '=', 'material')])
-
         for account in self:
             analytic_account_ids = account._get_all_analytic_accounts()
             if material_journal_ids:
