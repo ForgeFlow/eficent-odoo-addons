@@ -5,7 +5,6 @@
 from odoo.tests import common
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from datetime import datetime
-from odoo.exceptions import ValidationError
 
 
 class TestPurchaseOrderLine(common.TransactionCase):
@@ -36,9 +35,11 @@ class TestPurchaseOrderLine(common.TransactionCase):
         }
 
     def test_check_purchase_analytic(self):
-        with self.assertRaises(ValidationError):
-            self.po = self.PurchaseOrder.create(self.po_vals)
-            self.po.button_confirm()
-            self.picking = self.po.picking_ids
-            self.picking.force_assign()
-            self.picking.do_new_transfer()
+        self.po = self.PurchaseOrder.create(self.po_vals)
+        self.po.button_confirm()
+        self.picking = self.po.picking_ids
+        self.picking.force_assign()
+        self.picking.do_new_transfer()
+        self.AssertEqual(
+            self.picking.location_dest_id.analytic_account_id,
+            self.po.project_id)
