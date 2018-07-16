@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data>
+        <record id="view_order_line_form2" model="ir.ui.view">
+        <field name="name">view.order.line.form2</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_form2"/>
+            <field name="arch" type="xml">
+                <field name="qty_delivered" position="after">
+                    <field name="last_supplier_id"/>
+                    <field name="last_purchase_date"/>
+                    <field name="last_purchase_price"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_order_form">
+        <field name="name">sale.order.markup.view.form2</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="price_unit" position="after">
+                <field name="last_supplier_id"/>
+                <field name="last_purchase_date"/>
+                <field name="last_purchase_price"/>
+            </field>
+        </field>
+        </record>
+    </data>
+</openerp>
