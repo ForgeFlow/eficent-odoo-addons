@@ -19,7 +19,9 @@ class SaleOrderLine(orm.Model):
                           ('date_order', '<=', so_line.order_id.date_order),
                           ('state', 'in', ['confirmed', 'done'])],
                 order='id DESC', limit=1)
-            res[so_line.id] = {}
+            res[so_line.id] = {'last_purchase_price': 0.0,
+                               'last_purchase_date': None,
+                               'last_supplier_id': None}
             if po_line_ids:
                 po_lines = self.pool.get(
                     'purchase.order.line').browse(
@@ -45,8 +47,4 @@ class SaleOrderLine(orm.Model):
             fnct=_get_last_purchase, relation='res.partner',
             string='Last Supplier', type='many2one', store=True,
             multi=True, method=True, required=False)
-    }
-
-    _defaults = {
-        'last_purchase_price': 0.0
     }
