@@ -30,9 +30,6 @@ class SaleOrderLine(orm.Model):
                     po_lines[0].price_unit
                 res[so_line.id]['last_supplier_id'] = \
                     po_lines[0].order_id.partner_id.id
-            else:
-                res[so_line.id]['last_purchase_price'] = 0.0
-
         return res
 
     _columns = {
@@ -48,4 +45,8 @@ class SaleOrderLine(orm.Model):
             fnct=_get_last_purchase, relation='res.partner',
             string='Last Supplier', type='many2one', store=True,
             multi=True, method=True, required=False)
+    }
+
+    _defaults = {
+        'last_purchase_price': 0.0
     }
