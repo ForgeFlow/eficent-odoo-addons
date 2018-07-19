@@ -21,10 +21,11 @@ class StockMove(models.Model):
         src_loc = self.location_id.browse(vals['location_id'])
         dest_loc = self.location_id.browse(vals['location_dest_id'])
         add_analytic_id = False
+
         if src_loc.analytic_account_id or dest_loc.analytic_account_id:
-            if (src_loc.usage == 'customer'and dest_loc.usage ==
+            if (src_loc.usage in ('customer', 'supplier') and dest_loc.usage ==
                 'internal') or (src_loc.usage == 'internal' and
-                                dest_loc.usage == 'customer'):
+                                dest_loc.usage in ('customer', 'supplier')):
                 add_analytic_id = dest_loc.analytic_account_id.id
         if add_analytic_id:
             vals['analytic_account_id'] = add_analytic_id
@@ -47,9 +48,10 @@ class StockMove(models.Model):
 
             add_analytic_id = False
             if src_loc.analytic_account_id or dest_loc.analytic_account_id:
-                if (src_loc.usage == 'customer' and dest_loc.usage ==
-                        'internal') or (src_loc.usage == 'internal' and
-                                        dest_loc.usage == 'customer'):
+                if (src_loc.usage in ('customer', 'supplier') and
+                    dest_loc.usage == 'internal') or (
+                        src_loc.usage == 'internal' and
+                            dest_loc.usage in ('customer', 'supplier')):
                     add_analytic_id = dest_loc.analytic_account_id.id
             if add_analytic_id:
                 vals['analytic_account_id'] = add_analytic_id
