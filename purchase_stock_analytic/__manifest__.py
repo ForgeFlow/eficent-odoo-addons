@@ -18,5 +18,8 @@
         "stock_analytic_account",
         "purchase_analytic",
     ],
+    'data': [
+        'views/purchase_views.xml',
+    ],
     "installable": True,
 }
