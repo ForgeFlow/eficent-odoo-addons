@@ -15,7 +15,8 @@ class StockPicking(models.Model):
         res = super(StockPicking, self).do_transfer()
         if self.purchase_id.order_line.filtered(lambda p: p.delivery_line):
             return res
-        self._add_delivery_cost_to_po()
+        if self.carrier_id:
+            self._add_delivery_cost_to_po()
         return res
 
     @api.multi
