@@ -5,7 +5,7 @@
 #  - Matjaž Mozetič
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models
+from odoo import _, exceptions, api, models
 
 
 class PurchaseOrderLine(models.Model):
@@ -19,7 +19,7 @@ class PurchaseOrderLine(models.Model):
             if line.account_analytic_id:
                 res[0].update({
                     'analytic_account_id': line.account_analytic_id.id,
-                    'location_des_id':
+                    'location_dest_id':
                         line.account_analytic_id.location_id.id,
                 })
         return res
@@ -35,3 +35,13 @@ class PurchaseOrder(models.Model):
             res.update(
                 {'location_dest_id': self.project_id.location_id.id, })
         return res
+
+    @api.multi
+    def button_confirm(self):
+        for po in self:
+            if (po.project_id and not
+                    po.project_id.location_id):
+                raise exceptions.ValidationError(_(
+                    'Please assign a location for the project.'
+                ))
+        return super(PurchaseOrder, self).button_confirm()

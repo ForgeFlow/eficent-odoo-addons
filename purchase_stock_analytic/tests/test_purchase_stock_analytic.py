@@ -8,6 +8,7 @@
 from odoo.tests import common
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from datetime import datetime
+from odoo.exceptions import ValidationError
 
 
 class TestPurchaseStockAnalytic(common.TransactionCase):
@@ -22,6 +23,10 @@ class TestPurchaseStockAnalytic(common.TransactionCase):
         self.analytic_account = self.AnalyticAccount.create({
             'name': 'Test Analytic Account',
         })
+        self.location = self.env['stock.location'].create({
+            'name': 'ACC',
+            'usage': 'internal',
+            'analytic_account_id': self.analytic_account.id})
         self.po_vals = {
             'partner_id': self.partner_id.id,
             'order_line': [
@@ -39,6 +44,9 @@ class TestPurchaseStockAnalytic(common.TransactionCase):
 
     def test_purchase_stock_analytic(self):
         self.po = self.PurchaseOrder.create(self.po_vals)
+        with self.assertRaises(ValidationError):
+            self.po.button_confirm()
+        self.analytic_account.write({'location_id': self.location.id})
         self.po.button_confirm()
         self.picking = self.po.picking_ids
         self.picking.force_assign()

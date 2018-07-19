@@ -19,6 +19,11 @@ class TestPurchaseOrderLine(common.TransactionCase):
         self.analytic_account = self.AnalyticAccount.create({
             'name': 'Test Analytic Account',
         })
+        self.location = self.env['stock.location'].create({
+            'name': 'ACC',
+            'usage': 'internal',
+            'analytic_account_id': self.analytic_account.id})
+        self.analytic_account.write({'location_id': self.location.id})
         self.po_vals = {
             'partner_id': self.partner_id.id,
             'order_line': [
@@ -40,6 +45,6 @@ class TestPurchaseOrderLine(common.TransactionCase):
         self.picking = self.po.picking_ids
         self.picking.force_assign()
         self.picking.do_new_transfer()
-        self.AssertEqual(
+        self.assertEqual(
             self.picking.location_dest_id.analytic_account_id,
             self.po.project_id)
