@@ -2,6 +2,7 @@
 # © 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from openerp.osv import fields, orm
+from openerp.tools.translate import _
 
 
 class StockMove(orm.Model):
@@ -52,31 +53,30 @@ class StockMove(orm.Model):
         return super(StockMove, self).write(
             cr, uid, ids, vals, context=context)
 
-    def _check_analytic_account(self, cr, uid, ids, context=None):
-        # for move in self.browse(cr, uid, ids):
-        #     if move.location_id and move.location_dest_id:
-        #         if move.location_id.analytic_account_id and move.location_dest_id.analytic_account_id:
-        #             if move.location_id.analytic_account_id.id != move.location_dest_id.analytic_account_id.id:
-        #                 return False
-        return True
+    def action_done(self, cr, uid, ids, context=None):
+        """Override the action_done to add constraint to check if the
+        location_dest is disable"""
 
-    def _check_analytic(self, cr, uid, ids, context=None):
-        # for move in self.browse(cr, uid, ids):
-        #     if move.analytic_account_id:
-        #         if ((move.location_id.analytic_account_id ==
-        #                 move.analytic_account_id)
-        #             or (move.location_dest_id.analytic_account_id ==
-        #                 move.analytic_account_id)):
-        #             return True
-        #         else:
-        #             return False
-        return True
-
-    _constraints = [(_check_analytic_account,
-                     "Cannot move between different projects locations, "
-                     "please move first to general stock",
-                     ['location_id', 'location_dest_id']),
-                    (_check_analytic,
-                     "The analytic account in the move and in"
-                     " the destination location does not match",
-                     ['analytic_account_id', 'location_dest_id'])]
+        if context is None:
+            context = {}
+        if isinstance(ids, (int, long)):
+            ids = [ids]
+        move = self.browse(cr, uid, ids, context)[0]
+        location_dest_id = move.location_dest_id
+        dest_anal = move.location_dest_id.analytic_account_id
+        location_id = move.location_id
+        analytic = move.analytic_account_id
+        if location_id.analytic_account_id and location_dest_id.analytic_account_id:
+            if location_id.analytic_account_id.id != location_dest_id.analytic_account_id.id:
+                raise orm.except_orm(
+                    _('Validation Error'),
+                    _('Cannot move between projects location, please move first to general stock.')
+                )
+        if analytic or dest_anal:
+            if (analytic != location_id.analytic_account_id) and (analytic != location_dest_id.analytic_account_id):
+                raise orm.except_orm(
+                    _('Validation Error'),
+                    _('The analytic account in the stock move is wrong')
+                )
+        return super(StockMove, self).action_done(
+            cr, uid, ids, context=context)
