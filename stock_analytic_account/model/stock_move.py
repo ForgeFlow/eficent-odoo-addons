@@ -51,7 +51,7 @@ class StockMove(models.Model):
                 if (src_loc.usage in ('customer', 'supplier') and
                     dest_loc.usage == 'internal') or (
                         src_loc.usage == 'internal' and
-                            dest_loc.usage in ('customer', 'supplier')):
+                        dest_loc.usage in ('customer', 'supplier')):
                     add_analytic_id = dest_loc.analytic_account_id.id
             if add_analytic_id:
                 vals['analytic_account_id'] = add_analytic_id
