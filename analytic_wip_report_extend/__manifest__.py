@@ -14,6 +14,7 @@
     "license": "",
     "depends": [
         "analytic_wip_report",
+        "account_analytic_parent",
     ],
     "data": [
         "views/account_analytic_account_view.xml"

@@ -28,12 +28,6 @@ class AccountAnalyticAccount(models.Model):
             account.under_over = over_under_billings
         return res
 
-    total_contract_value = fields.Float(
-        compute='_compute_wip_report',
-        string='Total Contract Value',
-        help="""Total estimated revenue of the contract""",
-        digits=dp.get_precision('Account'))
-
     estimated_gross_profit_per = fields.Float(
         compute='_compute_wip_report',
         string='Total Value',
