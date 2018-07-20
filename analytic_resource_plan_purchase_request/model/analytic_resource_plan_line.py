@@ -67,8 +67,11 @@ class AnalyticResourcePlanLine(models.Model):
         default='none')
     purchase_request_lines = fields.Many2many(
         'purchase.request.line',
-        copy=False,
+        'purchase_request_line_analytic_resource_plan_line_line_rel',
+        'analytic_resource_plan_line_id',
+        'purchase_request_line_id',
         string='Purchase Request Lines',
+        copy=False,
         readonly=True)
 
     @api.multi
