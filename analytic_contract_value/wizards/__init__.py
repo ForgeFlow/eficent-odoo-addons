@@ -3,3 +3,4 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from . import analytic_change_contract_value
+from . import analytic_contract_value_breakdown

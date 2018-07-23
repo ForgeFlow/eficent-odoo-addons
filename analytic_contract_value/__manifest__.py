@@ -15,6 +15,7 @@
     "data": [
         "security/analytic_security.xml",
         "wizards/analytic_change_contract_value_view.xml",
+        "wizards/analytic_contract_value_breakdown_view.xml",
         "views/analytic_account_view.xml",
 
     ],
