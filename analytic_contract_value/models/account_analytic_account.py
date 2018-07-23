@@ -12,18 +12,20 @@ class AccountAnalyticAccount(models.Model):
     @api.multi
     def _get_all_analytic_accounts(self):
         # Now add the children
-        self.env.cr.execute('''
+        query = '''
         WITH RECURSIVE children AS (
         SELECT parent_id, id
         FROM account_analytic_account
-        WHERE parent_id in %s
+        WHERE parent_id in ({id1}) or id in ({id1})
         UNION ALL
         SELECT a.parent_id, a.id
         FROM account_analytic_account a
         JOIN children b ON(a.parent_id = b.id)
         )
-        SELECT * FROM children order by parent_id
-        ''', (tuple(self.ids),))
+        SELECT id FROM children order by parent_id
+        '''
+        query = query.format(id1=', '.join([str(i) for i in self._ids]))
+        self.env.cr.execute(query)
         res = self.env.cr.fetchall()
         res_list = list(chain(*res))
         return list(set(res_list))
