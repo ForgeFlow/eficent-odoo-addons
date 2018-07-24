@@ -10,13 +10,14 @@ class AccountMoveLine(models.Model):
 
     @api.multi
     def _compute_valid_to_post(self):
+        valid_list = ['Income', 'Expense', 'Cost', 'Revenue']
         for rec in self:
             if rec.analytic_account_id:
-                if rec.account_id.user_type_id.name not in ('Income',
-                                                            'Expenses'):
-                    rec.valid_to_post = False
-                    continue
-            rec.valid_to_post = True
+                for valid in valid_list:
+                    if valid in rec.account_id.user_type_id.name:
+                        rec.valid_to_post = True
+                        return
+            rec.valid_to_post = False
 
     valid_to_post = fields.Boolean(
         'Entry allowed to be post',
