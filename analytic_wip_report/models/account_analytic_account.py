@@ -136,7 +136,7 @@ class AccountAnalyticAccount(models.Model):
 
             # Estimated gross profit
             account.estimated_gross_profit = (
-                account.total_value - account.total_estimated_costs)
+                account.total_contract_value - account.total_estimated_costs)
 
             # Percent complete
             try:
