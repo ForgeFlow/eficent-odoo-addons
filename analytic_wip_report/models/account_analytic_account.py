@@ -148,7 +148,7 @@ class AccountAnalyticAccount(models.Model):
 
             # Earned revenue
             account.earned_revenue = (
-                account.percent_complete/100 * account.total_value)
+                account.percent_complete/100 * account.total_contract_value)
 
             # Over/Under billings
             over_under_billings = (account.actual_billings -
@@ -162,7 +162,7 @@ class AccountAnalyticAccount(models.Model):
             try:
                 account.estimated_gross_profit_per = (
                     account.estimated_gross_profit /
-                    account.total_value * 100)
+                    account.total_contract_value * 100)
             except ZeroDivisionError:
                 account.estimated_gross_profit_per = 0
             over_under_billings = (account.under_billings -
