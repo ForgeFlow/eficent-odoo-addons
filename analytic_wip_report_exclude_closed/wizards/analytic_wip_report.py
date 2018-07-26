@@ -26,21 +26,25 @@ class AnalyticWipReport(models.TransientModel):
         if self.filter_project and not comparing_date:
             project_ids = self.env['account.analytic.account'].\
                 search([('account_class', '=', 'project'),
-                        ('stage_id', 'not in', project_stage)])
+                        ('stage_id', 'not in', project_stage)],
+                       order='category_id, complete_wbs_code')
             domain = [('id', 'in', project_ids.ids), ] or []
         elif self.filter_project and comparing_date:
             project_ids = self.env['account.analytic.account'].\
                 search([('date_start', '>=', comparing_date),
                         ('account_class', '=', 'project'),
-                        ('stage_id', 'not in', project_stage)])
+                        ('stage_id', 'not in', project_stage)],
+                       order='category_id, complete_wbs_code')
             domain = [('id', 'in', project_ids.ids), ] or []
         elif not self.filter_project and comparing_date:
             project_ids = self.env['account.analytic.account'].\
                 search([('date_start', '>=', comparing_date),
-                        ('stage_id', 'not in', project_stage)])
+                        ('stage_id', 'not in', project_stage)],
+                       order='category_id, complete_wbs_code')
             domain = [('id', 'in', project_ids.ids), ] or []
         else:
             project_ids = self.env['account.analytic.account'].\
-                search([('stage_id', 'not in', project_stage)])
+                search([('stage_id', 'not in', project_stage)],
+                       order='category_id, complete_wbs_code')
             domain = [('id', 'in', project_ids.ids), ] or []
         return domain
