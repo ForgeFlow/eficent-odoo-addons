@@ -27,20 +27,20 @@ class AnalyticWipReport(models.TransientModel):
             project_ids = self.env['account.analytic.account'].\
                 search([('account_class', '=', 'project'),
                         ('stage_id', 'not in', project_stage)])
-            domain = [('id', 'in', project_ids.ids)] or []
+            domain = [('id', 'in', project_ids.ids), ] or []
         elif self.filter_project and comparing_date:
             project_ids = self.env['account.analytic.account'].\
                 search([('date_start', '>=', comparing_date),
                         ('account_class', '=', 'project'),
                         ('stage_id', 'not in', project_stage)])
-            domain = [('id', 'in', project_ids.ids)] or []
+            domain = [('id', 'in', project_ids.ids), ] or []
         elif not self.filter_project and comparing_date:
             project_ids = self.env['account.analytic.account'].\
                 search([('date_start', '>=', comparing_date),
                         ('stage_id', 'not in', project_stage)])
-            domain = [('id', 'in', project_ids.ids)] or []
+            domain = [('id', 'in', project_ids.ids), ] or []
         else:
             project_ids = self.env['account.analytic.account'].\
                 search([('stage_id', 'not in', project_stage)])
-            domain = [('id', 'in', project_ids.ids)] or []
+            domain = [('id', 'in', project_ids.ids), ] or []
         return domain
