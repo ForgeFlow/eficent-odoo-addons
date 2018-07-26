@@ -224,7 +224,7 @@ class AccountAnalyticAccount(models.Model):
         compute='_compute_wip_report',
         string='Percent Complete',
         help="Actual Costs to Date / Total Estimated Costs",
-        digits=dp.get_precision('Account')
+        digits=(16, 10.0)
     )
     earned_revenue = fields.Float(
         compute='_compute_wip_report',
