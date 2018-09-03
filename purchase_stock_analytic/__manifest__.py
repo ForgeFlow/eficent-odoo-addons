@@ -17,6 +17,7 @@
         "purchase",
         "stock_analytic_account",
         "purchase_analytic",
+        "purchase_location_by_line",
     ],
     'data': [
         'views/purchase_views.xml',
