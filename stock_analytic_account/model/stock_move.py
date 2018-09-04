@@ -32,32 +32,6 @@ class StockMove(models.Model):
         return super(StockMove, self).create(vals)
 
     @api.multi
-    def write(self, vals):
-        for move in self:
-            if 'location_id' in vals:
-                src_loc =\
-                    self.env['stock.location'].browse(vals['location_id'])[0]
-            else:
-                src_loc = move.location_id
-
-            if 'location_dest_id' in vals:
-                dest_loc = self.env['stock.location'
-                                    ].browse(vals['location_dest_id'])[0]
-            else:
-                dest_loc = move.location_dest_id
-
-            add_analytic_id = False
-            if src_loc.analytic_account_id or dest_loc.analytic_account_id:
-                if (src_loc.usage in ('customer', 'supplier') and
-                    dest_loc.usage == 'internal') or (
-                        src_loc.usage == 'internal' and
-                        dest_loc.usage in ('customer', 'supplier')):
-                    add_analytic_id = dest_loc.analytic_account_id.id
-            if add_analytic_id:
-                vals['analytic_account_id'] = add_analytic_id
-        return super(StockMove, self).write(vals)
-
-    @api.multi
     @api.constrains('analytic_account_id', 'location_id', 'location_dest_id')
     def _check_analytic_account(self):
         for move in self:
