@@ -5,7 +5,7 @@
 #  - Matjaž Mozetič
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, exceptions, api, models
+from odoo import _, exceptions, api, fields, models
 
 
 class PurchaseOrderLine(models.Model):
@@ -46,20 +46,20 @@ class PurchaseOrderLine(models.Model):
                     'analytic_account_id': line.account_analytic_id.id,
                     'location_dest_id':
                         line.account_analytic_id.location_id.id,
+                    'picking_type_id':
+                        line.account_analytic_id.picking_type_id.id
                 })
+                picking.location_dest_id = line.account_analytic_id.location_id.id
+                picking.picking_type_id = line.account_analytic_id.picking_type_id.id
         return res
+
+    picking_type_id = fields.Many2one(
+        'stock.picking.type',
+        'Default Picking Type for the receipt')
 
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
-
-    @api.model
-    def _prepare_picking(self):
-        res = super(PurchaseOrder, self)._prepare_picking()
-        if self.project_id:
-            res.update(
-                {'location_dest_id': self.project_id.location_id.id, })
-        return res
 
     @api.multi
     def button_confirm(self):
