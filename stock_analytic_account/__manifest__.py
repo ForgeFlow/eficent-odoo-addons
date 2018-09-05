@@ -15,11 +15,13 @@
         'stock_analytic',
         'stock_location_analytic',
         'analytic_location',
+        'analytic_journal',
     ],
     'data': [
         'view/stock_view.xml',
         'view/stock_picking_view.xml',
         'view/analytic_account_view.xml',
     ],
+    'pre_init_hook': 'pre_init_hook',
     'installable': True,
 }
