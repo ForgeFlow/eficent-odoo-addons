@@ -35,6 +35,8 @@ class TestPurchaseStockAnalytic(common.TransactionCase):
                     'product_id': self.product_id_1.id,
                     'product_qty': 5.0,
                     'product_uom': self.product_id_1.uom_po_id.id,
+                    'location_dest_id': self.location.id,
+                    'picking_type_id': 1,
                     'price_unit': 500.0,
                     'account_analytic_id': self.analytic_account.id,
                     'date_planned': datetime.today().
@@ -46,7 +48,8 @@ class TestPurchaseStockAnalytic(common.TransactionCase):
         self.po = self.PurchaseOrder.create(self.po_vals)
         with self.assertRaises(ValidationError):
             self.po.button_confirm()
-        self.analytic_account.write({'location_id': self.location.id})
+        self.analytic_account.write({'location_id': self.location.id,
+                                     'picking_type_id': 1})
         self.po.button_confirm()
         self.picking = self.po.picking_ids
         self.picking.force_assign()
