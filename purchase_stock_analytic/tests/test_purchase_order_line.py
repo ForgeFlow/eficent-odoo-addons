@@ -23,7 +23,8 @@ class TestPurchaseOrderLine(common.TransactionCase):
             'name': 'ACC',
             'usage': 'internal',
             'analytic_account_id': self.analytic_account.id})
-        self.analytic_account.write({'location_id': self.location.id})
+        self.analytic_account.write({'location_id': self.location.id,
+                                     'picking_type_id': 1})
         self.po_vals = {
             'partner_id': self.partner_id.id,
             'order_line': [
@@ -31,6 +32,8 @@ class TestPurchaseOrderLine(common.TransactionCase):
                     'name': self.product_id_1.name,
                     'product_id': self.product_id_1.id,
                     'product_qty': 5.0,
+                    'location_dest_id': self.location.id,
+                    'picking_type_id': 1,
                     'product_uom': self.product_id_1.uom_po_id.id,
                     'price_unit': 500.0,
                     'account_analytic_id': self.analytic_account.id,
