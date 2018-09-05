@@ -42,15 +42,14 @@ class PurchaseOrderLine(models.Model):
         res = super(PurchaseOrderLine, self)._prepare_stock_moves(picking)
         for line in self:
             if line.account_analytic_id:
+                aa = line.account_analytic_id
                 res[0].update({
-                    'analytic_account_id': line.account_analytic_id.id,
-                    'location_dest_id':
-                        line.account_analytic_id.location_id.id,
-                    'picking_type_id':
-                        line.account_analytic_id.picking_type_id.id
+                    'analytic_account_id': aa.id,
+                    'location_dest_id': aa.location_id.id,
+                    'picking_type_id': aa.picking_type_id.id
                 })
-                picking.location_dest_id = line.account_analytic_id.location_id.id
-                picking.picking_type_id = line.account_analytic_id.picking_type_id.id
+                picking.location_dest_id = aa.location_id.id
+                picking.picking_type_id = aa.picking_type_id.id
         return res
 
     picking_type_id = fields.Many2one(
