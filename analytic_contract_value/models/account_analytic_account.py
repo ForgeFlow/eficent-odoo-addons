@@ -34,10 +34,12 @@ class AccountAnalyticAccount(models.Model):
     @api.depends('contract_value')
     def _compute_total_contract_value(self):
         for acc_id in self:
-            accs = acc_id._get_all_analytic_accounts()
             total_contract_value = 0.0
-            for ch_acc_id in self.browse(accs):
-                total_contract_value += ch_acc_id.contract_value
+            if type(acc_id.id) == int:
+                # _get_all_analytic_accounts fails for new objects
+                accs = acc_id._get_all_analytic_accounts()
+                for ch_acc_id in self.browse(accs):
+                    total_contract_value += ch_acc_id.contract_value
             acc_id.total_contract_value = total_contract_value
 
     contract_value = fields.Float(
