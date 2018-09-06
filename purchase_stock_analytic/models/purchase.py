@@ -52,6 +52,19 @@ class PurchaseOrderLine(models.Model):
                 picking.picking_type_id = aa.picking_type_id.id
         return res
 
+    @api.constrains('location_dest_id', 'account_analytic_id')
+    @api.multi
+    def _check_line_locations(self):
+        # check users dont buy for projects to a generic location
+        for rec in self:
+            if rec.location_dest_id:
+                if (rec.location_dest_id.analytic_account_id !=
+                        rec.account_analytic_id):
+                    raise exceptions.ValidationError(
+                        _('The location is not dedicated to project %s'
+                          % rec.account_analytic_id.name))
+        return True
+
     picking_type_id = fields.Many2one(
         'stock.picking.type',
         'Default Picking Type for the receipt')
