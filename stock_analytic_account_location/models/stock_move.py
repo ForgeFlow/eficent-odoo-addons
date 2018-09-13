@@ -72,11 +72,5 @@ class StockMove(orm.Model):
                     _('Validation Error'),
                     _('Cannot move between projects location, please move first to general stock.')
                 )
-        if analytic or dest_anal:
-            if (analytic != location_id.analytic_account_id) and (analytic != location_dest_id.analytic_account_id):
-                raise orm.except_orm(
-                    _('Validation Error'),
-                    _('The analytic account in the stock move is wrong')
-                )
         return super(StockMove, self).action_done(
             cr, uid, ids, context=context)
