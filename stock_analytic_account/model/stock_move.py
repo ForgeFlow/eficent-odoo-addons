@@ -53,10 +53,6 @@ class StockMove(models.Model):
                             raise exceptions.ValidationError(_(
                                 "Wrong analytic account in destination or "
                                 "move"))
-                    else:
-                        raise exceptions.ValidationError(_(
-                            "Wrong analytic account in move or one of the "
-                            "locations"))
         return True
 
 
