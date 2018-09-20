@@ -13,6 +13,6 @@ class StockQuant(models.Model):
         If the location is a project location and it is out of the company do
         not create acc entries
         """
-        if move.analytic_account_id.location_id.company_id:
+        if not move.analytic_account_id.location_id.company_id:
             return super(StockQuant, self)._account_entry_move(move)
         return False
