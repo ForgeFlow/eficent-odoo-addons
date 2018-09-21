@@ -8,4 +8,5 @@ from odoo import fields, models
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    check_number = fields.Integer(string="Check Number", readonly=True)
+    check_number = fields.Integer(
+        related='payment_id.check_number', store=True)
