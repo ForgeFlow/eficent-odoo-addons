@@ -3,7 +3,7 @@
 # Copyright 2018 Eficent Business and IT Consulting Services S.L.
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lpgl.html).
 
-from odoo import models, fields, api
+from odoo import models, api
 from odoo.tools.float_utils import float_round
 from odoo.exceptions import UserError
 
