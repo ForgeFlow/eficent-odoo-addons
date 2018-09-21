@@ -20,7 +20,8 @@ Usage
 Known issues / Roadmap
 ======================
 
- * no known issues
+ * How to parse label. Currently just splitting by slashes.
+ * Labels may contain numbers referring dates or anything but check numbers
 
 Bug Tracker
 ===========
