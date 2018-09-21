@@ -5,9 +5,9 @@
 Account Bank Statement Check
 ============================
 
-Reconcile payments by check number
-
-
+Automatically Reconcile payments by check number. Automatic reconcile will do
+when the entry matches the label or the check number matches the reference
+otherwise manual reconcile is required
 
 Usage
 =====

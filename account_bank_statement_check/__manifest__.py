@@ -13,7 +13,7 @@
     'website': 'https://github.com/OCA/bank-payment',
     'category': 'Banking addons',
     'depends': [
-        'account',
+        'account_move_check_number',
     ],
-    'installable': False,
+    'installable': True,
 }

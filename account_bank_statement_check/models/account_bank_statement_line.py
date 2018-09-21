@@ -4,6 +4,7 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lpgl.html).
 
 from odoo import models, fields, api
+from odoo.tools.float_utils import float_round
 
 
 class AccountBankStatementLine(models.Model):
@@ -11,7 +12,8 @@ class AccountBankStatementLine(models.Model):
 
     @api.multi
     def auto_reconcile(self):
-        # Copying standard as impossible to change behavior otherwise changes at XXX
+        # Copying standard as impossible to change behavior otherwise.
+        # The changes are at XXX
         """ Try to automatically reconcile the statement.line ; return the counterpart journal entry/ies if the automatic reconciliation succeeded, False otherwise.
             TODO : this method could be greatly improved and made extensible
         """
@@ -28,10 +30,10 @@ class AccountBankStatementLine(models.Model):
                     'amount': float_round(amount, precision_digits=precision),
                     'partner_id': self.partner_id.id,
                     'ref': self.name,
-                    }
+                    'check': self.ref,
+                  }
         field = currency and 'amount_residual_currency' or 'amount_residual'
         liquidity_field = currency and 'amount_currency' or amount > 0 and 'debit' or 'credit'
-        # XXX Look for structured communication match
         if self.name:
             sql_query = self._get_common_sql_query() + \
                 " AND aml.ref = %(ref)s AND ("+field+" = %(amount)s OR (acc.internal_type = 'liquidity' AND "+liquidity_field+" = %(amount)s)) \
@@ -40,7 +42,17 @@ class AccountBankStatementLine(models.Model):
             match_recs = self.env.cr.dictfetchall()
             if len(match_recs) > 1:
                 return False
-        # Deleting lines here. Do not reconcile if ref does not match
+        # XXX check check number not just partner
+        if self.ref:
+            sql_query = self._get_common_sql_query() + \
+                " AND aml.check_number = %(check)s AND ("+field+" = %(amount)s OR (acc.internal_type = 'liquidity' AND "+liquidity_field+" = %(amount)s)) \
+                ORDER BY date_maturity asc, aml.id asc"
+            self.env.cr.execute(sql_query, params)
+            match_recs = self.env.cr.dictfetchall()
+            if len(match_recs) > 1:
+                return False
+        # XXX  Deleting lines here. Do not reconcile if full name or
+        # check number does not match
         if not match_recs:
             return False
 
