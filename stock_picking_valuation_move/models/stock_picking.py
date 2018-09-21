@@ -10,10 +10,10 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     account_move = fields.Many2one('account.move', 'Valuation Move',
-                                   compute='compute_valuation_move')
+                                   compute='_compute_valuation_move')
 
     @api.multi
-    def compute_valuation_move(self):
+    def _compute_valuation_move(self):
         account_move = self.env['account.move'].search(
             [('ref', '=', self.name)], limit=1)
         self.account_move = account_move
