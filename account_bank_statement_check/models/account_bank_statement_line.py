@@ -29,14 +29,15 @@ class AccountBankStatementLine(models.Model):
         # XXX parse check number
         labels = self.name.split('/')
         ref = tuple(int(s) for s in labels if s.isdigit())
-        params = {'company_id': self.env.user.company_id.id,
-                    'account_payable_receivable': (
-                        self.journal_id.default_credit_account_id.id,
-                        self.journal_id.default_debit_account_id.id),
-                    'amount': float_round(amount, precision_digits=precision),
-                    'partner_id': self.partner_id.id,
-                    'ref': ref,
-                  }
+        params = {
+            'company_id': self.env.user.company_id.id,
+            'account_payable_receivable': (
+                self.journal_id.default_credit_account_id.id,
+                self.journal_id.default_debit_account_id.id),
+            'amount': float_round(amount, precision_digits=precision),
+            'partner_id': self.partner_id.id,
+            'ref': ref,
+        }
         field = currency and 'amount_residual_currency' or 'amount_residual'
         liquidity_field = (currency and 'amount_currency' or amount > 0
                            and 'debit' or 'credit')
@@ -44,8 +45,8 @@ class AccountBankStatementLine(models.Model):
         if ref:
             sql_query = self._get_common_sql_query() + \
                 " AND aml.check_number in %(ref)s AND ("+field + \
-                        " = %(amount)s OR (acc.internal_type = 'liquidity'" \
-                        "AND "+liquidity_field+" = %(amount)s)) \
+                " = %(amount)s OR (acc.internal_type = 'liquidity'" \
+                "AND "+liquidity_field+" = %(amount)s)) \
                 ORDER BY date_maturity asc, aml.id asc"
             self.env.cr.execute(sql_query, params)
             match_recs = self.env.cr.dictfetchall()
