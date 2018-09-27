@@ -61,16 +61,17 @@ class StockMove(orm.Model):
             context = {}
         if isinstance(ids, (int, long)):
             ids = [ids]
-        move = self.browse(cr, uid, ids, context)[0]
-        location_dest_id = move.location_dest_id
-        dest_anal = move.location_dest_id.analytic_account_id
-        location_id = move.location_id
-        analytic = move.analytic_account_id
-        if location_id.analytic_account_id and location_dest_id.analytic_account_id:
-            if location_id.analytic_account_id.id != location_dest_id.analytic_account_id.id:
-                raise orm.except_orm(
-                    _('Validation Error'),
-                    _('Cannot move between projects location, please move first to general stock.')
-                )
+        if ids:
+            move = self.browse(cr, uid, ids, context)[0]
+            location_dest_id = move.location_dest_id
+            dest_anal = move.location_dest_id.analytic_account_id
+            location_id = move.location_id
+            analytic = move.analytic_account_id
+            if location_id.analytic_account_id and location_dest_id.analytic_account_id:
+                if location_id.analytic_account_id.id != location_dest_id.analytic_account_id.id:
+                    raise orm.except_orm(
+                        _('Validation Error'),
+                        _('Cannot move between projects location, please move first to general stock.')
+                    )
         return super(StockMove, self).action_done(
             cr, uid, ids, context=context)
