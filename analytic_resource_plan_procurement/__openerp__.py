@@ -41,7 +41,7 @@ Module features:
         "views/analytic_resource_plan_view.xml",
     ],
     'demo_xml': [],
-    'test':[],
+    'test': [],
     'installable': True,
     'active': False,
     'certificate': '',

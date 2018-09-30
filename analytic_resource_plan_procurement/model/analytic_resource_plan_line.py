@@ -22,7 +22,7 @@ from openerp.osv import fields, orm
 
 
 class AnalyticResourcePlanLine(orm.Model):
-    
+
     _inherit = 'analytic.resource.plan.line'
 
     _columns = {
@@ -50,7 +50,6 @@ class AnalyticResourcePlanLine(orm.Model):
 
         product_uom_id = line.product_uom_id \
             and line.product_uom_id.id or False
-
         return {
             'name': line.name,
             'origin': line.account_id.complete_name,
@@ -64,5 +63,5 @@ class AnalyticResourcePlanLine(orm.Model):
             'analytic_account_id': line.account_id.id,
             'dest_address_id': dest_address_id,
             'move_id': move_id,
-            'procurement_orders': [(4, [line.id])]
+            'analytic_resource_plan_lines': [(4, [line.id])]
         }

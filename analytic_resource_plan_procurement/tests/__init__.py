@@ -18,18 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, orm
+from . import test_analytic_resource_plan_procurement
 
-
-class ProcurementOrder(orm.Model):
-
-    _inherit = 'procurement.order'
-
-    _columns = {
-        'analytic_resource_plan_lines': fields.many2many(
-            'analytic.resource.plan.line',
-            'procurement_order_analytic_resource_plan_line_line_rel',
-            'procurement_order_id',
-            'analytic_resource_plan_line_id',
-            'Analytic Resource Plan Lines', readonly=True),
-    }
+fast_suite = [
+    test_analytic_resource_plan_procurement
+]

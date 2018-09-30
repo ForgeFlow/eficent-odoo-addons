@@ -137,7 +137,6 @@ class AnalyticResourcePlanLineMakeProcurement(orm.TransientModel):
                 and line.account_id.dest_address_id.id or False
             location_id = line.account_id.location_id \
                 and line.account_id.location_id.id or False
-
             procurement_ids = procurement_obj.search(
                 cr, uid, [('state', 'in', ['draft', 'confirmed']),
                           ('product_id', '=', line.product_id.id),
@@ -147,7 +146,8 @@ class AnalyticResourcePlanLineMakeProcurement(orm.TransientModel):
                            make_procurement.procure_method),
                           ('analytic_account_id', '=',
                            line.account_id.id),
-                          ('dest_address_id', '=', dest_address_id)],
+#                          ('dest_address_id', '=', dest_address_id)
+                          ],
                 context=context)
             if procurement_ids:
                 procurement_id = procurement_ids[0]
