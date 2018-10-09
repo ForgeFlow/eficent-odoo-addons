@@ -19,32 +19,28 @@ class AnalyticWipReport(models.TransientModel):
         return res
 
     @api.multi
-    def _get_analytic_search_domain(self):
+    def _get_anal_domain(self):
         comparing_date = self.fiscalyear_id.date_start
         project_stage = self.env['analytic.account.stage'].search(
             [('name', 'in', ('Closed', 'Cancelled'))]).mapped('id') or []
         if self.filter_project and not comparing_date:
-            project_ids = self.env['account.analytic.account'].\
-                search([('account_class', '=', 'project'),
-                        ('stage_id', 'not in', project_stage)],
-                       order='category_id, complete_wbs_code')
-            domain = [('id', 'in', project_ids.ids), ] or []
+            domain = [('account_class', '=', 'project'),
+                      ('stage_id', 'not in', project_stage)]
         elif self.filter_project and comparing_date:
-            project_ids = self.env['account.analytic.account'].\
-                search([('date', '>=', comparing_date),
-                        ('account_class', '=', 'project'),
-                        ('stage_id', 'not in', project_stage)],
-                       order='category_id, complete_wbs_code')
-            domain = [('id', 'in', project_ids.ids), ] or []
+            domain = [('date', '>=', comparing_date),
+                      ('account_class', '=', 'project'),
+                      ('stage_id', 'not in', project_stage)]
         elif not self.filter_project and comparing_date:
-            project_ids = self.env['account.analytic.account'].\
-                search([('date', '>=', comparing_date),
-                        ('stage_id', 'not in', project_stage)],
-                       order='category_id, complete_wbs_code')
-            domain = [('id', 'in', project_ids.ids), ] or []
+            domain = [('date', '>=', comparing_date),
+                      ('stage_id', 'not in', project_stage)]
         else:
-            project_ids = self.env['account.analytic.account'].\
-                search([('stage_id', 'not in', project_stage)],
-                       order='category_id, complete_wbs_code')
-            domain = [('id', 'in', project_ids.ids), ] or []
+            domain = [('stage_id', 'not in', project_stage)]
+        return domain
+
+    @api.multi
+    def _get_analytic_search_domain(self):
+        domain = self._get_anal_domain()
+        project_ids = self.env['account.analytic.account'].search(
+            domain, order='category_id, complete_wbs_code')
+        domain = [('id', 'in', project_ids.ids), ] or []
         return domain
