@@ -4,7 +4,7 @@
 
 {
     "name": "Analytic Schedule",
-    "version": "9.0.1.0.0",
+    "version": "10.0.1.0.0",
     "summary": "Automatically computes start and end dates for analytic "
                "accounts based on the earliest start and latest finish date "
                "of the children.",
@@ -13,6 +13,5 @@
     "category": "Generic Modules/Projects & Services",
     "depends": ["analytic", "account_analytic_parent"],
     "data": ['views/analyltic_account_view.xml'],
-    'installable': False,
-    'application': False,
+    'installable': True,
 }
