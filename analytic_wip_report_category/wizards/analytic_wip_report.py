@@ -11,8 +11,8 @@ class AnalyticWipReport(models.TransientModel):
         "account.analytic.category", "Category", ondelete="restrict")
 
     @api.multi
-    def _get_analytic_search_domain(self):
-        res = super(AnalyticWipReport, self)._get_analytic_search_domain()
+    def _get_anal_domain(self):
+        res = super(AnalyticWipReport, self)._get_anal_domain()
         if self.category_id:
             res.append(('category_id', '=', self.category_id.id),)
         return res
