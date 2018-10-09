@@ -8,47 +8,34 @@ from openerp import api, fields, models
 class AccountAnalyticAccount(models.Model):
     _inherit = "account.analytic.account"
 
-    @api.model
-    def _compute_scheduled_dates(self, analytic):
+    @api.multi
+    @api.depends('child_ids', 'project_ids')
+    def _compute_scheduled_dates(self):
         """Obtains the earliest and latest dates of the children."""
-        start_dates = []
-        end_dates = []
-        if not analytic.child_ids:
-            return True
-        for child in analytic.child_ids:
-            if child.date_start:
-                start_dates.append(child.date_start)
-            if child.date:
-                end_dates.append(child.date)
-        min_start_date = False
-        max_end_date = False
-        if start_dates:
-            min_start_date = min(start_dates)
-        if end_dates:
-            max_end_date = max(end_dates)
-        vals = {
-            'date_start': min_start_date,
-            'date': max_end_date,
-        }
-        analytic.write(vals)
+        for analytic in self:
+            start_dates = []
+            end_dates = []
+            if not analytic.child_ids:
+                for project in analytic.project_ids:
+                    if project.date_start:
+                        start_dates.append(project.date_start)
+                    if project.date:
+                        end_dates.append(project.date)
+            for child in analytic.child_ids:
+                for project in child.project_ids:
+                    if project.date_start:
+                        start_dates.append(project.date_start)
+                    if project.date:
+                        end_dates.append(project.date)
+            min_start_date = False
+            max_end_date = False
+            if start_dates:
+                min_start_date = min(start_dates)
+            if end_dates:
+                max_end_date = max(end_dates)
+            analytic.date_start = min_start_date
+            analytic.date = max_end_date
         return True
 
-    date_start = fields.Date('Start Date')
-    date = fields.Date('Expiration Date', index=True,
-                       track_visibility='onchange')
-
-    @api.model
-    def create(self, vals):
-        acc = super(AccountAnalyticAccount, self).create(vals)
-        self._compute_scheduled_dates(acc.parent_id)
-        return acc
-
-    @api.multi
-    def write(self, vals):
-        res = super(AccountAnalyticAccount, self).write(vals)
-        if 'date_start' in vals or 'date' in vals:
-            for acc in self:
-                if not acc.parent_id:
-                    return res
-                self._compute_scheduled_dates(acc.parent_id)
-        return res
+    date_start = fields.Date(compute=_compute_scheduled_dates)
+    date = fields.Date(compute=_compute_scheduled_dates)
