@@ -13,6 +13,8 @@
     "depends": [
         "analytic_wip_report",
         "project_wbs_stage",
+        "analytic_schedule",
+        "analytic_wip_report_fiscalyear",
     ],
     "data": [
         "wizards/analytic_wip_report_view.xml"
