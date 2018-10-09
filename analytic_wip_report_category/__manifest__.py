@@ -13,6 +13,7 @@
     "depends": [
         "analytic_wip_report_extend",
         "analytic_category",
+        "analytic_wip_report_exclude_closed",
     ],
     "data": [
         "wizards/analytic_wip_report_view.xml"
