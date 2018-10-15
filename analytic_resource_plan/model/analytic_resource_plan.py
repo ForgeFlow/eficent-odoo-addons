@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2018 Luxim d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import time
@@ -182,6 +183,7 @@ class AnalyticResourcePlanLine(models.Model):
             'product_id': self.product_id.id,
             'product_uom_id': self.product_uom_id.id,
             'unit_amount': self.unit_amount,
+            'unit_price': self.product_id.standard_price,
             'amount': -1 * self.product_id.standard_price * self.unit_amount,
             'general_account_id': general_account_id,
             'journal_id': journal_id,
