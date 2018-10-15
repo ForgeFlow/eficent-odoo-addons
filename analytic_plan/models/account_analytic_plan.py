@@ -31,8 +31,8 @@ class AccountAnalyticLinePlan(models.Model):
     )
     amount = fields.Float(
         string='Amount',
-        store=True,
-        compute='_compute_total_amount'
+        required=True,
+        deafult=0.0
     )
     unit_amount = fields.Float(
         string='Quantity',
@@ -155,7 +155,6 @@ class AccountAnalyticLinePlan(models.Model):
                     line.unit_price = product.price
 
     @api.multi
-    @api.depends('unit_price', 'unit_amount')
     def _compute_total_amount(self):
         analytic_journal_obj = self.env['account.analytic.plan.journal']
 
@@ -254,6 +253,7 @@ class AccountAnalyticLinePlan(models.Model):
                     % (prod.name, self.product_id,)
                 )
         self._set_unit_price()
+        self._compute_total_amount()
         self.general_account_id = a
 
     @api.onchange('journal_id')
