@@ -12,7 +12,22 @@ class AnalyticWipReport(models.TransientModel):
 
     @api.multi
     def _get_analytic_search_domain(self):
-        res = super(AnalyticWipReport, self)._get_analytic_search_domain()
+        comparing_date = self.fiscalyear_id.date_start
+        start_date = '2100-12-31'
+        if self.to_date:
+            start_date = self.to_date
+        stages = self.env['analytic.account.stage'].search(
+            [('name', 'in', ('Closed', 'Cancelled'))]).ids
+
         if self.category_id:
-            res.append(('category_id', '=', self.category_id.id),)
-        return res
+            domain = ['&', '|', ('stage_id', 'not in', stages),
+                      '&',
+                      ('stage_id', 'in', stages),
+                      ('date', '>=', comparing_date),
+                      ('date_start', '<=', start_date),
+                      ('category_id', '=', self.category_id.id),
+                      ('account_class', '=', 'project'),
+                      ]
+            return domain
+        else:
+            return super(AnalyticWipReport, self)._get_analytic_search_domain()
