@@ -19,7 +19,7 @@ class AnalyticWipReport(models.TransientModel):
         return res
 
     @api.multi
-    def _get_anal_domain(self):
+    def _get_analytic_search_domain(self):
         comparing_date = self.fiscalyear_id.date_start
         if self.filter_project and not comparing_date:
             domain = [('account_class', '=', 'project')]
@@ -30,12 +30,4 @@ class AnalyticWipReport(models.TransientModel):
             domain = [('date', '>=', comparing_date)]
         else:
             domain = []
-        return domain
-
-    @api.multi
-    def _get_analytic_search_domain(self):
-        domain = self._get_anal_domain()
-        project_ids = self.env['account.analytic.account'].search(
-            domain, order='category_id, complete_wbs_code')
-        domain = [('id', 'in', project_ids.ids), ] or []
         return domain
