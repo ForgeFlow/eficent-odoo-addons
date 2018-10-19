@@ -37,5 +37,5 @@ class AccountAnalyticAccount(models.Model):
             analytic.date = max_end_date
         return True
 
-    date_start = fields.Date(compute=_compute_scheduled_dates)
-    date = fields.Date(compute=_compute_scheduled_dates)
+    date_start = fields.Date(compute=_compute_scheduled_dates, store=True)
+    date = fields.Date(compute=_compute_scheduled_dates, store=True)
