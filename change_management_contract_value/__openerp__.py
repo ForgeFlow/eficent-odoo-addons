@@ -11,9 +11,11 @@
     'license': 'AGPL-3',
     'summary': 'Creates a project for each Change, child of the project '
                'indicated.',
-    'depends': ['change_management_own_project', 'analytic_contract_value'],
+    'depends': ['change_management_own_project', 'analytic_contract_value',
+                'analytic_plan'],
     'data': [
         'views/change_management_view.xml',
+        'views/analytic_line_plan_view.xml',
     ],
     'installable': True,
     'application': True,
