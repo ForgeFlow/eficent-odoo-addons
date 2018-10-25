@@ -13,6 +13,7 @@
     'category': 'Banking addons',
     'depends': [
         'account',
+        'account_check_printing',
     ],
     'data': [
         'views/account_move_view.xml',
