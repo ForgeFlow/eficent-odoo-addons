@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record forcecreate="True"
+            id="ir_cron_project_percent_complete" model="ir.cron">
+        <field name="name">Project Percent Complete</field>
+        <field name="state">code</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="priority">3</field>
+        <field eval="False" name="doall"/>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="code">model._compute_poc_on_duration(True)</field>
+    </record>
+
+</odoo>

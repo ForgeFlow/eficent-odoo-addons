@@ -19,6 +19,7 @@
     ],
     "data": [
         "view/project_view.xml",
+        "data/ir_cron.xml",
     ],
     "installable": True,
     "application": True,
