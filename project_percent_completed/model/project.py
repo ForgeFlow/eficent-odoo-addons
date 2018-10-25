@@ -11,7 +11,6 @@ class Project(models.Model):
     _inherit = "project.project"
 
     def _compute_poc_on_duration(self):
-        res = dict.fromkeys(self._ids, 0.0)
         measurement_type_obj = self.env['progress.measurement.type']
         def_meas_type_ids =\
             measurement_type_obj.search([('is_default', '=', True)])
@@ -26,10 +25,12 @@ class Project(models.Model):
         wbs_projects_data = self._get_project_analytic_wbs()
 
         # Remove from the list the projects that have been cancelled
-        for project_id in wbs_projects_data.keys():
+        for project in self.env['projec.project'].browse(
+                wbs_projects_data.keys()):
+            project_id = project.id
             if not def_meas_type_ids:
-                res[project_id] = 0.0
-                return res
+                project.poc_rate = 0.0
+                return True
             all_pids = wbs_projects_data[project_id].keys()
             self._cr.execute("""
                 WITH progress AS (
@@ -81,14 +82,14 @@ class Project(models.Model):
                     total_dur += duration
                     ev += duration * value / progress_max_value
             if total_dur > 0:
-                res[project_id] = round(ev / total_dur * 100)
+                project.poc_rate = round(ev / total_dur * 100)
             else:
-                res[project_id] = 0.0
-        return res
+                project.poc_rate = 0.0
+        return True
 
     poc_rate = fields.Float(
         compute="_compute_poc_on_duration",
         string='% Completed',
         help="""Aggregated percent completed, based on the duration
-            of the project"""
+            of the project""",
     )
