@@ -61,30 +61,6 @@ class AnalyticAccount(models.Model):
         return res
 
     @api.multi
-    def compute_labor_cost(self):
-        journal_obj = self.env['account.analytic.journal']
-
-        labor_journal_ids = journal_obj.search(
-            [('cost_type', '=', 'labor')])
-        for account in self:
-            analytic_account_ids = account._get_all_analytic_accounts()
-            account.labor_cost = -1*self._get_journal_item_totals(
-                labor_journal_ids, analytic_account_ids)
-        return True
-
-    @api.multi
-    def compute_material_cost(self):
-        journal_obj = self.env['account.analytic.journal']
-
-        material_journal_ids = journal_obj.search(
-            [('cost_type', '=', 'material')])
-        for account in self:
-            analytic_account_ids = account._get_all_analytic_accounts()
-            account.material_cost = -1*self._get_journal_item_totals(
-                material_journal_ids, analytic_account_ids)
-        return True
-
-    @api.multi
     def compute_total_cost(self):
         for account in self:
             account.total_cost = account.material_cost + account.labor_cost
@@ -97,29 +73,36 @@ class AnalyticAccount(models.Model):
         return True
 
     @api.multi
-    def compute_revenue(self):
+    def compute_cost_revenue(self):
         journal_obj = self.env['account.analytic.journal']
-
+        material_journal_ids = journal_obj.search(
+            [('cost_type', '=', 'material')])
         revenue_journal_ids = journal_obj.search(
             [('cost_type', '=', 'revenue')])
+        labor_journal_ids = journal_obj.search(
+            [('cost_type', '=', 'labor')])
         for account in self:
             analytic_account_ids = account._get_all_analytic_accounts()
             account.revenue = self._get_journal_item_totals(
                 revenue_journal_ids, analytic_account_ids)
+            account.material_cost = -1*self._get_journal_item_totals(
+                material_journal_ids, analytic_account_ids)
+            account.labor_cost = -1*self._get_journal_item_totals(
+                labor_journal_ids, analytic_account_ids)
         return True
 
     labor_cost = fields.Float(
-        compute=compute_labor_cost,
+        compute=compute_cost_revenue,
         string='Labor cost',
         digits=dp.get_precision('Account'))
     material_cost = fields.Float(
-        compute=compute_material_cost, string='Material cost',
+        compute=compute_cost_revenue, string='Material cost',
         digits=dp.get_precision('Account'))
     total_cost = fields.Float(
         compute=compute_total_cost, string='Total cost',
         digits=dp.get_precision('Account'))
     revenue = fields.Float(
-        compute=compute_revenue, string='Revenue',
+        compute=compute_cost_revenue, string='Revenue',
         digits=dp.get_precision('Account'))
     gross_profit = fields.Float(
         compute=compute_gross_profit,
