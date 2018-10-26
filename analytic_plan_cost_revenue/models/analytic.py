@@ -38,50 +38,20 @@ class AnalyticAccount(models.Model):
         return res
 
     @api.multi
-    def compute_labor_cost_plan(self):
-
-        journal_obj = self.env['account.analytic.plan.journal']
-        labor_journal_ids = journal_obj.search(
-            [('cost_type', '=', 'labor')])
-
-        for account in self:
-            analytic_account_ids = account._get_all_analytic_accounts()
-            if labor_journal_ids:
-                account.labor_cost_plan = -1 * \
-                    self._get_plan_journal_item_totals(
-                        labor_journal_ids.ids, analytic_account_ids,
-                        account.active_analytic_planning_version.id)
-            else:
-                account.labor_cost_plan = 0.0
-
-    @api.multi
-    def compute_material_cost_plan(self):
-
-        journal_obj = self.env['account.analytic.plan.journal']
-        material_journal_ids = journal_obj.search(
-            [('cost_type', '=', 'material')])
-        for account in self:
-            analytic_account_ids = account._get_all_analytic_accounts()
-            if material_journal_ids:
-                account.material_cost_plan = -1 * \
-                    self._get_plan_journal_item_totals(
-                        material_journal_ids.ids, analytic_account_ids,
-                        account.active_analytic_planning_version.id)
-            else:
-                account.material_cost_plan = 0.0
-
-    @api.multi
     def compute_total_cost_plan(self):
         for account in self:
             account.total_cost_plan = \
                 account.material_cost_plan + account.labor_cost_plan
 
     @api.multi
-    def compute_revenue_plan(self):
+    def compute_cost_revenue_plan(self):
         journal_obj = self.env['account.analytic.plan.journal']
         revenue_journal_ids = journal_obj.search(
             [('cost_type', '=', 'revenue')])
-
+        material_journal_ids = journal_obj.search(
+            [('cost_type', '=', 'material')])
+        labor_journal_ids = journal_obj.search(
+            [('cost_type', '=', 'labor')])
         for account in self:
             analytic_account_ids = account._get_all_analytic_accounts()
             if revenue_journal_ids:
@@ -92,6 +62,21 @@ class AnalyticAccount(models.Model):
             else:
                 account.revenue_plan = 0.0
 
+            if material_journal_ids:
+                account.material_cost_plan = -1 * \
+                    self._get_plan_journal_item_totals(
+                        material_journal_ids.ids, analytic_account_ids,
+                        account.active_analytic_planning_version.id)
+            else:
+                account.material_cost_plan = 0.0
+            if labor_journal_ids:
+                account.labor_cost_plan = -1 * \
+                    self._get_plan_journal_item_totals(
+                        labor_journal_ids.ids, analytic_account_ids,
+                        account.active_analytic_planning_version.id)
+            else:
+                account.labor_cost_plan = 0.0
+
     @api.multi
     @api.depends('total_cost_plan', 'revenue_plan')
     def compute_gross_profit_plan(self):
@@ -100,11 +85,11 @@ class AnalyticAccount(models.Model):
                 account.revenue_plan - account.total_cost_plan
 
     labor_cost_plan = fields.Float(
-        compute=compute_labor_cost_plan,
+        compute=compute_cost_revenue_plan,
         string='Planned Labor cost',
         digits=dp.get_precision('Account'))
     material_cost_plan = fields.Float(
-        compute=compute_material_cost_plan,
+        compute=compute_cost_revenue_plan,
         string='Planned Material cost',
         digits=dp.get_precision('Account'))
     total_cost_plan = fields.Float(
@@ -112,7 +97,7 @@ class AnalyticAccount(models.Model):
         string='Planned total cost',
         digits=dp.get_precision('Account'))
     revenue_plan = fields.Float(
-        compute=compute_revenue_plan, string='Planned Revenue',
+        compute=compute_cost_revenue_plan, string='Planned Revenue',
         digits=dp.get_precision('Account'))
     gross_profit_plan = fields.Float(
         compute=compute_gross_profit_plan,
