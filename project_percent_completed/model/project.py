@@ -25,7 +25,7 @@ class Project(models.Model):
         wbs_projects_data = self._get_project_analytic_wbs()
 
         # Remove from the list the projects that have been cancelled
-        for project in self.env['projec.project'].browse(
+        for project in self.env['project.project'].browse(
                 wbs_projects_data.keys()):
             project_id = project.id
             if not def_meas_type_ids:
