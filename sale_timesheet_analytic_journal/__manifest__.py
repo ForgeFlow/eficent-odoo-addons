@@ -12,6 +12,7 @@
     "license": "AGPL-3",
     "depends": [
         'sale_timesheet',
+        'analytic_cost_revenue',
         'analytic_journal',
     ],
     'installable': True,
