@@ -47,7 +47,6 @@
                 <field name="under_over" string='Total under/over billed for the entire contract' sum="Total"/>
                 <field name="under_billings" string="Under Billed" sum="Total"/>
                 <field name="over_billings" string ='Over Billed' sum="Total"/>
-                <field name="state" invisible="1"/>
                 <field name="currency_id" groups="base.group_multi_currency"/>
                 <field name="user_id" invisible="1"/>
                 <field name="partner_id" invisible="1"/>
