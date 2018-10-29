@@ -15,6 +15,8 @@
         'analytic_cost_revenue',
         'analytic_journal',
     ],
+    "data": ['demo/analytic_journal_data.xml',
+             ],
     'installable': True,
     'auto_install': True,
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="labor_journal" model="account.analytic.journal">
+        <field name="code">LB</field>
+        <field name="name">labor</field>
+        <field name="type">general</field>
+        <field name="cost_type">labor</field>
+    </record>
+</odoo>
