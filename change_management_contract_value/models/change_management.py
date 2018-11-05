@@ -82,6 +82,7 @@ class ChangeManagementChange(orm.Model):
             'account_id': account_id.id,
             'name': product_id.name,
             'change_id': change.id,
+            'ref': change.name,
             'date': time.strftime('%Y-%m-%d'),
             'product_id': product_id.id,
             'product_uom_id': product_id.uom_id.id,
