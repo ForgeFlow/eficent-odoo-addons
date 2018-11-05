@@ -15,6 +15,7 @@
                 'analytic_plan'],
     'data': [
         'views/change_management_view.xml',
+        'views/change_management_template_view.xml',
         'views/analytic_line_plan_view.xml',
     ],
     'installable': True,
