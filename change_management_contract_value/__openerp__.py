@@ -14,6 +14,7 @@
     'depends': ['change_management_own_project', 'analytic_contract_value',
                 'analytic_plan'],
     'data': [
+        'security/ir.model.access.csv',
         'views/change_management_view.xml',
         'views/change_management_template_view.xml',
         'views/analytic_line_plan_view.xml',

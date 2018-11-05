@@ -44,11 +44,17 @@ class ChangeManagementChange(orm.Model):
         res = {}
         res['value'] = {}
         account_id = change.project_id.analytic_account_id
+        if not change.change_template_id:
+            raise orm.except_orm(_('Sorry'),
+                                 _('Change template not found'))
         product_id = change.change_template_id.revenue_product_id
         journal_id = \
             product_id.revenue_analytic_plan_journal_id \
             and product_id.revenue_analytic_plan_journal_id.id \
             or False
+        if not journal_id:
+            raise orm.except_orm(_('Sorry'),
+                                 _('No revenue plan journal for the product'))
         version_id = change.change_template_id.version_id.id or False
 
         general_account_id = product_id.product_tmpl_id.\

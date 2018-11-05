@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_change_management_template_manager,change.management.template.manager.access,model_change_management_template,project.group_project_manager,1,1,1,1
