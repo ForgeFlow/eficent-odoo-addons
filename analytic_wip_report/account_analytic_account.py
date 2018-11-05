@@ -140,7 +140,7 @@ class account_analytic_account(osv.osv):
 
             # Estimated gross profit
             res[account.id]['estimated_gross_profit'] = \
-                account.total_contract_value - res[account.id]['total_estimated_costs']
+                account.total_value - res[account.id]['total_estimated_costs']
 
             # Percent complete
             try:
@@ -151,7 +151,7 @@ class account_analytic_account(osv.osv):
 
             # Earned revenue
             res[account.id]['earned_revenue'] = \
-                res[account.id]['percent_complete']/100 * account.total_contract_value
+                res[account.id]['percent_complete']/100 * account.total_value
 
             # Over/Under billings
             over_under_billings = res[account.id]['actual_billings'] - res[account.id]['earned_revenue']

@@ -76,9 +76,9 @@
     <record id="view_account_analytic_account_wip_tree_total4" model="ir.ui.view">
       <field name="name">account.analytic.account.wip.tree</field>
       <field name="model">account.analytic.account</field>
-      <field name="inherit_id" ref="analytic_wip_report_contract_value.view_account_analytic_account_wip_tree"/>
+      <field name="inherit_id" ref="analytic_wip_report.view_account_analytic_account_wip_tree"/>
       <field name="arch" type="xml">
-            <field name="total_contract_value" position="attributes">
+            <field name="total_value" position="attributes">
                 <attribute name="sum">Total</attribute>
             </field>
       </field>
