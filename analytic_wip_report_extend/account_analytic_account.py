@@ -33,7 +33,7 @@ class account_analytic_account(osv.osv):
             try:
                 res[account.id]['estimated_gross_profit_per'] = \
                     res[account.id]['estimated_gross_profit'] / \
-                    account.total_value * 100
+                    res[account.id]['total_value'] * 100
             except ZeroDivisionError:
                 res[account.id]['estimated_gross_profit_per'] = 0
             # Over/Under billings
