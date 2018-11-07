@@ -42,10 +42,16 @@ class account_analytic_account(orm.Model):
                  'fy_actual_costs': 0,
                  'fy_actual_material_cost': 0,
                  'fy_actual_labor_cost': 0,
-                })
+                 'actual_costs_fy': 0,
+                 'percent_complete_fy': 0,
+                 'total_estimated_costs_fy': 0,
+                 'earned_revenue_fy': 0
+                 })
 
             query_params = [tuple(all_ids)]
+            query_params_fy = [tuple(all_ids)]
             where_date = ''
+            where_date_fy = ''
 
             if context.get('from_date_fy', False):
                 fromdate = context.get('from_date_fy')
@@ -65,6 +71,9 @@ class account_analytic_account(orm.Model):
 
             where_date += " AND l.date <= %s"
             query_params += [todate]
+
+            where_date_fy += " AND l.date <= %s"
+            query_params_fy += [fromdate]
 
             # Actual billings for the fiscal year
             cr.execute(
@@ -98,7 +107,55 @@ class account_analytic_account(orm.Model):
             val = cr.fetchone()[0] or 0
             res[account.id]['fy_costs'] = val
 
-            # Revenue (add the under over)
+            # Revenue at the end of the last year to get the revenue of this
+            # year
+            cr.execute(
+                """
+                SELECT COALESCE(-1*sum(amount),0.0) total
+                                FROM account_analytic_line L
+                                INNER JOIN account_analytic_journal AAJ
+                                ON AAJ.id = L.journal_id
+                                INNER JOIN account_account AC
+                                ON L.general_account_id = AC.id
+                                INNER JOIN account_account_type AT
+                                ON AT.id = AC.user_type
+                                WHERE AT.report_type = 'expense'
+                                AND L.account_id in %s
+                """ + where_date_fy + """
+                """, query_params_fy)
+            res[account.id]['actual_costs_fy'] = 0
+            val = cr.fetchone()[0] or 0
+            res[account.id]['actual_costs_fy'] += val
+
+            # Total estimated costs at the end of the last year
+            cr.execute("""
+            SELECT COALESCE(-1*sum(amount),0.0) AS total_value
+            FROM account_analytic_line_plan AS L
+            LEFT JOIN account_analytic_account AS A
+            ON L.account_id = A.id
+            INNER JOIN account_account AC
+            ON L.general_account_id = AC.id
+            INNER JOIN account_account_type AT
+            ON AT.id = AC.user_type
+            WHERE AT.report_type = 'expense'
+            AND L.account_id IN %s
+            AND A.active_analytic_planning_version = L.version_id
+            """ + where_date_fy + """
+            """, query_params_fy)
+            val = cr.fetchone()[0] or 0
+            res[account.id]['total_estimated_costs_fy'] = val
+
+            try:
+                res[account.id]['percent_complete_fy'] = \
+                    (res[account.id]['actual_costs_fy'] / res[account.id]['total_estimated_costs_fy']) * 100
+            except ZeroDivisionError:
+                res[account.id]['percent_complete_fy'] = 0
+
+            # Earned revenue
+            res[account.id]['earned_revenue_fy'] = \
+                res[account.id]['percent_complete_fy']/100 * account.contract_value
+
+            res[account.id]['fy_revenue2'] = account.earned_revenue - res[account.id]['earned_revenue_fy']
             res[account.id]['fy_revenue'] = res[account.id]['fy_billings'] + res[account.id]['under_billings'] - res[account.id]['over_billings']
             # Gross margin
             res[account.id]['fy_gross_profit'] = \
@@ -139,7 +196,7 @@ class account_analytic_account(orm.Model):
 
         'fy_revenue': fields.function(
             _wip_report_fy, method=True, type='float',
-            string='Fiscal Year Revenue',
+            string='FY Revenue based on billings',
             multi='wip_report_fy',
             help="""Revenue for the provided Fiscal Year. This calculated
              by adding the billings for the fiscal year and the under/over 
@@ -147,7 +204,18 @@ class account_analytic_account(orm.Model):
              excess of cost (under billed) and the costs in excess 
              of billings (over billed).""",
             digits_compute=dp.get_precision('Account')),
-
+        'fy_revenue2': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='FY Revenue based on prior year',
+            multi='wip_report_fy',
+            help="""Revenue earned to date (current schedule) MINUS Revenue
+             earned to date (prior year) = Revenue Earned (current period)""",
+            digits_compute=dp.get_precision('Account')),
+        'earned_revenue_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Last Fiscal Year Revenue',
+            multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
         'fy_billings': fields.function(
                 _wip_report_fy, method=True, type='float',
                 string='Fiscal Year Billings',
@@ -165,12 +233,22 @@ class account_analytic_account(orm.Model):
                 _wip_report_fy, method=True, type='float',
                 string='Fiscal Year Gross Profit', multi='wip_report_fy',
                 digits_compute=dp.get_precision('Account')),
-
         'fy_actual_costs': fields.function(
             _wip_report_fy, method=True, type='float',
             string='Fiscal Year Actual Costs', multi='wip_report_fy',
             digits_compute=dp.get_precision('Account')),
-
+        'actual_costs_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Last Year actual cost', multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
+        'total_estimated_costs_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Estimated cost last year', multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
+        'percent_complete_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Percent Complete last year',
+            multi='wip_report', digits_compute=dp.get_precision('Account')),
         'fy_actual_material_cost': fields.function(
             _wip_report_fy, method=True, type='float',
             string='Fiscal Year Material Costs', multi='wip_report_fy',
