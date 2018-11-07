@@ -11,8 +11,8 @@
         <field name="numbercall">-1</field>
         <field name="priority">3</field>
         <field eval="False" name="doall"/>
-        <field name="model_id" ref="project.model_project_project"/>
-        <field name="code">model._compute_poc_on_duration(True)</field>
+        <field eval="'project.project'" name="model" />
+        <field eval="'compute_poc_on_duration'" name="function" />
     </record>
 
 </odoo>
