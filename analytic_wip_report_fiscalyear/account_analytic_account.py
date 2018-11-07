@@ -159,7 +159,7 @@ class account_analytic_account(orm.Model):
             res[account.id]['fy_revenue'] = res[account.id]['fy_billings'] + res[account.id]['under_billings'] - res[account.id]['over_billings']
             # Gross margin
             res[account.id]['fy_gross_profit'] = \
-                res[account.id]['fy_revenue'] - res[account.id]['fy_costs']
+                res[account.id]['fy_revenue2'] - res[account.id]['fy_costs']
 
             # Actual costs to date
             cr.execute(
