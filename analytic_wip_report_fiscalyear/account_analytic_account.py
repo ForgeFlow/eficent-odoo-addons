@@ -45,7 +45,8 @@ class account_analytic_account(orm.Model):
                  'actual_costs_fy': 0,
                  'percent_complete_fy': 0,
                  'total_estimated_costs_fy': 0,
-                 'earned_revenue_fy': 0
+                 'earned_revenue_fy': 0,
+                 'total_value_fy': 0
                  })
 
             query_params = [tuple(all_ids)]
@@ -109,6 +110,26 @@ class account_analytic_account(orm.Model):
 
             # Revenue at the end of the last year to get the revenue of this
             # year
+
+            # Total Value
+            cr.execute(
+                """SELECT COALESCE(sum(amount),0.0) AS total_value
+                FROM account_analytic_line_plan AS L
+                LEFT JOIN account_analytic_account AS A
+                ON L.account_id = A.id
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type
+                WHERE AT.report_type = 'income'
+                AND l.account_id IN %s
+                AND a.active_analytic_planning_version = l.version_id
+                """ + where_date_fy + """
+                """,
+                query_params_fy)
+            val = cr.fetchone()[0] or 0
+            res[account.id]['total_value_fy'] = val
+
             cr.execute(
                 """
                 SELECT COALESCE(-1*sum(amount),0.0) total
@@ -153,7 +174,7 @@ class account_analytic_account(orm.Model):
 
             # Earned revenue
             res[account.id]['earned_revenue_fy'] = \
-                res[account.id]['percent_complete_fy']/100 * account.contract_value
+                res[account.id]['percent_complete_fy']/100 * res[account.id]['total_value_fy']
 
             res[account.id]['fy_revenue2'] = account.earned_revenue - res[account.id]['earned_revenue_fy']
             res[account.id]['fy_revenue'] = res[account.id]['fy_billings'] + res[account.id]['under_billings'] - res[account.id]['over_billings']
@@ -193,7 +214,11 @@ class account_analytic_account(orm.Model):
         return res
 
     _columns = {
-
+        'total_value_fy': fields.function(
+            _wip_report_fy, method=True, type='float', string='Total Value prior FY',
+            multi='wip_report',
+            help="Total estimated (prior year) revenue of the contract",
+            digits_compute=dp.get_precision('Account')),
         'fy_revenue': fields.function(
             _wip_report_fy, method=True, type='float',
             string='FY Revenue based on billings',
