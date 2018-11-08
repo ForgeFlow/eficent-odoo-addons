@@ -4,7 +4,7 @@
 
 {
     'name': 'HR Timesheet Sheet Import Accounts',
-    'version': '10.0.1.0.0',
+    'version': '10.0.1.0.1',
     'author': 'Eficent, Odoo Community Association (OCA)',
     'category': 'Human Resources',
     'summary': "This module lets the user import the analytic accounts from "
@@ -12,7 +12,9 @@
     'website': 'http://www.eficent.com',
     "license": "LGPL-3",
     'depends': ['hr_timesheet_sheet',
-                'hr_employee_product'],
+                'hr_employee_product',
+                'hr_period',
+                ],
     'data': [
         'views/hr_timesheet_sheet_view.xml',
         'views/hr_employee_view.xml',
