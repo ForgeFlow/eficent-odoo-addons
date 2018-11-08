@@ -13,7 +13,7 @@
     "license": "LGPL-3",
     'depends': ['hr_timesheet_sheet',
                 'hr_employee_product',
-                'hr_period',
+                'hr_timesheet_sheet_period',
                 ],
     'data': [
         'views/hr_timesheet_sheet_view.xml',
