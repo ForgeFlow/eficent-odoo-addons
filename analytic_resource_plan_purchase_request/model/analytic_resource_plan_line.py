@@ -77,10 +77,11 @@ class AnalyticResourcePlanLine(models.Model):
     @api.multi
     def unlink(self):
         for line in self:
-            if line.purchase_request_lines:
+            if line.purchase_request_lines.filtered(
+                    lambda l: l.request_state not in('rejected')):
                 raise ValidationError(
-                    _('You cannot delete a record that refers to '
-                      'Purchase request lines!'))
+                    _('You cannot delete plan lines that refers to '
+                      'not rejected Purchase request lines'))
         return super(AnalyticResourcePlanLine, self).unlink()
 
     @api.multi
