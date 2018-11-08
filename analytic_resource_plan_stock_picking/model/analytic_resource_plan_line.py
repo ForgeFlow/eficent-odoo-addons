@@ -104,6 +104,8 @@ class AnalyticResourcePlanLine(models.Model):
     @api.multi
     def action_button_confirm(self):
         for line in self:
+            if line.child_ids:
+                continue
             if not line.account_id.location_id:
                 raise UserError(_('''Could not fetch stock. You have to set a
                     location for the project'''))
