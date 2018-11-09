@@ -31,21 +31,30 @@ class AccountAnalyticAccount(models.Model):
         return list(set(res_list))
 
     @api.multi
-    @api.depends('contract_value')
-    def _compute_total_contract_value(self):
+    def _compute_contract_value(self):
         for acc_id in self:
-            total_contract_value = 0.0
-            if type(acc_id.id) == int:
-                # _get_all_analytic_accounts fails for new objects
-                accs = acc_id._get_all_analytic_accounts()
-                for ch_acc_id in self.browse(accs):
-                    total_contract_value += ch_acc_id.contract_value
-            acc_id.total_contract_value = total_contract_value
+            all_ids = self.get_child_accounts().keys()
+            query_params = [tuple(all_ids)]
+            self.env.cr.execute(
+                """
+                SELECT COALESCE(sum(amount),0.0)
+                FROM account_analytic_line_plan AS L
+                LEFT JOIN account_analytic_account AS A
+                ON L.account_id = A.id
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type_id
+                WHERE AT.name in ('Income', 'Other Income')
+                AND l.account_id IN %s
+                AND a.active_analytic_planning_version = l.version_id
+                """,
+                query_params)
+            val = self.env.cr.fetchone()[0] or 0
+            acc_id.contract_value = val
+        return True
 
     contract_value = fields.Float(
-        'Original Contract Value',
-        readonly=True)
-    total_contract_value = fields.Float(
-        compute=_compute_total_contract_value,
+        compute=_compute_contract_value,
         string='Current Total Contract Value',
         help='Total Contract Value including child analytic accounts')
