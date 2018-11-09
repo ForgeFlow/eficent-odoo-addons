@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="change_form_view" model="ir.ui.view">
+        <field name="name">change.management.change.form.view</field>
+        <field name="model">change.management.change</field>
+        <field name="inherit_id" ref="change_management.change_form_view"/>
+        <field name="arch" type="xml">
+            <field name="change_category_id" position="after">
+                <field name="change_value"/>
+                <field name="change_template_id"/>
+            </field>
+            <xpath expr='//page[@name="desc"]' position="after">
+                <page string="Contract Value">
+                    <group string="Revenue Plan Lines">
+                        <field name="analytic_line_plan_ids" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="change_tree_view" model="ir.ui.view" >
+        <field name="name">change.management.change.tree.view</field>
+        <field name="model">change.management.change</field>
+        <field name="inherit_id" ref="change_management.change_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <field name="change_value" sum="Total"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

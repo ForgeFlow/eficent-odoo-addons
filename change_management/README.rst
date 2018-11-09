@@ -5,7 +5,7 @@
 Change Management
 =================
 
-Change Management for integrated with Stakeholders Requirements Management
+Change Management for integrated with Stakeholders Requirements Management.
 
 Insert a project requirement and manage it through the change management.
 
