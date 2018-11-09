@@ -91,14 +91,14 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Description">
+                        <page string="Description" name="desc">
                             <group>
                             <field name="description_event"/>
                             <field name="description_cause"/>
                             <field name="description_effect"/>
                             </group>
                         </page>
-                        <page string="Change Enforcing">
+                        <page string="Change Enforcing" name="response">
                             <field name="change_response_ids"
                                    string="Response Actions"
                                    context="{'user_invisible': False, 'default_project_id':project_id}"/>
