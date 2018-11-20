@@ -20,6 +20,7 @@ class AccountAnalyticAccount(models.Model):
         'analytic.account.stage', 'Stage',
         default=_default_stage_id,
         domain="[('fold', '=', False)]")
+    stage_name = fields.Char(related='stage_id.name')
 
     @api.multi
     def write(self, values):
