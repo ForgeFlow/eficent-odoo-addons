@@ -5,8 +5,9 @@
         <field name="model">account.analytic.account</field>
         <field name="field_parent">child_ids</field>
         <field name="arch" type="xml">
-            <tree colors="green:state=='pending';grey:state in ('close','cancelled');blue:type=='view'"
+            <tree colors="green:stage_name=='Execution';grey:stage_name in ('Close','Cancelled');"
                   string="Analytic account" toolbar="1" create="false">
+                <field name="stage_name" invisible="1"/>
                 <field name="complete_wbs_code" string="Contract Code"/>
                 <field name="complete_wbs_name" string="Contract"/>
                 <field name="total_value" sum="Total"/>

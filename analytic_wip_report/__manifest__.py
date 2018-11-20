@@ -14,6 +14,7 @@
         'analytic',
         'analytic_plan_cost_revenue',
         'project_wbs',
+        'project_wbs_stage',
         'analytic_journal',
     ],
     'data': [
