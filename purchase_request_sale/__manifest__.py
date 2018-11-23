@@ -8,7 +8,7 @@
     "website": "www.eficent.com",
     "category": "Purchase Management",
     "depends": ["purchase_request_procurement", "sale"],
-    "description": """
+    "summary": """
         Link from sales to Purchase Requests
     """,
     "data": [
