@@ -1,14 +1,17 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-# For copyright and license notices, see __manifest__.py file in root directory
-##############################################################################
-
-from odoo import api, models, fields, _
+# -*- coding: utf-8 -*-
+# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+from odoo import api, models, fields
 import odoo.addons.decimal_precision as dp
 
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
+
+    @api.multi
+    def write(self, vals):
+        self._get_last_purchase()
+        return super(SaleOrderLine, self).write(vals)
 
     @api.multi
     def _get_last_purchase(self):
@@ -30,11 +33,13 @@ class SaleOrderLine(models.Model):
                 so_line.last_supplier_id = False
 
     last_purchase_price = fields.Float(
-        compute=_get_last_purchase,
+        readonly=True,
         digits=dp.get_precision('Product'),
-        string='Last Purchase Price')
+        string='Last Purchase Price',
+        store=True)
     last_purchase_date = fields.Date(
-        compute=_get_last_purchase, string='Last Purchase Date')
+        readonly=True, string='Last Purchase Date',
+        store=True)
     last_supplier_id = fields.Many2one(
-        compute=_get_last_purchase, comodel_name='res.partner',
-        string='Last Supplier')
+        readonly=True, comodel_name='res.partner',
+        string='Last Supplier', store=True)
