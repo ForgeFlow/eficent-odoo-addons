@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.ui.view" id="procurement_normal_form_view">
+        <field name="name">procurement.form</field>
+        <field name="model">procurement.order</field>
+        <field name="inherit_id" ref="procurement.procurement_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sale_line_id"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
