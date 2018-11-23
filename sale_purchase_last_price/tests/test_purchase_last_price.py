@@ -1,7 +1,6 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-# For copyright and license notices, see __manifest__.py file in root directory
-##############################################################################
+# -*- coding: utf-8 -*-
+# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests import common
 from datetime import datetime
