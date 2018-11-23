@@ -3,8 +3,6 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0).
 
 from odoo.tests import common
-from odoo import fields
-from odoo.exceptions import UserError
 
 
 class TestPurchaseRequestProcurement(common.SavepointCase):
