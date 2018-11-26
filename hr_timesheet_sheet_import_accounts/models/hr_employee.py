@@ -8,7 +8,7 @@ class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
     product_id = fields.Many2one(
-        comodel_name='product.product', string='Product', required=True)
+        comodel_name='product.product', string='Product')
 
     @api.multi
     @api.constrains('product_id')

@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
             <group name="active_group" position="inside">
-                <field name="product_id"/>
+                <field name="product_id" required="1"/>
             </group>
         </field>
     </record>
