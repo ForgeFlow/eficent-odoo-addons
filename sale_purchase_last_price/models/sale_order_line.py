@@ -16,7 +16,7 @@ class SaleOrderLine(orm.Model):
         for so_line in self.browse(cr, uid, ids, context):
             po_line_ids = self.pool.get('purchase.order.line').search(
                 cr, uid, [('product_id', '=', so_line.product_id.id),
-                          ('date_order', '<=', so_line.order_id.date_order),
+                          ('date_order', '<=', so_line.order_id.commitment_date),
                           ('state', 'in', ['confirmed', 'done'])],
                 order='id DESC', limit=1)
             res[so_line.id] = {'last_purchase_price': 0.0,
