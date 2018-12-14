@@ -6,6 +6,7 @@
     'name': 'Procurement Location Analytic',
     'version': '10.0.1.0.0',
     'category': 'Logistics',
+    "license": "AGPL-3",
     'summary': 'Control routes when using analytic locations',
     'author': 'Eficent',
     'website': 'http://www.eficent.com',
