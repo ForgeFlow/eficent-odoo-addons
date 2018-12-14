@@ -9,17 +9,14 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     @api.multi
-    def write(self, vals):
-        self._get_last_purchase()
-        return super(SaleOrderLine, self).write(vals)
-
-    @api.multi
+    @api.depends('product_id', 'order_id.state', 'product_uom_qty',
+                 'order_id.partner_id')
     def _get_last_purchase(self):
         """ Get last purchase price, last purchase date and last supplier """
         for so_line in self:
             po_lines = self.env['purchase.order.line'].search(
                 [('product_id', '=', so_line.product_id.id),
-                 ('date_order', '<=', so_line.order_id.date_order),
+                 ('date_order', '<=', so_line.order_id.commitment_date),
                  ('state', 'in', ['purchase', 'done'])],
                 order='id DESC', limit=1)
 

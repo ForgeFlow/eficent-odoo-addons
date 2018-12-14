@@ -12,6 +12,7 @@
     "website": "http://www.eficent.com",
     "depends": [
         "sale",
+        "sale_order_dates",
         "purchase",
     ],
     "data": [
