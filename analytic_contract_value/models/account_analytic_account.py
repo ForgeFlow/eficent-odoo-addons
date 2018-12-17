@@ -33,7 +33,7 @@ class AccountAnalyticAccount(models.Model):
     @api.multi
     def _compute_contract_value(self):
         for acc_id in self:
-            all_ids = self.get_child_accounts().keys()
+            all_ids = acc_id._get_all_analytic_accounts()
             query_params = [tuple(all_ids)]
             self.env.cr.execute(
                 """
