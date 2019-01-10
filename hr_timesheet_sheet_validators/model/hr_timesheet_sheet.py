@@ -46,52 +46,14 @@ class hr_timesheet_sheet(orm.Model):
         'department_id': _default_department,
     }
 
-    def _get_validator_user_ids(self, cr, uid, ids, context=None):
-        res = {}
-        users = {}
-        for timesheet in self.browse(cr, uid, ids):
-            res[timesheet.id] = []
-            users[timesheet.id] = []
-            if (
-                timesheet.employee_id
-                and timesheet.employee_id.parent_id
-                and timesheet.employee_id.parent_id.user_id
-            ):
-                users[timesheet.id].append(
-                    timesheet.employee_id.parent_id.user_id.id)
-            if (
-                timesheet.department_id
-                and timesheet.department_id.manager_id
-                and timesheet.department_id.manager_id.user_id
-                and timesheet.department_id.manager_id.user_id.id != uid
-            ):
-                users[timesheet.id].append(
-                    timesheet.department_id.manager_id.user_id.id)
-            elif (
-                timesheet.department_id
-                and timesheet.department_id.parent_id
-                and timesheet.department_id.parent_id.manager_id
-                and timesheet.department_id.parent_id.manager_id.user_id
-                and timesheet.department_id.parent_id.
-                    manager_id.user_id.id != uid
-            ):
-                users[timesheet.id].append(
-                    timesheet.department_id.manager_id.user_id.id)
-
-            [res[timesheet.id].append(item) for item in users[timesheet.id]
-             if item not in res[timesheet.id]]
-        return res
-
-    def button_confirm(self, cr, uid, ids, context=None):
-        validators = self._get_validator_user_ids(cr, uid,
-                                                  ids, context=context)
-        for sheet in self.browse(cr, uid, ids, context=context):
-            self.write(cr, uid, sheet.id,
-                       {'validator_user_ids':
-                           [(4, user_id) for user_id
-                            in validators[sheet.id]]})
-        return super(hr_timesheet_sheet, self).button_confirm(cr, uid, ids,
-                                                              context=context)
+    def create(self, cr, uid, vals, context=None):
+        employee = vals.get('employee_id', False)
+        if employee:
+            validators = self.pool.get('hr.employee').get_validator_user_ids(
+                cr, uid, [employee], context=context)
+            vals['validator_user_ids'] = [(4, user_id) for user_id in validators[employee]]
+        return super(hr_timesheet_sheet, self).create(
+            cr, uid, vals, context=context)
 
     def _check_authorised_validator(self, cr, uid, ids, *args):
         for timesheet in self.browse(cr, uid, ids):
