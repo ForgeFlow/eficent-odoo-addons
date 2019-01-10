@@ -94,34 +94,7 @@ class hr_timesheet_sheet(orm.Model):
                                                               context=context)
 
     def _check_authorised_validator(self, cr, uid, ids, *args):
-        model_data_obj = self.pool.get('ir.model.data')
-        res_groups_obj = self.pool.get("res.groups")
-        group_hr_manager_id = model_data_obj._get_id(
-            cr, uid, 'base', 'group_hr_manager')
-        group_hr_user_id = model_data_obj._get_id(
-            cr, uid, 'base', 'group_hr_user')
-
         for timesheet in self.browse(cr, uid, ids):
-            if group_hr_manager_id:
-                    res_id = model_data_obj.read(cr, uid, [group_hr_manager_id],
-                                                 ['res_id'])[0]['res_id']
-                    group_hr_manager = res_groups_obj.browse(
-                        cr, uid, res_id)
-                    group_hr_manager_ids = [user.id for user
-                                            in group_hr_manager.users]
-                    if uid in group_hr_manager_ids:
-                        continue
-
-            if group_hr_user_id:
-                    res_id = model_data_obj.read(cr, uid, [group_hr_user_id],
-                                                 ['res_id'])[0]['res_id']
-                    group_hr_user = res_groups_obj.browse(
-                        cr, uid, res_id)
-                    group_hr_user_ids = [user.id for user
-                                         in group_hr_user.users]
-                    if uid in group_hr_user_ids:
-                        continue
-
             validator_user_ids = []
             for validator_user_id in timesheet.validator_user_ids:
                 validator_user_ids.append(validator_user_id.id)
