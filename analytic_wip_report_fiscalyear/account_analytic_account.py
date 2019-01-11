@@ -46,13 +46,17 @@ class account_analytic_account(orm.Model):
                  'percent_complete_fy': 0,
                  'total_estimated_costs_fy': 0,
                  'earned_revenue_fy': 0,
-                 'total_value_fy': 0
+                 'total_value_fy': 0,
+                 'total_value_end_fy': 0,
+                 'earned_revenue_end_fy': 0
                  })
 
             query_params = [tuple(all_ids)]
             query_params_fy = [tuple(all_ids)]
+            query_params_fy_end = [tuple(all_ids)]
             where_date = ''
             where_date_fy = ''
+            where_date_fy_end = ''
 
             if context.get('from_date_fy', False):
                 fromdate = context.get('from_date_fy')
@@ -74,6 +78,7 @@ class account_analytic_account(orm.Model):
             query_params += [todate]
 
             where_date_fy += " AND l.date <= %s"
+            where_date_fy_end += " AND l.date <= %s"
             query_params_fy += [fromdate]
 
             # Actual billings for the fiscal year
@@ -111,7 +116,7 @@ class account_analytic_account(orm.Model):
             # Revenue at the end of the last year to get the revenue of this
             # year
 
-            # Total Value
+            # Total Value beginning year
             cr.execute(
                 """SELECT COALESCE(sum(amount),0.0) AS total_value
                 FROM account_analytic_line_plan AS L
@@ -129,6 +134,25 @@ class account_analytic_account(orm.Model):
                 query_params_fy)
             val = cr.fetchone()[0] or 0
             res[account.id]['total_value_fy'] = val
+
+            # Total Value end year
+            cr.execute(
+                """SELECT COALESCE(sum(amount),0.0) AS total_value
+                FROM account_analytic_line_plan AS L
+                LEFT JOIN account_analytic_account AS A
+                ON L.account_id = A.id
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type
+                WHERE AT.report_type = 'income'
+                AND l.account_id IN %s
+                AND a.active_analytic_planning_version = l.version_id
+                """ + where_date_fy_end + """
+                """,
+                query_params_fy_end)
+            val = cr.fetchone()[0] or 0
+            res[account.id]['total_value_end_fy'] = val
 
             cr.execute(
                 """
@@ -148,7 +172,26 @@ class account_analytic_account(orm.Model):
             val = cr.fetchone()[0] or 0
             res[account.id]['actual_costs_fy'] += val
 
-            # Total estimated costs at the end of the last year
+            cr.execute(
+                """
+                SELECT COALESCE(-1*sum(amount),0.0) total
+                                FROM account_analytic_line L
+                                INNER JOIN account_analytic_journal AAJ
+                                ON AAJ.id = L.journal_id
+                                INNER JOIN account_account AC
+                                ON L.general_account_id = AC.id
+                                INNER JOIN account_account_type AT
+                                ON AT.id = AC.user_type
+                                WHERE AT.report_type = 'expense'
+                                AND L.account_id in %s
+                """ + where_date_fy_end + """
+                """,
+                query_params_fy_end)
+            res[account.id]['actual_costs_end_fy'] = 0
+            val = cr.fetchone()[0] or 0
+            res[account.id]['actual_costs_end_fy'] += val
+
+            # Total estimated costs at the beggining of the fiscal year
             cr.execute("""
             SELECT COALESCE(-1*sum(amount),0.0) AS total_value
             FROM account_analytic_line_plan AS L
@@ -166,17 +209,45 @@ class account_analytic_account(orm.Model):
             val = cr.fetchone()[0] or 0
             res[account.id]['total_estimated_costs_fy'] = val
 
+            # Total estimated costs at the end of the fiscal year
+            cr.execute("""
+            SELECT COALESCE(-1*sum(amount),0.0) AS total_value
+            FROM account_analytic_line_plan AS L
+            LEFT JOIN account_analytic_account AS A
+            ON L.account_id = A.id
+            INNER JOIN account_account AC
+            ON L.general_account_id = AC.id
+            INNER JOIN account_account_type AT
+            ON AT.id = AC.user_type
+            WHERE AT.report_type = 'expense'
+            AND L.account_id IN %s
+            AND A.active_analytic_planning_version = L.version_id
+            """ + where_date_fy_end + """
+            """, query_params_fy_end)
+            val = cr.fetchone()[0] or 0
+            res[account.id]['total_estimated_costs_end_fy'] = val
+
             try:
                 res[account.id]['percent_complete_fy'] = \
                     (res[account.id]['actual_costs_fy'] / res[account.id]['total_estimated_costs_fy']) * 100
             except ZeroDivisionError:
                 res[account.id]['percent_complete_fy'] = 0
 
-            # Earned revenue
+            try:
+                res[account.id]['percent_complete_end_fy'] = \
+                    (res[account.id]['actual_costs_end_fy'] / res[account.id]['total_estimated_costs_end_fy']) * 100
+            except ZeroDivisionError:
+                res[account.id]['percent_complete_end_fy'] = 0
+
+            # Earned revenue at beginning of the year
             res[account.id]['earned_revenue_fy'] = \
                 res[account.id]['percent_complete_fy']/100 * res[account.id]['total_value_fy']
-
-            res[account.id]['fy_revenue2'] = account.earned_revenue - res[account.id]['earned_revenue_fy']
+            # Earned revenue at end of the year
+            res[account.id]['earned_revenue_end_fy'] = \
+                res[account.id]['percent_complete_end_fy']/100 * res[account.id]['total_value_end_fy']
+            # Earned revenue at current year
+            res[account.id]['fy_revenue2'] = end_year_revenue - res[account.id]['earned_revenue_fy']
+            # Earned revenue based on billings
             res[account.id]['fy_revenue'] = res[account.id]['fy_billings'] + res[account.id]['under_billings'] - res[account.id]['over_billings']
             # Gross margin
             res[account.id]['fy_gross_profit'] = \
@@ -217,7 +288,13 @@ class account_analytic_account(orm.Model):
         'total_value_fy': fields.function(
             _wip_report_fy, method=True, type='float', string='Total Value prior FY',
             multi='wip_report',
-            help="Total estimated (prior year) revenue of the contract",
+            help="Total estimated (prior year) value of the contract",
+            digits_compute=dp.get_precision('Account')),
+        'total_value_end_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Total Value end FY',
+            multi='wip_report',
+            help="Total estimated (end year) value of the contract",
             digits_compute=dp.get_precision('Account')),
         'fy_revenue': fields.function(
             _wip_report_fy, method=True, type='float',
@@ -238,7 +315,12 @@ class account_analytic_account(orm.Model):
             digits_compute=dp.get_precision('Account')),
         'earned_revenue_fy': fields.function(
             _wip_report_fy, method=True, type='float',
-            string='Last Fiscal Year Revenue',
+            string='Revenue at beginning of the year',
+            multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
+        'earned_revenue_end_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Revenue at end of the year',
             multi='wip_report_fy',
             digits_compute=dp.get_precision('Account')),
         'fy_billings': fields.function(
@@ -266,13 +348,25 @@ class account_analytic_account(orm.Model):
             _wip_report_fy, method=True, type='float',
             string='Last Year actual cost', multi='wip_report_fy',
             digits_compute=dp.get_precision('Account')),
+        'actual_costs_end_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='End fiscal Year actual cost', multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
         'total_estimated_costs_fy': fields.function(
             _wip_report_fy, method=True, type='float',
-            string='Estimated cost last year', multi='wip_report_fy',
+            string='Estimated cost beginning of year', multi='wip_report_fy',
+            digits_compute=dp.get_precision('Account')),
+        'total_estimated_costs_end_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Estimated cost end fiscal year', multi='wip_report_fy',
             digits_compute=dp.get_precision('Account')),
         'percent_complete_fy': fields.function(
             _wip_report_fy, method=True, type='float',
-            string='Percent Complete last year',
+            string='Percent Complete beginning fy',
+            multi='wip_report', digits_compute=dp.get_precision('Account')),
+        'percent_complete_end_fy': fields.function(
+            _wip_report_fy, method=True, type='float',
+            string='Percent Complete end fy',
             multi='wip_report', digits_compute=dp.get_precision('Account')),
         'fy_actual_material_cost': fields.function(
             _wip_report_fy, method=True, type='float',
