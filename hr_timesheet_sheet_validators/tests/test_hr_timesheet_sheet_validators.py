@@ -5,6 +5,7 @@
 
 from odoo.tests.common import TransactionCase
 import time
+from odoo.exceptions import UserError
 
 
 class TestComputeWorkdays(TransactionCase):
@@ -28,6 +29,7 @@ class TestComputeWorkdays(TransactionCase):
         user_dict = {
             'name': 'User 1',
             'login': 'tua@example.com',
+            'email': 'tua@example.com',
             'password': 'base-test-passwd',
         }
         self.user_test = self.env['res.users'].create(user_dict)
@@ -52,17 +54,18 @@ class TestComputeWorkdays(TransactionCase):
         })
 
         # I add 5 hours of work timesheet
-        self.timesheet_sheet.write({'timesheet_ids': [(0, 0, {
-            'project_id': self.project_2.id,
-            'date': time.strftime('%Y-%m-11'),
-            'name': 'Develop UT for hr module(1)',
-            'user_id': self.user_test.id,
-            'unit_amount': 5.00,
-        })]})
+        self.timesheet_sheet.sudo(self.user_test).write(
+            {'timesheet_ids': [(0, 0, {
+             'project_id': self.project_2.id,
+             'date': time.strftime('%Y-%m-11'),
+             'name': 'Develop UT for hr module(1)',
+             'user_id': self.user_test.id,
+             'unit_amount': 5.00})]})
 
     def test_timesheet_methods(self):
-        self.timesheet_sheet.action_timesheet_confirm()
         self.assertEqual(self.timesheet_sheet.validator_user_ids,
                          self.timesheet_sheet.employee_id.parent_id.user_id)
+        self.timesheet_sheet.sudo(self.user_test).action_timesheet_confirm()
+        with self.assertRaises(UserError):
+            self.timesheet_sheet.sudo(self.user_test).action_timesheet_done()
         self.timesheet_sheet.action_timesheet_done()
-        self.timesheet_sheet.action_timesheet_draft()

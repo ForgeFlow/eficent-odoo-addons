@@ -25,7 +25,7 @@
                         groups="base.group_user,hr.group_hr_user" class="oe_highlight"/>
             </xpath>
             <xpath expr='//page[2]' position="after">
-                <page string="Validators" groups="hr.group_hr_user">
+                <page string="Validators" groups="hr_timesheet_sheet_validators.group_hr_validator">
                      <group>
                          <field name="validator_user_ids"/>
                      </group>
@@ -40,7 +40,7 @@
         <field name="inherit_id" ref="hr_timesheet_sheet.view_hr_timesheet_sheet_filter"/>
         <field name="arch" type="xml">
             <xpath expr='//field[@name="employee_id"]' position="after">
-                <field name="validator_user_ids"/>
+                <field name="validator_user_ids" groups="hr_timesheet_sheet_validators.group_hr_validator"/>
             </xpath>
             <xpath expr='//filter[@name="to_approve"]' position="after">
                 <filter name="my_timesheets"
