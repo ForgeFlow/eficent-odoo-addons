@@ -4,6 +4,9 @@
 
 from odoo.addons import decimal_precision as dp
 from odoo import api, fields, models
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
 
 
 class AccountAnalyticAccount(models.Model):
@@ -17,22 +20,30 @@ class AccountAnalyticAccount(models.Model):
             # Total Value
             query_params = [tuple(all_ids)]
             query_params_fy = [tuple(all_ids)]
+            query_params_fy_end = [tuple(all_ids)]
             where_date_fy = ''
+            where_date_fy_end = ''
             where_date = ''
             context = self._context
             cr = self._cr
             if self._context.get('from_date_fy', False):
                 from_date = context['from_date_fy']
-                where_date += " AND l.date >= %s"
+                from_date = datetime.strptime(
+                    from_date, DT) - relativedelta(days=1)
+                from_date = datetime.strftime(from_date, DT)
+                where_date += " AND l.date > %s"
                 query_params += [from_date]
                 where_date_fy += " AND l.date <= %s"
                 query_params_fy += [from_date]
+
             if self._context.get('to_date_fy', False):
                 to_date = context['to_date_fy']
                 where_date += " AND l.date <= %s"
                 query_params += [to_date]
+                where_date_fy_end += " AND l.date <= %s"
+                query_params_fy_end += [to_date]
 
-            # Total Value
+            # Total Value Beginning year
             cr.execute(
                 """SELECT COALESCE(sum(amount),0.0) AS total_value
                 FROM account_analytic_line_plan AS L
@@ -51,8 +62,26 @@ class AccountAnalyticAccount(models.Model):
             val = cr.fetchone()[0] or 0
             account.total_value_fy = val
 
-            # Revenue at the end of the last year to get the revenue of this
-            # year
+            # Total Value end year
+            cr.execute(
+                """SELECT COALESCE(sum(amount),0.0) AS total_value
+                FROM account_analytic_line_plan AS L
+                LEFT JOIN account_analytic_account AS A
+                ON L.account_id = A.id
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type_id
+                WHERE AT.name in ('Income', 'Other Income')
+                AND l.account_id IN %s
+                AND a.active_analytic_planning_version = l.version_id
+                """ + where_date_fy_end + """
+                """,
+                query_params_fy_end)
+            val = cr.fetchone()[0] or 0
+            account.total_value_end_fy = val
+
+            # actual cost at the the beginning of the fy
             cr.execute(
                 """
                 SELECT COALESCE(-1*sum(amount),0.0) total
@@ -70,7 +99,27 @@ class AccountAnalyticAccount(models.Model):
             account.actual_costs_fy = 0
             val = cr.fetchone()[0] or 0
             account.actual_costs_fy += val
-            # Total estimated costs at the end of the last year
+
+            # actual cost at the the end of the fy
+            cr.execute(
+                """
+                SELECT COALESCE(-1*sum(amount),0.0) total
+                FROM account_analytic_line L
+                INNER JOIN account_analytic_journal AAJ
+                ON AAJ.id = L.journal_id
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type_id
+                WHERE AT.name in ('Expense', 'Cost of Goods Sold')
+                AND L.account_id in %s
+                """ + where_date_fy_end + """
+                """, query_params_fy_end)
+            account.actual_costs_end_fy = 0
+            val = cr.fetchone()[0] or 0
+            account.actual_costs_end_fy += val
+
+            # Total estimated costs at the beginning of the fy
             cr.execute("""
             SELECT COALESCE(-1*sum(amount),0.0) AS total_value
             FROM account_analytic_line_plan AS L
@@ -87,19 +136,49 @@ class AccountAnalyticAccount(models.Model):
             """, query_params_fy)
             val = cr.fetchone()[0] or 0
             account.total_estimated_costs_fy = val
+
+            # Total estimated costs at the enf of the fy
+            cr.execute("""
+            SELECT COALESCE(-1*sum(amount),0.0) AS total_value
+            FROM account_analytic_line_plan AS L
+            LEFT JOIN account_analytic_account AS A
+            ON L.account_id = A.id
+            INNER JOIN account_account AC
+            ON L.general_account_id = AC.id
+            INNER JOIN account_account_type AT
+            ON AT.id = AC.user_type_id
+            WHERE AT.name in ('Expense', 'Cost of Goods Sold')
+            AND L.account_id IN %s
+            AND A.active_analytic_planning_version = L.version_id
+            """ + where_date_fy_end + """
+            """, query_params_fy_end)
+            val = cr.fetchone()[0] or 0
+            account.total_estimated_costs_end_fy = val
+
             try:
                 account.percent_complete_fy = (
                     (account.actual_costs_fy /
                      account.total_estimated_costs_fy) * 100)
             except ZeroDivisionError:
                 account.percent_complete_fy = 0
+
+            try:
+                account.percent_complete_end_fy = (
+                    (account.actual_costs_end_fy /
+                     account.total_estimated_costs_end_fy) * 100)
+            except ZeroDivisionError:
+                account.percent_complete_end_fy = 0
+
             # Earned revenue
             account.earned_revenue_fy = \
                 account.percent_complete_fy/100 * account.total_value_fy
+            account.earned_revenue_end_fy = \
+                account.percent_complete_end_fy/100 * \
+                account.total_value_end_fy
             account.fy_revenue = \
-                account.earned_revenue - account.earned_revenue_fy
+                account.earned_revenue_end_fy - account.earned_revenue_fy
 #
-            # Actual costs to date
+            # Actual costs for the period
             # pylint: disable=sql-injection
             cr.execute(
                 """
@@ -114,8 +193,8 @@ class AccountAnalyticAccount(models.Model):
                                 WHERE AT.name in (
                                 'Expense', 'Cost of Goods Sold')
                                 AND L.account_id IN %s
-                """ + where_date + """
-                """, query_params)
+                """ + where_date_fy + """
+                """, query_params_fy)
             account.fy_actual_costs = 0
             fy_actual_cost_line_ids = []
             fy_actual_material_line_ids = []
@@ -135,7 +214,6 @@ class AccountAnalyticAccount(models.Model):
                 (6, 0, [l for l in fy_actual_material_line_ids])]
             account.fy_actual_labor_line_ids = [
                 (6, 0, [l for l in fy_actual_labor_line_ids])]
-
             # Actual billings to date
             # pylint: disable=sql-injection
             cr.execute(
@@ -164,6 +242,18 @@ class AccountAnalyticAccount(models.Model):
                                        account.fy_actual_costs)
         return True
 
+    total_value_fy = fields.Float(
+        compute='_compute_fy_wip_report',
+        string='Total Value at beginning year',
+        help='Only for revenue calculation',
+        digits=dp.get_precision('Account')
+    )
+    total_value_end_fy = fields.Float(
+        compute='_compute_fy_wip_report',
+        string='Total Value at end year',
+        help='Only for revenue calculation',
+        digits=dp.get_precision('Account')
+    )
     fy_actual_costs = fields.Float(
         compute='_compute_fy_wip_report',
         string='Fiscal Year Costs',
@@ -201,7 +291,13 @@ class AccountAnalyticAccount(models.Model):
     )
     earned_revenue_fy = fields.Float(
         compute='_compute_fy_wip_report',
-        string='Last Year Fiscal Year Revenue',
+        string='Revenue at the Beginning of the Fiscal Year',
+        help='Only for revenue calculation',
+        digits=dp.get_precision('Account')
+    )
+    earned_revenue_end_fy = fields.Float(
+        compute='_compute_fy_wip_report',
+        string='Revenue at the end of the Fiscal Year',
         help='Only for revenue calculation',
         digits=dp.get_precision('Account')
     )
@@ -227,17 +323,32 @@ class AccountAnalyticAccount(models.Model):
     )
     actual_costs_fy = fields.Float(
         compute='_compute_wip_report',
-        string='Actual Costs to date Last FY',
+        string='Actual Costs to date beginning FY',
+        digits=dp.get_precision('Account')
+    )
+    actual_costs_end_fy = fields.Float(
+        compute='_compute_wip_report',
+        string='Actual Costs to date end FY',
         digits=dp.get_precision('Account')
     )
     total_estimated_costs_fy = fields.Float(
         compute='_compute_wip_report',
-        string='Total Estimated Costs Last FY',
+        string='Total Estimated Costs Beginning FY',
+        digits=dp.get_precision('Account')
+    )
+    total_estimated_costs_end_fy = fields.Float(
+        compute='_compute_wip_report',
+        string='Total Estimated Costs end FY',
         digits=dp.get_precision('Account')
     )
     percent_complete_fy = fields.Float(
         compute='_compute_wip_report',
-        string='Percent Complete Last FY',
+        string='Percent Complete beginning FY',
+        digits=(16, 10.0)
+    )
+    percent_complete_end_fy = fields.Float(
+        compute='_compute_wip_report',
+        string='Percent Complete ending FY',
         digits=(16, 10.0)
     )
 
