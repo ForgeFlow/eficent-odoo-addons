@@ -63,9 +63,9 @@ class account_analytic_account(orm.Model):
 
             if context.get('from_date_fy', False):
                 fromdate = context.get('from_date_fy')
-                fromdate = datetime.strptime(
+                fromdatefy = datetime.strptime(
                     fromdate, DT) - relativedelta(days=1)
-                fromdate = datetime.strftime(fromdate, DT)
+                fromdatefy = datetime.strftime(fromdatefy, DT)
             else:
                 raise orm.except_orm(_('Error'),
                                _('The start date for the fiscal year has'
@@ -85,7 +85,7 @@ class account_analytic_account(orm.Model):
 
             where_date_fy += " AND l.date <= %s"
             where_date_fy_end += " AND l.date <= %s"
-            query_params_fy += [fromdate]
+            query_params_fy += [fromdatefy]
             query_params_fy_end += [todate]
 
             # Actual billings for the fiscal year
