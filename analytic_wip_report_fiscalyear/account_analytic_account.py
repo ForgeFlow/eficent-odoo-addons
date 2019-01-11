@@ -21,6 +21,9 @@
 import decimal_precision as dp
 from openerp.osv import fields, orm
 from openerp.tools.translate import _
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DT
 
 
 class account_analytic_account(orm.Model):
@@ -60,6 +63,9 @@ class account_analytic_account(orm.Model):
 
             if context.get('from_date_fy', False):
                 fromdate = context.get('from_date_fy')
+                fromdate = datetime.strptime(
+                    fromdate, DT) - relativedelta(days=1)
+                fromdate = datetime.strftime(fromdate, DT)
             else:
                 raise orm.except_orm(_('Error'),
                                _('The start date for the fiscal year has'
@@ -80,6 +86,7 @@ class account_analytic_account(orm.Model):
             where_date_fy += " AND l.date <= %s"
             where_date_fy_end += " AND l.date <= %s"
             query_params_fy += [fromdate]
+            query_params_fy_end += [todate]
 
             # Actual billings for the fiscal year
             cr.execute(
@@ -246,7 +253,7 @@ class account_analytic_account(orm.Model):
             res[account.id]['earned_revenue_end_fy'] = \
                 res[account.id]['percent_complete_end_fy']/100 * res[account.id]['total_value_end_fy']
             # Earned revenue at current year
-            res[account.id]['fy_revenue2'] = end_year_revenue - res[account.id]['earned_revenue_fy']
+            res[account.id]['fy_revenue2'] = res[account.id]['earned_revenue_end_fy'] - res[account.id]['earned_revenue_fy']
             # Earned revenue based on billings
             res[account.id]['fy_revenue'] = res[account.id]['fy_billings'] + res[account.id]['under_billings'] - res[account.id]['over_billings']
             # Gross margin
