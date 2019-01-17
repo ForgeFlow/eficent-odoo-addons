@@ -28,13 +28,13 @@ class AccountAnalyticAccount(models.Model):
             cr = self._cr
             if self._context.get('from_date_fy', False):
                 from_date = context['from_date_fy']
-                from_date = datetime.strptime(
+                fromdatefy = datetime.strptime(
                     from_date, DT) - relativedelta(days=1)
-                from_date = datetime.strftime(from_date, DT)
-                where_date += " AND l.date > %s"
+                fromdatefy = datetime.strftime(fromdatefy, DT)
+                where_date += " AND l.date >= %s"
                 query_params += [from_date]
                 where_date_fy += " AND l.date <= %s"
-                query_params_fy += [from_date]
+                query_params_fy += [fromdatefy]
 
             if self._context.get('to_date_fy', False):
                 to_date = context['to_date_fy']
