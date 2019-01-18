@@ -20,19 +20,15 @@
              action="action_show_actions"
              groups="project.group_project_manager,project.group_project_user"/>
 
-    <menuitem name="Changes"
-              id="menu_configuration_changes"
-              parent="project.menu_project_config"
-              groups="project.group_project_manager"/>
 
     <menuitem name="Change Categories"
               action="action_show_categories"
               id="menu_change_categories"
-              parent="menu_configuration_changes"/>
+              parent="project.menu_project_config"/>
 
-    <menuitem name="Proximity"
+    <menuitem name="Change Proximity"
               action="action_show_proximity"
               id="menu_change_proximity"
-              parent="menu_configuration_changes"/>
+              parent="project.menu_project_config"/>
 
 </odoo>
