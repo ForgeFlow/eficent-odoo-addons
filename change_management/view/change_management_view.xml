@@ -189,65 +189,13 @@
         </field>
     </record>
 
-    <record id="change_kanban_view" model="ir.ui.view">
-        <field name="name">change.management.change.kanban.view</field>
-        <field name="model">change.management.change</field>
-        <field name="arch"  type="xml">
-            <kanban class="oe_background_grey" default_group_by="proximity_id">
-                <field name="name"/>
-                <field name="description"/>
-                <field name="state"/>
-                <field name="project_id"/>
-                <field name="change_category_id"/>
-                <field name="change_response_ids"/>
-                <field name="change_response_count"/>
-                <field name="change_owner_id"/>
-                <field name="color"/>
-                <templates>
-                  <t t-name="kanban-box">
-                    <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
-                      <div class="oe_dropdown_toggle oe_dropdown_kanban">
-                        <span class="oe_e">í</span>
-                          <ul class="oe_dropdown_menu">
-                          <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit...</a></li></t>
-                          <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
-                        </ul>
-                      </div>
-                      <div class="oe_kanban_content">
-                        <div>
-                          <ul>
-                            <li><b><field name="description"/></b></li>
-                            <li><field name="name"/></li>
-                            <li><field name="change_category_id"/></li>
-                          </ul>
-                        </div>
-                        <div>
-                          <field name="project_id"/>
-                        </div>
-                        <div style="padding-left: 0.5em">
-                          <span>
-                            <label>Actions:</label>
-                            <t t-esc="record.change_response_count.value"/>
-                          </span>
-                        </div>
-                        <div class="oe_kanban_project_avatars">
-                          <img t-att-src="kanban_image('res.users', 'image_small', record.change_owner_id.raw_value)" t-att-title="record.change_owner_id.value" width="24" height="24" class="oe_kanban_avatar" t-if="record.change_owner_id.value"/>
-                        </div>
-                      </div>
-                    </div>
-                  </t>
-                </templates>
-              </kanban>
-        </field>
-    </record>
-
     <!-- ACTIONS  -->
     <record model="ir.actions.act_window" id="action_show_changes">
         <field name="name">Changes</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">change.management.change</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="change_search_form_view"/>
         <field name="context">{'search_default_active': 1}</field>
     </record>
@@ -292,12 +240,6 @@
         <field name="arch" type="xml">
             <xpath expr="//div[contains(@class, 'o_kanban_primary_left')]" position="inside">
                 <div class="oe_kanban_project_list">
-                    <!--<a t-if="record.change_count.raw_value"-->
-                       <!--name="%(change_management.action_show_changes)d"-->
-                       <!--type="action"-->
-                       <!--style="margin-right: 10px">-->
-                        <!--<field name="change_count"/> Changes-->
-                    <!--</a>-->
                     <a t-if="record.change_count.raw_value"
                        name="%(change_management.action_show_changes)d"
                        type="action"
