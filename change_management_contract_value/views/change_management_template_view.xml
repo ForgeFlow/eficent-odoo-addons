@@ -64,6 +64,6 @@
     <menuitem groups="project.group_project_manager"
         action="action_change_management_template_open_form"
         id="change_management_template_entries"
-        parent="change_management.menu_configuration_changes"
+        parent="project.menu_project_config"
         sequence="15"/>
 </odoo>
