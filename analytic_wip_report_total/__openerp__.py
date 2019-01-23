@@ -17,7 +17,6 @@ Add the totals in tree view
     "license": "", 
     "depends": [
         "analytic_wip_report_fiscalyear",
-        "analytic_wip_report_contract_value",
         "analytic_wip_report_extend",
     ],
     "demo": [],

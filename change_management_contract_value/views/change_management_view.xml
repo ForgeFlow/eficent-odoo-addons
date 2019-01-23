@@ -9,7 +9,15 @@
             <field name="arch" type="xml">
                 <field name="change_category_id" position="after">
                     <field name="change_value"/>
+                    <field name="change_template_id"/>
                 </field>
+                <xpath expr='//page[@string="Description"]' position="after">
+                    <page string="Contract Value">
+                        <group string="Revenue Plan Lines">
+                            <field name="analytic_line_plan_ids" nolabel="1"/>
+                        </group>
+                    </page>
+                </xpath>
             </field>
         </record>
 
