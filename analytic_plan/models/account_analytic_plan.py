@@ -73,7 +73,7 @@ class AccountAnalyticLinePlan(models.Model):
         readonly=True
     )
     product_uom_id = fields.Many2one(
-        comodel_name='product.uom',
+        comodel_name='uom.uom',
         string='UoM'
     )
     product_id = fields.Many2one(
