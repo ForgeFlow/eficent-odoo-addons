@@ -20,7 +20,7 @@ msgstr ""
 msgid "<p>\n"
 "                No activity yet on this contract.\n"
 "              </p><p>\n"
-"                In OpenERP, contracts and projects are implemented using\n"
+"                In odoo, contracts and projects are implemented using\n"
 "                analytic account. So, you can track costs and revenues to analyse\n"
 "                your margins easily.\n"
 "              </p>\n"
@@ -282,7 +282,7 @@ msgstr ""
 
 #. module: analytic_plan
 #: help:account.analytic.plan.journal,type:0
-msgid "Gives the type of the analytic journal. When it needs for a document (eg: an invoice) to create analytic entries, OpenERP will look  for a matching journal of the same type."
+msgid "Gives the type of the analytic journal. When it needs for a document (eg: an invoice) to create analytic entries, odoo will look  for a matching journal of the same type."
 msgstr ""
 
 #. module: analytic_plan

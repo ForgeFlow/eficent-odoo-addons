@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 # Copyright 2015 Eficent Business and IT Consulting Services S.L.
 # (Jordi Ballester Alomar)
 # Copyright 2016 Matmoz d.o.o. and 2018 Luxim d.o.o.s

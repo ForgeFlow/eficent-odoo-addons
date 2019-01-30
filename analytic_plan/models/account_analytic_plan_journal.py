@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 # Copyright 2015 Eficent Business and IT Consulting Services S.L.
 # (Jordi Ballester Alomar)
 # Copyright 2016 Matmoz d.o.o.
@@ -37,7 +37,7 @@ class AccountAnalyticPlanJournal(models.Model):
         'Type',
         required=True,
         help="""Gives the type of the analytic journal. When it needs for a
-                document (eg: an invoice) to create analytic entries, OpenERP
+                document (eg: an invoice) to create analytic entries, odoo
                 will look  for a matching journal of the same type.""",
         default='general'
     )
