@@ -5,7 +5,7 @@
 
 {
     "name": "Project Stock Move Link",
-    "version": "10.0.1.0.0",
+    "version": "12.0.1.0.0",
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
