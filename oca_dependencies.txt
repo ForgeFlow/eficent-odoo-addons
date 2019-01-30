@@ -1,0 +1,2 @@
+account-analytic https://github.com/OCA/account-analytic 12.0
+stock-analytic https://github.com/eficent/account-analytic 12.0-mig-stock_analytic
