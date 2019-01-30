@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # Copyright 2018 Luxim d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -12,7 +12,7 @@ class AnalyticResourcePlanLine(models.Model):
 
     _name = 'analytic.resource.plan.line'
     _description = "Analytic Resource Planning lines"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = 'mail.thread'
 
     @api.multi
     @api.depends('child_ids')

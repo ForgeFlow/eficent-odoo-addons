@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # Copyright 2017 Luxim d.o.o.
 # Copyright 2017 Matmoz d.o.o.
@@ -21,6 +21,11 @@ class TestAnalyticResourcePlan(common.SavepointCase):
         cls.account_id.write({
             'active_analytic_planning_version': cls.plan_version.id})
         cls.product = cls.env['product.product'].create({'name': 'SP'})
+        cls.expense = cls.env.ref('account.data_account_type_expenses').id
+        cls.general_account_id = cls.env['account.account'].\
+            search([('user_type_id', '=', cls.expense)], limit=1)
+        cls.product.categ_id.property_account_expense_categ_id = \
+            cls.general_account_id
         cls.anal_journal = cls.env['account.analytic.journal'].create(
             {'name': 'Expenses',
              'code': 'EX',
@@ -41,7 +46,18 @@ class TestAnalyticResourcePlan(common.SavepointCase):
              }
         )
         cls.product.write(
-            {'expense_analytic_plan_journal_id': cls.plan_expenses.id, })
+            {'expense_analytic_plan_journal_id': cls.plan_expenses.id,
+             'property_account_expense_categ_id': cls.general_account_id.id})
+
+    def _create_account(self, acc_type, name, code, company):
+        """Create an account."""
+        account = self.account_model.create({
+            'name': name,
+            'code': code,
+            'user_type_id': acc_type.id,
+            'company_id': company.id
+        })
+        return account
 
     def test_plan(cls):
         cls.resource_plan_line.action_button_confirm()
