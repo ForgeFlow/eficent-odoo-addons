@@ -70,7 +70,7 @@ class AnalyticResourcePlanLine(models.Model):
         states={'draft': [('readonly', False)]}
     )
     product_uom_id = fields.Many2one(
-        comodel_name='product.uom',
+        comodel_name='uom.uom',
         string='UoM',
         required=True,
         readonly=True,
