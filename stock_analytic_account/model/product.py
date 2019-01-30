@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2014-17 Eficent Business and IT Consulting Services S.L.
 # Copyright 2016 Matmoz d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -22,7 +21,8 @@ class Product(models.Model):
                 [('analytic_account_id', '=', self._context.get(
                     'analytic_account_id_out'))]).ids
             customer_locations = self.env['stock.location'].search(
-                [('usage', '=', 'customer')]).ids
+                [('usage', '=', 'customer'),
+                 ('analytic_account_id', '=', False)]).ids
             dom_loc_out = [('location_dest_id', 'in', locations),
                            ('location_id', 'in', customer_locations), ]
             dom_loc_in = [('location_dest_id', 'in', customer_locations),
