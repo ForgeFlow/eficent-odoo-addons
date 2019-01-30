@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -19,6 +18,8 @@ class TestStockLocation(TransactionCase):
         self.yourcompany_loc = self.env.ref('stock.stock_location_stock')
         self.yourcompany_aa =\
             self.env.ref('analytic.analytic_our_super_product')
+        self.plan_version = self.env.ref(
+            'analytic_plan.analytic_plan_version_P02')
         self.AA1 = self.create_analytic('AA1')
         self.AA2 = self.create_analytic('AA2')
         self.yourcompany_loc.write({'analytic_account_id': self.AA1.id})
@@ -26,7 +27,8 @@ class TestStockLocation(TransactionCase):
             self.AA1, self.yourcompany_loc)
 
     def create_analytic(self, name):
-        vals = {'name': name}
+        vals = {'name': name,
+                'active_analytic_planning_version': self.plan_version.id}
         analytic_id = self.analytic_model.create(vals)
         return analytic_id
 
