@@ -101,7 +101,7 @@ class AnalyticResourcePlanLine(models.Model):
     )
     has_child = fields.Boolean(
         compute='_compute_has_child',
-        string="Child lines"
+        string="Has child"
     )
     analytic_line_plan_ids = fields.One2many(
         comodel_name='account.analytic.line.plan',

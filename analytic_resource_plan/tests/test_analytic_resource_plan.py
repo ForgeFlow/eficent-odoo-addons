@@ -47,7 +47,7 @@ class TestAnalyticResourcePlan(common.SavepointCase):
         )
         cls.product.write(
             {'expense_analytic_plan_journal_id': cls.plan_expenses.id,
-             'property_account_expense_categ_id': cls.general_account_id.id})
+             'property_account_expense_id': cls.general_account_id.id})
 
     def _create_account(self, acc_type, name, code, company):
         """Create an account."""

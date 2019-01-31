@@ -81,6 +81,5 @@ class AccountAnalyticAccount(models.Model):
     active_analytic_planning_version = fields.Many2one(
         'account.analytic.plan.version',
         'Active planning Version',
-        required=True,
         default=_default_version
     )

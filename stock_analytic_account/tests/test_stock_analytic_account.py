@@ -11,7 +11,6 @@ class TestStockAnalyticAccount(common.TransactionCase):
         self.AnalyticAccount = self.env['account.analytic.account']
         self.StockPicking = self.env['stock.picking']
         self.StockMove = self.env['stock.move']
-        self.ProcurementOrder = self.env['procurement.order']
         self.route_warehouse0_mto_id =\
             self.env.ref('stock.route_warehouse0_mto').id
         self.partner_id = self.env.ref('base.res_partner_1')
