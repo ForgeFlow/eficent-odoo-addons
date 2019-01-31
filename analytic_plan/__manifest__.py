@@ -7,7 +7,7 @@
 
 {
     'name': 'Analytic Plan',
-    'version': '10.0.1.0.0',
+    'version': '12.0.1.0.0',
     'author':   'Eficent, '
                 'Matmoz, '
                 'Project Expert Team',
