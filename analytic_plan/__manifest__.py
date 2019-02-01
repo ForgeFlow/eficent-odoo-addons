@@ -15,10 +15,7 @@
     'category': 'Project Management',
     'license': 'AGPL-3',
     'depends': [
-        'account',
-        'analytic',
         'analytic_journal',
-        'project',
         'project_wbs'
     ],
     'data': [
