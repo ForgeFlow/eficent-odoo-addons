@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# © 2014-17 Eficent Business and IT Consulting Services S.L.
+# © 2014-19 Eficent Business and IT Consulting Services S.L.
 # © 2016 Matmoz d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -42,7 +41,8 @@ class TestProgressMeasurement(TransactionCase):
                 'is_percent': True,
                 'is_default': True
             })
-        self.assertEquals(
+        self.assertEqual(
             self.progress_measurement_id.communication_date_print,
-            self.progress_measurement_id.communication_date
+            self.progress_measurement_id.communication_date.strftime(
+                '%Y-%m-%d')
         )
