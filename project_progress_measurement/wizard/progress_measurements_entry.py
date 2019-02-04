@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright 2014-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2014-19 Eficent Business and IT Consulting Services S.L.
 #        <contact@eficent.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -63,7 +62,7 @@ class ProgressMeasurementsEntry(models.TransientModel):
                 'communication_date': communication_date,
                 'progress_measurement_type': progress_measurement_type_id,
             }
-            if project_id in measurements.keys():
+            if project_id in list(measurements.keys()):
                 if measurements[project_id]['communication_date'
                                             ] == communication_date:
                     res.append(measurements[project_id]['id'])

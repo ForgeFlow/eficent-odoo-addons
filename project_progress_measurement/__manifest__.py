@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
-# Copyright 2014-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2014-19 Eficent Business and IT Consulting Services S.L.
 #        <contact@eficent.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": "Project progress measurement",
-    "version": "10.0.1.0.0",
+    "version": "12.0.1.0.0",
     "author": "Eficent, Odoo Community Association (OCA),"
               "Project Expert Team",
     "website": "http://project.expert",
