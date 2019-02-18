@@ -9,14 +9,15 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     @api.multi
-    @api.depends('product_id', 'order_id.state', 'product_uom_qty',
-                 'order_id.partner_id')
-    def _get_last_purchase(self):
+    def _compute_last_purchase(self):
         """ Get last purchase price, last purchase date and last supplier """
         for so_line in self:
+            date_compare = (so_line.order_id.commitment_date if
+                            so_line.order_id.commitment_date else
+                            so_line.order_id.date_order)
             po_lines = self.env['purchase.order.line'].search(
                 [('product_id', '=', so_line.product_id.id),
-                 ('date_order', '<=', so_line.order_id.commitment_date),
+                 ('date_order', '<=', date_compare),
                  ('state', 'in', ['purchase', 'done'])],
                 order='id DESC', limit=1)
 
@@ -30,13 +31,13 @@ class SaleOrderLine(models.Model):
                 so_line.last_supplier_id = False
 
     last_purchase_price = fields.Float(
-        readonly=True,
+        compute='_compute_last_purchase',
         digits=dp.get_precision('Product'),
-        string='Last Purchase Price',
-        store=True)
+        string='Last Purchase Price')
     last_purchase_date = fields.Date(
-        readonly=True, string='Last Purchase Date',
-        store=True)
+        compute='_compute_last_purchase',
+        string='Last Purchase Date')
     last_supplier_id = fields.Many2one(
-        readonly=True, comodel_name='res.partner',
-        string='Last Supplier', store=True)
+        compute='_compute_last_purchase',
+        comodel_name='res.partner',
+        string='Last Supplier')
