@@ -58,7 +58,6 @@ class TestPurchaseLastPrice(common.TransactionCase):
         })
         purchase_order.button_confirm()
         sale = self.create_sale_order()
-        sale.order_line._get_last_purchase()
         p_date = datetime.strptime(purchase_order.date_order, DT)
         p_date = p_date.date().strftime(DF)
         for line in sale.order_line:
