@@ -8,17 +8,16 @@ from odoo import api, fields, models, _
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    purchase_request_ids = fields.One2many(
-        'purchase.request', 'sale_order_id', 'Purchase Requests')
+    purchase_request_ids = fields.Many2many(
+        'purchase.request', 'purchase_request_sale_rel', 'request_id',
+        'sale_id')
 
     @api.multi
     def action_cancel(self):
         res = super(SaleOrder, self).action_cancel()
-        request_obj = self.env['purchase.request']
         for sale in self:
-            request_ids = request_obj.search(
-                [('sale_order_id', '=', sale.id),
-                 ('state', 'in', ['draft', 'to_approve'])])
+            request_ids = sale.purchase_request_ids.filtered(
+                lambda s: s.state in ['draft', 'to_approve'])
             if request_ids:
                 request_ids.button_rejected()
             for request in request_ids:
