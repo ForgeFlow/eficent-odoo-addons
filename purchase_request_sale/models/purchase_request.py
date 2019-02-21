@@ -7,8 +7,8 @@ class PurchaseRequest(models.Model):
 
     _inherit = "purchase.request"
 
-    sale_order_id = fields.Many2one(
-        'sale.order', 'Sales Order', readonly=True)
+    sale_order_ids = fields.Many2many(
+        'sale.order', 'purchase_request_sale_rel', 'sale_id', 'request_id')
 
 
 class PurchaseRequestLine(models.Model):

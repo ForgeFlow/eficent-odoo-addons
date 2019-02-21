@@ -11,21 +11,27 @@ class ProcurementOrder(models.Model):
     def _prepare_purchase_request_line(self):
         res = super(ProcurementOrder, self)._prepare_purchase_request_line()
         for procurement in self:
-            sale_line = procurement.group_id.procurement_ids.filtered(
-                lambda p: p.id != procurement.id).sale_line_id
+            procs = procurement.group_id.procurement_ids.filtered(
+                lambda p: (p.id != procurement.id and
+                           p.product_id == procurement.product_id and
+                           p.date_planned == procurement.date_planned and
+                           p.warehouse_id == procurement.warehouse_id
+                           ))
+            sale_line = procs.mapped('sale_line_id')
             if len(sale_line) == 1:
                 res['sale_order_line_id'] = sale_line.id
                 res['name'] = procurement.name
                 res['sequence'] = sale_line.sequence
+
         return res
 
     def _prepare_purchase_request(self):
         res = super(ProcurementOrder, self)._prepare_purchase_request()
         for procurement in self:
-            sale_line = procurement.group_id.procurement_ids.filtered(
-                lambda p: p.id != procurement.id).sale_line_id
-            if len(sale_line) == 1:
-                res['sale_order_id'] = sale_line.order_id.id
+            procs = procurement.group_id.procurement_ids.filtered(
+                lambda p: p.id != procurement.id)
+            sales = procs.mapped('sale_line_id').mapped('order_id')
+            res['sale_order_ids'] = [(4, sid.id) for sid in sales]
         return res
 
     def _search_existing_purchase_request(self):
@@ -35,14 +41,9 @@ class ProcurementOrder(models.Model):
         """
         res = super(
             ProcurementOrder, self)._search_existing_purchase_request()
-        purchase_request_obj = self.env['purchase.request']
         for procurement in self:
-            if procurement.sale_line_id and \
-                    procurement.sale_line_id.order_id:
-                request_ids = purchase_request_obj.search(
-                    [('sale_order_id', '=',
-                      procurement.sale_line_id.order_id.id),
-                     ('state', '=', 'draft')])
-                if request_ids:
-                    return request_ids[0]
+            request_ids = procurement.group_id.procurement_ids.mapped(
+                'request_id')
+            if request_ids:
+                return request_ids[0]
         return res
