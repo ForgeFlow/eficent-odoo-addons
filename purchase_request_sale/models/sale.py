@@ -9,8 +9,11 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     purchase_request_ids = fields.Many2many(
-        'purchase.request', 'purchase_request_sale_rel', 'request_id',
-        'sale_id')
+        comodel_name='purchase.request',
+        relation='purchase_request_sale_rel',
+        column1='request_id',
+        column2='sale_id',
+        string="Purchase Requests")
 
     @api.multi
     def action_cancel(self):

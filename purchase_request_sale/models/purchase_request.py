@@ -8,7 +8,11 @@ class PurchaseRequest(models.Model):
     _inherit = "purchase.request"
 
     sale_order_ids = fields.Many2many(
-        'sale.order', 'purchase_request_sale_rel', 'sale_id', 'request_id')
+        comodel_name='sale.order',
+        relation='purchase_request_sale_rel',
+        column1='request_id',
+        column2='sale_id',
+        string="Sales")
 
 
 class PurchaseRequestLine(models.Model):
