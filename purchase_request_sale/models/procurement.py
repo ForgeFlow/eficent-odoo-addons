@@ -8,8 +8,8 @@ from odoo import models
 class ProcurementOrder(models.Model):
     _inherit = 'procurement.order'
 
-    def _prepare_purchase_request_line(self):
-        res = super(ProcurementOrder, self)._prepare_purchase_request_line()
+    def _prepare_purchase_request_line(self, pr):
+        res = super(ProcurementOrder, self)._prepare_purchase_request_line(pr)
         for procurement in self:
             procs = procurement.group_id.procurement_ids.filtered(
                 lambda p: (p.id != procurement.id and
