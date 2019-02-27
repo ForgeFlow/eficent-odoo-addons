@@ -7,7 +7,7 @@ from openupgradelib import openupgrade
 def fill_purchase_request_sale_rel(env):
     env.cr.execute(
         """
-            INSERT INTO purchase_request_sale_rel (sale_id, request_id)
+            INSERT INTO purchase_request_sale_rel (request_id, sale_id)
             SELECT DISTINCT ON (so.id, pr.id) so.id as sale_id,
             pr.id as request_id
             FROM purchase_request pr
