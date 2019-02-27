@@ -14,7 +14,6 @@ def fill_purchase_request_sale_rel(env):
             INNER JOIN purchase_request_line prl on prl.request_id = pr.id
             INNER JOIN sale_order_line sol ON sol.id = prl.sale_order_line_id
             INNER JOIN sale_order so ON sol.order_id = so.id
-        )
         """
     )
 
