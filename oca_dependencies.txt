@@ -7,3 +7,4 @@ hr-timesheet https://github.com/OCA/hr-timesheet 10.0
 account-invoicing https://github.com/OCA/account-invoicing 10.0
 operating_unit https://github.com/OCA/operating-unit 10.0
 pana https://github.com/acsone/account-analytic.git 10.0-purchase_analytic-cpi
+po https://github.com/Eficent/purchase-workflow 10.0-imp-pr
