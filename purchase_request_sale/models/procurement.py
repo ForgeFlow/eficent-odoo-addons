@@ -12,8 +12,7 @@ class ProcurementOrder(models.Model):
         res = super(ProcurementOrder, self)._prepare_purchase_request_line(pr)
         for procurement in self:
             procs = procurement.group_id.procurement_ids.filtered(
-                lambda p: (p.id != procurement.id and
-                           p.product_id == procurement.product_id and
+                lambda p: (p.product_id == procurement.product_id and
                            p.date_planned == procurement.date_planned and
                            p.warehouse_id == procurement.warehouse_id
                            ))
@@ -28,8 +27,7 @@ class ProcurementOrder(models.Model):
     def _prepare_purchase_request(self):
         res = super(ProcurementOrder, self)._prepare_purchase_request()
         for procurement in self:
-            procs = procurement.group_id.procurement_ids.filtered(
-                lambda p: p.id != procurement.id)
+            procs = procurement.group_id.procurement_ids
             sales = procs.mapped('sale_line_id').mapped('order_id')
             res['sale_order_ids'] = [(4, sid.id) for sid in sales]
         return res
