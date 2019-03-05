@@ -25,9 +25,12 @@ class ProcurementOrder(models.Model):
         return res
 
     def _prepare_purchase_request(self):
+        self.ensure_one()
         res = super(ProcurementOrder, self)._prepare_purchase_request()
-        for procurement in self:
-            procs = procurement.group_id.procurement_ids
+        if res.get('group_id'):
+            group = self.env['procurement.group'].browse(
+                res.get('group_id'))
+            procs = group.procurement_ids
             sales = procs.mapped('sale_line_id').mapped('order_id')
             res['sale_order_ids'] = [(4, sid.id) for sid in sales]
         return res
@@ -35,7 +38,7 @@ class ProcurementOrder(models.Model):
     def _search_existing_purchase_request(self):
         """This method is to be implemented by other modules that can
         provide a criteria to select the appropriate purchase request to be
-        extended.
+        extended. Deprecated by _make_pr_get_domain
         """
         res = super(
             ProcurementOrder, self)._search_existing_purchase_request()
