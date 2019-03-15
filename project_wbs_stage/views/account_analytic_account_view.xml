@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <xpath expr='//sheet' position='before'>
                     <header>
-                        <field name="stage_id" widget="statusbar"/>
+                        <field name="stage_id" widget="statusbar" clickable="True"/>
                     </header>
                 </xpath>
             </field>
