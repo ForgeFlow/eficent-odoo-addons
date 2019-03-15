@@ -26,7 +26,7 @@ class AccountAnalyticAccount(models.Model):
     def write(self, values):
         res = super(AccountAnalyticAccount, self).write(values)
         if values.get('stage_id'):
-            stage_obj = self.env['project.project.stage']
+            stage_obj = self.env['analytic.account.stage']
             for project in self:
                 # Search if there's an associated project
                 new_stage = stage_obj.browse(values.get('stage_id'))
@@ -34,7 +34,7 @@ class AccountAnalyticAccount(models.Model):
                 # it as well (only if the new stage sequence is greater than
                 #  the current)
                 child_ids = self.search([('parent_id', '=', project.id)])
-                for child in self.browse(child_ids):
+                for child in child_ids:
                     if child.stage_id.sequence < new_stage.sequence:
                         child.write({'stage_id': new_stage.id})
         return res
