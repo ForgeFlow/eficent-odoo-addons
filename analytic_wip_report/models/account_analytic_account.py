@@ -337,7 +337,7 @@ class AccountAnalyticAccount(models.Model):
         return res
 
     @api.multi
-    def action_open_totalvalue_lines(self):
+    def action_open_total_value_lines(self):
         line = self
         bill_lines = [x.id for x in line.total_value_line_ids]
         res = self.env['ir.actions.act_window'].for_xml_id(
