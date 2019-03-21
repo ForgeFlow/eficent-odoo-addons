@@ -6,7 +6,7 @@
             <field name="inherit_id"
                    ref="analytic_wip_report.view_account_analytic_account_wip_tree"/>
             <field name="arch" type="xml">
-                <field name="under_billings" position="after">
+                <field name="company_id" position="after">
                     <field name="fy_billings" sum="Total"/>
                     <button string="Detail"
                         name="action_open_fy_billings_lines"
