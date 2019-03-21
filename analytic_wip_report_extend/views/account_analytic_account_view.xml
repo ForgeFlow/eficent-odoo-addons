@@ -9,9 +9,6 @@
             <xpath expr="//field[@name='estimated_gross_profit']" position="after">
                 <field name="estimated_gross_profit_per" string="Estimated Gross Profit Percent"/>
             </xpath>
-            <xpath expr="//field[@name='over_billings']" position="before">
-                <field name="under_over" string='Total under/over billed'/>
-            </xpath>
         </field>
     </record>
 
