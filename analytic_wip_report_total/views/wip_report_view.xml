@@ -44,9 +44,6 @@
         <field name="model">account.analytic.account</field>
         <field name="inherit_id" ref="analytic_wip_report_extend.view_account_analytic_account_wip_extend_tree"/>
         <field name="arch" type="xml">
-            <field name="estimated_gross_profit_per" position="attributes">
-                <attribute name="sum">Total</attribute>
-            </field>
             <field name="under_over" position="attributes">
                 <attribute name="sum">Total</attribute>
             </field>
