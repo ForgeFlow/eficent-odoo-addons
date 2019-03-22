@@ -3,10 +3,11 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.addons import decimal_precision as dp
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
+from odoo.exceptions import ValidationError
 
 
 class AccountAnalyticAccount(models.Model):
@@ -35,6 +36,8 @@ class AccountAnalyticAccount(models.Model):
                 query_params += [from_date]
                 where_date_fy += " AND l.date <= %s"
                 query_params_fy += [fromdatefy]
+            else:
+                raise ValidationError(_("No dates provided"))
 
             if self._context.get('to_date_fy', False):
                 to_date = context['to_date_fy']
@@ -42,7 +45,8 @@ class AccountAnalyticAccount(models.Model):
                 query_params += [to_date]
                 where_date_fy_end += " AND l.date <= %s"
                 query_params_fy_end += [to_date]
-
+            else:
+                raise ValidationError(_("No dates provided"))
             # Total Value Beginning year
             cr.execute(
                 """SELECT COALESCE(sum(amount),0.0) AS total_value
@@ -197,8 +201,8 @@ class AccountAnalyticAccount(models.Model):
                 WHERE AT.name in ('Expense', 'Cost of Goods Sold',
                'Expenses', 'Cost of Revenue')
                 AND L.account_id IN %s
-                """ + where_date_fy + """
-                """, query_params_fy)
+                """ + where_date + """
+                """, query_params)
             account.fy_actual_costs = 0
             fy_actual_cost_line_ids = []
             fy_actual_material_line_ids = []
