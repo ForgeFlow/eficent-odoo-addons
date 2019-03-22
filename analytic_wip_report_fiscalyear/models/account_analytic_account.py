@@ -92,7 +92,8 @@ class AccountAnalyticAccount(models.Model):
                 ON L.general_account_id = AC.id
                 INNER JOIN account_account_type AT
                 ON AT.id = AC.user_type_id
-                WHERE AT.name in ('Expense', 'Cost of Goods Sold')
+                WHERE AT.name in ('Expense', 'Cost of Goods Sold',
+                'Expenses', 'Cost of Revenue')
                 AND L.account_id in %s
                 """ + where_date_fy + """
                 """, query_params_fy)
@@ -111,7 +112,8 @@ class AccountAnalyticAccount(models.Model):
                 ON L.general_account_id = AC.id
                 INNER JOIN account_account_type AT
                 ON AT.id = AC.user_type_id
-                WHERE AT.name in ('Expense', 'Cost of Goods Sold')
+                WHERE AT.name in ('Expense', 'Cost of Goods Sold',
+                'Expenses', 'Cost of Revenue')
                 AND L.account_id in %s
                 """ + where_date_fy_end + """
                 """, query_params_fy_end)
@@ -129,7 +131,8 @@ class AccountAnalyticAccount(models.Model):
             ON L.general_account_id = AC.id
             INNER JOIN account_account_type AT
             ON AT.id = AC.user_type_id
-            WHERE AT.name in ('Expense', 'Cost of Goods Sold')
+            WHERE AT.name in ('Expense', 'Cost of Goods Sold',
+            'Expenses', 'Cost of Revenue')
             AND L.account_id IN %s
             AND A.active_analytic_planning_version = L.version_id
             """ + where_date_fy + """
@@ -147,7 +150,8 @@ class AccountAnalyticAccount(models.Model):
             ON L.general_account_id = AC.id
             INNER JOIN account_account_type AT
             ON AT.id = AC.user_type_id
-            WHERE AT.name in ('Expense', 'Cost of Goods Sold')
+            WHERE AT.name in ('Expense', 'Cost of Goods Sold',
+            'Expenses', 'Cost of Revenue')
             AND L.account_id IN %s
             AND A.active_analytic_planning_version = L.version_id
             """ + where_date_fy_end + """
@@ -183,16 +187,16 @@ class AccountAnalyticAccount(models.Model):
             cr.execute(
                 """
                 SELECT amount, L.id, AAJ.cost_type
-                                FROM account_analytic_line L
-                                INNER JOIN account_analytic_journal AAJ
-                                ON AAJ.id = L.journal_id
-                                INNER JOIN account_account AC
-                                ON L.general_account_id = AC.id
-                                INNER JOIN account_account_type AT
-                                ON AT.id = AC.user_type_id
-                                WHERE AT.name in (
-                                'Expense', 'Cost of Goods Sold')
-                                AND L.account_id IN %s
+                FROM account_analytic_line L
+                INNER JOIN account_analytic_journal AAJ
+                ON AAJ.id = L.journal_id
+                INNER JOIN account_account AC
+                ON L.general_account_id = AC.id
+                INNER JOIN account_account_type AT
+                ON AT.id = AC.user_type_id
+                WHERE AT.name in ('Expense', 'Cost of Goods Sold',
+               'Expenses', 'Cost of Revenue')
+                AND L.account_id IN %s
                 """ + where_date_fy + """
                 """, query_params_fy)
             account.fy_actual_costs = 0
@@ -225,7 +229,7 @@ class AccountAnalyticAccount(models.Model):
                 INNER JOIN account_account_type AT
                 ON AT.id = AC.user_type_id
                 WHERE AT.name in (
-                    'Income', 'Other Income', 'Other Current Asset')
+                    'Income', 'Other Income')
                 AND L.account_id IN %s
                 """ + where_date + """
                 """, query_params
