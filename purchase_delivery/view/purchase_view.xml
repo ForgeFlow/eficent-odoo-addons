@@ -10,9 +10,6 @@
                 <group name="delivery">
                     <field name="carrier_id" context="{'purchase_order_id':active_id or False}"
                             help="If you don't 'Add in Quote', the exact price will be computed when invoicing based on incoming shipment(s)."/>
-                    <button name="delivery_set" string="Add in Quote" type="object"
-                        class="oe_edit_only"
-                        attrs="{'invisible':[('carrier_id','=',False),('state','not in',('draft','sent'))]}"/>
                 </group>
             </xpath>
         </field>
