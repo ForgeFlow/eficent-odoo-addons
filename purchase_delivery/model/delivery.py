@@ -65,6 +65,8 @@ class DeliveryCarrier(models.Model):
         return self.get_price_from_picking(total, weight, volume, quantity)
 
     def get_price_from_picking(self, total, weight, volume, quantity):
+        if self.delivery_type == 'fixed':
+            return self.fixed_price
         price = 0.0
         price_dict = {
             'price': total,

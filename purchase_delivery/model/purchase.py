@@ -28,48 +28,39 @@ class PurchaseOrder(models.Model):
         })
         return result
 
-    @api.multi
-    def delivery_set(self):
-        for order in self:
-            carrier = order.carrier_id
-            dest_address_id = order.dest_address_id or False
-            if (not dest_address_id and order.picking_type_id.warehouse_id and
-                    order.picking_type_id.warehouse_id.partner_id):
-                dest_address_id = order.picking_type_id.warehouse_id.partner_id
-            if not dest_address_id:
-                raise ValidationError(_('''
-                    No destination address available! An address must be added
-                    to the purchase order or the warehouse.'''))
-            if order.state not in ('draft', 'sent'):
-                raise ValidationError(_('''
-                    Order not in Draft State! The order state have to be
-                    draft to add delivery lines.'''))
-            price_unit = carrier.get_price_available(order)
-            self._create_delivery_line(order, carrier, price_unit)
-        return True
+    def _prepare_invoice_line_from_carrier(self, carrier, price_unit):
 
-    def _create_delivery_line(self, order, carrier, price_unit):
-        PurchaseOrderLine = self.env['purchase.order.line']
+        taxes = carrier.product_id.supplier_taxes_id
+        invoice_line_tax_ids = self.fiscal_position_id.map_tax(taxes)
+        invoice_line = self.env['account.invoice.line']
 
-        taxes = carrier.product_id.taxes_id.\
-            filtered(lambda t: t.company_id.id == carrier.company_id.id)
-        taxes_ids = taxes.ids
-        if self.partner_id and self.fiscal_position_id:
-            taxes_ids = self.fiscal_position_id.\
-                map_tax(taxes, carrier.product_id, self.partner_id).ids
-        # create the purchase order line
-        values = {
-            'order_id': order.id,
+        journal_domain = [
+            ('type', '=', 'purchase'),
+            ('company_id', '=', self.company_id.id),
+            ('currency_id', '=',
+             self.partner_id.property_purchase_currency_id.id),
+        ]
+        default_journal_id = self.env['account.journal'].search(journal_domain,
+                                                                limit=1)
+        data = {
             'name': carrier.name,
-            'product_qty': 1,
-            'product_uom': carrier.product_id.uom_id.id,
+            'origin': self.origin,
+            'uom_id': carrier.product_id.uom_id.id,
             'product_id': carrier.product_id.id,
+            'account_id': invoice_line.with_context(
+                {'journal_id': default_journal_id.id,
+                 'type': 'in_invoice'})._default_account(),
             'price_unit': price_unit,
-            'taxes_id': [(6, 0, taxes_ids)],
-            'date_planned': order.date_order,
-            'delivery_line': True,
+            'quantity': 1.0,
+            'discount': 0.0,
+            'account_analytic_id': self.project_id.id,
+            'invoice_line_tax_ids': invoice_line_tax_ids.ids
         }
-        if self.order_line:
-            values['sequence'] = self.order_line[-1].sequence + 1
-        pol = PurchaseOrderLine.sudo().create(values)
-        return pol
+        account = invoice_line.get_invoice_line_account(
+            'in_invoice',
+            carrier.product_id,
+            self.fiscal_position_id,
+            self.env.user.company_id)
+        if account:
+            data['account_id'] = account.id
+        return data
