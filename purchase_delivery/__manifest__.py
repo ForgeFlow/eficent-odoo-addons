@@ -14,7 +14,7 @@
     "license": "AGPL-3",
     "depends": [
         "delivery",
-        "purchase"
+        "purchase_analytic"
     ],
     "data": [
         "view/purchase_view.xml",
