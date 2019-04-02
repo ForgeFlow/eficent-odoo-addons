@@ -12,6 +12,7 @@ class PurchaseRequest(models.Model):
         relation='purchase_request_sale_rel',
         column1='sale_id',
         column2='request_id',
+        copy=False,
         string="Sales")
 
 
