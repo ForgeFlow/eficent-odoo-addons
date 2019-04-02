@@ -13,6 +13,7 @@ class SaleOrder(models.Model):
         relation='purchase_request_sale_rel',
         column1='request_id',
         column2='sale_id',
+        copy=False,
         string="Purchase Requests")
 
     @api.multi
