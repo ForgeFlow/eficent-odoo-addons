@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <field name="dest_address_id" position="attributes">
                 <attribute name="attrs">{
-                    'invisible': ['|',('default_location_dest_id_usage', '!=', 'customer'), ('project_id', '!=', False)],
+                    'invisible': ['|',('default_location_dest_id_usage', '!=', 'customer')],
                     }
                 </attribute>
             </field>
