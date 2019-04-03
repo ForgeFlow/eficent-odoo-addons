@@ -27,6 +27,9 @@ class AccountAnalyticAccount(models.Model):
     picking_type_id = fields.Many2one(
         'stock.picking.type',
         'Default Picking Type for the project')
+    picking_type_out_id = fields.Many2one(
+        'stock.picking.type',
+        'Default Picking Type for deliveries')
     dest_address_id = fields.Many2one(
         'res.partner',
         'Delivery Address',
