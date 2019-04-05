@@ -5,7 +5,7 @@
         <field name="name">progress.measurements.entry.form</field>
         <field name="model">progress.measurements.entry</field>
         <field name="arch" type="xml">
-            <form string="Progress Measurements entry" version="7.0">
+            <form string="Progress Measurements entry">
                 <group>
                     <field name="communication_date"/>
                     <field name="progress_measurement_type_id"/>
