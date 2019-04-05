@@ -65,7 +65,7 @@ class AccountAnalyticAccount(models.Model):
                     get('account.analytic.account')
         else:
             new_code = self.env['ir.sequence'].get('account.analytic.account')
-        if 'code' in vals and not vals['code'] and new_code:
+        if not 'code' in vals and new_code:
             vals['code'] = new_code
         analytic_account = super(AccountAnalyticAccount, self).create(vals)
         if 'sequence_ids' not in vals or\
@@ -87,7 +87,7 @@ class AccountAnalyticAccount(models.Model):
 
     @api.model
     def map_sequences(self, new_analytic_account):
-        """ copy and map tasks from old to new analytic account """
+        """ copy and map tasks from  old to new analytic account """
         map_sequence_id = {}
         account = self
         for sequence in account.sequence_ids:
