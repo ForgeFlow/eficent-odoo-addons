@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="progress_measurements_quick_entry_form" model="ir.ui.view">
+            <field name="name">progress.measurements.quick.entry.form</field>
+            <field name="model">progress.measurements.quick.entry</field>
+            <field name="arch" type="xml">
+                <form string="Progress Measurements quick entry">
+                    <group>
+                        <field name="value"/>
+                        <field name="communication_date"/>
+                        <field name="progress_measurement_type_id"/>
+                    </group>
+                    <footer>
+                        <button string="Create" name="progress_measurements_quick_entry_open_window" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_progress_measurements_quick_entry_form"
+                model="ir.actions.act_window">
+            <field name="name">Enter non-aggregated progress Measurements</field>
+            <field name="res_model">progress.measurements.quick.entry</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="progress_measurements_quick_entry_form"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

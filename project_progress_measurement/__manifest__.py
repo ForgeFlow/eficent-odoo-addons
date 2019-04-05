@@ -18,6 +18,7 @@
     "data": [
         "security/ir.model.access.csv",
         "wizard/progress_measurements_entry_view.xml",
+        "wizard/progress_measurement_quick_entry_view.xml",
         "views/project_progress_measurement_view.xml",
         "views/project_project_view.xml",
     ],
