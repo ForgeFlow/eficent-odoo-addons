@@ -120,7 +120,7 @@ class AnalyticAccountSequence(models.Model):
     padding = fields.Integer(
         'Number Padding',
         required=True,
-        default=0,
+        default=2,
         help="OpenERP will automatically adds some '0' on"
         " the left of the 'Next Number' to get the "
         "required padding size."
@@ -276,19 +276,14 @@ class AnalyticAccountSequence(models.Model):
         preferred_sequences = [s for s in self if
                                s.company_id.id == force_company]
         seq = preferred_sequences[0] if preferred_sequences else self[0]
-        if seq.implementation == 'standard':
-            # pylint: disable=sql-injection
-            self._cr.execute(
-                "SELECT nextval('analytic_account_sequence_%05d')" % seq.id)
-            seq.number_next = self._cr.fetchone()
-        else:
-            self._cr.execute("SELECT number_next FROM "
-                             "analytic_account_sequence WHERE id=%s"
-                             "FOR UPDATE NOWAIT", (seq.id,))
-            self._cr.execute(
-                "UPDATE analytic_account_sequence "
-                "SET number_next=number_next+number_increment "
-                "WHERE id=%s ", (seq.id,))
+        # TODO do different for not standard implementation
+        self._cr.execute("SELECT number_next FROM "
+                         "analytic_account_sequence WHERE id=%s"
+                         "FOR UPDATE NOWAIT", (seq.id,))
+        self._cr.execute(
+            "UPDATE analytic_account_sequence "
+            "SET number_next=number_next+number_increment "
+            "WHERE id=%s ", (seq.id,))
         d = self._interpolation_dict()
         try:
             interpolated_prefix = self._interpolate(seq.prefix, d)
