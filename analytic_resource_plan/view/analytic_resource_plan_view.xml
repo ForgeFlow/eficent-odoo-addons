@@ -44,6 +44,7 @@
                             <span class="oe_grey"> x </span>
                             <field name="price_unit" class="oe_inline"
                                    required="True" widget="monetary"
+                                   groups='project.group_project_manager'
                                    options="{'currency_field': 'currency_id'}"/>
                         </h2>
                         </div>
@@ -101,7 +102,7 @@
                 <field name="user_id" attrs="{'readonly':[('resource_type','=','procurement')]}"/>
                 <field name="unit_amount" string="Qty"/>
                 <field name="product_uom_id"/>
-                <field name="price_unit"/>
+                <field name="price_unit" groups='project.group_project_manager'/>
                 <field name="price_total" readonly="True"/>
                 <field name="state"/>
                 <field name="has_child"/>
