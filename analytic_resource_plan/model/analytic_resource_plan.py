@@ -111,7 +111,6 @@ class AnalyticResourcePlanLine(models.Model):
     )
     price_unit = fields.Float(
         string='Cost Price',
-        groups='project.group_project_manager',
     )
     price_total = fields.Float(
         store=False,
