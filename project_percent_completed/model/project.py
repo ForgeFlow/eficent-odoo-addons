@@ -3,13 +3,14 @@
 #        <contact@eficent.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models
 import time
+from odoo import api, fields, models
 
 
 class Project(models.Model):
     _inherit = "project.project"
 
+    @api.depends('progress_measurements')
     def _compute_poc_on_duration(self):
         measurement_type_obj = self.env['progress.measurement.type']
         def_meas_type_ids =\
