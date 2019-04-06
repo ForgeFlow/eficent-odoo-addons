@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<odoo noupdate="1">
     <record id="analytic_plan_version_P00" model="account.analytic.plan.version">
         <field name="code">P00</field>
         <field name="name">committed</field>
