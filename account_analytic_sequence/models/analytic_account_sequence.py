@@ -30,16 +30,16 @@ class AnalyticAccountSequence(models.Model):
             else:
                 # pylint: disable=sql-injection
                 statement = """
-                    SELECT last_value, increment_by, is_called
+                    SELECT last_value, is_called
                     FROM analytic_account_sequence_%05d
                     """ % element.id
                 # get number from postgres sequence. Cannot use
                 # currval, because that might give an error when
                 # not having used nextval before.
                 self._cr.execute(statement)
-                (last_value, increment_by, is_called) = self._cr.fetchone()
+                (last_value, is_called) = self._cr.fetchone()
                 if is_called:
-                    element.number_next_actual = last_value + increment_by
+                    element.number_next_actual = last_value + 1
                 else:
                     element.number_next_actual = last_value
 
@@ -276,14 +276,23 @@ class AnalyticAccountSequence(models.Model):
         preferred_sequences = [s for s in self if
                                s.company_id.id == force_company]
         seq = preferred_sequences[0] if preferred_sequences else self[0]
-        # TODO do different for not standard implementation
-        self._cr.execute("SELECT number_next FROM "
-                         "analytic_account_sequence WHERE id=%s"
-                         "FOR UPDATE NOWAIT", (seq.id,))
-        self._cr.execute(
-            "UPDATE analytic_account_sequence "
-            "SET number_next=number_next+number_increment "
-            "WHERE id=%s ", (seq.id,))
+        if seq.implementation == 'standard':
+            # pylint: disable=sql-injection
+            self._cr.execute(
+                "SELECT nextval('analytic_account_sequence_%05d')" % seq.id)
+            number_next = self._cr.fetchone()
+            if number_next:
+                seq.number_next = number_next[0]
+            else:
+                seq.number_next = 1
+        else:
+            self._cr.execute("SELECT number_next FROM "
+                             "analytic_account_sequence WHERE id=%s"
+                             "FOR UPDATE NOWAIT", (seq.id,))
+            self._cr.execute(
+                "UPDATE analytic_account_sequence "
+                "SET number_next=number_next+number_increment "
+                "WHERE id=%s ", (seq.id,))
         d = self._interpolation_dict()
         try:
             interpolated_prefix = self._interpolate(seq.prefix, d)
