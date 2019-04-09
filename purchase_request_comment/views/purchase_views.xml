@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!-- Copyright 2019 Eficent Business and IT Consulting Services S.L.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+
+    <record model="ir.ui.view" id="purchase_order_form_add_comment">
+        <field name="name">comment_template.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase_comment_template.purchase_order_form_add_comment"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook//page[@name='comments']" position="after">
+                <page string="Internal Comments" name="internal_comments">
+                    <p style="margin-top: 10px;">The comments are internal and merely informative.</p>
+                    <group name="internal_comments" string="Comments from Purchase Request">
+                        <field name="internal_comments" nolabel="1" placeholder="Insert here internal informative comments for users."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
