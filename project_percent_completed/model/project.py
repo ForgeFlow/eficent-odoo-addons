@@ -93,5 +93,4 @@ class Project(models.Model):
         string='% Completed',
         help="""Aggregated percent completed, based on the duration
             of the project""",
-        store=True
     )
