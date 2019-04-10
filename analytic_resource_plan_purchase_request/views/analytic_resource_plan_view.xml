@@ -12,6 +12,9 @@
                 <field name="requested_qty"/>
                 <field name="request_state"/>
             </field>
+            <field name="user_id" position="after">
+                <field name="label" string="Label to Purchase_Request"/>
+            </field>
         </field>
     </record>
 
@@ -36,6 +39,9 @@
                     </group>
                 </page>
             </notebook>
+            <field name="user_id" position="after">
+                <field name="label"/>
+            </field>
         </field>
     </record>
 
