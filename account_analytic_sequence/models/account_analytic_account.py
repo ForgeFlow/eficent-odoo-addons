@@ -33,7 +33,7 @@ class AccountAnalyticAccount(models.Model):
                 'suffix': ir_sequence.suffix,
                 'number_next': 1,
                 'number_increment': ir_sequence.number_increment,
-                'padding': ir_sequence.padding,
+                'padding': 2,
                 'company_id': (
                     ir_sequence.company_id and
                     ir_sequence.company_id.id or
