@@ -18,8 +18,7 @@
         "project_wbs"
     ],
     "data": [
-        "view/project_view.xml",
-        "data/ir_cron.xml",
+        "view/project_view.xml"
     ],
     "installable": True,
     "application": True,
