@@ -73,6 +73,8 @@ class AnalyticResourcePlanLine(models.Model):
         string='Purchase Request Lines',
         copy=False,
         readonly=True)
+    label = fields.Char('Label to PR',
+                        readonly=True, states={'draft': [('readonly', False)]})
 
     @api.multi
     def unlink(self):
@@ -103,7 +105,7 @@ class AnalyticResourcePlanLine(models.Model):
                                   line=None):
         data = {
             'company_id': company_id,
-            'origin': line.account_id.name if line else self.name,
+            'origin': self.label or line.account_id.name if line else self.name,
             'description': self.product_id.description,
             'picking_type_id': picking_type_id,
         }
