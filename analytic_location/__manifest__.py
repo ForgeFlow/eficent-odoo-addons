@@ -5,7 +5,7 @@
 
 {
     'name': 'Stock Location in Analytic Account',
-    'version': '10.0.1.0.0',
+    'version': '10.0.1.1.0',
     'author': 'Eficent, '
               'Project Expert Team, '
               'Odoo Community Association (OCA)',
