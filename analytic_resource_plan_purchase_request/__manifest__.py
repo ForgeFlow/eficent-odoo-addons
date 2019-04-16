@@ -5,7 +5,7 @@
 
 {
     'name': 'Analytic Resource Planning - Purchase Requests',
-    'version': '10.0.1.0.0',
+    'version': '10.0.1.0.1',
     'author':   'Eficent, Odoo Community Association (OCA),'
                 'Project Expert Team',
     'contributors': [
@@ -23,6 +23,7 @@
     'data': [
         'views/purchase_request_view.xml',
         'views/analytic_resource_plan_view.xml',
+        'wizard/analytic_resource_plan_line_make_purchase_request.xml',
     ],
     'installable': True,
 }
