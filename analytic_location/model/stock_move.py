@@ -14,8 +14,8 @@ class StockMove(models.Model):
             ['|', ('picking_type_id', '=', picking_type_id),
              ('picking_type_out_id', '=', picking_type_id),
              ('parent_id', '=', 1)])
-        if analytic_account:
-            return analytic_account.id
+        if len(analytic_account):
+            return analytic_account[0].id
         return False
 
     analytic_account_id = fields.Many2one(
