@@ -94,6 +94,13 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
             else:
                 company_id = line_company_id
 
+            if not len(line.account_id.location_id):
+                raise ValidationError(
+                    _('The analytic account has no location assigned'))
+            picking_type_id = line.account_id.picking_type_id
+            if not len(picking_type_id):
+                raise ValidationError(
+                    _("No picking type defined for the analytic account"))
             if request is False:
                 request_data = self._prepare_purchase_request(
                     make_purchase_request, company_id)
