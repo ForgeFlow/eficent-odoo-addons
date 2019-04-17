@@ -49,8 +49,8 @@ class ProjectProject(models.Model):
     def create(self, values):
         res = super(ProjectProject, self).create(values)
         res.parent_id.project_ids._compute_scheduled_dates()
-        res.propagate_dates(vals)
-        return pp_id
+        res.propagate_dates(values)
+        return res
 
     @api.multi
     def write(self, vals):
