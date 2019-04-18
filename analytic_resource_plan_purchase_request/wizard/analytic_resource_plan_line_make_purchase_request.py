@@ -115,12 +115,6 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
             line.write(values)
             project_manager_id = line.account_id.user_id and \
                 line.account_id.user_id.partner_id.id or False
-            if project_manager_id:
-                message_follower_ids = [x.id for x in
-                                        request.message_follower_ids]
-                if project_manager_id not in message_follower_ids:
-                    request.write({
-                        'message_follower_ids': [(4, project_manager_id)]})
             res.append(request_line.id)
 
         return {
