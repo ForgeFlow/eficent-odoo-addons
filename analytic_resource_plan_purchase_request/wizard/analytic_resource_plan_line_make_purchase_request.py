@@ -116,6 +116,12 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
             project_manager_id = line.account_id.user_id and \
                 line.account_id.user_id.partner_id.id or False
             res.append(request_line.id)
+            if project_manager_id:
+                message_follower_ids = [x.id for x in
+                                        request.message_follower_ids]
+                if project_manager_id not in message_follower_ids:
+                    request.sudo().write({
+                        'message_follower_ids': [(4, project_manager_id)]})
 
         return {
             'domain': "[('id','in', [" + ','.join(map(str, res)) + "])]",
