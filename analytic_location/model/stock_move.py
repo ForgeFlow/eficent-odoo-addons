@@ -10,6 +10,8 @@ class StockMove(models.Model):
     def _default_analytic_account_id(self):
         picking_type_id = self.picking_id._context.get(
             'default_picking_type_id')
+        if not picking_type_id:
+            return False
         analytic_account = self.env['account.analytic.account'].search(
             ['|', ('picking_type_id', '=', picking_type_id),
              ('picking_type_out_id', '=', picking_type_id),
