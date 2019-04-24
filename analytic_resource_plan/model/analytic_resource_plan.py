@@ -165,7 +165,7 @@ class AnalyticResourcePlanLine(models.Model):
                 'for this product: "%s" (id:%d)'
             ) % (self.product_id.name, self.product_id.id,))
         default_plan = plan_version_obj.search(
-            [('default_plan', '=', True)],
+            [('default_resource_plan', '=', True)],
             limit=1
         )
 
