@@ -43,11 +43,12 @@ class PurchaseOrderLine(models.Model):
         for line in self:
             if line.account_analytic_id:
                 aa = line.account_analytic_id
-                res[0].update({
-                    'analytic_account_id': aa.id,
-                    'location_dest_id': aa.location_id.id
-                })
-                picking.location_dest_id = aa.location_id.id
+                if len(res):
+                    res[0].update({
+                        'analytic_account_id': aa.id,
+                        'location_dest_id': aa.location_id.id
+                    })
+                    picking.location_dest_id = aa.location_id.id
         return res
 
     @api.constrains('location_dest_id', 'account_analytic_id')
