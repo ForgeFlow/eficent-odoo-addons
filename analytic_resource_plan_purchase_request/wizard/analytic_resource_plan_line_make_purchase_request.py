@@ -49,12 +49,10 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
     @api.model
     def _prepare_purchase_request(self, make_purchase_request,
                                   company_id):
-        type_obj = self.env['stock.picking.type']
-        types = type_obj.search([('code', '=', 'incoming'), ('warehouse_id.company_id', '=', company_id),
-                                 ('default_location_dest_id.analytic_account_id', 'in', make_purchase_request.item_ids.mapped('account_id').ids),
-                                 ('warehouse_id.operating_unit_id', '=', self.env.user.default_operating_unit_id.id)])
-
-        pt = self.picking_type_id = types[:1]
+        if len(make_purchase_request.item_ids.mapped('account_id')) == 1:
+            pt = make_purchase_request.item_ids.mapped('account_id').picking_type_id
+        else:
+            raise ValidationError('Please select lines from one project only')
         data = {
             'company_id': company_id,
             'origin': make_purchase_request.origin,
