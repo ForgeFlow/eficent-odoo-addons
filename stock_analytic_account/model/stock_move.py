@@ -39,20 +39,19 @@ class StockMove(models.Model):
                 analytic = move.analytic_account_id
                 src_anal = move.location_id.analytic_account_id
                 dest_anal = move.location_dest_id.analytic_account_id
-                if analytic:
-                    if src_anal and dest_anal:
-                        raise exceptions.ValidationError(_("""
-                            Cannot move between different projects locations,
-                            please move first to general stock"""))
-                    elif src_anal and not dest_anal:
-                        if src_anal != analytic:
-                            raise exceptions.ValidationError(_(
-                                "Wrong analytic account in source or move"))
-                    elif dest_anal and not src_anal:
-                        if dest_anal != analytic:
-                            raise exceptions.ValidationError(_(
-                                "Wrong analytic account in destination or "
-                                "move"))
+                if src_anal and dest_anal:
+                    raise exceptions.ValidationError(_("""
+                        Cannot move between different projects locations,
+                        please move first to general stock"""))
+                elif src_anal and not dest_anal:
+                    if src_anal != analytic:
+                        raise exceptions.ValidationError(_(
+                            "Wrong analytic account in source or move"))
+                elif dest_anal and not src_anal:
+                    if dest_anal != analytic:
+                        raise exceptions.ValidationError(_(
+                            "Wrong analytic account in destination or "
+                            "move"))
         return True
 
 
