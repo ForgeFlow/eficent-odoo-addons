@@ -13,9 +13,10 @@ class StockMove(models.Model):
         dest_loc = self.location_id.browse(vals['location_dest_id'])
         add_analytic_id = False
         if src_loc.analytic_account_id or dest_loc.analytic_account_id:
-            if (src_loc.usage == 'customer'and dest_loc.usage ==
-                'internal') or (src_loc.usage == 'internal' and
-                                dest_loc.usage == 'customer'):
+            if (src_loc.usage in ('customer', 'supplier') and
+                dest_loc.usage == 'internal') or (
+                    src_loc.usage == 'internal' and
+                    dest_loc.usage == 'customer'):
                 add_analytic_id = dest_loc.analytic_account_id.id
         if add_analytic_id:
             vals['analytic_account_id'] = add_analytic_id
@@ -36,12 +37,14 @@ class StockMove(models.Model):
             else:
                 dest_loc = move.location_dest_id
 
-            add_analytic_id = False
-            if src_loc.analytic_account_id or dest_loc.analytic_account_id:
-                if (src_loc.usage == 'customer' and dest_loc.usage ==
-                        'internal') or (src_loc.usage == 'internal' and
-                                        dest_loc.usage == 'customer'):
-                    add_analytic_id = dest_loc.analytic_account_id.id
-            if add_analytic_id:
-                vals['analytic_account_id'] = add_analytic_id
+            if 'location_id' in vals or 'location_dest_id' in vals:
+                add_analytic_id = False
+                if src_loc.analytic_account_id or dest_loc.analytic_account_id:
+                    if (src_loc.usage in ('customer', 'supplier')
+                        and dest_loc.usage == 'internal') or (
+                            src_loc.usage == 'internal' and
+                            dest_loc.usage == 'customer'):
+                        add_analytic_id = dest_loc.analytic_account_id.id
+                if add_analytic_id:
+                    vals['analytic_account_id'] = add_analytic_id
         return super(StockMove, self).write(vals)
