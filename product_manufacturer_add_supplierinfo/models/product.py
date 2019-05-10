@@ -17,7 +17,8 @@ class ProductTemplate(models.Model):
             'product_code': product_tmp.manufacturer_pref,
             'sequence': 99,
             'min_qty': 0.0,
-            'product_tmpl_id': product_tmp.id
+            'product_tmpl_id': product_tmp.id,
+            'type': 'supplier'
         }
         return res
 
