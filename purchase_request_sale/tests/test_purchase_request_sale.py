@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-# Copyright 2018 Eficent Business and IT Consulting Services S.L.
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0).
+# Copyright 2015-19 Eficent Business and IT Consulting Services S.L.
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests import common
 
@@ -11,21 +10,21 @@ class TestPurchaseRequestProcurement(common.SavepointCase):
         super(TestPurchaseRequestProcurement, self).setUp()
         self.pr_model = self.env['purchase.request']
         self.prl_model = self.env['purchase.request.line']
-        self.product_uom_model = self.env['product.uom']
+        self.product_uom_model = self.env['uom.uom']
         self.supplierinfo_model = self.env['product.supplierinfo']
         partner_values = {'name': 'Tupac'}
         self.partner = self.env['res.partner'].create(partner_values)
         partner_values = {'name': 'Todo a 100'}
         self.partner_buy = self.env['res.partner'].create(partner_values)
-        self.uom_unit_categ = self.env.ref('product.product_uom_categ_unit')
+        self.uom_unit_categ = self.env.ref('uom.product_uom_categ_unit')
         product_values = {'name': 'Odoo',
                           'list_price': 5,
                           'type': 'product'}
         self.product = self.env['product.product'].create(product_values)
-        self.product_uom_unit = self.env.ref('product.product_uom_unit')
+        self.product_uom_unit = self.env.ref('uom.product_uom_unit')
         self.product.route_ids = (
             self.env.ref('stock.route_warehouse0_mto') |
-            self.env.ref('purchase.route_warehouse0_buy')
+            self.env.ref('purchase_stock.route_warehouse0_buy')
         )
         supplierinfo_vals = {
             'name': self.partner_buy.id,

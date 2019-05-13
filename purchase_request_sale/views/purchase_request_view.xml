@@ -7,8 +7,7 @@
         <field name="inherit_id"
                ref="purchase_request.view_purchase_request_form"/>
         <field name="arch" type="xml">
-            <xpath
-                    expr="//field[@name='line_ids']/form//field[@name='date_required']" position="after">
+            <xpath expr="//field[@name='line_ids']/form//field[@name='date_required']" position="after">
                 <field name="sale_order_line_id"/>
             </xpath>
         </field>
