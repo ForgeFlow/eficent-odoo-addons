@@ -46,6 +46,15 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
         res['item_ids'] = items
         return res
 
+    @api.model
+    def _prepare_purchase_request(self, make_purchase_request,
+                                  company_id):
+        data = {
+            'company_id': company_id,
+            'origin': make_purchase_request.origin,
+            'description': make_purchase_request.description,
+            }
+        return data
 
     @api.model
     def _prepare_purchase_request_line(self, pr_id, item):
