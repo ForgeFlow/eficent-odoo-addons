@@ -84,12 +84,12 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
 
     def _prepare_order_picking(self, line, date, move_type):
         pick_name = self.env['ir.sequence'].next_by_code('stock.picking.out')
-        picking_type = self.env['stock.picking.type'].search(
-            [('default_location_src_id', '=', line.account_id.location_id.id)]
-        )
-        if not picking_type:
-            raise ValidationError(_('Define a picking type out from the'
-                                    ' project location'))
+        type_obj = self.env['stock.picking.type']
+        company_id = self.env.context.get('company_id') or self.env.user.company_id.id
+        types = type_obj.search([('code', '=', 'incoming'), ('warehouse_id.company_id', '=', company_id),
+                                 ('name', '=', 'Receptions'),
+                                 ('warehouse_id.operating_unit_id', '=', self.env.user.default_operating_unit_id.id)])
+        picking_type = types[:1]
         location = line.account_id.location_id
 
         wh = line.account_id.location_id.get_warehouse()
