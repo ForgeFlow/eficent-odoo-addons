@@ -11,10 +11,12 @@ class ProjectProject(models.Model):
     @api.multi
     def write(self, values):
         for project in self:
-            stage = project.analytic_account_id.stage_id
-            if stage.allow_timesheets and project.account_class == \
-                    'work_package':
-                values['allow_timesheets'] = True
-            else:
-                values['allow_timesheets'] = False
+            if values.get('stage_id', False):
+                stage_obj = self.env['project.project.stage']
+                stage = stage_obj.browse(values['stage_id'])
+                if stage.allow_timesheets and project.account_class == \
+                        'work_package':
+                    values['allow_timesheets'] = True
+                elif not stage.allow_timesheets:
+                    values['allow_timesheets'] = False
         return super(ProjectProject, self).write(values)
