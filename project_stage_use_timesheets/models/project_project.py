@@ -12,7 +12,7 @@ class ProjectProject(models.Model):
     def write(self, values):
         for project in self:
             if values.get('stage_id', False):
-                stage_obj = self.env['project.project.stage']
+                stage_obj = self.env['analytic.account.stage']
                 stage = stage_obj.browse(values['stage_id'])
                 if stage.allow_timesheets and project.account_class == \
                         'work_package':
