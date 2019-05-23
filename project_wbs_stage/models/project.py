@@ -14,5 +14,6 @@ class Project(models.Model):
 
     stage_id = fields.Many2one(
         comodel_name='base.kanban.stage',
-        related='analytic_account_id.stage_id'
+        related='analytic_account_id.stage_id',
+        store=True
     )
