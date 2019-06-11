@@ -9,6 +9,7 @@
             <group name='period' position="after">
                 <group name="filter">
                     <field name="filter_project"/>
+                    <field name="only_closed"/>
                 </group>
             </group>
         </field>

@@ -4,7 +4,7 @@
 
 {
     "name": "Work In Progress Statement Exclude Closed Projects",
-    "version": "10.0.1.0.0",
+    "version": "10.0.2.0.0",
     "author": "Eficent Business and IT Consulting Services S.L.,"
               "Odoo Community Association (OCA)",
     "summary": """Filter closed projects in analytic wip report""",
