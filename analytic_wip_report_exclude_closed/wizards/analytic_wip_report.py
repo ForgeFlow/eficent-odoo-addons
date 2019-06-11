@@ -11,6 +11,10 @@ class AnalyticWipReport(models.TransientModel):
         'Filter By Project',
         default=True
     )
+    only_closed = fields.Boolean(
+        'Only Closed',
+        default=False
+    )
 
     @api.multi
     def analytic_wip_report_open_window(self):
@@ -28,15 +32,26 @@ class AnalyticWipReport(models.TransientModel):
             [('name', 'in', ('Closed', 'Cancelled'))]).ids
 
         if self.filter_project:
-            domain = ['&', '|', ('stage_id', 'not in', stages),
-                      '&',
-                      ('stage_id', 'in', stages),
-                      ('date', '>=', comparing_date),
-                      ('date_start', '<=', start_date),
-                      ('account_class', '=', 'project'),
-                      ]
+            if not self.only_closed:                
+                domain = ['&', '|', ('stage_id', 'not in', stages),
+                          '&',
+                          ('stage_id', 'in', stages),
+                          ('date', '>=', comparing_date),
+                          ('date_start', '<=', start_date),
+                          ('account_class', '=', 'project'),
+                          ]
+            else:
+                domain = [('stage_id', 'in', stages),
+                          ('date', '>=', comparing_date),
+                          ('date_start', '<=', start_date),
+                          ('account_class', '=', 'project'),
+                          ]
         else:
-            domain = ['|', '&', ('date', '>=', comparing_date),
-                      ('stage_id', 'in', stages),
-                      ('stage_id', 'not in', stages)]
+            if not self.only_closed:
+                domain = ['|', '&', ('date', '>=', comparing_date),
+                          ('stage_id', 'in', stages),
+                          ('stage_id', 'not in', stages)]
+            else:
+                domain = [('date', '>=', comparing_date),
+                          ('stage_id', 'in', stages)]
         return domain
