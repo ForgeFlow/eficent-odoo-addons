@@ -20,14 +20,22 @@ class AnalyticWipReport(models.TransientModel):
             [('name', 'in', ('Closed', 'Cancelled'))]).ids
 
         if self.category_id:
-            domain = ['&', '|', ('stage_id', 'not in', stages),
-                      '&',
-                      ('stage_id', 'in', stages),
-                      ('date', '>=', comparing_date),
-                      ('date_start', '<=', start_date),
-                      ('category_id', '=', self.category_id.id),
-                      ('account_class', '=', 'project'),
-                      ]
+            if not self.only_closed:
+                domain = ['&', '|', ('stage_id', 'not in', stages),
+                          '&',
+                          ('stage_id', 'in', stages),
+                          ('date', '>=', comparing_date),
+                          ('date_start', '<=', start_date),
+                          ('category_id', '=', self.category_id.id),
+                          ('account_class', '=', 'project'),
+                          ]
+            else:
+                domain = [('stage_id', 'in', stages),
+                          ('date', '>=', comparing_date),
+                          ('date_start', '<=', start_date),
+                          ('category_id', '=', self.category_id.id),
+                          ('account_class', '=', 'project'),
+                          ]
             return domain
         else:
             return super(AnalyticWipReport, self)._get_analytic_search_domain()
