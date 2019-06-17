@@ -48,9 +48,11 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
 
     @api.model
     def _prepare_purchase_request(self, make_purchase_request,
+                                  picking_type_id,
                                   company_id):
         data = {
             'company_id': company_id,
+            'picking_type_id': picking_type_id,
             'origin': make_purchase_request.origin,
             'description': make_purchase_request.description,
             }
@@ -103,7 +105,7 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
                     _("No picking type defined for the analytic account"))
             if request is False:
                 request_data = self._prepare_purchase_request(
-                    make_purchase_request, company_id)
+                    make_purchase_request, picking_type_id.id, company_id)
                 request = request_obj.create(request_data)
             request_line_data = self._prepare_purchase_request_line(
                 request.id, item)
