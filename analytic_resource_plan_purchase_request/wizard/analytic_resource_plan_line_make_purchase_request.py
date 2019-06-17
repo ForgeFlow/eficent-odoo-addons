@@ -50,15 +50,10 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
     def _prepare_purchase_request(self, make_purchase_request,
                                   picking_type_id,
                                   company_id):
-        if len(make_purchase_request.item_ids.mapped('account_id')) == 1:
-            pt = make_purchase_request.item_ids.mapped('account_id').picking_type_id
-        else:
-            raise ValidationError('Please select lines from one project only')
         data = {
             'company_id': company_id,
             'picking_type_id': picking_type_id,
             'origin': make_purchase_request.origin,
-            'picking_type_id': pt.id,
             'description': make_purchase_request.description,
             }
         return data
