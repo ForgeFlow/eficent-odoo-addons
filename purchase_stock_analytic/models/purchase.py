@@ -56,11 +56,9 @@ class PurchaseOrderLine(models.Model):
     def _check_line_locations(self):
         # check users dont buy for projects to a generic location
         for rec in self:
-            if rec.location_dest_id:
+            if rec.location_dest_id and rec.account_analytic_id:
                 if (rec.location_dest_id.analytic_account_id.id not in
                         rec.account_analytic_id.get_parents()):
-                    print(rec.order_id.name)
-                    print(rec.location_dest_id.analytic_account_id.id)
                     raise exceptions.ValidationError(
                         _('The location is not dedicated to project %s'
                           % rec.account_analytic_id.name))
