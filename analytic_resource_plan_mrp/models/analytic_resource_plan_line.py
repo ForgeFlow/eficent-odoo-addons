@@ -135,7 +135,7 @@ class AnalyticResourcePlanLine(models.Model):
             'name': line.name,
             'date': line.date,
             'product_id': line.product_id.id,
-            'product_uom_qty': product_qty * line.unit_amount,
+            'product_uom_qty': product_qty,
             'product_uom': line.product_uom_id.id,
             'location_id': source_location_id,
             'location_dest_id': destination_location_id,
