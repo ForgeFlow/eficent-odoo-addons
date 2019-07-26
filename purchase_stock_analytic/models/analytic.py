@@ -5,7 +5,7 @@ from odoo import api, models
 
 class AccountAnalyticAccount(models.Model):
 
-    _inherit ='account.analytic.account'
+    _inherit = 'account.analytic.account'
 
     @api.multi
     def get_parents(self):
@@ -19,5 +19,4 @@ class AccountAnalyticAccount(models.Model):
             while current.parent_id:
                 res.append(current.parent_id.id)
                 current = current.parent_id
-        print(res)
         return res
