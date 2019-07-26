@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo.addons.analytic_resource_plan_stock.tests import \
     test_analytic_resource_plan_stock
+from odoo.tools.safe_eval import safe_eval
 
 
 class TestAnalyticResourcePlanMrp(
@@ -14,7 +15,19 @@ class TestAnalyticResourcePlanMrp(
             cls.env['analytic.resource.plan.line']
         cls.mrp_bom_obj = cls.env['mrp.bom']
         cls.mrp_bom_line_obj = cls.env['mrp.bom.line']
-        cls.product_id = cls.env.ref('product.product_product_27')
+        cls.account_type = cls.env["account.account.type"].create({
+            "name": "Test account type",
+            "type": "other",
+        })
+        cls.gp_account_id = cls.env["account.account"].create({
+            "name": "Test account",
+            "code": "TEST_ARP",
+            "user_type_id": cls.account_type.id,
+            "reconcile": True,
+        })
+        cls.product_id = cls.env['product.product'].create({'name': 'XXX'})
+        cls.product.categ_id.property_account_expense_categ_id = \
+            cls.gp_account_id
         cls.partner = cls.env.ref('base.res_partner_1')
         cls.analytic_plan_version =\
             cls.env.ref('analytic_plan.analytic_plan_version_P00')
@@ -74,7 +87,7 @@ class TestAnalyticResourcePlanMrp(
             active_model="analytic.resource.plan.line",
             active_ids=cls.resource_plan_line_wbom_id.id).create({})
         move_action = wiz_id.do_produce()
-        move_id = eval(move_action['domain'])[0][2]
+        move_id = safe_eval(move_action['domain'])[0][2]
         move = cls.env['stock.move'].browse(move_id)[0]
         cls.assertEqual(
             move.product_qty, child.unit_amount, 'Wrong consumed qty')
@@ -82,7 +95,6 @@ class TestAnalyticResourcePlanMrp(
         wiz_id = cls.env['analytic.resource.plan.line.consume'].with_context(
             active_model="analytic.resource.plan.line",
             active_ids=cls.resource_plan_line_wbom_id.id).create({})
-        move_action = wiz_id.do_consume()
-        move_id = eval(move_action['domain'])[0][2]
+        wiz_id.do_consume()
         cls.assertEqual(
             move.product_qty, child.unit_amount, 'Wrong consumed qty')
