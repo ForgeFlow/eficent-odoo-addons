@@ -32,7 +32,7 @@ class AnalyticWipReport(models.TransientModel):
             [('name', 'in', ('Closed', 'Cancelled'))]).ids
 
         if self.filter_project:
-            if not self.only_closed:                
+            if not self.only_closed:
                 domain = ['&', '|', ('stage_id', 'not in', stages),
                           '&',
                           ('stage_id', 'in', stages),
