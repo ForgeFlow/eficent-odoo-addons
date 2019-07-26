@@ -4,6 +4,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests.common import TransactionCase
+from odoo.exceptions import ValidationError
 
 
 class TestStock(TransactionCase):
@@ -21,6 +22,7 @@ class TestStock(TransactionCase):
         self.yourcompany_aa = self.env.ref(
             'analytic.analytic_commercial_marketing')
         self.AA1 = self.create_analytic('AA1')
+        self.AA2 = self.create_analytic('AA2')
         self.yourcompany_loc.write({'analytic_account_id': self.AA1.id})
         self.location1 = self.create_location(
             self.AA1, self.yourcompany_loc, 'internal')
@@ -30,6 +32,8 @@ class TestStock(TransactionCase):
             None, self.shelf_loc, 'internal')
         self.location4 = self.create_location(
             None, None, 'customer')
+        self.location5 = self.create_location(
+            self.AA2, False, 'customer')
         self.product = self.env.ref('product.product_product_4')
         self.product_categ = self.env.ref('product.product_category_5')
         self.current_assets_type = self.account_type_model.search(
@@ -66,6 +70,12 @@ class TestStock(TransactionCase):
         )
         self.move4 = self.create_move(
             'in', self.location4, self.location3
+        )
+        self.move5 = self.create_move(
+            'return_aa', self.location2, self.location3
+        )
+        self.move6 = self.create_move(
+            'return_aa', self.location2, self.location4
         )
 
     def create_account(self, name, code, type):
@@ -105,8 +115,9 @@ class TestStock(TransactionCase):
         return move
 
     def test_move_anaytic(self):
-        """Test move have or not analytic account"""
-        self.assertEqual(self.move1.analytic_account_id.id, False,
+        """Test move have or not analytic account, onchanges are not always
+         necessary but they are actually executed in real life"""
+        self.assertEqual(self.move1.analytic_account_id.id, self.AA1.id,
                          "Analytic account 1 should exist")
         self.assertEqual(self.move2.analytic_account_id.id, False,
                          "No analytic account should be in this move")
@@ -114,3 +125,11 @@ class TestStock(TransactionCase):
                          "Analytic account 1 should exist")
         self.assertEqual(self.move4.analytic_account_id.id, False,
                          "No analytic account should be in this move")
+        self.assertEqual(self.move5.analytic_account_id.id, self.AA1.id,
+                         "Analytic account 1 should exist")
+        self.assertEqual(self.move6.analytic_account_id.id, self.AA1.id,
+                         "Analytic account 1 should exist")
+        with self.assertRaises(ValidationError):
+            self.move7 = self.create_move(
+                'bad_aa', self.location2, self.location5
+            )
