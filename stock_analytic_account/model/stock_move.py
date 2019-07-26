@@ -16,42 +16,26 @@ class StockMove(models.Model):
         readonly=True
     )
 
-    @api.model
-    def create(self, vals):
-        src_loc = self.location_id.browse(vals['location_id'])
-        dest_loc = self.location_id.browse(vals['location_dest_id'])
-        add_analytic_id = False
-
-        if src_loc.analytic_account_id or dest_loc.analytic_account_id:
-            if (src_loc.usage in ('customer', 'supplier') and dest_loc.usage ==
-                'internal') or (src_loc.usage == 'internal' and
-                                dest_loc.usage in ('customer', 'supplier')):
-                add_analytic_id = dest_loc.analytic_account_id.id
-        if add_analytic_id:
-            vals['analytic_account_id'] = add_analytic_id
-        return super(StockMove, self).create(vals)
-
     @api.multi
     @api.constrains('analytic_account_id', 'location_id', 'location_dest_id')
     def _check_analytic_account(self):
         for move in self:
-            if move.analytic_account_id:
-                analytic = move.analytic_account_id
-                src_anal = move.location_id.analytic_account_id
-                dest_anal = move.location_dest_id.analytic_account_id
-                if src_anal and dest_anal:
-                    raise exceptions.ValidationError(_("""
-                        Cannot move between different projects locations,
-                        please move first to general stock"""))
-                elif src_anal and not dest_anal:
-                    if src_anal != analytic:
-                        raise exceptions.ValidationError(_(
-                            "Wrong analytic account in source or move"))
-                elif dest_anal and not src_anal:
-                    if dest_anal != analytic:
-                        raise exceptions.ValidationError(_(
-                            "Wrong analytic account in destination or "
-                            "move"))
+            analytic = move.analytic_account_id
+            src_anal = move.location_id.analytic_account_id
+            dest_anal = move.location_dest_id.analytic_account_id
+            if src_anal and dest_anal:
+                raise exceptions.ValidationError(_("""
+                    Cannot move between different projects locations,
+                    please move first to general stock"""))
+            elif src_anal and not dest_anal:
+                if src_anal != analytic:
+                    raise exceptions.ValidationError(_(
+                        "Wrong analytic account in source or move"))
+            elif dest_anal and not src_anal:
+                if dest_anal != analytic:
+                    raise exceptions.ValidationError(_(
+                        "Wrong analytic account in destination or "
+                        "move"))
         return True
 
 
