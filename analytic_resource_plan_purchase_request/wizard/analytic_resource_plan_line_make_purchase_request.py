@@ -75,7 +75,6 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
     def make_purchase_request(self):
         res = []
         make_purchase_request = self
-        line_plan_obj = self.env['analytic.resource.plan.line']
         request_obj = self.env['purchase.request']
         request_line_obj = self.env['purchase.request.line']
         company_id = False
@@ -146,13 +145,13 @@ class AnalyticResourcePlanLineMakePurchaseRequestItem(models.TransientModel):
     _description = "Resource plan make purchase request item"
 
     wiz_id = fields.Many2one(
-            'analytic.resource.plan.line.make.purchase.request',
-            'Wizard', required=True, ondelete='cascade',
-            readonly=True)
+        'analytic.resource.plan.line.make.purchase.request',
+        'Wizard', required=True, ondelete='cascade',
+        readonly=True)
     line_id = fields.Many2one('analytic.resource.plan.line',
                               'Resource Plan Line',
-                               required=True,
-                               readonly=True)
+                              required=True,
+                              readonly=True)
     account_id = fields.Many2one('account.analytic.account',
                                  related='line_id.account_id',
                                  string='Analytic Account',

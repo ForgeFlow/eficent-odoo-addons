@@ -62,10 +62,11 @@ class AccountAnalyticAccount(models.Model):
                 new_code = obj_sequence.next_by_id(parent.sequence_ids[0].id)
             else:
                 new_code = self.env['ir.sequence'].\
-                    get('account.analytic.account')
+                    next_by_code('account.analytic.account')
         else:
-            new_code = self.env['ir.sequence'].get('account.analytic.account')
-        if not 'code' in vals and new_code:
+            new_code = self.env['ir.sequence'].next_by_code(
+                'account.analytic.account')
+        if 'code' not in vals and new_code:
             vals['code'] = new_code
         analytic_account = super(AccountAnalyticAccount, self).create(vals)
         if 'sequence_ids' not in vals or\

@@ -32,17 +32,18 @@ class TestAnalyticResourcePlanStock(
             'location_dest_id': cls.account_id.location_id.id})
         cls.env['stock.move'].create({
             'name': '/',
-            'product_id': cls.product.id,
+            'product_id': cls.resource_plan_line.product_id.id,
             'product_uom_qty': 5.0,
             'analytic_account_id': cls.account_id.id,
             'picking_id': picking_in.id,
-            'product_uom':  cls.product.uom_id.id,
+            'product_uom':  cls.resource_plan_line.product_id.uom_id.id,
             'location_id': cls.env.ref('stock.stock_location_suppliers').id,
             'location_dest_id': cls.account_id.location_id.id,
         })
         picking_in.action_confirm()
         # recomputing here as no relation to the pickings in this module
         # to put in the api depends
+        cls.resource_plan_line._compute_quantities()
         cls.assertEqual(cls.resource_plan_line.incoming_qty, 5.0,
                         'Bad Incoming Qty')
         cls.assertEqual(cls.resource_plan_line.virtual_available, 5.0,

@@ -19,14 +19,14 @@ class TestStockLocation(TransactionCase):
         self.yourcompany_loc = self.env.ref('stock.stock_location_stock')
         self.yourcompany_aa =\
             self.env.ref('analytic.analytic_our_super_product')
-        self.AA1 = self.create_analytic('AA1')
-        self.AA2 = self.create_analytic('AA2')
+        self.AA1 = self.create_analytic('AA1', 'xx')
+        self.AA2 = self.create_analytic('AA2', 'yy')
         self.yourcompany_loc.write({'analytic_account_id': self.AA1.id})
         self.location1 = self.create_location(
             self.AA1, self.yourcompany_loc)
 
-    def create_analytic(self, name):
-        vals = {'name': name}
+    def create_analytic(self, name, code):
+        vals = {'name': name, 'code': code}
         analytic_id = self.analytic_model.create(vals)
         return analytic_id
 

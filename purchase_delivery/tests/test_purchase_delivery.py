@@ -5,7 +5,6 @@
 from odoo.tests import common
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from datetime import datetime
-from odoo.exceptions import ValidationError
 
 
 class TestPurchaseDelivery(common.TransactionCase):
@@ -43,17 +42,9 @@ class TestPurchaseDelivery(common.TransactionCase):
 
     def test_delivery(self):
         self.po.onchange_partner_id()
-        self.carrier_id.with_context({'purchase_order_id': self.po.id
-                                      }).get_price()
-        self.carrier_id.name_get()
-        self.po.delivery_set()
-        with self.assertRaises(ValidationError):
-            self.po.button_confirm()
-            self.po.delivery_set()
+        self.po.button_confirm()
         self.picking = self.po.picking_ids
         self.picking.force_assign()
         self.picking.do_new_transfer()
+        self.assertTrue(self.picking.carrier_id)
         self.assertEqual(self.picking.carrier_id, self.po.carrier_id)
-        self.assertEqual(self.po.order_line[1].product_id.list_price,
-                         self.po.carrier_id.fixed_price)
-        self.assertEqual(self.po.name, self.picking.group_id.name)
