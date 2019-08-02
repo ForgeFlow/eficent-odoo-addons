@@ -11,10 +11,21 @@ class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet_sheet.sheet"
 
     @api.multi
-    def prepare_timesheet(self, project_id, ga_id):
+    def prepare_timesheet(self, project_id):
         for sheet in self:
             aa = self.env['project.project'].browse(
                 project_id).analytic_account_id
+            ga_id = self.env['account.analytic.line'].\
+                _getGeneralAccountFromCostCategory(aa, sheet.user_id)
+            if not ga_id:
+                ga_id = sheet.employee_id.product_id.\
+                    property_account_expense_id.id or \
+                    sheet.employee_id.product_id.\
+                    categ_id.property_account_expense_categ_id.id
+            if not ga_id:
+                raise exceptions.ValidationError(_(
+                    'Please set a general expense '
+                    'account in your employee view'))
             vals = {
                 'date': sheet.date_from,
                 'account_id': aa.id,
@@ -23,8 +34,7 @@ class HrTimesheetSheet(models.Model):
                 'product_id': sheet.employee_id.product_id.id,
                 'product_uom_id':
                     sheet.employee_id.product_id.uom_id.id,
-                'general_account_id': ga_id,
-                'amount': sheet.employee_id.product_id.standard_price,
+                'general_account_id': ga_id.id,
                 'user_id': sheet.user_id.id,
                 'sheet_id': sheet.id,
             }
@@ -61,17 +71,9 @@ class HrTimesheetSheet(models.Model):
             lw_sheet_ids = sheet_obj.search(
                 sheet_domain, limit=1, order='date_to desc')
             a_line_ids = lw_sheet_ids.mapped('timesheet_ids').ids
-            ga_id = sheet.employee_id.product_id.\
-                property_account_expense_id.id or \
-                sheet.employee_id.product_id.\
-                categ_id.property_account_expense_categ_id.id
-            if not ga_id:
-                raise exceptions.ValidationError(_(
-                    'Please set a general expense '
-                    'account in your employee view'))
             if a_line_ids:
                 projects = self.get_accounts(a_line_ids)
                 for project_id in [a['project_id'] for a in projects]:
-                    vals = sheet.prepare_timesheet(project_id, ga_id)
+                    vals = sheet.prepare_timesheet(project_id)
                     self.env['account.analytic.line'].create(vals)
         return True
