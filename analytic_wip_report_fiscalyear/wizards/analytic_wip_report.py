@@ -38,4 +38,3 @@ class AnalyticWipReport(models.TransientModel):
             if rec.fiscalyear_id:
                 rec.from_date_fy = rec.fiscalyear_id.date_start
                 rec.to_date_fy = rec.fiscalyear_id.date_end
-                rec.to_date = rec.fiscalyear_id.date_end
