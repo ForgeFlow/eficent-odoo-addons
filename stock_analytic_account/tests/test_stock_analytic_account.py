@@ -14,8 +14,10 @@ class TestStockAnalyticAccount(common.TransactionCase):
         self.route_warehouse0_mto_id =\
             self.env.ref('stock.route_warehouse0_mto').id
         self.partner_id = self.env.ref('base.res_partner_1')
-        self.product_icecream = self.env.ref('stock.product_icecream')
-        self.product_icecream.write({
+        self.product1 = self.env['product.product'].create(
+            {'name': 'xx',
+             'type': 'product'})
+        self.product1.write({
             'route_ids': [(6, 0, [self.route_warehouse0_mto_id])],
         })
         self.analytic_account = self.env.ref('analytic.analytic_agrolait')
@@ -26,12 +28,7 @@ class TestStockAnalyticAccount(common.TransactionCase):
         self.dest_location = self.env.ref('stock.stock_location_customers')
         self.outgoing_picking_type = self.env.ref('stock.picking_type_out')
 
-        product_qty = self.env['stock.change.product.qty'].create({
-            'location_id': self.location.id,
-            'product_id': self.product_icecream.id,
-            'new_quantity': 20,
-        })
-        product_qty.change_product_qty()
+        self._update_product_qty(self.product1, self.location, 10.0)
 
         # create Picking
         picking_data = {
@@ -46,10 +43,10 @@ class TestStockAnalyticAccount(common.TransactionCase):
         # create move
         move_data = {
             'picking_id': self.picking.id,
-            'product_id': self.product_icecream.id,
-            'name': self.product_icecream.name,
+            'product_id': self.product1.id,
+            'name': self.product1.name,
             'product_uom_qty': 11.0,
-            'product_uom': self.product_icecream.uom_id.id,
+            'product_uom': self.product1.uom_id.id,
             'location_id': self.location.id,
             'location_dest_id': self.dest_location.id,
             'analytic_account_id': self.analytic_account.id
@@ -60,6 +57,15 @@ class TestStockAnalyticAccount(common.TransactionCase):
         self.picking.action_assign()
         self.picking.action_done()
 
+    def _update_product_qty(self, product, location, quantity):
+        product_qty = self.env['stock.change.product.qty'].create({
+            'location_id': location.id,
+            'product_id': product.id,
+            'new_quantity': quantity,
+        })
+        product_qty.change_product_qty()
+        return product_qty
+
     def test_stock_analytic_account(self):
         """Test Procurement Order And Move"""
         self.analytic_account = self.AnalyticAccount.\
@@ -68,6 +74,9 @@ class TestStockAnalyticAccount(common.TransactionCase):
                          self.move.analytic_account_id)
         self.assertEqual(self.move.analytic_account_id,
                          self.analytic_account.move_ids.analytic_account_id)
+        self.assertEqual(self.move.location_id.analytic_account_id.id,
+                         self.analytic_account.id)
         self.assertEqual(
-            self.move.quant_ids[1].analytic_account_id,
-            self.analytic_account.move_ids.quant_ids[1].analytic_account_id)
+            len(self.env['stock.quant'].search(
+                [('analytic_account_id', '=',
+                 self.move.analytic_account_id.id)])), 1)
