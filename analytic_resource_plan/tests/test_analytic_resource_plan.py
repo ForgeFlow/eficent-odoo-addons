@@ -20,7 +20,8 @@ class TestAnalyticResourcePlan(common.SavepointCase):
             'analytic_plan.analytic_plan_version_P02')
         cls.account_id.write({
             'active_analytic_planning_version': cls.plan_version.id})
-        cls.product = cls.env['product.product'].create({'name': 'SP'})
+        cls.product = cls.env['product.product'].create(
+            {'name': 'SP', 'type': 'product'})
         cls.expense = cls.env.ref('account.data_account_type_expenses').id
         cls.general_account_id = cls.env['account.account'].\
             search([('user_type_id', '=', cls.expense)], limit=1)

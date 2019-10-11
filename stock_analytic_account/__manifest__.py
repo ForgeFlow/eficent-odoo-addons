@@ -15,6 +15,7 @@
         'stock_location_analytic',
         'analytic_location',
         'analytic_journal',
+        'stock_inventory_analytic',
     ],
     'data': [
         'view/stock_view.xml',
