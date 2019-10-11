@@ -186,8 +186,8 @@ class AccountAnalyticLinePlan(models.Model):
         if self.product_id:
             prod = self.product_id
         if not self.journal_id:
-            j = analytic_journal_obj.search([('type', '=', 'purchase')])
-            journal = j[0] if j and j[0] else False
+            journal = analytic_journal_obj.search(
+                [('type', '=', 'purchase')], limit=1)
         if not self.journal_id or not self.product_id:
             return {}
         if journal.type != 'sale' and prod:
@@ -228,8 +228,8 @@ class AccountAnalyticLinePlan(models.Model):
         if self.product_id:
             prod = self.product_id
         if not self.journal_id:
-            j = analytic_journal_obj.search([('type', '=', 'purchase')])
-            journal = j[0] if j and j[0] else False
+            journal = analytic_journal_obj.search(
+                [('type', '=', 'purchase')], limit=1)
         if not self.journal_id or not self.product_id:
             return {}
         if journal.type != 'sale' and prod:
@@ -262,10 +262,8 @@ class AccountAnalyticLinePlan(models.Model):
         prod = False
         journal = self.journal_id if self.journal_id else self
         if not self.journal_id:
-            j = analytic_journal_obj.search(
-                [('type', '=', 'purchase')]
-            )
-            journal = j[0] if j and j[0] else False
+            journal = analytic_journal_obj.search(
+                [('type', '=', 'purchase')], limit=1)
         if not self.journal_id or not self.product_id:
             return {}
         if self.product_id:

@@ -16,7 +16,7 @@
                 <button string="Planned cost lines"
                         name="open_plan_cost_tree_view"
                         type="object"
-                        icon="gtk-open"/>
+                        icon="fa fa-list"/>
             </field>
             <field name="debit" position="before">
                 <field name="active_analytic_planning_version"
