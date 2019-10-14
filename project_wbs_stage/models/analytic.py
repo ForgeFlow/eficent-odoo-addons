@@ -3,29 +3,20 @@
 # Copyright 2017-19 Matmoz d.o.o.
 # Copyright 2017-19 Deneroteam.
 
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)..
+# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html)..
 
-from odoo import api, fields, models
+from odoo import api, models
 
 
 class AccountAnalyticAccount(models.Model):
-    _inherit = "account.analytic.account"
-
-    def _default_stage_id(self):
-        return self.env["analytic.account.stage"].search(
-            [('case_default', '=', True)], limit=1)
-
-    stage_id = fields.Many2one(
-        'analytic.account.stage', 'Stage',
-        default=_default_stage_id,
-        domain="[('fold', '=', False)]")
-    stage_name = fields.Char(related='stage_id.name')
+    _name = 'account.analytic.account'
+    _inherit = ['account.analytic.account', 'base.kanban.abstract']
 
     @api.multi
     def write(self, values):
         res = super(AccountAnalyticAccount, self).write(values)
         if values.get('stage_id'):
-            stage_obj = self.env['analytic.account.stage']
+            stage_obj = self.env['base.kanban.stage']
             for project in self:
                 # Search if there's an associated project
                 new_stage = stage_obj.browse(values.get('stage_id'))
