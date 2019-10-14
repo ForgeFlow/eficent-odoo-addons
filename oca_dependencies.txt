@@ -1,2 +1,3 @@
 account-analytic https://github.com/OCA/account-analytic 12.0
 project https://github.com/eficent/project 12.0-mig-project_wbs
+server-tools https://github.com/eficent/server-tools 12.0-mig-base_kanban_stage
