@@ -4,7 +4,7 @@
 
 from odoo import api, fields, models
 from odoo.tools.translate import _
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 
 
 class AnalyticResourcePlanCopyVersion(models.TransientModel):
@@ -60,11 +60,11 @@ class AnalyticResourcePlanCopyVersion(models.TransientModel):
             data.dest_version_id else False
         )
         if dest_version.default_plan:
-            raise Warning(_('''It is prohibited to copy to the default
+            raise ValidationError(_('''It is prohibited to copy to the default
                 planning version.'''))
 
         if source_version == dest_version:
-            raise Warning(_('''Choose different source and destination
+            raise ValidationError(_('''Choose different source and destination
                 planning versions.'''))
         if include_child:
             account_ids = record.get_child_accounts().keys()
