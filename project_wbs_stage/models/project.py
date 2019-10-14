@@ -3,16 +3,16 @@
 # Copyright 2017-19 Matmoz d.o.o.
 # Copyright 2017-19 Deneroteam.
 
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class Project(models.Model):
-
-    _inherit = 'project.project'
+    _name = 'project.project'
+    _inherit = ['project.project',  "base.kanban.abstract"]
 
     stage_id = fields.Many2one(
-        'analytic.account.stage',
+        comodel_name='base.kanban.stage',
         related='analytic_account_id.stage_id'
     )
