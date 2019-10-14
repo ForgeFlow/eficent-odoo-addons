@@ -1,0 +1,15 @@
+<odoo>
+
+    <record model="ir.ui.view" id="product_template_manufacturer_form_view">
+        <field name="name">product.template.manufacturer.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id"
+               ref="product_manufacturer.product_template_manufacturer_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='manufacturer']" position="attributes">
+                <attribute name="context">{'default_manufacturer': True,'default_supplier':False, 'default_customer':False}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
