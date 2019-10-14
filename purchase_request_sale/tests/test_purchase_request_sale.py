@@ -26,6 +26,10 @@ class TestPurchaseRequestProcurement(common.SavepointCase):
             self.env.ref('stock.route_warehouse0_mto') |
             self.env.ref('purchase_stock.route_warehouse0_buy')
         )
+        for rule in self.env.ref(
+                'purchase_stock.route_warehouse0_buy').rule_ids:
+            rule.propagate = True
+            rule.group_propagation_option = 'propagate'
         supplierinfo_vals = {
             'name': self.partner_buy.id,
             'product_tmpl_id': self.product.product_tmpl_id.id,
