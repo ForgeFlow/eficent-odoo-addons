@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="form_analytic_category" model="ir.ui.view">
+        <field name="name">analytic_category.form_analytic_category</field>
+        <field name="model">account.analytic.category</field>
+        <field name="arch" type="xml">
+        <form string="Category" version="7.0">
+            <group>
+                <group>
+                    <field name="name"/>
+                </group>
+                <group>
+                    <field name="code"/>
+                </group>
+            </group>
+        </form>
+        </field>
+    </record>
+
+    <record id="tree_analytic_category" model="ir.ui.view">
+        <field name="name">analytic_category.tree_analytic_category</field>
+        <field name="model">account.analytic.category</field>
+        <field name="arch" type="xml">
+        <tree string="Categories">
+            <field name="name"/>
+            <field name="code"/>
+        </tree>
+        </field>
+    </record>
+
+    <record id="search_analytic_category" model="ir.ui.view">
+        <field name="name">analytic_category.search_analytic_category</field>
+        <field name="model">account.analytic.category</field>
+        <field name="arch" type="xml">
+        <search string="Search Category">
+            <field name="name"/>
+            <field name="code"/>
+        </search>
+        </field>
+    </record>
+
+    <record id="action_analytic_category" model="ir.actions.act_window">
+        <field name="name">Category</field>
+        <field name="res_model">account.analytic.category</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_analytic_category" name="Analytic Categories"
+              parent="account.menu_analytic_accounting"
+              sequence="1"
+              action="action_analytic_category"/>
+</odoo>
