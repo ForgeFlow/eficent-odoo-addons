@@ -5,7 +5,7 @@
 
 {
     "name": "Analytic Contract Value",
-    "version": "10.0.1.0.0",
+    "version": "12.0.1.0.0",
     "summary": "Sets a Contract Value on the analytic account",
     "author": "Eficent",
     "license": "AGPL-3",
@@ -15,7 +15,6 @@
     "data": [
         "security/analytic_security.xml",
         "views/analytic_account_view.xml",
-
     ],
-    'installable': True,
+    "installable": True,
 }
