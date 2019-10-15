@@ -21,5 +21,4 @@
     ],
     "installable": True,
     "auto_install": True,
-    "active": True
 }
