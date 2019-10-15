@@ -23,9 +23,6 @@ class AccountAnalyticAccount(models.Model):
         'Default Stock Location',
         domain=[('usage', '<>', 'view')]
     )
-    picking_type_id = fields.Many2one(
-        'stock.picking.type',
-        'Default Picking Type for the project')
     dest_address_id = fields.Many2one(
         'res.partner',
         'Delivery Address',

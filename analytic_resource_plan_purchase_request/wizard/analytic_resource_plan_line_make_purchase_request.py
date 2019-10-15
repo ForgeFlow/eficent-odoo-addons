@@ -100,7 +100,6 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
                 company_id = line_company_id
 
             if not len(line.account_id.location_id):
-                print(line)
                 raise ValidationError(
                     _("The analytic account has no location assigned")
                 )

@@ -19,7 +19,6 @@ class TestAnalyticResourcePlanStock(
             'parent_id': cls.env.ref('stock.stock_location_stock').id,
             'analytic_account_id': cls.account_id.id})
         cls.account_id.location_id = cls.location
-        cls.account_id.picking_type_id = cls.env.ref('stock.picking_type_in')
 
     def test_res_stock(cls):
         cls.assertEqual(cls.resource_plan_line.qty_available, 0.0,
