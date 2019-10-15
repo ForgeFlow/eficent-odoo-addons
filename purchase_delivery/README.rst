@@ -1,9 +1,11 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-    :alt: License AGPL-3
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
 
 =======================
 Purchase Delivery Costs
 =======================
+
 Allows you to add delivery methods in purchase orders and picking.
 
 This module makes it possible to add delivery method to purchase orders and
