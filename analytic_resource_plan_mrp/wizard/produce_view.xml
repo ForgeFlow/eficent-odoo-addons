@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_analytic_resource_plan_line_produce_wizard" model="ir.ui.view">
+        <field name="name">Produce</field>
+        <field name="model">analytic.resource.plan.line.produce</field>
+        <field name="arch" type="xml">
+            <form string="Produce" version="7.0">
+                <group>
+                    <field name="item_ids" nolabel="1">
+                        <tree string="Details" create="false" editable="bottom">
+                            <field name="line_id" options="{'no_open': true}"/>
+                            <field name="product_qty"/>
+                            <field name="product_uom_id" options="{'no_open': true}"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button name="do_produce" type="object" string="Confirm" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_analytic_resource_plan_line_produce"
+            model="ir.actions.act_window">
+        <field name="name">Produce</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">analytic.resource.plan.line.produce</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="binding_model_id" ref="analytic_resource_plan.model_analytic_resource_plan_line"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+   <record id="view_analytic_resource_plan_line_form" model="ir.ui.view">
+        <field name="name">analytic.resource.plan.line.form</field>
+        <field name="model">analytic.resource.plan.line</field>
+        <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <xpath expr='//form/sheet/group[@name="account"]' position='after'>
+                <group name="bom0">
+                   <group name="bom">
+                        <field name="show_button_bom_explode" invisible="1"/>
+                        <field name="bom_id"/>
+                        <button name="button_bom_explode_to_resource_plan"
+                            string="Explode BOM"
+                            attrs="{'invisible':[('show_button_bom_explode','=',False)]}"
+                            class="oe_highlight"
+                            type="object"/>
+                   </group>
+                </group>
+            </xpath>
+        </field>
+   </record>
+
+    <record id="view_analytic_resource_plan_line_tree" model="ir.ui.view">
+        <field name="name">analytic.resource.plan.line.tree</field>
+        <field name="model">analytic.resource.plan.line</field>
+        <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_tree"/>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="product_uom_id"]' position='after'>
+                <field name="bom_id"/>
+                <field name="show_button_bom_explode" invisible="1"/>
+                <button name="button_bom_explode_to_resource_plan"
+                        string="Explode"
+                        icon="fa-sitemap"
+                        attrs="{'invisible':[('show_button_bom_explode','=',False)]}"
+                        type="object"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
