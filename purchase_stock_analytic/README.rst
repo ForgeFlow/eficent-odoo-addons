@@ -1,5 +1,6 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-    :alt: License AGPL-3
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
 
 =======================
 Purchase Stock Analytic
@@ -8,7 +9,7 @@ Purchase Stock Analytic
 Copies the analytic account of the purchase order item to the stock move.
 
 Usage
-============
+=====
 
 * Create a PO line with an analytic account. The analytic account is passed to
   the move
