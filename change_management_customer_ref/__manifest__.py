@@ -18,5 +18,4 @@
     ],
     'installable': True,
     'application': True,
-    'active': True,
 }

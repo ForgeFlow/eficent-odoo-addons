@@ -9,6 +9,7 @@
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
+    'license': 'AGPL-3',
     "depends": [
         "project",
         "stock_analytic_account"

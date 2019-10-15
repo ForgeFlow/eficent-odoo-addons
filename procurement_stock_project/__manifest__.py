@@ -9,6 +9,7 @@
               "Odoo Community Association (OCA)",
     "website": "https://www.odoo-community.org",
     "category": "Warehouse Management",
+    "license": "LGPL-3",
     "depends": ["stock_project", "procurement_project"],
     'installable': False,
 }
