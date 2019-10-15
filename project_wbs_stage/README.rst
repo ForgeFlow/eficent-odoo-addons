@@ -1,6 +1,9 @@
-.. image:: https://img.shields.io/badge/licence-LGPL--3-blue.svg
-    :alt: License LGPL-3
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
 
+
+=================
 Project WBS Stage
 =================
 
