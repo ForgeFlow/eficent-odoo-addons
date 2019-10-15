@@ -31,16 +31,8 @@
         <field name="res_model">analytic.resource.plan.line.produce</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
+        <field name="binding_model_id" ref="analytic_resource_plan.model_analytic_resource_plan_line"/>
         <field name="target">new</field>
-    </record>
-
-    <record model="ir.values" id="analytic_resource_plan_line_produce">
-        <field name="model_id" ref="analytic_resource_plan.model_analytic_resource_plan_line" />
-        <field name="name">Produce</field>
-        <field name="key2">client_action_multi</field>
-        <field name="value" eval="'ir.actions.act_window,' + str(ref('act_analytic_resource_plan_line_produce'))" />
-        <field name="key">action</field>
-        <field name="model">analytic.resource.plan.line</field>
     </record>
 
 </odoo>
