@@ -1,5 +1,5 @@
-.. image:: https://img.shields.io/badge/license-AGPLv3-blue.svg
-   :target: https://www.gnu.org/licenses/agpl.html
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
 ==============================================

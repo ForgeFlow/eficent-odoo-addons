@@ -11,7 +11,7 @@
     "website": "http://www.eficent.com",
     "category": "Accounting & Finance",
     "depends": ['account', 'project'],
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "data": [
         "views/account_move_view.xml",
     ],
