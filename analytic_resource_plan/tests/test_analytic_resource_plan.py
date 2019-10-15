@@ -14,7 +14,7 @@ class TestAnalyticResourcePlan(common.SavepointCase):
         super(TestAnalyticResourcePlan, cls).setUp()
         cls.project = cls.env['project.project'].create(
             {'name': 'Test project',
-             'code': '0001'})
+             'code': 'X0001'})
         cls.account_id = cls.project.analytic_account_id
         cls.plan_version = cls.env.ref(
             'analytic_plan.analytic_plan_version_P02')
