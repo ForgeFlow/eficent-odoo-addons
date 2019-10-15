@@ -17,7 +17,6 @@
     ],
     'data': [
         'views/stock_view.xml',
-        'views/analytic_view.xml',
     ],
     'demo': [
         'demo/stock_demo.xml'

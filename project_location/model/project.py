@@ -27,9 +27,6 @@ class ProjectProject(models.Model):
         else:
             return super(ProjectProject, self)._default_dest_address()
 
-    picking_type_id = fields.Many2one(
-        related='analytic_account_id.picking_type_id'
-    )
     location_id = fields.Many2one(
         related='analytic_account_id.location_id'
     )
