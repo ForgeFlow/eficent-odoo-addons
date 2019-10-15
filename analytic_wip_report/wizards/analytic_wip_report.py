@@ -18,8 +18,8 @@ class AnalyticWipReport(models.TransientModel):
         result = mod_obj.get_object_reference(
             "analytic_wip_report", "action_account_analytic_account_wip_form"
         )
-        id = result and result[1] or False
-        result = act_obj.search([("id", "=", id)])
+        res_id = result and result[1] or False
+        result = act_obj.search([("id", "=", res_id)])
         result = result.read()[0]
         data = self.read()[0]
         if data["from_date"]:

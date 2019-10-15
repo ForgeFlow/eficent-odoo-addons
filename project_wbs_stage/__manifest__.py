@@ -2,7 +2,6 @@
 # Copyright 2017-19 Luxim d.o.o.
 # Copyright 2017-19 Matmoz d.o.o.
 # Copyright 2017-19 Deneroteam.
-
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
 
 {

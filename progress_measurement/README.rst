@@ -1,9 +1,11 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-    :alt: License AGPL-3
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
 
 ====================
 Progress measurement
 ====================
+
 The progress of a project indicates the degree of completion, with respect
 to the estimated scope of work. Generally the progress cannot be
 automatically measured and it is based on the expert judgement or the
