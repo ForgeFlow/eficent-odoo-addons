@@ -11,7 +11,7 @@
     "license": "AGPL-3",
     "website": "http://www.eficent.com",
     "category": "Generic",
-    "depends": ["analytic"],
+    "depends": ["analytic", "analytic_plan"],
     "data": [
         "security/analytic_security.xml",
         "views/analytic_account_view.xml",
