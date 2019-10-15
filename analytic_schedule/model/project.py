@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -27,24 +26,32 @@ class ProjectProject(models.Model):
             if end_dates:
                 max_end_date = max(end_dates)
             if min_start_date:
-                pp.write({'date_start': min_start_date})
+                pp.write({"date_start": min_start_date})
             if max_end_date:
-                pp.write({'date': max_end_date})
+                pp.write({"date": max_end_date})
         return True
 
     @api.multi
     def propagate_dates(self, vals):
-        for pp in self:
-            if 'date_start' in vals and 'date' in vals:
-                pp.analytic_account_id.write({'date_start': vals['date_start'],
-                                              'date': vals['date']})
-            elif 'date' in vals:
-                for pp in self:
-                    pp.analytic_account_id.write({'date': vals['date']})
-            elif 'date_start' in vals:
-                for pp in self:
+        for rec in self:
+            if "date_start" in vals and "date" in vals:
+                for pp in rec:
                     pp.analytic_account_id.write(
-                        {'date_start': vals['date_start']})
+                        {
+                            "date_start": vals["date_start"],
+                            "date": vals["date"],
+                        }
+                    )
+            elif "date" in vals:
+                for pp in rec:
+                    pp.analytic_account_id.write(
+                        {"date": vals["date"]}
+                    )
+            elif "date_start" in vals:
+                for pp in rec:
+                    pp.analytic_account_id.write(
+                        {"date_start": vals["date_start"]}
+                    )
 
     @api.model
     def create(self, values):
@@ -56,10 +63,10 @@ class ProjectProject(models.Model):
     @api.multi
     def write(self, vals):
         res = super(ProjectProject, self).write(vals)
-        if 'date_start' in vals or 'date' in vals:
+        if "date_start" in vals or "date" in vals:
             for pp in self:
-                if not pp.parent_id:
-                    return res
                 pp.parent_id.project_ids._compute_scheduled_dates()
                 pp.propagate_dates(vals)
+                if not pp.parent_id:
+                    return res
         return res
