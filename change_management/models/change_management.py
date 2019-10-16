@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Matmoz d.o.o. (<http://www.matmoz.si>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -35,46 +34,30 @@ class CMProximity(models.Model):
 class CMChange(models.Model):
     _name = 'change.management.change'
     _description = 'Change'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread']
     _order = 'id desc'
 
     # ##### Track state changes #####  #
-    _track = {
-        'state': {
-            'change_management.mt_change_draft': (
-                lambda self, cr, uid, obj,
-                ctx=None: obj['state'] in ['draft']
-            ),
-            'change_management.mt_change_active': (
-                lambda self, cr, uid, obj,
-                ctx=None: obj['state'] in ['active']
-            ),
-            'change_management.mt_change_accepted': (
-                lambda self, cr, uid, obj,
-                ctx=None: obj['state'] in ['accepted']
-            ),
-            'change_management.mt_change_in_progress': (
-                lambda self, cr, uid, obj,
-                ctx=None: obj['state'] in ['in_progress']
-            ),
-            'change_management.mt_change_done': (
-                lambda self, cr, uid, obj,
-                ctx=None: obj['state'] in ['done']
-            ),
-            'change_management.mt_change_rejected': (
-                lambda self, cr, uid, obj,
-                ctx=None: obj['state'] in ['rejected']
-            ),
-            'change_management.mt_change_withdrawn': (
-                lambda self, cr, uid, obj,
-                ctx=None: obj['state'] in ['withdrawn']
-            ),
-            'change_management.mt_change_deferred': (
-                lambda self, cr, uid, obj,
-                ctx=None: obj['state'] in ['deferred']
-            )
-        }
-    }
+    @api.multi
+    def _track_subtype(self, init_values):
+        self.ensure_one()
+        if self.state == 'draft':
+            return 'change_management.mt_change_draft'
+        elif self.state == 'active':
+            return 'change_management.mt_change_active'
+        elif self.state == 'accepted':
+            return 'change_management.mt_change_accepted'
+        elif self.state == 'in_progress':
+            return 'change_management.mt_change_in_progress'
+        elif self.state == 'done':
+            return 'change_management.mt_change_done'
+        elif self.state == 'rejected':
+            return 'change_management.mt_change_rejected'
+        elif self.state == 'withdrawn':
+            return 'change_management.mt_change_withdrawn'
+        elif self.state == 'deferred':
+            return 'change_management.mt_change_deferred'
+        return super(CMChange, self)._track_subtype(init_values)
 
     # ##### define CR code #####  #
 
@@ -82,7 +65,8 @@ class CMChange(models.Model):
     def create(self, vals):
         if vals.get('name', '/'):
             vals['name'] =\
-                self.env['ir.sequence'].get('change.management.change')
+                self.env['ir.sequence'].next_by_code(
+                    'change.management.change')
         return super(CMChange, self).create(vals)
 
     @api.multi
@@ -91,7 +75,7 @@ class CMChange(models.Model):
         if default is None:
             default = {}
         default['name'] =\
-            self.env['ir.sequence'].get('change.management.change')
+            self.env['ir.sequence'].next_by_code('change.management.change')
         return super(CMChange, self).copy(default)
 
     # ##### FIELDS #####  #
@@ -281,13 +265,14 @@ class CMChange(models.Model):
     def set_state_draft(self):
         self.write({'state': 'draft'})
         self.confirmed_id = self.approved_id = []
-        self.date_confirmed = self.approval_date = ''
+        self.date_confirmed = ''
+        self.date_approved = ''
 
     @api.multi
     def set_state_active(self):
         self.write({'state': 'active'})
         self.confirmed_id = self.env.user
-        self.date_confirmed = fields.Datetime.now()
+        self.date_confirmed = fields.Date.to_date(fields.Datetime.now())
 
     @api.multi
     def set_state_accepted(self):
@@ -326,9 +311,9 @@ class CMChange(models.Model):
             vals[x] is False
         ]
         if len(user_ids) > 0:
-            self.message_subscribe_users(
-                user_ids=user_ids
-            )
+            partner_ids = self.env['res.users'].browse(user_ids).mapped(
+                'partner_id').ids
+            self.message_subscribe(partner_ids=partner_ids)
 
         changes = self.read(
             ['message_follower_ids', 'change_response_ids']
@@ -459,10 +444,9 @@ class CMChange(models.Model):
         return mail_message
 
     @api.multi
-    def message_get_email_values(self, notif_mail=None):
-        self.ensure_one()
-        res = super(CMChange, self).message_get_email_values(
-            notif_mail=notif_mail)
+    def _notify_specific_email_values(self, message):
+        res = super(CMChange, self)._notify_specific_email_values(
+            message=message)
         headers = {}
         if res.get('headers'):
             try:

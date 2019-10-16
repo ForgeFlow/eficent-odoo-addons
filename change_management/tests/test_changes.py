@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Matmoz d.o.o. (<http://www.matmoz.si>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -7,10 +6,10 @@ from odoo.tests import common
 
 class TestChanges(common.SavepointCase):
 
-    def setUp(cls):
-
+    @classmethod
+    def setUpClass(cls):
         """***setup change tests***"""
-        super(TestChanges, cls).setUp()
+        super(TestChanges, cls).setUpClass()
         cls.change_model = cls.env['change.management.change']
         cls.project_model = cls.env['project.project']
         cls.task_model = cls.env['project.task']
@@ -33,35 +32,35 @@ class TestChanges(common.SavepointCase):
             'change_owner_id': cls.change_manager_id.id
         })
 
-    def test_change_owner_and_creator_added_to_followers_for_change(cls):
-        change = cls.test_change_id
+    def test_change_owner_and_creator_added_to_followers_for_change(self):
+        change = self.test_change_id
         followers = [follower.id for follower in change.message_follower_ids]
-        cls.assertTrue(
+        self.assertTrue(
             len(followers) == 1,
             msg='Expecting 3 followers - got:%s' % len(followers)
         )
 
-    def test_saving_a_change_in_users_as_followers_works(cls):
-        cls.test_change_id.write(
-            {'author_id': cls.change_second_author_id.id}
+    def test_saving_a_change_in_users_as_followers_works(self):
+        self.test_change_id.write(
+            {'author_id': self.change_second_author_id.id}
         )
-        change = cls.test_change_id
+        change = self.test_change_id
         followers = [follower.id for follower in change.message_follower_ids]
-        cls.assertTrue(
+        self.assertTrue(
             len(followers) == 2,
             msg='Expecting 4 followers - got:%s' % len(followers)
         )
 
-    def test_adding_a_task_on_a_change(cls):
-        change = cls.test_change_id.read(['message_follower_ids'])
-        followers = cls.env['mail.followers'].browse(
+    def test_adding_a_task_on_a_change(self):
+        change = self.test_change_id.read(['message_follower_ids'])
+        followers = self.env['mail.followers'].browse(
             change[0]['message_follower_ids'])
-        cls.test_change_id.write({
+        self.test_change_id.write({
             'change_response_ids': [(0, 0,
                                      {'remaining_hours': 0,
                                       'stage_id': 1,
                                       'planned_hours': 0,
-                                      'user_id': cls.uid,
+                                      'user_id': self.env.uid,
                                       'name': 'My New Task',
                                       'date_deadline': False,
                                       'sequence': 10,
@@ -75,8 +74,8 @@ class TestChanges(common.SavepointCase):
                                       'message_ids': False,
                                       'description': 'A new Task'})]
         })
-        cls.assertNotEqual(
+        self.assertNotEqual(
             followers,
-            cls.test_change_id.change_response_ids[0].message_follower_ids,
+            self.test_change_id.change_response_ids[0].message_follower_ids,
             msg='Followers are not set on the associated action'
         )

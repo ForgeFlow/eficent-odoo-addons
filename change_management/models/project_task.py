@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Matmoz d.o.o. (<http://www.matmoz.si>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -34,9 +33,3 @@ class ProjectProject(models.Model):
     def _compute_change_count(self):
         for record in self:
             record.change_count = len(record.change_ids)
-
-    @api.model
-    def _get_alias_models(self):
-        res = super(ProjectProject, self)._get_alias_models()
-        res.append(("change.management.change", "Change Requests"))
-        return res

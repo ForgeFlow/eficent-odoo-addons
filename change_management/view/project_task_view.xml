@@ -43,6 +43,7 @@
         <field name="arch" type="xml">
             <xpath expr="//filter[@name='unassigned']" position="after">
                 <filter string="Change Action" context="{'change_id_visible': False}"
+                        name="change_action"
                         domain="[('change_id','&lt;&gt;',False)]"
                         help="Show only tasks (actions) on change"
                         icon="terp-emblem-important"/>
