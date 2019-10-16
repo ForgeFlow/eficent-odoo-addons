@@ -12,7 +12,7 @@ class AnalyticResourcePlanLine(models.Model):
     _inherit = "analytic.resource.plan.line"
 
     @api.multi
-    @api.depends('picking_ids', 'picking_ids.state')
+    @api.depends("picking_ids", "picking_ids.state")
     def _compute_qty_fetched(self):
         qty = 0.0
         for line in self:
@@ -24,7 +24,7 @@ class AnalyticResourcePlanLine(models.Model):
             line.qty_fetched = qty
 
     @api.multi
-    @api.depends('picking_ids', 'picking_ids.state')
+    @api.depends("picking_ids", "picking_ids.state")
     def _compute_qty_left(self):
         qty = 0.0
         for line in self:
@@ -67,8 +67,12 @@ class AnalyticResourcePlanLine(models.Model):
                     "=",
                     self.account_id.company_id.id,
                 ),
-            ]
+            ], limit=1
         )
+        if not picking_type_id:
+            raise ValidationError(
+                _("No valid picking type for the projects location")
+            )
         return {
             "origin": self.name,
             "move_type": "one",  # direct

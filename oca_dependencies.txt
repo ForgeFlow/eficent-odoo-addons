@@ -2,3 +2,4 @@ account-analytic https://github.com/OCA/account-analytic 12.0
 project https://github.com/eficent/project 12.0-mig-project_wbs
 server-tools https://github.com/OCA/server-tools 12.0
 purchase-workflow https://github.com/OCA/purchase-workflow 12.0
+operating_unit https://github.com/OCA/operating-unit 12.0
