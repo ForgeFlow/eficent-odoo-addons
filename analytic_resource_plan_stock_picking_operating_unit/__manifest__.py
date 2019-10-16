@@ -14,4 +14,5 @@
         "stock_operating_unit",
     ],
     "installable": True,
+    "auto_install": True,
 }

@@ -108,7 +108,8 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
                 [
                     ("code", "=", "incoming"),
                     ("warehouse_id.company_id", "=", company_id),
-                ]
+                ],
+                limit=1,
             )
             if not len(picking_type_id):
                 raise ValidationError(
