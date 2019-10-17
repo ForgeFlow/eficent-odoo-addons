@@ -32,7 +32,8 @@ class ProjectProject(models.Model):
         related='analytic_account_id.picking_type_id'
     )
     location_id = fields.Many2one(
-        related='analytic_account_id.location_id'
+        related='analytic_account_id.location_id',
+        readonly=True
     )
     dest_address_id = fields.Many2one(
         related='analytic_account_id.dest_address_id'
