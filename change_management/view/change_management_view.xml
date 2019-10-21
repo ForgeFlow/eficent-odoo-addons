@@ -127,17 +127,17 @@
                        domain="[('change_response_ids','=',False)]"
                        help="Changes without actions"
                        name="no_actions" icon="fa-check-circle"/>
-               <field name="change_owner_id" index="1" string="Change Owner"
+               <field name="change_owner_id" string="Change Owner"
                       filter_domain="[('change_owner_id','=',False)]"/>
                <separator orientation="vertical"/>
 
-               <field name="name" index="1"/>
-               <field name="project_id" index="1"
+               <field name="name"/>
+               <field name="project_id"
                       domain="['|',('user_id','=',uid),('members','in',[uid])]"/>
-               <field name="change_category_id" index="1"/>
+               <field name="change_category_id"/>
                <separator orientation="vertical"/>
 
-               <field name="message_unread" index="1"
+               <field name="message_unread"
                       filter_domain="[('message_unread', '=', True)]"/>
 
                <newline/>
