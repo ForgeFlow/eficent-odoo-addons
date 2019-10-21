@@ -83,3 +83,21 @@ class AccountAnalyticAccount(models.Model):
         'Active planning Version',
         default=_default_version
     )
+
+    @api.multi
+    def open_plan_cost_tree_view(self):
+        self.ensure_one()
+        res = self.env.get('ir.actions.act_window').for_xml_id(
+            'analytic_plan',
+            'action_account_analytic_plan_journal_open_form')
+        plan_obj = self.env['account.analytic.line.plan']
+
+        accs = self.browse(self.get_child_accounts())
+        line_ids = plan_obj.search(
+            [('account_id', 'in', accs.ids),
+                ('version_id', '=', self.active_analytic_planning_version.id)]
+        )
+        res['domain'] = "[('id', 'in', ["+','.join(
+            map(str, line_ids.ids))+"])]"
+        res['nodestroy'] = False
+        return res
