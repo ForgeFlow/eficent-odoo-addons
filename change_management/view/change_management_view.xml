@@ -127,27 +127,18 @@
                        domain="[('change_response_ids','=',False)]"
                        help="Changes without actions"
                        name="no_actions" icon="fa-check-circle"/>
-               <field name="change_owner_id" index="1" string="Change Owner">
-                   <filter domain="[('change_owner_id','=',False)]"
-                           name="filter_change_owner_id"
-                           help="Changes without ownership" icon="fa-user-minus"/>
-               </field>
+               <field name="change_owner_id" index="1" string="Change Owner"
+                      filter_domain="[('change_owner_id','=',False)]"/>
                <separator orientation="vertical"/>
 
                <field name="name" index="1"/>
                <field name="project_id" index="1"
-                      domain="['|',('user_id','=',uid),('members','in',[uid])]">
-                   <filter domain="['|',('project_id.user_id','=',uid),('project_id.members','in',[uid])]"
-                           name="filter_project_id"
-                           help="My Projects" icon="fa-user"/>
-               </field>
+                      domain="['|',('user_id','=',uid),('members','in',[uid])]"/>
                <field name="change_category_id" index="1"/>
                <separator orientation="vertical"/>
 
-               <field name="message_unread" index="1">
-                   <filter domain="[('message_unread', '=', True)]" help="Unread messages"
-                           name="filter_message_unread"/>
-               </field>
+               <field name="message_unread" index="1"
+                      filter_domain="[('message_unread', '=', True)]"/>
 
                <newline/>
                <group expand="0" string="Group By..." colspan="4" col="20">
