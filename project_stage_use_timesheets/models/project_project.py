@@ -7,14 +7,21 @@ from odoo import api, models
 class ProjectProject(models.Model):
     _inherit = "project.project"
 
-    @api.depends("stage_id", "stage_id.allow_timesheets")
     @api.multi
-    def check_use_timesheets(self):
-        for pp in self:
-            if (
-                pp.stage_id.allow_timesheets
-                and pp.analytic_account_id.account_class == "work_package"
-            ):
-                self.allow_timesheets = True
-            elif not pp.stage_id.allow_timesheets:
-                self.allow_timesheets = False
+    def write(self, values):
+        if (
+            values.get("stage_id")
+            and self.env["base.kanban.stage"]
+            .browse(values.get("stage_id"))
+            .allow_timesheets
+            and self.analytic_account_id.account_class == "work_package"
+        ):
+            values["allow_timesheets"] = True
+        if (
+            values.get("stage_id")
+            and not self.env["base.kanban.stage"]
+            .browse(values.get("stage_id"))
+            .allow_timesheets
+        ):
+            values["allow_timesheets"] = False
+        return super(ProjectProject, self).write(values)
