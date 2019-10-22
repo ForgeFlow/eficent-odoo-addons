@@ -6,8 +6,10 @@ from odoo import fields
 
 
 class TestAnalyticCostRevenue(common.SavepointCase):
-    def setUp(cls):
-        super(TestAnalyticCostRevenue, cls).setUp()
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestAnalyticCostRevenue, cls).setUpClass()
         cls.project_project = cls.env["project.project"]
         cls.project = cls.project_project.create(
             {"name": "Test project", "code": "ACV0001"}
@@ -99,8 +101,8 @@ class TestAnalyticCostRevenue(common.SavepointCase):
             }
         )
 
-    def test_cost_revenue(cls):
-        cls.assertEqual(cls.account_id.material_cost_plan, -100.0)
-        cls.assertEqual(cls.account_id.labor_cost_plan, -0.0)
-        cls.assertEqual(cls.account_id.revenue_plan, 200.0)
-        cls.assertEqual(cls.account_id.gross_profit_plan, 100.0)
+    def test_cost_revenue(self):
+        self.assertEqual(self.account_id.material_cost_plan, -100.0)
+        self.assertEqual(self.account_id.labor_cost_plan, -0.0)
+        self.assertEqual(self.account_id.revenue_plan, 200.0)
+        self.assertEqual(self.account_id.gross_profit_plan, 100.0)

@@ -6,37 +6,38 @@ from odoo.tests import common
 
 class TestPurchaseRequestProcurement(common.SavepointCase):
 
-    def setUp(self):
-        super(TestPurchaseRequestProcurement, self).setUp()
-        self.pr_model = self.env['purchase.request']
-        self.prl_model = self.env['purchase.request.line']
-        self.product_uom_model = self.env['uom.uom']
-        self.supplierinfo_model = self.env['product.supplierinfo']
+    @classmethod
+    def setUpClass(cls):
+        super(TestPurchaseRequestProcurement, cls).setUpClass()
+        cls.pr_model = cls.env['purchase.request']
+        cls.prl_model = cls.env['purchase.request.line']
+        cls.product_uom_model = cls.env['uom.uom']
+        cls.supplierinfo_model = cls.env['product.supplierinfo']
         partner_values = {'name': 'Tupac'}
-        self.partner = self.env['res.partner'].create(partner_values)
+        cls.partner = cls.env['res.partner'].create(partner_values)
         partner_values = {'name': 'Todo a 100'}
-        self.partner_buy = self.env['res.partner'].create(partner_values)
-        self.uom_unit_categ = self.env.ref('uom.product_uom_categ_unit')
+        cls.partner_buy = cls.env['res.partner'].create(partner_values)
+        cls.uom_unit_categ = cls.env.ref('uom.product_uom_categ_unit')
         product_values = {'name': 'Odoo',
                           'list_price': 5,
                           'type': 'product'}
-        self.product = self.env['product.product'].create(product_values)
-        self.product_uom_unit = self.env.ref('uom.product_uom_unit')
-        self.product.route_ids = (
-            self.env.ref('stock.route_warehouse0_mto') |
-            self.env.ref('purchase_stock.route_warehouse0_buy')
+        cls.product = cls.env['product.product'].create(product_values)
+        cls.product_uom_unit = cls.env.ref('uom.product_uom_unit')
+        cls.product.route_ids = (
+            cls.env.ref('stock.route_warehouse0_mto') |
+            cls.env.ref('purchase_stock.route_warehouse0_buy')
         )
-        for rule in self.env.ref(
+        for rule in cls.env.ref(
                 'purchase_stock.route_warehouse0_buy').rule_ids:
             rule.propagate = True
             rule.group_propagation_option = 'propagate'
         supplierinfo_vals = {
-            'name': self.partner_buy.id,
-            'product_tmpl_id': self.product.product_tmpl_id.id,
+            'name': cls.partner_buy.id,
+            'product_tmpl_id': cls.product.product_tmpl_id.id,
             'price': 121.0
         }
-        self.supplierinfo_model.create(supplierinfo_vals)
-        self.product.product_tmpl_id.purchase_request = True
+        cls.supplierinfo_model.create(supplierinfo_vals)
+        cls.product.product_tmpl_id.purchase_request = True
 
     def create_sale_order(self):
         sale_obj = self.env['sale.order']

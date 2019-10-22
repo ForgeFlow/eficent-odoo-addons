@@ -8,8 +8,10 @@ from odoo.tests import common
 
 
 class TestAnalyticSchedule(common.SavepointCase):
-    def setUp(cls):
-        super(TestAnalyticSchedule, cls).setUp()
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestAnalyticSchedule, cls).setUpClass()
         cls.project_project = cls.env["project.project"]
         cls.project = cls.project_project.create(
             {"name": "Test project", "code": "ACV0001"}
@@ -49,5 +51,6 @@ class TestAnalyticSchedule(common.SavepointCase):
             }
         )
 
-    def test_contarct_value(cls):
-        cls.assertEquals(cls.account_id.contract_value, 100000.0, "Bad value")
+    def test_contarct_value(self):
+        self.assertEquals(self.account_id.contract_value, 100000.0,
+                          "Bad value")

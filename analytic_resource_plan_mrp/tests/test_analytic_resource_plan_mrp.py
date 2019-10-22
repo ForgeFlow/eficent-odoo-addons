@@ -9,8 +9,10 @@ from odoo.tools.safe_eval import safe_eval
 class TestAnalyticResourcePlanMrp(
     test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock
 ):
-    def setUp(cls):
-        super(TestAnalyticResourcePlanMrp, cls).setUp()
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestAnalyticResourcePlanMrp, cls).setUpClass()
         cls.analytic_account_obj = cls.env["account.analytic.account"]
         cls.analytic_resource_plan_obj = cls.env["analytic.resource.plan.line"]
         cls.mrp_bom_obj = cls.env["mrp.bom"]
@@ -39,10 +41,10 @@ class TestAnalyticResourcePlanMrp(
 
         cls.bom = cls._create_bom(cls.product_id)
         cls.resource_plan_line_wbom_id = cls._create_analytic_resource_plan(
-            cls.product_id
-        )
+            cls.product_id)
         cls.account_id.bom_id = cls.bom.id
 
+    @classmethod
     def _create_bom(cls, product):
         test_bom = cls.mrp_bom_obj.create(
             {
@@ -62,6 +64,7 @@ class TestAnalyticResourcePlanMrp(
         )
         return test_bom
 
+    @classmethod
     def _create_analytic_account(
         cls, name, partner, analytic_plan_version, location
     ):
@@ -74,6 +77,7 @@ class TestAnalyticResourcePlanMrp(
             }
         )
 
+    @classmethod
     def _create_analytic_resource_plan(cls, product):
         return cls.analytic_resource_plan_obj.create(
             {
@@ -87,40 +91,40 @@ class TestAnalyticResourcePlanMrp(
             }
         )
 
-    def test_resource_plan_line(cls):
-        cls.resource_plan_line_wbom_id.action_button_confirm()
-        child = cls.resource_plan_line_wbom_id.child_ids
-        plan_lines = cls.env["account.analytic.line.plan"].search(
+    def test_resource_plan_line(self):
+        self.resource_plan_line_wbom_id.action_button_confirm()
+        child = self.resource_plan_line_wbom_id.child_ids
+        plan_lines = self.env["account.analytic.line.plan"].search(
             [("resource_plan_id", "=", child.id)]
         )
-        cls.assertEqual(len(plan_lines), 1, "bad plan lines")
-        cls.assertEqual(child.state, "confirm", "child not confirm")
-        cls.assertEqual(child.unit_amount, 4.0, "wrong qty in child")
+        self.assertEqual(len(plan_lines), 1, "bad plan lines")
+        self.assertEqual(child.state, "confirm", "child not confirm")
+        self.assertEqual(child.unit_amount, 4.0, "wrong qty in child")
         # test produce
         wiz_id = (
-            cls.env["analytic.resource.plan.line.produce"]
+            self.env["analytic.resource.plan.line.produce"]
             .with_context(
                 active_model="analytic.resource.plan.line",
-                active_ids=cls.resource_plan_line_wbom_id.id,
+                active_ids=self.resource_plan_line_wbom_id.id,
             )
             .create({})
         )
         move_action = wiz_id.do_produce()
         move_id = safe_eval(move_action["domain"])[0][2]
-        move = cls.env["stock.move"].browse(move_id)[0]
-        cls.assertEqual(
+        move = self.env["stock.move"].browse(move_id)[0]
+        self.assertEqual(
             move.product_qty, child.unit_amount, "Wrong consumed qty"
         )
         # test consume
         wiz_id = (
-            cls.env["analytic.resource.plan.line.consume"]
+            self.env["analytic.resource.plan.line.consume"]
             .with_context(
                 active_model="analytic.resource.plan.line",
-                active_ids=cls.resource_plan_line_wbom_id.id,
+                active_ids=self.resource_plan_line_wbom_id.id,
             )
             .create({})
         )
         wiz_id.do_consume()
-        cls.assertEqual(
+        self.assertEqual(
             move.product_qty, child.unit_amount, "Wrong consumed qty"
         )

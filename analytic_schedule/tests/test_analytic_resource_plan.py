@@ -11,8 +11,10 @@ from dateutil.relativedelta import relativedelta
 
 
 class TestAnalyticSchedule(common.SavepointCase):
-    def setUp(cls):
-        super(TestAnalyticSchedule, cls).setUp()
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestAnalyticSchedule, cls).setUpClass()
         cls.project_project = cls.env["project.project"]
 
         cls.project = cls.project_project.create(
@@ -30,25 +32,25 @@ class TestAnalyticSchedule(common.SavepointCase):
         cls.grand_son_account = cls.project_grand_son.analytic_account_id
         cls.grand_son_account.parent_id = cls.son_account
 
-    def test_schedule(cls):
+    def test_schedule(self):
         date = datetime.strftime(datetime.today(), DEFAULT_SERVER_DATE_FORMAT)
-        cls.project_grand_son.date_start = date
-        cls.project_grand_son.date = date
+        self.project_grand_son.date_start = date
+        self.project_grand_son.date = date
 
-        cls.assertEquals(
-            cls.parent_account.date_start, cls.grand_son_account.date_start
+        self.assertEquals(
+            self.parent_account.date_start, self.grand_son_account.date_start
         )
-        cls.project_son.date = datetime.strftime(
+        self.project_son.date = datetime.strftime(
             datetime.today() + relativedelta(months=9),
             DEFAULT_SERVER_DATE_FORMAT,
         )
-        cls.assertNotEqual(
-            cls.grand_son_account.date,
-            cls.son_account.date,
+        self.assertNotEqual(
+            self.grand_son_account.date,
+            self.son_account.date,
             "Should Not propagate downwards",
         )
-        cls.assertEquals(
-            cls.son_account.date,
-            cls.parent_account.date,
+        self.assertEquals(
+            self.son_account.date,
+            self.parent_account.date,
             "Should propagate upwards",
         )

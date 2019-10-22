@@ -10,8 +10,10 @@ from odoo.addons.analytic_resource_plan_stock.tests import (
 class TestAnalyticResourcePlanStockPicking(
     test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock
 ):
-    def setUp(cls):
-        super(TestAnalyticResourcePlanStockPicking, cls).setUp()
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestAnalyticResourcePlanStockPicking, cls).setUpClass()
         cls.analytic_account_obj = cls.env["account.analytic.account"]
         cls.resource_plan_line_obj = cls.env["analytic.resource.plan.line"]
         cls.product_id = cls.env.ref("product.product_product_27")
@@ -42,26 +44,26 @@ class TestAnalyticResourcePlanStockPicking(
             }
         )
 
-    def test_analytic_resource_plan_stock_picking(cls):
+    def test_analytic_resource_plan_stock_picking(self):
         # error if no location
-        with cls.assertRaises(ValidationError):
-            cls.account_id.location_id = False
-            cls.resource_plan_line.action_button_confirm()
-        cls.account_id.location_id = cls.env.ref(
+        with self.assertRaises(ValidationError):
+            self.account_id.location_id = False
+            self.resource_plan_line.action_button_confirm()
+        self.account_id.location_id = self.env.ref(
             "stock.stock_location_stock"
         )
-        cls.unit_amount = 2.0
-        upd_qty = cls.env["stock.change.product.qty"].create(
+        self.unit_amount = 2.0
+        upd_qty = self.env["stock.change.product.qty"].create(
             {
-                "product_id": cls.resource_plan_line.product_id.id,
+                "product_id": self.resource_plan_line.product_id.id,
                 "product_tmpl_id":
-                    cls.resource_plan_line.product_id.product_tmpl_id.id,
+                    self.resource_plan_line.product_id.product_tmpl_id.id,
                 "new_quantity": 1.0,
-                "location_id": cls.env.ref("stock.stock_location_stock").id,
+                "location_id": self.env.ref("stock.stock_location_stock").id,
             }
         )
         upd_qty.change_product_qty()
-        cls.resource_plan_line.action_button_confirm()
-        cls.assertEqual(
-            cls.resource_plan_line.qty_fetched, 1.0, "bad qty fetched"
+        self.resource_plan_line.action_button_confirm()
+        self.assertEqual(
+            self.resource_plan_line.qty_fetched, 1.0, "bad qty fetched"
         )
