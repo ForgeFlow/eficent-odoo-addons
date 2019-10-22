@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for change_management.change -->
+
+        <record id="seq_change_management_change" model="ir.sequence">
+            <field name="name">Request Id</field>
+            <field name="code">change.management.change</field>
+            <field name="prefix">CR</field>
+            <field name="padding">4</field>
+        </record>
+
+    </data>
+</odoo>

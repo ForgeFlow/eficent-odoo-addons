@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="change_management_project_task_form_view">
+        <field name="name">change.management.inherit.task.view1</field>
+        <field name="model">project.task</field>
+        <field name="type">form</field>
+        <field name="priority">15</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <separator/>
+                <separator/>
+                <label for="change_id"/>
+                    <h4>
+                        <field name="change_id"/>
+                    </h4>
+            </field>
+        </field>
+    </record>
+
+    <record id="change_management_project_task_tree_view" model="ir.ui.view">
+        <field name="name">change.management.inherit.task.tree1</field>
+        <field name="model">project.task</field>
+        <field name="priority">20</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="name" position="after">
+                    <field name="change_id"/>
+                </field>
+                <field name="user_id" position="replace">
+                    <field name="user_id"/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record id="change_management_project_task_search_view" model="ir.ui.view">
+        <field name="name">change.management.inherit.task.search.view</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='unassigned']" position="after">
+                <filter string="Change Action" context="{'change_id_visible': False}"
+                        name="change_action"
+                        domain="[('change_id','&lt;&gt;',False)]"
+                        help="Show only tasks (actions) on change"
+                        icon="terp-emblem-important"/>
+                <filter string="Active Tasks"
+                        help="Active tasks"
+                        name="active_tasks" icon="gtk-execute"/>
+            </xpath>
+           <filter name="project" position="after">
+                <filter string="Change"
+                        name="group_change_id"
+                        icon="terp-rating-rated" domain="[]"
+                        context="{'group_by' : 'change_id'}"/>
+           </filter>
+        </field>
+    </record>
+
+</odoo>

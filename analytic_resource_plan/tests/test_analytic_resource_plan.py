@@ -10,8 +10,9 @@ from odoo.tests import common
 
 class TestAnalyticResourcePlan(common.SavepointCase):
 
-    def setUp(cls):
-        super(TestAnalyticResourcePlan, cls).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestAnalyticResourcePlan, cls).setUpClass()
         cls.project = cls.env['project.project'].create(
             {'name': 'Test project',
              'code': 'X0001'})
@@ -60,14 +61,14 @@ class TestAnalyticResourcePlan(common.SavepointCase):
         })
         return account
 
-    def test_plan(cls):
-        cls.resource_plan_line.action_button_confirm()
-        cls.assertEqual(cls.resource_plan_line.state, 'confirm')
-        plan_line = cls.env['account.analytic.line.plan'].search(
-            [('resource_plan_id', '=', cls.resource_plan_line.id)])
-        cls.assertEqual(len(plan_line), 1, 'Wrong plan lines number')
-        cls.resource_plan_line.action_button_draft()
-        cls.assertEqual(cls.resource_plan_line.state, 'draft')
-        plan_line = cls.env['account.analytic.line.plan'].search(
-            [('resource_plan_id', '=', cls.resource_plan_line.id)])
-        cls.assertEqual(len(plan_line), 0, 'Plan line not deleted')
+    def test_plan(self):
+        self.resource_plan_line.action_button_confirm()
+        self.assertEqual(self.resource_plan_line.state, 'confirm')
+        plan_line = self.env['account.analytic.line.plan'].search(
+            [('resource_plan_id', '=', self.resource_plan_line.id)])
+        self.assertEqual(len(plan_line), 1, 'Wrong plan lines number')
+        self.resource_plan_line.action_button_draft()
+        self.assertEqual(self.resource_plan_line.state, 'draft')
+        plan_line = self.env['account.analytic.line.plan'].search(
+            [('resource_plan_id', '=', self.resource_plan_line.id)])
+        self.assertEqual(len(plan_line), 0, 'Plan line not deleted')

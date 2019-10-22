@@ -9,9 +9,12 @@ from odoo.addons.analytic_resource_plan_stock.tests import (
 class TestAnalyticResourcePlanStockPickingPurchaseRequest(
     test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock
 ):
-    def setUp(cls):
+
+    @classmethod
+    def setUpClass(cls):
         super(
-            TestAnalyticResourcePlanStockPickingPurchaseRequest, cls).setUp()
+            TestAnalyticResourcePlanStockPickingPurchaseRequest, cls
+        ).setUpClass()
         cls.analytic_account_obj = cls.env["account.analytic.account"]
         cls.resource_plan_line_obj = cls.env["analytic.resource.plan.line"]
         cls.product_id = cls.env.ref("product.product_product_27")
@@ -42,30 +45,30 @@ class TestAnalyticResourcePlanStockPickingPurchaseRequest(
             }
         )
 
-    def test_analytic_resource_plan_stock_picking(cls):
-        cls.resource_plan_line.unit_amount = 2.0
-        upd_qty = cls.env["stock.change.product.qty"].create(
+    def test_analytic_resource_plan_stock_picking(self):
+        self.resource_plan_line.unit_amount = 2.0
+        upd_qty = self.env["stock.change.product.qty"].create(
             {
-                "product_id": cls.resource_plan_line.product_id.id,
+                "product_id": self.resource_plan_line.product_id.id,
                 "product_tmpl_id":
-                    cls.resource_plan_line.product_id.product_tmpl_id.id,
+                    self.resource_plan_line.product_id.product_tmpl_id.id,
                 "new_quantity": 1.0,
-                "location_id": cls.env.ref("stock.stock_location_stock").id,
+                "location_id": self.env.ref("stock.stock_location_stock").id,
             }
         )
         upd_qty.change_product_qty()
-        cls.resource_plan_line.action_button_confirm()
-        purchase_request_line = cls.resource_plan_line.purchase_request_lines[
+        self.resource_plan_line.action_button_confirm()
+        purchase_request_line = self.resource_plan_line.purchase_request_lines[
             0
         ]
         purchase_request = purchase_request_line.request_id
         purchase_request.button_to_approve()
         purchase_request.button_approved()
-        cls.assertEqual(
-            cls.resource_plan_line.request_state,
+        self.assertEqual(
+            self.resource_plan_line.request_state,
             "approved",
             "should approved request",
         )
-        cls.assertEqual(
-            cls.resource_plan_line.requested_qty, 1.0, "bad qty requested"
+        self.assertEqual(
+            self.resource_plan_line.requested_qty, 1.0, "bad qty requested"
         )

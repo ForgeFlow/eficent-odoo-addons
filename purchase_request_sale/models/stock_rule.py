@@ -20,7 +20,6 @@ class StockRule(models.Model):
                     and sol.product_uom_qty == product_qty:
                 res['sale_order_line_id'] = sol.id
                 res['name'] = group.name
-                res['sequence'] = sol.sequence
                 # The user who requested the PR will be the same as the SO,
                 # otherwise the user will be Odoobot because of the pull rule
                 res['requested_by'] = sol.order_id.user_id.id
