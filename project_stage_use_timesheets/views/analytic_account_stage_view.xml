@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
-        <record id="analytic_account_stage_edit" model="ir.ui.view">
-            <field name="name">analytic.account.stage.form</field>
-            <field name="model">analytic.account.stage</field>
-            <field name="inherit_id"
-                   ref="project_wbs_stage.analytic_account_stage_edit"/>
-            <field name="arch" type="xml">
-                <field name="case_default" position="after">
-                    <field name="allow_timesheets"/>
-                </field>
+    <record id="base_kanban_stage_view_form" model="ir.ui.view">
+        <field name="name">Kanban Stage - Form View</field>
+        <field name="model">base.kanban.stage</field>
+        <field name="inherit_id"
+               ref="base_kanban_stage.base_kanban_stage_view_form"/>
+        <field name="arch" type="xml">
+            <field name="description" position="after">
+                <field name="allow_timesheets"/>
             </field>
-        </record>
+        </field>
+    </record>
 
-    </data>
-</openerp>
+</odoo>
