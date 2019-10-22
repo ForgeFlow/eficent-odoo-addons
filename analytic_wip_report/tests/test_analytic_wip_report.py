@@ -11,7 +11,7 @@ class TestAnalyticWipReport(common.TransactionCase):
         self.account_model = self.env["account.account"]
 
         self.partner = self.env.ref("base.res_partner_2")
-        self.receivable = self.env.ref("account.data_account_type_receivable")
+        self.receivable = self.env.ref("account.data_account_type_revenue")
         self.analytic_plan_version = self.env.ref(
             "analytic_plan.analytic_plan_version_P02"
         )
@@ -20,6 +20,8 @@ class TestAnalyticWipReport(common.TransactionCase):
             {
                 "name": "AnalyticAccount Parent for Test",
                 "partner_id": self.partner.id,
+                "active_analytic_planning_version":
+                    self.analytic_plan_version.id,
             }
         )
 
@@ -39,8 +41,8 @@ class TestAnalyticWipReport(common.TransactionCase):
                         {
                             "name": "Test invoice line",
                             "account_id": self.invoice_account.id,
-                            "quantity": 2,
-                            "price_unit": 100,
+                            "quantity": 1,
+                            "price_unit": 200,
                             "account_analytic_id": self.account.id,
                         },
                     )
@@ -48,8 +50,30 @@ class TestAnalyticWipReport(common.TransactionCase):
             }
         )
         self.invoice.action_invoice_open()
+        self.invoice = self.account_invoice.create(
+            {
+                "partner_id": self.partner.id,
+                "type": "in_invoice",
+                "account_id": self.invoice_account.id,
+                "invoice_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Test invoice line",
+                            "account_id": self.invoice_account.id,
+                            "quantity": 1,
+                            "price_unit": 100,
+                            "account_analytic_id": self.account.id,
+                        },
+                    )
+                ],
+            }
+        )
+
         self.account._compute_wip_report()
         self.assertEquals(self.account.earned_revenue, 0)
+        self.assertEquals(self.account.actual_billings, 200.0)
         self.assertEquals(self.account.total_value, 0)
-        self.assertEquals(self.account.actual_costs, 0)
+        self.assertEquals(self.account.actual_costs, 100)
         self.assertEquals(self.account.total_estimated_costs, 0)
