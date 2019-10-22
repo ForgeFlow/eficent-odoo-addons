@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_account_analytic_account_wip_tree" model="ir.ui.view">
+            <field name="name">account.analytic.account.wip.tree</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id"
+                   ref="analytic_wip_report.view_account_analytic_account_wip_tree"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="fy_billings" sum="Total"/>
+                    <button string="Detail"
+                        name="action_open_fy_billings_lines"
+                        type="object"
+                        icon="fa-search"/>
+                    <field name="fy_revenue" sum="Total"/>
+                    <field name="fy_actual_costs" sum="Total"/>
+                    <button string="Detail"
+                        name="action_open_fy_cost_lines"
+                        type="object"
+                        icon="fa-search"/>
+                    <field name="fy_actual_material_cost" sum="Total"/>
+                    <button string="Detail"
+                        name="action_open_fy_material_lines"
+                        type="object"
+                        icon="fa-search"/>
+                    <field name="fy_actual_labor_cost" sum="Total"/>
+                    <button string="Detail"
+                        name="action_open_fy_labor_lines"
+                        type="object"
+                        icon="fa-search"/>
+                    <field name="fy_gross_profit" sum="Total"/>
+                </field>
+            </field>
+        </record>
+
+</odoo>
