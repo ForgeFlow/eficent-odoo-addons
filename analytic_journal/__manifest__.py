@@ -10,7 +10,7 @@
     "license": "LGPL-3",
     "category": "Analytic",
     "depends": ["account", "analytic"],
-    "data": ['views/analytic_view.xml',
-             'security/ir.model.access.csv', ],
-    'installable': True,
+    "data": ["views/analytic_view.xml", "security/ir.model.access.csv"],
+    "installable": True,
+    "post_init_hook": "post_init_hook",
 }

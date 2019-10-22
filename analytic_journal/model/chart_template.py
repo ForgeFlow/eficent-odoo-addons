@@ -10,10 +10,12 @@ class AccountChartTemplate(models.Model):
 
     @api.multi
     def _prepare_all_journals(
-            self, acc_template_ref, company, journals_dict=None):
+        self, acc_template_ref, company, journals_dict=None
+    ):
         res = super(AccountChartTemplate, self)._prepare_all_journals(
-            acc_template_ref, company, journals_dict=journals_dict)
-        anal_obj = self.env['account.analytic.journal']
+            acc_template_ref, company, journals_dict=journals_dict
+        )
+        anal_obj = self.env["account.analytic.journal"]
         for journal in res:
             analytic_journal = anal_obj.find_journal(journal)
             if not analytic_journal:
