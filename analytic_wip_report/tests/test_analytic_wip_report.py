@@ -12,6 +12,7 @@ class TestAnalyticWipReport(common.TransactionCase):
 
         self.partner = self.env.ref("base.res_partner_2")
         self.receivable = self.env.ref("account.data_account_type_revenue")
+        self.expense = self.env.ref("account.data_account_type_expenses")
         self.analytic_plan_version = self.env.ref(
             "analytic_plan.analytic_plan_version_P02"
         )
@@ -25,10 +26,14 @@ class TestAnalyticWipReport(common.TransactionCase):
             }
         )
 
-    def test_check_wip_report(self):
+        self.expense_account = self.env["account.account"].search(
+            [("user_type_id", "=", self.expense.id)], limit=1
+        )
         self.invoice_account = self.account_model.search(
             [("user_type_id", "=", self.receivable.id)], limit=1
         )
+
+    def test_check_wip_report(self):
         self.invoice = self.account_invoice.create(
             {
                 "partner_id": self.partner.id,
@@ -61,7 +66,7 @@ class TestAnalyticWipReport(common.TransactionCase):
                         0,
                         {
                             "name": "Test invoice line",
-                            "account_id": self.invoice_account.id,
+                            "account_id": self.expense_account.id,
                             "quantity": 1,
                             "price_unit": 100,
                             "account_analytic_id": self.account.id,
@@ -70,8 +75,8 @@ class TestAnalyticWipReport(common.TransactionCase):
                 ],
             }
         )
+        self.invoice.action_invoice_open()
 
-        self.account._compute_wip_report()
         self.assertEquals(self.account.earned_revenue, 0)
         self.assertEquals(self.account.actual_billings, 200.0)
         self.assertEquals(self.account.total_value, 0)
