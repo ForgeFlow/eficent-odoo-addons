@@ -5,13 +5,12 @@
         <field name="name">Work In Progress Statement</field>
         <field name="model">analytic.wip.report</field>
         <field name="arch" type="xml">
-            <form string="Analytic Work In Progress Statement" version="7.0">
+            <form string="Analytic Work In Progress Statement">
                 <group name='period'
                        string="Select the Period for Analysis"
                        col="4">
                     <field name="from_date"/>
                     <field name="to_date"/>
-                    <label string="(Keep empty to open the current situation)" colspan="4"/>
                 </group>
                 <footer>
                     <button name="analytic_wip_report_open_window" string="Open" type="object" class="oe_highlight"/>
