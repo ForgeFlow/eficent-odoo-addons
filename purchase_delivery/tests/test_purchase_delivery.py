@@ -1,6 +1,3 @@
-# Copyright 2018 Eficent Business and IT Consulting Services S.L.
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 from datetime import datetime
 
 from odoo.tests import common
@@ -51,7 +48,7 @@ class TestPurchaseDelivery(common.TransactionCase):
         self.po.onchange_partner_id()
         self.po.button_confirm()
         self.picking = self.po.picking_ids
-        self.picking.force_assign()
+        self.picking.action_assign()
         self.picking.do_new_transfer()
         self.assertTrue(self.picking.carrier_id)
         self.assertEqual(self.picking.carrier_id, self.po.carrier_id)

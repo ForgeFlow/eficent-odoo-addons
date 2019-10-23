@@ -33,9 +33,15 @@ class PurchaseOrder(models.Model):
         journal_domain = [
             ("type", "=", "purchase"),
             ("company_id", "=", self.company_id.id),
-            ("currency_id", "=", self.partner_id.property_purchase_currency_id.id),
+            (
+                "currency_id",
+                "=",
+                self.partner_id.property_purchase_currency_id.id,
+            ),
         ]
-        default_journal_id = self.env["account.journal"].search(journal_domain, limit=1)
+        default_journal_id = self.env["account.journal"].search(
+            journal_domain, limit=1
+        )
         data = {
             "name": carrier.name,
             "origin": self.origin,

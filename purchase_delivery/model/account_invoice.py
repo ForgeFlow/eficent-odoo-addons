@@ -24,7 +24,9 @@ class AccountInvoice(models.Model):
         self.ensure_one()
         purchase_order = self.purchase_id
         if purchase_order:
-            price_unit = purchase_order.carrier_id.get_price_available(purchase_order)
+            price_unit = purchase_order.carrier_id.get_price_available(
+                purchase_order
+            )
             return purchase_order._prepare_invoice_line_from_carrier(
                 purchase_order.carrier_id, price_unit
             )
