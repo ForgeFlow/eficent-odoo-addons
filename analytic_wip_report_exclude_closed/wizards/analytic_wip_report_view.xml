@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="analytic_wip_report_view" model="ir.ui.view">
+        <field name="name">Work In Progress Statement</field>
+        <field name="model">analytic.wip.report</field>
+        <field name="inherit_id" ref="analytic_wip_report.analytic_wip_report_view"/>
+        <field name="arch" type="xml">
+            <group name='period' position="after">
+                <group name="filter">
+                    <field name="filter_project"/>
+                    <field name="only_closed"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>
