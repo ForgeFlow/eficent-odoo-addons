@@ -1,6 +1,4 @@
-from datetime import datetime
 from odoo import _, api, exceptions, models
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
 class HrTimesheetSheet(models.Model):
@@ -20,7 +18,8 @@ class HrTimesheetSheet(models.Model):
             if not ga_id:
                 ga_id = (
                     sheet.employee_id.product_id.property_account_expense_id.id
-                    or sheet.employee_id.product_id.categ_id.property_account_expense_categ_id.id
+                    or sheet.employee_id.product_id.categ_id.
+                    property_account_expense_categ_id.id
                 )
             if not ga_id:
                 raise exceptions.ValidationError(
