@@ -21,7 +21,7 @@ msgid "Timesheet"
 msgstr ""
 
 #. module: hr_timesheet_sheet_import_accounts
-#: view:hr_timesheet_sheet.sheet:0
+#: view:hr_timesheet.sheet:0
 msgid "Import accounts from previous Timehseet"
 msgstr ""
 
