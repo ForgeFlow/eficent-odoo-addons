@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_analytic_account_wip_extend_tree" model="ir.ui.view">
+        <field name="name">account.analytic.account.wip.tree</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic_wip_report.view_account_analytic_account_wip_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='estimated_gross_profit']" position="after">
+                <field name="estimated_gross_profit_per" string="Estimated Gross Profit Percent"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
