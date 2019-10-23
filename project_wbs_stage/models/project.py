@@ -10,9 +10,10 @@ from odoo import fields, models
 
 class Project(models.Model):
     _name = 'project.project'
-    _inherit = ['project.project',  "base.kanban.abstract"]
+    _inherit = ['project.project']
 
     stage_id = fields.Many2one(
         comodel_name='base.kanban.stage',
-        related='analytic_account_id.stage_id'
+        related='analytic_account_id.stage_id',
+        store=True
     )
