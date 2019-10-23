@@ -1,7 +1,7 @@
 # Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, _
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -31,8 +31,7 @@ class AnalyticResourcePlanLine(models.Model):
         states={"draft": [("readonly", False)]},
     )
     show_button_bom_explode = fields.Boolean(
-        string="show button bom explode",
-        compute="_compute_show_button_bom_explode",
+        string="show button bom explode", compute="_compute_show_button_bom_explode"
     )
 
     @api.onchange("product_id")
@@ -87,14 +86,10 @@ class AnalyticResourcePlanLine(models.Model):
             )
             plan_line_ids.unlink()
             factor = plan.product_uom_id._compute_quantity(
-                plan.unit_amount,
-                plan.product_uom_id,
-                plan.bom_id.product_uom_id,
+                plan.unit_amount, plan.product_uom_id, plan.bom_id.product_uom_id
             )
             bom_res = plan.bom_id.explode(
-                plan.product_id,
-                factor / plan.bom_id.product_qty,
-                picking_type=False,
+                plan.product_id, factor / plan.bom_id.product_qty, picking_type=False
             )
             for component in bom_res[1]:
                 line = component[0]

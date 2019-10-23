@@ -1,6 +1,7 @@
-from odoo.tests.common import TransactionCase
 import time
+
 from odoo.exceptions import UserError
+from odoo.tests.common import TransactionCase
 
 
 class TestComputeWorkdays(TransactionCase):
@@ -14,9 +15,7 @@ class TestComputeWorkdays(TransactionCase):
         self.root = self.env.ref("hr.employee_admin")
         self.user = self.env.ref("base.user_admin")
         self.root.write({"user_id": self.user.id})
-        self.dept.write(
-            {"parent_id": self.dept_1.id, "manager_id": self.root.id}
-        )
+        self.dept.write({"parent_id": self.dept_1.id, "manager_id": self.root.id})
 
         # create user
         user_dict = {

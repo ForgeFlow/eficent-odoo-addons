@@ -9,10 +9,7 @@
     "website": "www.eficent.com",
     "summary": """Fetch stock for projects""",
     "category": "Generic Modules/Projects & Services",
-    "depends": [
-        "analytic_resource_plan_stock_picking",
-        "stock_operating_unit",
-    ],
+    "depends": ["analytic_resource_plan_stock_picking", "stock_operating_unit"],
     "installable": True,
     "auto_install": True,
 }

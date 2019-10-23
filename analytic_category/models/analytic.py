@@ -8,4 +8,5 @@ class AccountAnalyticAccount(models.Model):
     _inherit = "account.analytic.account"
 
     category_id = fields.Many2one(
-        "account.analytic.category", "Category", ondelete="restrict")
+        "account.analytic.category", "Category", ondelete="restrict"
+    )

@@ -1,4 +1,3 @@
-
 # Copyright 2015 Eficent Business and IT Consulting Services S.L.
 # (Jordi Ballester Alomar)
 # Copyright 2016 Matmoz d.o.o.
@@ -10,40 +9,39 @@ from odoo import api, fields, models
 
 class AccountAnalyticAccount(models.Model):
 
-    _inherit = 'account.analytic.account'
+    _inherit = "account.analytic.account"
 
     @api.model
     def _default_version(self):
-        plan_versions = self.env['account.analytic.plan.version'].\
-            search([('default_plan', '=', True)], limit=1)
+        plan_versions = self.env["account.analytic.plan.version"].search(
+            [("default_plan", "=", True)], limit=1
+        )
         return plan_versions
 
     @api.multi
     def _compute_debit_credit_bal_qtty_plan(self):
-        analytic_line_obj = self.env['account.analytic.line.plan']
-        domain = [('account_id', 'in', self.mapped('id'))]
-        if self._context.get('from_date', False):
-            domain.append(('date', '>=', self._context['from_date']))
-        if self._context.get('to_date', False):
-            domain.append(('date', '<=', self._context['to_date']))
+        analytic_line_obj = self.env["account.analytic.line.plan"]
+        domain = [("account_id", "in", self.mapped("id"))]
+        if self._context.get("from_date", False):
+            domain.append(("date", ">=", self._context["from_date"]))
+        if self._context.get("to_date", False):
+            domain.append(("date", "<=", self._context["to_date"]))
 
         account_amounts = analytic_line_obj.search_read(
-            domain, ['account_id', 'amount']
+            domain, ["account_id", "amount"]
         )
-        account_ids = set(
-            [line['account_id'][0] for line in account_amounts]
-        )
+        account_ids = {line["account_id"][0] for line in account_amounts}
         data_debit_plan = {account_id: 0.0 for account_id in account_ids}
         data_credit_plan = {account_id: 0.0 for account_id in account_ids}
         for account_amount in account_amounts:
-            if account_amount['amount'] < 0.0:
-                data_debit_plan[
-                    account_amount['account_id'][0]
-                ] += account_amount['amount']
+            if account_amount["amount"] < 0.0:
+                data_debit_plan[account_amount["account_id"][0]] += account_amount[
+                    "amount"
+                ]
             else:
-                data_credit_plan[
-                    account_amount['account_id'][0]
-                ] += account_amount['amount']
+                data_credit_plan[account_amount["account_id"][0]] += account_amount[
+                    "amount"
+                ]
 
         for account in self:
             account.debit_plan = abs(data_debit_plan.get(account.id, 0.0))
@@ -51,53 +49,47 @@ class AccountAnalyticAccount(models.Model):
             account.balance_plan = account.credit_plan - account.debit_plan
 
     plan_line_ids = fields.One2many(
-        'account.analytic.line.plan',
-        'account_id',
-        string="Analytic Entries"
+        "account.analytic.line.plan", "account_id", string="Analytic Entries"
     )
     company_id = fields.Many2one(
-        'res.company',
-        string='Company',
+        "res.company",
+        string="Company",
         required=True,
-        default=lambda self: self.env.user.company_id
+        default=lambda self: self.env.user.company_id,
     )
     balance_plan = fields.Float(
-        compute='_compute_debit_credit_bal_qtty_plan',
-        string='Planned Balance'
+        compute="_compute_debit_credit_bal_qtty_plan", string="Planned Balance"
     )
     debit_plan = fields.Float(
-        compute='_compute_debit_credit_bal_qtty_plan',
-        string='Planned Debit'
+        compute="_compute_debit_credit_bal_qtty_plan", string="Planned Debit"
     )
     credit_plan = fields.Float(
-        compute='_compute_debit_credit_bal_qtty_plan',
-        string='Planned Credit'
+        compute="_compute_debit_credit_bal_qtty_plan", string="Planned Credit"
     )
     currency_id = fields.Many2one(
-        related="company_id.currency_id",
-        string="Currency",
-        readonly=True
+        related="company_id.currency_id", string="Currency", readonly=True
     )
     active_analytic_planning_version = fields.Many2one(
-        'account.analytic.plan.version',
-        'Active planning Version',
-        default=_default_version
+        "account.analytic.plan.version",
+        "Active planning Version",
+        default=_default_version,
     )
 
     @api.multi
     def open_plan_cost_tree_view(self):
         self.ensure_one()
-        res = self.env.get('ir.actions.act_window').for_xml_id(
-            'analytic_plan',
-            'action_account_analytic_plan_journal_open_form')
-        plan_obj = self.env['account.analytic.line.plan']
+        res = self.env.get("ir.actions.act_window").for_xml_id(
+            "analytic_plan", "action_account_analytic_plan_journal_open_form"
+        )
+        plan_obj = self.env["account.analytic.line.plan"]
 
         accs = self.browse(self.get_child_accounts())
         line_ids = plan_obj.search(
-            [('account_id', 'in', accs.ids),
-                ('version_id', '=', self.active_analytic_planning_version.id)]
+            [
+                ("account_id", "in", accs.ids),
+                ("version_id", "=", self.active_analytic_planning_version.id),
+            ]
         )
-        res['domain'] = "[('id', 'in', ["+','.join(
-            map(str, line_ids.ids))+"])]"
-        res['nodestroy'] = False
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, line_ids.ids)) + "])]"
+        res["nodestroy"] = False
         return res

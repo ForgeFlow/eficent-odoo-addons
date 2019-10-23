@@ -1,10 +1,11 @@
 # Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, api, fields, models
-import odoo.addons.decimal_precision as dp
-from odoo.exceptions import ValidationError
 from datetime import datetime
+
+import odoo.addons.decimal_precision as dp
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
@@ -15,10 +16,7 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
         return datetime.now()
 
     date = fields.Datetime(
-        "Picking date",
-        help="Picking date",
-        required=True,
-        default=_default_date,
+        "Picking date", help="Picking date", required=True, default=_default_date
     )
     date_expected = fields.Datetime(
         "Scheduled Date",
@@ -48,18 +46,14 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
 
     @api.model
     def default_get(self, fields):
-        res = super(
-            AnalyticResourcePlanLineStockPickingOut, self
-        ).default_get(fields)
+        res = super(AnalyticResourcePlanLineStockPickingOut, self).default_get(fields)
         res_plan_obj = self.env["analytic.resource.plan.line"]
         resource_plan_line_ids = self._context.get("active_ids", [])
         active_model = self._context.get("active_model")
 
         if not resource_plan_line_ids:
             return res
-        assert (
-            active_model == "analytic.resource.plan.line"
-        ), "Bad context propagation"
+        assert active_model == "analytic.resource.plan.line", "Bad context propagation"
 
         items = []
         for line in res_plan_obj.browse(resource_plan_line_ids):
@@ -96,14 +90,9 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
     def _prepare_order_picking(self, line, date, move_type):
         pick_name = self.env["ir.sequence"].next_by_code("stock.picking.out")
         type_obj = self.env["stock.picking.type"]
-        company_id = (
-            self.env.context.get("company_id") or self.env.user.company_id.id
-        )
+        company_id = self.env.context.get("company_id") or self.env.user.company_id.id
         types = type_obj.search(
-            [
-                ("code", "=", "outgoing"),
-                ("warehouse_id.company_id", "=", company_id),
-            ]
+            [("code", "=", "outgoing"), ("warehouse_id.company_id", "=", company_id)]
         )
         picking_type = types[:1]
         location = line.account_id.location_id
@@ -143,31 +132,21 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
                     _("The analytic account does not belong to a project")
                 )
             project = project[0]
-            if project.date_start and (
-                make_picking.date_expected < project.date_start
-            ):
+            if project.date_start and (make_picking.date_expected < project.date_start):
 
                 raise ValidationError(
-                    _(
-                        "The expected date must be after the "
-                        "Project start date."
-                    )
+                    _("The expected date must be after the " "Project start date.")
                 )
             if line.state != "confirm":
                 raise ValidationError(
                     _("All resource plan lines must be  " "confirmed.")
                 )
-            if line.product_id and line.product_id.type not in (
-                "product",
-                "consu",
-            ):
+            if line.product_id and line.product_id.type not in ("product", "consu"):
                 raise ValidationError(
                     _("You have to select stockable or " "consumable items.")
                 )
             line_company_id = (
-                line.account_id.company_id
-                and line.account_id.company_id.id
-                or False
+                line.account_id.company_id and line.account_id.company_id.id or False
             )
             if company_id is not False and line_company_id != company_id:
                 raise ValidationError(
@@ -183,10 +162,7 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
                     )
                 )
             move_data = self._prepare_order_move(
-                item,
-                picking_id,
-                make_picking.date,
-                make_picking.date_expected,
+                item, picking_id, make_picking.date, make_picking.date_expected
             )
             move_obj.create(move_data)
             res.append(picking_id.id)
@@ -211,9 +187,7 @@ class AnalyticResourcePlanLineStockPickingOutItem(models.TransientModel):
     picking_out_wiz_id = fields.Many2one(
         "analytic.resource.plan.line.stock.picking.out", "Picking Wizard"
     )
-    line_id = fields.Many2one(
-        "analytic.resource.plan.line", "Resource Plan Line"
-    )
+    line_id = fields.Many2one("analytic.resource.plan.line", "Resource Plan Line")
     product_qty = fields.Float(
         string="Quantity to deliver", digits=dp.get_precision("Product UoS")
     )

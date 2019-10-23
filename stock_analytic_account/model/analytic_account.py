@@ -10,25 +10,29 @@ class AccountAnalyticAccount(models.Model):
     _inherit = "account.analytic.account"
 
     move_ids = fields.One2many(
-        'stock.move',
-        'analytic_account_id',
-        'Moves for this analytic account',
-        readonly=True
+        "stock.move",
+        "analytic_account_id",
+        "Moves for this analytic account",
+        readonly=True,
     )
 
     @api.multi
     def copy(self, default=None):
         self.ensure_one()
         default = dict(default or {})
-        default['move_ids'] = []
+        default["move_ids"] = []
         return super(AccountAnalyticAccount, self).copy(default=default)
 
     @api.multi
-    @api.constrains('location_id')
+    @api.constrains("location_id")
     def _check_location(self):
         for analytic in self:
             if analytic.location_id:
                 if analytic.location_id.analytic_account_id != analytic:
-                    return ValidationError(_("""The location does not belong
-                        to this project"""))
+                    return ValidationError(
+                        _(
+                            """The location does not belong
+                        to this project"""
+                        )
+                    )
         return True

@@ -16,8 +16,8 @@
                     <field name="is_default"/>
                 </search>
             </field>
-        </record>        
-        
+        </record>
+
         <record id="view_progress_measurement_type_edit" model="ir.ui.view">
             <field name="name">progress.measurement.type.form</field>
             <field name="model">progress.measurement.type</field>
@@ -56,7 +56,7 @@
             <field name="res_model">progress.measurement.type</field>
             <field name="view_id" ref="view_progress_measurement_type_tree"/>
             <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref="view_progress_measurement_type_search"/>     
+            <field name="search_view_id" ref="view_progress_measurement_type_search"/>
             <field name="help">Define the Progress Measurement Types.</field>
         </record>
 

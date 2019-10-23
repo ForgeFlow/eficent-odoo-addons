@@ -22,9 +22,7 @@ class AccountAnalyticAccount(models.Model):
             except ZeroDivisionError:
                 account.estimated_gross_profit_per = 0
             # Over/Under billings
-            over_under_billings = (
-                account.under_billings - account.over_billings
-            )
+            over_under_billings = account.under_billings - account.over_billings
             account.under_over = over_under_billings
         return res
 

@@ -1,8 +1,8 @@
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.
-from odoo import _, api, fields, models
 import odoo.addons.decimal_precision as dp
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -13,9 +13,7 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
     origin = fields.Char("Origin", size=32, required=True)
     description = fields.Text("Description")
     item_ids = fields.One2many(
-        "analytic.resource.plan.line.make.purchase.request.item",
-        "wiz_id",
-        "Items",
+        "analytic.resource.plan.line.make.purchase.request.item", "wiz_id", "Items"
     )
 
     @api.model
@@ -30,18 +28,16 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
 
     @api.model
     def default_get(self, fields):
-        res = super(
-            AnalyticResourcePlanLineMakePurchaseRequest, self
-        ).default_get(fields)
+        res = super(AnalyticResourcePlanLineMakePurchaseRequest, self).default_get(
+            fields
+        )
         res_plan_obj = self.env["analytic.resource.plan.line"]
         resource_plan_line_ids = self.env.context.get("active_ids", [])
         active_model = self.env.context.get("active_model")
 
         if not resource_plan_line_ids:
             return res
-        assert (
-            active_model == "analytic.resource.plan.line"
-        ), "Bad context propagation"
+        assert active_model == "analytic.resource.plan.line", "Bad context propagation"
 
         items = []
         for line in res_plan_obj.browse(resource_plan_line_ids):
@@ -88,9 +84,7 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
                 raise ValidationError(_("Enter a positive quantity."))
 
             line_company_id = (
-                line.account_id.company_id
-                and line.account_id.company_id.id
-                or False
+                line.account_id.company_id and line.account_id.company_id.id or False
             )
             if company_id is not False and line_company_id != company_id:
                 raise ValidationError(
@@ -120,9 +114,7 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
                     make_purchase_request, picking_type_id.id, company_id
                 )
                 request = request_obj.create(request_data)
-            request_line_data = self._prepare_purchase_request_line(
-                request.id, item
-            )
+            request_line_data = self._prepare_purchase_request_line(request.id, item)
             request_line = request_line_obj.create(request_line_data)
             values = {
                 "purchase_request_lines": [(4, request_line.id)],
@@ -166,10 +158,7 @@ class AnalyticResourcePlanLineMakePurchaseRequestItem(models.TransientModel):
     wiz_id = fields.Many2one(
         "analytic.resource.plan.line.make.purchase.request", "Wizard"
     )
-    line_id = fields.Many2one(
-        "analytic.resource.plan.line",
-        "Resource Plan Line",
-    )
+    line_id = fields.Many2one("analytic.resource.plan.line", "Resource Plan Line")
     account_id = fields.Many2one(
         "account.analytic.account",
         related="line_id.account_id",
@@ -177,17 +166,11 @@ class AnalyticResourcePlanLineMakePurchaseRequestItem(models.TransientModel):
         readonly=True,
     )
     product_id = fields.Many2one(
-        "product.product",
-        related="line_id.product_id",
-        string="Product",
-        readonly=True,
+        "product.product", related="line_id.product_id", string="Product", readonly=True
     )
     product_qty = fields.Float(
         string="Quantity to request", digits=dp.get_precision("Product UoS")
     )
     product_uom_id = fields.Many2one(
-        "uom.uom",
-        related="line_id.product_uom_id",
-        string="UoM",
-        readonly=True,
+        "uom.uom", related="line_id.product_uom_id", string="UoM", readonly=True
     )

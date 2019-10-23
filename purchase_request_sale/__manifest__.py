@@ -5,15 +5,13 @@
     "name": "Purchase Request Sale",
     "version": "12.0.1.0.0",
     "author": "Eficent",
-    'license': 'AGPL-3',
+    "license": "AGPL-3",
     "website": "www.eficent.com",
     "category": "Purchase Management",
     "depends": ["purchase_request", "sale"],
     "summary": """
         Link from sales to Purchase Requests
     """,
-    "data": [
-        "views/purchase_request_view.xml"
-    ],
-    'installable': True,
+    "data": ["views/purchase_request_view.xml"],
+    "installable": True,
 }

@@ -14,10 +14,7 @@
         "hr_employee_product",
         "hr_timesheet_sheet_period",
     ],
-    "data": [
-        "views/hr_timesheet_sheet_view.xml",
-        "views/hr_employee_view.xml",
-    ],
+    "data": ["views/hr_timesheet_sheet_view.xml", "views/hr_employee_view.xml"],
     "installable": True,
     "auto_install": False,
 }

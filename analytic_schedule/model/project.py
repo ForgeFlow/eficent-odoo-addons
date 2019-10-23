@@ -37,21 +37,14 @@ class ProjectProject(models.Model):
             if "date_start" in vals and "date" in vals:
                 for pp in rec:
                     pp.analytic_account_id.write(
-                        {
-                            "date_start": vals["date_start"],
-                            "date": vals["date"],
-                        }
+                        {"date_start": vals["date_start"], "date": vals["date"]}
                     )
             elif "date" in vals:
                 for pp in rec:
-                    pp.analytic_account_id.write(
-                        {"date": vals["date"]}
-                    )
+                    pp.analytic_account_id.write({"date": vals["date"]})
             elif "date_start" in vals:
                 for pp in rec:
-                    pp.analytic_account_id.write(
-                        {"date_start": vals["date_start"]}
-                    )
+                    pp.analytic_account_id.write({"date_start": vals["date_start"]})
 
     @api.model
     def create(self, values):

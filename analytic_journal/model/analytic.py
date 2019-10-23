@@ -9,9 +9,7 @@ from odoo.exceptions import ValidationError
 class AccountAnalyticLine(models.Model):
     _inherit = "account.analytic.line"
 
-    journal_id = fields.Many2one(
-        "account.analytic.journal", "Analytic Journal"
-    )
+    journal_id = fields.Many2one("account.analytic.journal", "Analytic Journal")
 
 
 class AccountAnalyticJournal(models.Model):
@@ -39,8 +37,7 @@ class AccountAnalyticJournal(models.Model):
         "account.analytic.line", "journal_id", "Lines", copy=False
     )
     company_id = fields.Many2one(
-        comodel_name="res.company",
-        default=lambda self: self._get_default_company(),
+        comodel_name="res.company", default=lambda self: self._get_default_company()
     )
 
     @api.model
@@ -52,11 +49,7 @@ class AccountAnalyticJournal(models.Model):
     @api.model
     def _prepare_analytic_journal(self, vals):
         if vals.get("type") and vals.get("name") and vals.get("code"):
-            vals = {
-                "type": vals["type"],
-                "name": _(vals["name"]),
-                "code": vals["code"],
-            }
+            vals = {"type": vals["type"], "name": _(vals["name"]), "code": vals["code"]}
         else:
             raise ValidationError(_("Cannot create an analytic journal"))
         return vals
@@ -101,9 +94,7 @@ class AccountInvoice(models.Model):
         res = super(AccountInvoice, self).invoice_line_move_line_get()
         for data in res:
             if data.get("analytic_line_ids", False) and data.get("invoice_id"):
-                aj = self.browse(
-                    data["invoice_id"]
-                ).journal_id.analytic_journal_id.id
+                aj = self.browse(data["invoice_id"]).journal_id.analytic_journal_id.id
                 for line in data["analytic_line_ids"]:
                     line[2]["journal_id"] = aj
         return res

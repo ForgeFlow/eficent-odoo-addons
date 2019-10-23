@@ -33,11 +33,7 @@ class AnalyticAccount(models.Model):
         if version_id:
             domain.append(("version_id", "=", version_id))
         domain.append(
-            (
-                "company_id",
-                "=",
-                self.browse(analytic_account_ids[0]).company_id.id,
-            )
+            ("company_id", "=", self.browse(analytic_account_ids[0]).company_id.id)
         )
         accs = line_obj.read_group(
             domain, fields=["amount", "company_id"], groupby="company_id"
@@ -56,12 +52,8 @@ class AnalyticAccount(models.Model):
     @api.multi
     def compute_cost_revenue_plan(self):
         journal_obj = self.env["account.analytic.plan.journal"]
-        revenue_journal_ids = journal_obj.search(
-            [("cost_type", "=", "revenue")]
-        )
-        material_journal_ids = journal_obj.search(
-            [("cost_type", "=", "material")]
-        )
+        revenue_journal_ids = journal_obj.search([("cost_type", "=", "revenue")])
+        material_journal_ids = journal_obj.search([("cost_type", "=", "material")])
         labor_journal_ids = journal_obj.search([("cost_type", "=", "labor")])
         for account in self:
             analytic_account_ids = account._get_all_analytic_accounts()
@@ -75,24 +67,18 @@ class AnalyticAccount(models.Model):
                 account.revenue_plan = 0.0
 
             if material_journal_ids:
-                account.material_cost_plan = (
-                    -1
-                    * self._get_plan_journal_item_totals(
-                        material_journal_ids.ids,
-                        analytic_account_ids,
-                        account.active_analytic_planning_version.id,
-                    )
+                account.material_cost_plan = -1 * self._get_plan_journal_item_totals(
+                    material_journal_ids.ids,
+                    analytic_account_ids,
+                    account.active_analytic_planning_version.id,
                 )
             else:
                 account.material_cost_plan = 0.0
             if labor_journal_ids:
-                account.labor_cost_plan = (
-                    -1
-                    * self._get_plan_journal_item_totals(
-                        labor_journal_ids.ids,
-                        analytic_account_ids,
-                        account.active_analytic_planning_version.id,
-                    )
+                account.labor_cost_plan = -1 * self._get_plan_journal_item_totals(
+                    labor_journal_ids.ids,
+                    analytic_account_ids,
+                    account.active_analytic_planning_version.id,
                 )
             else:
                 account.labor_cost_plan = 0.0
@@ -101,9 +87,7 @@ class AnalyticAccount(models.Model):
     @api.depends("total_cost_plan", "revenue_plan")
     def compute_gross_profit_plan(self):
         for account in self:
-            account.gross_profit_plan = (
-                account.revenue_plan + account.total_cost_plan
-            )
+            account.gross_profit_plan = account.revenue_plan + account.total_cost_plan
 
     labor_cost_plan = fields.Float(
         compute=compute_cost_revenue_plan,

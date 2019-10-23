@@ -1,8 +1,9 @@
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+from itertools import chain
+
 from odoo import api, fields, models
 from odoo.addons import decimal_precision as dp
-from itertools import chain
 
 
 class AccountAnalyticJournal(models.Model):
@@ -55,11 +56,7 @@ class AnalyticAccount(models.Model):
         if self.env.context.get("to_date", False):
             domain.append(("date", "<=", self.env.context["to_date"]))
         domain.append(
-            (
-                "company_id",
-                "=",
-                self.browse(analytic_account_ids[0]).company_id.id,
-            )
+            ("company_id", "=", self.browse(analytic_account_ids[0]).company_id.id)
         )
         accs = line_obj.read_group(
             domain, fields=["amount", "company_id"], groupby="company_id"
@@ -83,12 +80,8 @@ class AnalyticAccount(models.Model):
     @api.multi
     def compute_cost_revenue(self):
         journal_obj = self.env["account.analytic.journal"]
-        material_journal_ids = journal_obj.search(
-            [("cost_type", "=", "material")]
-        )
-        revenue_journal_ids = journal_obj.search(
-            [("cost_type", "=", "revenue")]
-        )
+        material_journal_ids = journal_obj.search([("cost_type", "=", "material")])
+        revenue_journal_ids = journal_obj.search([("cost_type", "=", "revenue")])
         labor_journal_ids = journal_obj.search([("cost_type", "=", "labor")])
         for account in self:
             analytic_account_ids = account._get_all_analytic_accounts()

@@ -1,8 +1,8 @@
 # Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, _
 import odoo.addons.decimal_precision as dp
+from odoo import _, api, fields, models
 
 
 class AnalyticResourcePlanLineConsume(models.TransientModel):
@@ -29,9 +29,7 @@ class AnalyticResourcePlanLineConsume(models.TransientModel):
 
         if not resource_plan_line_ids:
             return res
-        assert (
-            active_model == "analytic.resource.plan.line"
-        ), "Bad context propagation"
+        assert active_model == "analytic.resource.plan.line", "Bad context propagation"
 
         items = []
         for line in res_plan_obj.browse(resource_plan_line_ids):
@@ -80,8 +78,5 @@ class AnalyticResourcePlanLineConsumeItem(models.TransientModel):
         string="Quantity to consume", digits=dp.get_precision("Product UoS")
     )
     product_uom_id = fields.Many2one(
-        "uom.uom",
-        related="line_id.product_uom_id",
-        string="UoM",
-        readonly=True,
+        "uom.uom", related="line_id.product_uom_id", string="UoM", readonly=True
     )

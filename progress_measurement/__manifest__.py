@@ -18,5 +18,5 @@
         "views/progress_measurement_type_view.xml",
         "security/ir.model.access.csv",
     ],
-    'installable': True,
+    "installable": True,
 }

@@ -11,9 +11,6 @@
     "website": "http://www.eficent.com",
     "category": "Generic",
     "depends": ["analytic", "analytic_plan"],
-    "data": [
-        "security/analytic_security.xml",
-        "views/analytic_account_view.xml",
-    ],
+    "data": ["security/analytic_security.xml", "views/analytic_account_view.xml"],
     "installable": True,
 }

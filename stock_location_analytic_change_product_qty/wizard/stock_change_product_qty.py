@@ -11,9 +11,7 @@ class StockChangeProductQty(models.TransientModel):
     def _compute_analytic_account_id(self):
         for wiz in self:
             if wiz.location_id.analytic_account_id:
-                wiz.analytic_account_id = (
-                    wiz.location_id.analytic_account_id.id
-                )
+                wiz.analytic_account_id = wiz.location_id.analytic_account_id.id
         return True
 
     analytic_account_id = fields.Many2one(

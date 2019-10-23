@@ -12,10 +12,6 @@
     "summary": """
             Project Manufacturing Order Link
     """,
-    "data": [
-        "view/project_view.xml",
-        "security/ir.model.access.csv",
-    ],
-    'installable': True,
-
+    "data": ["view/project_view.xml", "security/ir.model.access.csv"],
+    "installable": True,
 }

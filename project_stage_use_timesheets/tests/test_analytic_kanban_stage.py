@@ -16,11 +16,7 @@ class TestAnalyticKanban(common.TransactionCase):
         customer1 = self.partner_obj.create({"name": "Customer 1"})
         # Create analytic group and operation:
         self.project_ts = self.project_obj.create(
-            {
-                "partner_id": customer1.id,
-                "name": "TS",
-                "account_class": "work_package",
-            }
+            {"partner_id": customer1.id, "name": "TS", "account_class": "work_package"}
         )
         self.analytic_ts = self.project_ts.analytic_account_id
         self.stage_ts = self.kanban_stage_model.create(

@@ -67,7 +67,7 @@
         <field name="search_view_id" ref="view_account_analytic_plan_journal_search" />
     </record>
 
-    <menuitem groups="analytic.group_analytic_accounting" 
+    <menuitem groups="analytic.group_analytic_accounting"
             action="action_account_analytic_plan_journal_form"
             id="account_def_analytic_plan_journal"
             parent="account.menu_analytic_accounting" sequence="6"/>

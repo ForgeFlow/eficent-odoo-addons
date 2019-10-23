@@ -10,9 +10,9 @@ class AnalyticResourcePlanLine(models.Model):
     _inherit = "analytic.resource.plan.line"
 
     def _prepare_purchase_request_line(self, pr_id, line):
-        res = super(
-            AnalyticResourcePlanLine, self
-        )._prepare_purchase_request_line(pr_id, line)
+        res = super(AnalyticResourcePlanLine, self)._prepare_purchase_request_line(
+            pr_id, line
+        )
         res.update(product_qty=line.qty_left)
         return res
 
@@ -24,7 +24,5 @@ class AnalyticResourcePlanLine(models.Model):
             if line.qty_left <= 0.0:
                 continue
             else:
-                res = super(
-                    AnalyticResourcePlanLine, line
-                )._make_purchase_request()
+                res = super(AnalyticResourcePlanLine, line)._make_purchase_request()
         return res

@@ -1,8 +1,8 @@
 # © 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests.common import TransactionCase
 from odoo.exceptions import ValidationError
+from odoo.tests.common import TransactionCase
 
 
 class TestStockLocationAnalyticMRP(TransactionCase):
@@ -56,9 +56,7 @@ class TestStockLocationAnalyticMRP(TransactionCase):
         with self.assertRaises(ValidationError):
             self.production.write({"location_src_id": self.yourcompany_loc.id})
         with self.assertRaises(ValidationError):
-            self.production.write(
-                {"location_dest_id": self.yourcompany_loc.id}
-            )
+            self.production.write({"location_dest_id": self.yourcompany_loc.id})
         self.location1.write({"analytic_account_id": self.AA1.id})
         self.production.write(
             {

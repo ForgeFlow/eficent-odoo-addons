@@ -4,14 +4,14 @@
 # Copyright 2017 Deneroteam.
 # Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
 from odoo.tests import common
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
 
 class TestAnalyticSchedule(common.SavepointCase):
-
     @classmethod
     def setUpClass(cls):
         super(TestAnalyticSchedule, cls).setUpClass()
@@ -41,8 +41,7 @@ class TestAnalyticSchedule(common.SavepointCase):
             self.parent_account.date_start, self.grand_son_account.date_start
         )
         self.project_son.date = datetime.strftime(
-            datetime.today() + relativedelta(months=9),
-            DEFAULT_SERVER_DATE_FORMAT,
+            datetime.today() + relativedelta(months=9), DEFAULT_SERVER_DATE_FORMAT
         )
         self.assertNotEqual(
             self.grand_son_account.date,
@@ -50,7 +49,5 @@ class TestAnalyticSchedule(common.SavepointCase):
             "Should Not propagate downwards",
         )
         self.assertEquals(
-            self.son_account.date,
-            self.parent_account.date,
-            "Should propagate upwards",
+            self.son_account.date, self.parent_account.date, "Should propagate upwards"
         )

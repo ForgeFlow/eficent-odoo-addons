@@ -1,5 +1,6 @@
-from odoo.tests.common import TransactionCase
 import time
+
+from odoo.tests.common import TransactionCase
 
 
 class TestHRTimesheetSheetImportAccounts(TransactionCase):
@@ -14,9 +15,7 @@ class TestHRTimesheetSheetImportAccounts(TransactionCase):
         self.root = self.env.ref("hr.employee_admin")
         self.user = self.env.ref("base.user_admin")
         self.root.write({"user_id": self.user.id})
-        self.dept.write(
-            {"parent_id": self.dept_1.id, "manager_id": self.root.id}
-        )
+        self.dept.write({"parent_id": self.dept_1.id, "manager_id": self.root.id})
         self.product = self.env.ref("product.product_product_11")
         self.product.write({"is_employee": True})
         # create user

@@ -17,10 +17,7 @@ class TestAnalyticWipReportExtend(common.TransactionCase):
         )
 
         self.account = self.AnalyticAccountObject.create(
-            {
-                "name": "AnalyticAccount Parent for Test",
-                "partner_id": self.partner.id,
-            }
+            {"name": "AnalyticAccount Parent for Test", "partner_id": self.partner.id}
         )
 
     def test_check_wip_report(self):

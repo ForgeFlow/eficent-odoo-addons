@@ -10,10 +10,12 @@ class Product(models.Model):
 
     def _get_domain_locations(self):
 
-        if self._context.get('analytic_account_id'):
-            aa = self.env['account.analytic.account'].browse(
-                self._context.get('analytic_account_id'))
-            return super(Product, self.with_context(
-                location=aa.location_id.id))._get_domain_locations()
+        if self._context.get("analytic_account_id"):
+            aa = self.env["account.analytic.account"].browse(
+                self._context.get("analytic_account_id")
+            )
+            return super(
+                Product, self.with_context(location=aa.location_id.id)
+            )._get_domain_locations()
         else:
             return super(Product, self)._get_domain_locations()

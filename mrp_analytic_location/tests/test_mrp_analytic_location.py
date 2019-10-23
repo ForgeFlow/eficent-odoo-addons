@@ -1,5 +1,5 @@
-from odoo.tests import common
 from odoo.exceptions import ValidationError
+from odoo.tests import common
 
 
 class TestMrpAnalyticLocation(common.TransactionCase):
@@ -15,9 +15,7 @@ class TestMrpAnalyticLocation(common.TransactionCase):
             {"name": "Analytic account test"}
         )
         self.location.analytic_account_id = self.analytic_account.id
-        self.product = self.env["product.product"].create(
-            {"name": "Test product"}
-        )
+        self.product = self.env["product.product"].create({"name": "Test product"})
         self.bom = self.env["mrp.bom"].create(
             {
                 "product_id": self.product.id,

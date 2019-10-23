@@ -1,12 +1,11 @@
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests import common
 from odoo import fields
+from odoo.tests import common
 
 
 class TestAnalyticCostRevenue(common.SavepointCase):
-
     @classmethod
     def setUpClass(cls):
         super(TestAnalyticCostRevenue, cls).setUpClass()
@@ -32,9 +31,7 @@ class TestAnalyticCostRevenue(common.SavepointCase):
         cls.account_type = cls.env["account.account.type"].create(
             {"name": "Income", "type": "other"}
         )
-        cls.analytic_journal_purchase = cls.env[
-            "account.analytic.plan.journal"
-        ].create(
+        cls.analytic_journal_purchase = cls.env["account.analytic.plan.journal"].create(
             {
                 "name": "Purchase",
                 "type": "purchase",
@@ -42,15 +39,8 @@ class TestAnalyticCostRevenue(common.SavepointCase):
                 "cost_type": "material",
             }
         )
-        cls.analytic_journal_sale = cls.env[
-            "account.analytic.plan.journal"
-        ].create(
-            {
-                "name": "Sale",
-                "type": "sale",
-                "code": "SAL",
-                "cost_type": "revenue",
-            }
+        cls.analytic_journal_sale = cls.env["account.analytic.plan.journal"].create(
+            {"name": "Sale", "type": "sale", "code": "SAL", "cost_type": "revenue"}
         )
         cls.analytic_line_plan = cls.analytic_line_plan_obj.create(
             {
@@ -83,9 +73,9 @@ class TestAnalyticCostRevenue(common.SavepointCase):
         )
 
         #  this checks it does not affect result
-        cls.analytic_journal_no_cost = cls.env[
-            "account.analytic.plan.journal"
-        ].create({"name": "Sale", "type": "sale", "code": "SAL"})
+        cls.analytic_journal_no_cost = cls.env["account.analytic.plan.journal"].create(
+            {"name": "Sale", "type": "sale", "code": "SAL"}
+        )
         cls.analytic_line_plan = cls.analytic_line_plan_obj.create(
             {
                 "name": cls.product_id.name,

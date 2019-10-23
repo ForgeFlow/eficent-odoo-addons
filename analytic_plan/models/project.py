@@ -5,9 +5,8 @@ from odoo import fields, models
 
 
 class Project(models.Model):
-    _inherit = 'project.project'
+    _inherit = "project.project"
 
     active_analytic_planning_version = fields.Many2one(
-        related='analytic_account_id.active_analytic_planning_version',
-        readonly=False,
+        related="analytic_account_id.active_analytic_planning_version", readonly=False
     )

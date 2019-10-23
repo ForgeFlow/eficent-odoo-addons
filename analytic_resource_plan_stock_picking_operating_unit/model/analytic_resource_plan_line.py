@@ -12,7 +12,5 @@ class AnalyticResourcePlanLine(models.Model):
         res = super(AnalyticResourcePlanLine, self)._prepare_picking_vals(
             src_location_id
         )
-        res[
-            "operating_unit_id"
-        ] = self.account_id.location_id.operating_unit_id.id
+        res["operating_unit_id"] = self.account_id.location_id.operating_unit_id.id
         return res

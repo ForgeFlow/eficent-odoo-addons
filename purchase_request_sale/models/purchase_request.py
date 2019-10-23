@@ -9,12 +9,13 @@ class PurchaseRequest(models.Model):
     _inherit = "purchase.request"
 
     sale_order_ids = fields.Many2many(
-        comodel_name='sale.order',
-        relation='purchase_request_sale_rel',
-        column1='sale_id',
-        column2='request_id',
+        comodel_name="sale.order",
+        relation="purchase_request_sale_rel",
+        column1="sale_id",
+        column2="request_id",
         copy=False,
-        string="Sales")
+        string="Sales",
+    )
 
 
 class PurchaseRequestLine(models.Model):
@@ -22,4 +23,5 @@ class PurchaseRequestLine(models.Model):
     _inherit = "purchase.request.line"
 
     sale_order_line_id = fields.Many2one(
-        'sale.order.line', 'Sales Order Line', readonly=True)
+        "sale.order.line", "Sales Order Line", readonly=True
+    )

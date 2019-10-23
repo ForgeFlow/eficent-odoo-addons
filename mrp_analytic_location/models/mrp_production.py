@@ -1,4 +1,4 @@
-from odoo import _, exceptions, api, fields, models
+from odoo import _, api, exceptions, fields, models
 
 
 class MrpProduction(models.Model):
@@ -20,9 +20,5 @@ class MrpProduction(models.Model):
                     )
         return True
 
-    location_src_id = fields.Many2one(
-        compute=compute_project_location, store=True
-    )
-    location_dest_id = fields.Many2one(
-        compute=compute_project_location, store=True
-    )
+    location_src_id = fields.Many2one(compute=compute_project_location, store=True)
+    location_dest_id = fields.Many2one(compute=compute_project_location, store=True)

@@ -5,17 +5,11 @@
     "name": "Stock Location in Project",
     "version": "12.0.1.0.0",
     "author": "Eficent, Odoo Community Association (OCA)",
-    "license": 'AGPL-3',
+    "license": "AGPL-3",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
     "summary": """stock location in the project.""",
-    "depends": [
-        "project_stock",
-        "analytic_location"
-    ],
-    "data": [
-        "view/project_view.xml",
-        "security/ir.model.access.csv",
-    ],
+    "depends": ["project_stock", "analytic_location"],
+    "data": ["view/project_view.xml", "security/ir.model.access.csv"],
     "installable": True,
 }

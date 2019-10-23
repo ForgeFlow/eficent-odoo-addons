@@ -21,8 +21,7 @@ class TestAnalyticWipReport(common.TransactionCase):
             {
                 "name": "AnalyticAccount Parent for Test",
                 "partner_id": self.partner.id,
-                "active_analytic_planning_version":
-                    self.analytic_plan_version.id,
+                "active_analytic_planning_version": self.analytic_plan_version.id,
             }
         )
 

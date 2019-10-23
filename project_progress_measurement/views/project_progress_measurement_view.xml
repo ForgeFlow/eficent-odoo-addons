@@ -15,7 +15,7 @@
             </search>
         </field>
     </record>
-    
+
     <record id="view_project_progress_measurement_form" model="ir.ui.view">
         <field name="name">project.progress.measurement.form</field>
         <field name="model">project.progress.measurement</field>

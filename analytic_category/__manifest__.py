@@ -7,13 +7,15 @@
  Allow to define analytic categories for analytic accounts
 
     """,
-    'license': 'AGPL-3',
+    "license": "AGPL-3",
     "version": "12.0.1.0.0",
-    "author":  "Eficent",
+    "author": "Eficent",
     "category": "Analytic",
     "depends": ["analytic"],
-    "data": ["security/security.xml",
-             "view/analytic_view.xml",
-             "view/category_view.xml"],
-    "installable": True
+    "data": [
+        "security/security.xml",
+        "view/analytic_view.xml",
+        "view/category_view.xml",
+    ],
+    "installable": True,
 }

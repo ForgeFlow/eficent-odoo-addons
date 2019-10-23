@@ -1,12 +1,13 @@
 # Copyright 2018 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.addons import decimal_precision as dp
-from odoo import _, api, fields, models
-from dateutil.relativedelta import relativedelta
 from datetime import datetime
-from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
+
+from dateutil.relativedelta import relativedelta
+from odoo import _, api, fields, models
+from odoo.addons import decimal_precision as dp
 from odoo.exceptions import ValidationError
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
 
 
 class AccountAnalyticAccount(models.Model):
@@ -28,9 +29,7 @@ class AccountAnalyticAccount(models.Model):
             cr = self._cr
             if self._context.get("from_date_fy", False):
                 from_date = context["from_date_fy"]
-                fromdatefy = datetime.strptime(from_date, DT) - relativedelta(
-                    days=1
-                )
+                fromdatefy = datetime.strptime(from_date, DT) - relativedelta(days=1)
                 fromdatefy = datetime.strftime(fromdatefy, DT)
                 where_date += " AND l.date >= %s"
                 query_params += [from_date]
@@ -196,8 +195,7 @@ class AccountAnalyticAccount(models.Model):
 
             try:
                 account.percent_complete_end_fy = (
-                    account.actual_costs_end_fy
-                    / account.total_estimated_costs_end_fy
+                    account.actual_costs_end_fy / account.total_estimated_costs_end_fy
                 ) * 100
             except ZeroDivisionError:
                 account.percent_complete_end_fy = 0
@@ -207,9 +205,7 @@ class AccountAnalyticAccount(models.Model):
                 account.percent_complete_fy / 100 * account.total_value_fy
             )
             account.earned_revenue_end_fy = (
-                account.percent_complete_end_fy
-                / 100
-                * account.total_value_end_fy
+                account.percent_complete_end_fy / 100 * account.total_value_end_fy
             )
             account.fy_revenue = (
                 account.earned_revenue_end_fy - account.earned_revenue_fy
@@ -282,13 +278,9 @@ class AccountAnalyticAccount(models.Model):
                 account.fy_billings += total
                 fy_billings_line_ids.append(line_id)
 
-            account.fy_billings_line_ids = [
-                (6, 0, [l for l in fy_billings_line_ids])
-            ]
+            account.fy_billings_line_ids = [(6, 0, [l for l in fy_billings_line_ids])]
             # Gross margin
-            account.fy_gross_profit = (
-                account.fy_revenue - account.fy_actual_costs
-            )
+            account.fy_gross_profit = account.fy_revenue - account.fy_actual_costs
         return True
 
     total_value_fy = fields.Float(
@@ -408,9 +400,7 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic", "account_analytic_line_action_entries"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
     @api.multi
@@ -420,9 +410,7 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic", "account_analytic_line_action_entries"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
     @api.multi
@@ -432,9 +420,7 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic", "account_analytic_line_action_entries"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
     @api.multi
@@ -444,7 +430,5 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic", "account_analytic_line_action_entries"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res

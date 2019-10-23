@@ -1,15 +1,13 @@
 # Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo.addons.analytic_resource_plan_stock.tests import (
-    test_analytic_resource_plan_stock,
-)
+from odoo.addons.analytic_resource_plan_stock.tests import \
+    test_analytic_resource_plan_stock
 from odoo.tools.safe_eval import safe_eval
 
 
 class TestAnalyticResourcePlanMrp(
     test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock
 ):
-
     @classmethod
     def setUpClass(cls):
         super(TestAnalyticResourcePlanMrp, cls).setUpClass()
@@ -29,9 +27,7 @@ class TestAnalyticResourcePlanMrp(
             }
         )
         cls.product_id = cls.env["product.product"].create({"name": "XXX"})
-        cls.product.categ_id.property_account_expense_categ_id = (
-            cls.gp_account_id
-        )
+        cls.product.categ_id.property_account_expense_categ_id = cls.gp_account_id
         cls.partner = cls.env.ref("base.res_partner_1")
         cls.analytic_plan_version = cls.env.ref(
             "analytic_plan.analytic_plan_version_P00"
@@ -41,7 +37,8 @@ class TestAnalyticResourcePlanMrp(
 
         cls.bom = cls._create_bom(cls.product_id)
         cls.resource_plan_line_wbom_id = cls._create_analytic_resource_plan(
-            cls.product_id)
+            cls.product_id
+        )
         cls.account_id.bom_id = cls.bom.id
 
     @classmethod
@@ -56,18 +53,12 @@ class TestAnalyticResourcePlanMrp(
             }
         )
         cls.mrp_bom_line_obj.create(
-            {
-                "bom_id": test_bom.id,
-                "product_id": product.id,
-                "product_qty": 2.0,
-            }
+            {"bom_id": test_bom.id, "product_id": product.id, "product_qty": 2.0}
         )
         return test_bom
 
     @classmethod
-    def _create_analytic_account(
-        cls, name, partner, analytic_plan_version, location
-    ):
+    def _create_analytic_account(cls, name, partner, analytic_plan_version, location):
         return cls.analytic_account_obj.create(
             {
                 "name": name,
@@ -112,9 +103,7 @@ class TestAnalyticResourcePlanMrp(
         move_action = wiz_id.do_produce()
         move_id = safe_eval(move_action["domain"])[0][2]
         move = self.env["stock.move"].browse(move_id)[0]
-        self.assertEqual(
-            move.product_qty, child.unit_amount, "Wrong consumed qty"
-        )
+        self.assertEqual(move.product_qty, child.unit_amount, "Wrong consumed qty")
         # test consume
         wiz_id = (
             self.env["analytic.resource.plan.line.consume"]
@@ -125,6 +114,4 @@ class TestAnalyticResourcePlanMrp(
             .create({})
         )
         wiz_id.do_consume()
-        self.assertEqual(
-            move.product_qty, child.unit_amount, "Wrong consumed qty"
-        )
+        self.assertEqual(move.product_qty, child.unit_amount, "Wrong consumed qty")

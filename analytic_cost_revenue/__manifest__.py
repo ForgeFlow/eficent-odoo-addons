@@ -9,12 +9,7 @@
     "Summary": "Analytic Cost and Revenue to analytic accounts ",
     "website": "http://www.eficent.com/",
     "license": "AGPL-3",
-    "depends": [
-        "account",
-        "analytic",
-        "account_analytic_parent",
-        "analytic_journal",
-    ],
+    "depends": ["account", "analytic", "account_analytic_parent", "analytic_journal"],
     "data": ["views/analytic_view.xml"],
     "installable": True,
 }

@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -7,9 +7,7 @@ class HrTimesheetSheet(models.Model):
 
     @api.model
     def _default_department(self):
-        employees = self.env["hr.employee"].search(
-            [("user_id", "=", self.env.uid)]
-        )
+        employees = self.env["hr.employee"].search([("user_id", "=", self.env.uid)])
         for emp in employees:
             return emp.department_id and emp.department_id.id or False
         return False
@@ -17,9 +15,7 @@ class HrTimesheetSheet(models.Model):
     validator_user_ids = fields.Many2many("res.users", string="Validators")
 
     department_id = fields.Many2one(
-        comodel_name="hr.department",
-        string="Department",
-        default=_default_department,
+        comodel_name="hr.department", string="Department", default=_default_department
     )
 
     @api.model
@@ -28,9 +24,7 @@ class HrTimesheetSheet(models.Model):
         if employee_id:
             employee = self.env["hr.employee"].browse(employee_id)
             validators = employee.get_validator_user_ids()
-            vals["validator_user_ids"] = [
-                (4, user_id) for user_id in validators
-            ]
+            vals["validator_user_ids"] = [(4, user_id) for user_id in validators]
         return super(HrTimesheetSheet, self).create(vals)
 
     @api.multi
@@ -38,10 +32,7 @@ class HrTimesheetSheet(models.Model):
         for timesheet in self:
             if self.env.uid not in timesheet.validator_user_ids.ids:
                 raise UserError(
-                    _(
-                        "You are not authorised to approve  or "
-                        "refuse this Timesheet."
-                    )
+                    _("You are not authorised to approve  or " "refuse this Timesheet.")
                 )
 
     @api.multi

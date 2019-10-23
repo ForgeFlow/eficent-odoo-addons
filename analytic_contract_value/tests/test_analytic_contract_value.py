@@ -8,7 +8,6 @@ from odoo.tests import common
 
 
 class TestAnalyticSchedule(common.SavepointCase):
-
     @classmethod
     def setUpClass(cls):
         super(TestAnalyticSchedule, cls).setUpClass()
@@ -30,14 +29,10 @@ class TestAnalyticSchedule(common.SavepointCase):
                 "user_type_id": cls.account_type.id,
             }
         )
-        cls.analytic_plan_journal = cls.env[
-            "account.analytic.plan.journal"
-        ].create(
+        cls.analytic_plan_journal = cls.env["account.analytic.plan.journal"].create(
             {"name": "Sale", "type": "sale", "code": "SAL", "active": True}
         )
-        cls.resource_plan_line_simple = cls.env[
-            "account.analytic.line.plan"
-        ].create(
+        cls.resource_plan_line_simple = cls.env["account.analytic.line.plan"].create(
             {
                 "product_id": cls.product_simple.id,
                 "product_uom_id": cls.product_simple.uom_id.id,
@@ -52,5 +47,4 @@ class TestAnalyticSchedule(common.SavepointCase):
         )
 
     def test_contarct_value(self):
-        self.assertEquals(self.account_id.contract_value, 100000.0,
-                          "Bad value")
+        self.assertEquals(self.account_id.contract_value, 100000.0, "Bad value")

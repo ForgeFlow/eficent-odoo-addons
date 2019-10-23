@@ -9,9 +9,7 @@ class AccountChartTemplate(models.Model):
     _inherit = "account.chart.template"
 
     @api.multi
-    def _prepare_all_journals(
-        self, acc_template_ref, company, journals_dict=None
-    ):
+    def _prepare_all_journals(self, acc_template_ref, company, journals_dict=None):
         res = super(AccountChartTemplate, self)._prepare_all_journals(
             acc_template_ref, company, journals_dict=journals_dict
         )

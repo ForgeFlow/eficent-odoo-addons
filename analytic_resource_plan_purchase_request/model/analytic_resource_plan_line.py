@@ -2,8 +2,8 @@
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, api, fields, models
 import odoo.addons.decimal_precision as dp
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 _REQUEST_STATE = [
@@ -129,14 +129,10 @@ class AnalyticResourcePlanLine(models.Model):
         return res
 
     @api.model
-    def _prepare_purchase_request(
-        self, company_id, picking_type_id=None, line=None
-    ):
+    def _prepare_purchase_request(self, company_id, picking_type_id=None, line=None):
         data = {
             "company_id": company_id,
-            "origin": self.label or line.account_id.name
-            if line
-            else self.name,
+            "origin": self.label or line.account_id.name if line else self.name,
             "description": self.product_id.description,
             "picking_type_id": picking_type_id,
         }
@@ -171,13 +167,8 @@ class AnalyticResourcePlanLine(models.Model):
                 )
             else:
                 company_id = line_company_id
-            line_warehouse_id = (
-                line.account_id.location_id.get_warehouse() or False
-            )
-            if (
-                warehouse_id is not False
-                and line_warehouse_id != warehouse_id
-            ):
+            line_warehouse_id = line.account_id.location_id.get_warehouse() or False
+            if warehouse_id is not False and line_warehouse_id != warehouse_id:
                 raise ValidationError(
                     _("You have to select lines " "from the same warehouse.")
                 )
@@ -199,9 +190,7 @@ class AnalyticResourcePlanLine(models.Model):
                 company_id, picking_type_id.id, line
             )
             request_id = request_obj.create(request_data)
-            request_line_data = line._prepare_purchase_request_line(
-                request_id, line
-            )
+            request_line_data = line._prepare_purchase_request_line(request_id, line)
             request_line_id = request_line_obj.create(request_line_data)
             line.purchase_request_lines = [(4, request_line_id.id)]
         return True

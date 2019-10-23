@@ -1,12 +1,10 @@
-from odoo import api, exceptions, fields, models, _
+from odoo import _, api, exceptions, fields, models
 
 
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
-    product_id = fields.Many2one(
-        comodel_name="product.product", string="Product"
-    )
+    product_id = fields.Many2one(comodel_name="product.product", string="Product")
 
     @api.multi
     @api.constrains("product_id")

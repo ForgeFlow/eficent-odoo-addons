@@ -1,4 +1,3 @@
-
 # Copyright 2015 Eficent Business and IT Consulting Services S.L.
 # (Jordi Ballester Alomar)
 # Copyright 2016 Matmoz d.o.o.
@@ -10,50 +9,39 @@ from odoo import fields, models
 
 class AccountAnalyticPlanJournal(models.Model):
 
-    _name = 'account.analytic.plan.journal'
-    _description = 'Analytic Journal Plan'
+    _name = "account.analytic.plan.journal"
+    _description = "Analytic Journal Plan"
 
-    name = fields.Char(
-        'Planning Journal Name',
-        required=True
-    )
-    code = fields.Char(
-        'Planning Journal Code'
-    )
+    name = fields.Char("Planning Journal Name", required=True)
+    code = fields.Char("Planning Journal Code")
     active = fields.Boolean(
-        'Active',
+        "Active",
         help="""If the active field is set to False, it will allow you to
                 hide the analytic journal without removing it.""",
-        default=True
+        default=True,
     )
     type = fields.Selection(
         [
-            ('sale', 'Sale'),
-            ('purchase', 'Purchase'),
-            ('cash', 'Cash'),
-            ('general', 'General'),
-            ('situation', 'Situation')
+            ("sale", "Sale"),
+            ("purchase", "Purchase"),
+            ("cash", "Cash"),
+            ("general", "General"),
+            ("situation", "Situation"),
         ],
-        'Type',
+        "Type",
         required=True,
         help="""Gives the type of the analytic journal. When it needs for a
                 document (eg: an invoice) to create analytic entries, odoo
                 will look  for a matching journal of the same type.""",
-        default='general'
+        default="general",
     )
-    line_ids = fields.One2many(
-        'account.analytic.line.plan',
-        'journal_id',
-        'Lines'
-    )
+    line_ids = fields.One2many("account.analytic.line.plan", "journal_id", "Lines")
     company_id = fields.Many2one(
-        'res.company',
-        'Company',
+        "res.company",
+        "Company",
         required=True,
-        default=lambda self:
-            self.env['res.users'].browse(self._uid).company_id.id)
+        default=lambda self: self.env["res.users"].browse(self._uid).company_id.id,
+    )
     analytic_journal = fields.Many2one(
-        'account.analytic.journal',
-        'Actual Journal',
-        required=False
+        "account.analytic.journal", "Actual Journal", required=False
     )

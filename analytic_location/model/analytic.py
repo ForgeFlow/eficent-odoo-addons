@@ -6,26 +6,26 @@ from odoo import api, fields, models
 
 
 class AccountAnalyticAccount(models.Model):
-    _inherit = 'account.analytic.account'
+    _inherit = "account.analytic.account"
 
     @api.model
     def _default_dest_address(self):
-        partner_id = self.env.context.get('partner_id', False)
+        partner_id = self.env.context.get("partner_id", False)
         if partner_id:
-            return self.env['res.partner'].address_get(
-                [partner_id], ['delivery']
-            )['delivery'],
+            return (
+                self.env["res.partner"].address_get([partner_id], ["delivery"])[
+                    "delivery"
+                ],
+            )
         else:
             return False
 
     location_id = fields.Many2one(
-        'stock.location',
-        'Default Stock Location',
-        domain=[('usage', '<>', 'view')]
+        "stock.location", "Default Stock Location", domain=[("usage", "<>", "view")]
     )
     dest_address_id = fields.Many2one(
-        'res.partner',
-        'Delivery Address',
+        "res.partner",
+        "Delivery Address",
         default=_default_dest_address,
-        help="""Delivery address for the current contract project."""
+        help="""Delivery address for the current contract project.""",
     )

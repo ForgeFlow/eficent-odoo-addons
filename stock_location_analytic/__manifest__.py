@@ -2,24 +2,15 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Stock Location Analytic',
-    'version': '12.0.1.0.0',
-    'category': 'Logistics',
-    'summary': 'Introduces the analytic account to the locations',
-    'author': 'Eficent',
+    "name": "Stock Location Analytic",
+    "version": "12.0.1.0.0",
+    "category": "Logistics",
+    "summary": "Introduces the analytic account to the locations",
+    "author": "Eficent",
     "license": "AGPL-3",
-    'website': 'http://www.eficent.com',
-    'depends': [
-        'stock',
-        'analytic',
-        'analytic_location',
-        'analytic_plan'
-    ],
-    'data': [
-        'views/stock_view.xml',
-    ],
-    'demo': [
-        'demo/stock_demo.xml'
-    ],
-    'installable': True,
+    "website": "http://www.eficent.com",
+    "depends": ["stock", "analytic", "analytic_location", "analytic_plan"],
+    "data": ["views/stock_view.xml"],
+    "demo": ["demo/stock_demo.xml"],
+    "installable": True,
 }

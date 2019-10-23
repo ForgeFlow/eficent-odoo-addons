@@ -3,25 +3,24 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Stock Analytic Account',
-    'version': '12.0.1.0.1',
-    'author':   'Eficent, Odoo Community Association (OCA),'
-                'Project Expert Team',
-    'website': 'http://project.expert',
-    'category': 'Project Management',
-    'license': 'AGPL-3',
-    'depends': [
-        'stock_analytic',
-        'stock_location_analytic',
-        'analytic_location',
-        'analytic_journal',
-        'stock_inventory_analytic',
+    "name": "Stock Analytic Account",
+    "version": "12.0.1.0.1",
+    "author": "Eficent, Odoo Community Association (OCA)," "Project Expert Team",
+    "website": "http://project.expert",
+    "category": "Project Management",
+    "license": "AGPL-3",
+    "depends": [
+        "stock_analytic",
+        "stock_location_analytic",
+        "analytic_location",
+        "analytic_journal",
+        "stock_inventory_analytic",
     ],
-    'data': [
-        'view/stock_view.xml',
-        'view/stock_picking_view.xml',
-        'view/analytic_account_view.xml',
+    "data": [
+        "view/stock_view.xml",
+        "view/stock_picking_view.xml",
+        "view/analytic_account_view.xml",
     ],
-    'pre_init_hook': 'pre_init_hook',
-    'installable': True,
+    "pre_init_hook": "pre_init_hook",
+    "installable": True,
 }

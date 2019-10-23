@@ -7,9 +7,7 @@ class AnalyticWipReport(models.TransientModel):
     _inherit = "analytic.wip.report"
 
     fiscalyear_id = fields.Many2one(
-        "date.range",
-        required=True,
-        domain=[("type_id.fiscal_year", "=", True)],
+        "date.range", required=True, domain=[("type_id.fiscal_year", "=", True)]
     )
     from_date_fy = fields.Date("From (within the fiscal year)", required=True)
     to_date_fy = fields.Date("To (within the fiscal year)", required=True)
@@ -17,9 +15,7 @@ class AnalyticWipReport(models.TransientModel):
     @api.multi
     def analytic_wip_report_open_window(self):
         result_context = {}
-        result = super(
-            AnalyticWipReport, self
-        ).analytic_wip_report_open_window()
+        result = super(AnalyticWipReport, self).analytic_wip_report_open_window()
         data = self.read()[0]
         if data["from_date"]:
             result_context.update({"from_date": data["from_date"]})

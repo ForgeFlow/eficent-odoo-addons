@@ -1,10 +1,11 @@
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import api, fields, models, _
-from odoo.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
-from odoo.exceptions import ValidationError
-import odoo.addons.decimal_precision as dp
 import time
+
+import odoo.addons.decimal_precision as dp
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
+from odoo.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class AnalyticResourcePlanLine(models.Model):
@@ -16,9 +17,7 @@ class AnalyticResourcePlanLine(models.Model):
     def _compute_qty_fetched(self):
         qty = 0.0
         for line in self:
-            for picking in line.picking_ids.filtered(
-                lambda p: p.state != "cancel"
-            ):
+            for picking in line.picking_ids.filtered(lambda p: p.state != "cancel"):
                 for move in picking.move_lines:
                     qty += move.product_uom_qty
             line.qty_fetched = qty
@@ -28,19 +27,14 @@ class AnalyticResourcePlanLine(models.Model):
     def _compute_qty_left(self):
         qty = 0.0
         for line in self:
-            for picking in line.picking_ids.filtered(
-                lambda p: p.state != "cancel"
-            ):
+            for picking in line.picking_ids.filtered(lambda p: p.state != "cancel"):
                 for move in picking.move_lines:
                     qty += move.product_uom_qty
             line.qty_left = line.unit_amount - qty
         return line.qty_left
 
     picking_ids = fields.One2many(
-        "stock.picking",
-        "analytic_resource_plan_line_id",
-        "Pickings",
-        readonly=True,
+        "stock.picking", "analytic_resource_plan_line_id", "Pickings", readonly=True
     )
     qty_fetched = fields.Float(
         string="Fetched Quantity",
@@ -62,17 +56,12 @@ class AnalyticResourcePlanLine(models.Model):
         picking_type_id = self.env["stock.picking.type"].search(
             [
                 ("code", "=", "incoming"),
-                (
-                    "warehouse_id.company_id",
-                    "=",
-                    self.account_id.company_id.id,
-                ),
-            ], limit=1
+                ("warehouse_id.company_id", "=", self.account_id.company_id.id),
+            ],
+            limit=1,
         )
         if not picking_type_id:
-            raise ValidationError(
-                _("No valid picking type for the projects location")
-            )
+            raise ValidationError(_("No valid picking type for the projects location"))
         return {
             "origin": self.name,
             "move_type": "one",  # direct
@@ -84,8 +73,7 @@ class AnalyticResourcePlanLine(models.Model):
             "location_id": src_location_id.id,
             "location_dest_id": dest_location.id,
             "analytic_resource_plan_line_id": self.id,
-            "note": "Resource Plan Line %s %s"
-            % (self.account_id.id, self.name),
+            "note": "Resource Plan Line {} {}".format(self.account_id.id, self.name),
         }
 
     @api.multi
@@ -149,16 +137,10 @@ class AnalyticResourcePlanLine(models.Model):
                             stock = line.with_context(
                                 {"location": location_id.id}
                             ).product_id._product_available()
-                            qty_available = stock[line.product_id.id][
-                                "qty_available"
-                            ]
+                            qty_available = stock[line.product_id.id]["qty_available"]
                             if qty_available > 0:
-                                picking = self._prepare_picking_vals(
-                                    location_id
-                                )
-                                picking_id = self.env[
-                                    "stock.picking"
-                                ].create(picking)
+                                picking = self._prepare_picking_vals(location_id)
+                                picking_id = self.env["stock.picking"].create(picking)
                                 if qty_available > line.unit_amount:
                                     qty_to_fetch = line.unit_amount
                                 else:
@@ -166,13 +148,9 @@ class AnalyticResourcePlanLine(models.Model):
                                 move_vals = line._prepare_move_vals(
                                     qty_to_fetch, picking_id, location_id
                                 )
-                                move = self.env["stock.move"].create(
-                                    move_vals
-                                )
+                                move = self.env["stock.move"].create(move_vals)
                                 qty_fetched += move.product_uom_qty
-            return super(
-                AnalyticResourcePlanLine, self
-            ).action_button_confirm()
+            return super(AnalyticResourcePlanLine, self).action_button_confirm()
         return super(AnalyticResourcePlanLine, self).action_button_confirm()
 
     @api.multi
@@ -180,9 +158,6 @@ class AnalyticResourcePlanLine(models.Model):
         for line in self:
             if line.picking_ids:
                 raise ValidationError(
-                    _(
-                        "You cannot delete a record that refers to "
-                        "a picking"
-                    )
+                    _("You cannot delete a record that refers to " "a picking")
                 )
         return super(AnalyticResourcePlanLine, self).unlink()

@@ -56,8 +56,5 @@ class AnalyticWipReport(models.TransientModel):
                     ("stage_id", "not in", stages),
                 ]
             else:
-                domain = [
-                    ("date", ">=", comparing_date),
-                    ("stage_id", "in", stages),
-                ]
+                domain = [("date", ">=", comparing_date), ("stage_id", "in", stages)]
         return domain

@@ -9,14 +9,14 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     analytic_account_ids = fields.Many2one(
-        'account.analytic.account',
-        related='move_lines.analytic_account_id',
-        string='Analytic Account',
-        readonly=True
+        "account.analytic.account",
+        related="move_lines.analytic_account_id",
+        string="Analytic Account",
+        readonly=True,
     )
     analytic_account_user_ids = fields.Many2one(
-        'res.users',
-        related='move_lines.analytic_account_user_id',
-        string='Project Manager',
-        readonly=True
+        "res.users",
+        related="move_lines.analytic_account_user_id",
+        string="Project Manager",
+        readonly=True,
     )

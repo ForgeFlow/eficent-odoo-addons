@@ -1,8 +1,8 @@
 # Copyright 2015 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.addons import decimal_precision as dp
 from odoo import api, fields, models
+from odoo.addons import decimal_precision as dp
 
 
 class AccountAnalyticAccount(models.Model):
@@ -48,9 +48,7 @@ class AccountAnalyticAccount(models.Model):
             for (total, line_id) in cr.fetchall():
                 account.total_value += total
                 total_value_line_ids.append(line_id)
-            account.total_value_line_ids = [
-                (6, 0, [l for l in total_value_line_ids])
-            ]
+            account.total_value_line_ids = [(6, 0, [l for l in total_value_line_ids])]
             # Actual billings to date
             cr.execute(
                 """
@@ -109,15 +107,11 @@ class AccountAnalyticAccount(models.Model):
                     actual_labor_line_ids.append(line_id)
                 account.actual_costs -= total
                 actual_cost_line_ids.append(line_id)
-            account.actual_cost_line_ids = [
-                (6, 0, [l for l in actual_cost_line_ids])
-            ]
+            account.actual_cost_line_ids = [(6, 0, [l for l in actual_cost_line_ids])]
             account.actual_material_line_ids = [
                 (6, 0, [l for l in actual_material_line_ids])
             ]
-            account.actual_labor_line_ids = [
-                (6, 0, [l for l in actual_labor_line_ids])
-            ]
+            account.actual_labor_line_ids = [(6, 0, [l for l in actual_labor_line_ids])]
 
             # Total estimated costs
             cr.execute(
@@ -171,9 +165,7 @@ class AccountAnalyticAccount(models.Model):
             )
 
             # Over/Under billings
-            over_under_billings = (
-                account.actual_billings - account.earned_revenue
-            )
+            over_under_billings = account.actual_billings - account.earned_revenue
             account.under_over = over_under_billings
 
             if over_under_billings > 0:
@@ -186,9 +178,7 @@ class AccountAnalyticAccount(models.Model):
                 )
             except ZeroDivisionError:
                 account.estimated_gross_profit_per = 0
-            over_under_billings = (
-                account.under_billings - account.over_billings
-            )
+            over_under_billings = account.under_billings - account.over_billings
             account.under_over = over_under_billings
         return True
 
@@ -312,9 +302,7 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic", "account_analytic_line_action_entries"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
     @api.multi
@@ -324,9 +312,7 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic", "account_analytic_line_action_entries"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
     @api.multi
@@ -336,9 +322,7 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic", "account_analytic_line_action_entries"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
     @api.multi
@@ -351,9 +335,7 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic", "account_analytic_line_action_entries"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
     @api.multi
@@ -363,9 +345,7 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic_plan", "action_account_analytic_line_plan_form"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
     @api.multi
@@ -375,7 +355,5 @@ class AccountAnalyticAccount(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "analytic_plan", "action_account_analytic_line_plan_form"
         )
-        res["domain"] = (
-            "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
-        )
+        res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res

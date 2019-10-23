@@ -4,8 +4,7 @@
 {
     "name": "Work In Progress Statement Fiscal Year",
     "version": "12.0.1.0.0",
-    "author": "Eficent, Odoo Community Association (OCA), "
-    "Project Expert Team",
+    "author": "Eficent, Odoo Community Association (OCA), " "Project Expert Team",
     "website": "http://project.expert",
     "category": "Project Management",
     "license": "AGPL-3",
