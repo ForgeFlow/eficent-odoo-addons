@@ -3,24 +3,24 @@
 
     <record id="hr_timesheet_sheet_form" model="ir.ui.view">
         <field name="name">hr.timesheet.sheet.form</field>
-        <field name="model">hr_timesheet_sheet.sheet</field>
+        <field name="model">hr_timesheet.sheet</field>
         <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
         <field name="arch" type="xml">
             <field name="department_id" position="attributes">
                 <attribute name="invisible">False</attribute>
                 <attribute name="readonly">True</attribute>
             </field>
-            <xpath expr='//button[@name="action_timesheet_done"]' position="attributes">
+            <xpath expr='//header/button[@name="action_timesheet_done"]' position="attributes">
                 <attribute name="invisible">True</attribute>
             </xpath>
-            <xpath expr='//button[@name="action_timesheet_done"]' position="after">
+            <xpath expr='//header/button[@name="action_timesheet_done"]' position="after">
                 <button name="action_timesheet_done" states="confirm" string="Approve" type="object"
                         groups="base.group_user,hr.group_hr_user" class="oe_highlight"/>
             </xpath>
-            <xpath expr='//button[@name="action_timesheet_draft"][2]' position="attributes">
+            <xpath expr='//header/button[@name="action_timesheet_draft"]' position="attributes">
                 <attribute name="invisible">True</attribute>
             </xpath>
-            <xpath expr='//button[@name="action_timesheet_draft"][2]' position="after">
+            <xpath expr='//header/button[@name="action_timesheet_draft"]' position="after">
                 <button name="action_timesheet_draft" states="confirm" string="Refuse" type="object"
                         groups="base.group_user,hr.group_hr_user" class="oe_highlight"/>
             </xpath>
@@ -35,8 +35,8 @@
     </record>
 
     <record id="view_hr_timesheet_sheet_filter" model="ir.ui.view">
-        <field name="name">hr_timesheet_sheet.sheet.filter</field>
-        <field name="model">hr_timesheet_sheet.sheet</field>
+        <field name="name">hr_timesheet.sheet.filter</field>
+        <field name="model">hr_timesheet.sheet</field>
         <field name="inherit_id" ref="hr_timesheet_sheet.view_hr_timesheet_sheet_filter"/>
         <field name="arch" type="xml">
             <xpath expr='//field[@name="employee_id"]' position="after">
@@ -51,15 +51,14 @@
         </field>
     </record>
 
-    <record id="hr_timesheet_sheet_tree_simplified" model="ir.ui.view">
+    <record id="hr_timesheet_sheet_form2" model="ir.ui.view">
         <field name="name">hr.timesheet.sheet.tree</field>
-        <field name="model">hr_timesheet_sheet.sheet</field>
-        <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree_simplified"/>
-        <field eval="10" name="priority"/>
+        <field name="model">hr_timesheet.sheet</field>
+        <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
         <field name="arch" type="xml">
-            <field name="department_id" position="attributes">
+            <xpath expr='//sheet/group/group[@name="dates"]/field[@name="department_id"]' position="attributes">
                 <attribute name="invisible">False</attribute>
-            </field>
+            </xpath>
         </field>
     </record>
 
