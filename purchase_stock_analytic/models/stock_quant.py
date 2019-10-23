@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 # 2015-17 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from openerp import api, models
 
 
 class StockQuant(models.Model):
-    _inherit = 'stock.quant'
+    _inherit = "stock.quant"
 
     @api.multi
     def _account_entry_move(self, move):

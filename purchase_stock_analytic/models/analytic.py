@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 from odoo import api, models
 
 
 class AccountAnalyticAccount(models.Model):
 
-    _inherit = 'account.analytic.account'
+    _inherit = "account.analytic.account"
 
     @api.multi
     def get_parents(self):
