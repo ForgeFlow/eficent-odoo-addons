@@ -16,22 +16,22 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: hr_timesheet_sheet_validators
-#: view:hr_timesheet_sheet.sheet:0
+#: view:hr_timesheet.sheet:0
 msgid "Refuse"
 msgstr "Refuse"
 
 #. module: hr_timesheet_sheet_validators
-#: view:hr_timesheet_sheet.sheet:0
+#: view:hr_timesheet.sheet:0
 msgid "My Timesheets to validate"
 msgstr "My Timesheets to validate"
 
 #. module: hr_timesheet_sheet_validators
-#: view:hr_timesheet_sheet.sheet:0
+#: view:hr_timesheet.sheet:0
 msgid "False"
 msgstr "False"
 
 #. module: hr_timesheet_sheet_validators
-#: view:hr_timesheet_sheet.sheet:0
+#: view:hr_timesheet.sheet:0
 msgid "My timesheets to validate"
 msgstr "My timesheets to validate"
 
@@ -41,13 +41,13 @@ msgid "Timesheet"
 msgstr "Timesheet"
 
 #. module: hr_timesheet_sheet_validators
-#: view:hr_timesheet_sheet.sheet:0
-#: field:hr_timesheet_sheet.sheet,validator_user_ids:0
+#: view:hr_timesheet.sheet:0
+#: field:hr_timesheet.sheet,validator_user_ids:0
 msgid "Validators"
 msgstr "Validators"
 
 #. module: hr_timesheet_sheet_validators
-#: view:hr_timesheet_sheet.sheet:0
+#: view:hr_timesheet.sheet:0
 msgid "Approve"
 msgstr "Approve"
 
