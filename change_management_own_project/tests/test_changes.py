@@ -1,18 +1,17 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Matmoz d.o.o. (<http://www.matmoz.si>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo.addons.change_management.tests import test_changes
+from odoo.addons.change_management.tests.test_changes import TestChanges
 
 
-class TestChangeManagementOwnProject(
-        test_changes.TestChanges):
+class TestChangeManagementOwnProject(TestChanges):
 
-    def setUp(cls):
-        super(TestChangeManagementOwnProject, cls).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super(TestChangeManagementOwnProject, cls).setUpClass()
 
-    def test_change_project(cls):
-        cls.test_change_id.button_create_change_project()
-        ch_project = cls.test_change_id.change_project_id
-        cls.assertEqual(
+    def test_change_project(self):
+        self.test_change_id.button_create_change_project()
+        ch_project = self.test_change_id.change_project_id
+        self.assertEqual(
             ch_project.parent_id,
-            cls.test_project_id.analytic_account_id, "Bad parent project")
+            self.test_project_id.analytic_account_id, "Bad parent project")
