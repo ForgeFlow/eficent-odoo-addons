@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -20,7 +19,7 @@ class ChangeManagementChange(models.Model):
         change_ids = self.env['change.management.change'].\
             search([('project_id', 'in', project_ids.ids)])
         if change_ids:
-            return [('id', 'in', tuple(change_ids.ids))]
+            return [('id', 'in', change_ids.ids)]
         else:
             return []
 
@@ -29,11 +28,10 @@ class ChangeManagementChange(models.Model):
         search='_search_by_project_customer',
         comodel_name='res.partner',
         string='Customer',
-        readonly=True,
         store=False
     )
     customer_ref = fields.Char(
-        'Customer ref.',
+        string='Customer ref.',
         help="Reference of the Change as indicated by the Customer",
         readonly=True,
         states={'draft': [('readonly', False)]}
