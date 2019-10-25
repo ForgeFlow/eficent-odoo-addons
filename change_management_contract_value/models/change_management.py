@@ -121,6 +121,6 @@ class ChangeManagementChange(models.Model):
 
     @api.multi
     def set_state_rejected(self):
-        res = super(ChangeManagementChange, self).set_state_draft()
+        res = super(ChangeManagementChange, self).set_state_rejected()
         self._delete_analytic_lines()
         return res
