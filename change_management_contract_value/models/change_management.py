@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2015 Eficent Business and IT Consulting Services S.L. <contact@eficent.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -9,19 +8,19 @@ from odoo.exceptions import ValidationError
 class ChangeManagementChange(models.Model):
     _inherit = 'change.management.change'
 
-    change_value = fields.Float('Value',
+    change_value = fields.Float(string='Value',
                                 readonly=True,
                                 help="Value of the Change",
                                 states={'draft': [('readonly', False)]})
     analytic_line_plan_ids = fields.One2many(
         'account.analytic.line.plan',
         'change_id',
-        'Revenue planning lines',
+        string='Revenue planning lines',
         readonly=True,
     )
     change_template_id = fields.Many2one(
         'change.management.template',
-        'Change Template',
+        string='Change Template',
         readonly=True,
         states={'draft': [('readonly', False)]})
 
@@ -121,6 +120,6 @@ class ChangeManagementChange(models.Model):
 
     @api.multi
     def set_state_rejected(self):
-        res = super(ChangeManagementChange, self).set_state_draft()
+        res = super(ChangeManagementChange, self).set_state_rejected()
         self._delete_analytic_lines()
         return res
