@@ -36,6 +36,7 @@ class AnalyticAccount(models.Model):
         )
         SELECT id FROM children order by parent_id
         """
+        # pylint: disable=sql-injection
         query = query.format(id1=", ".join([str(i) for i in self._ids]))
         self.env.cr.execute(query)
         res = self.env.cr.fetchall()

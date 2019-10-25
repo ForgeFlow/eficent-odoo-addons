@@ -64,7 +64,7 @@ class AccountAnalyticAccount(models.Model):
                 + where_date_fy
                 + """
                 """,
-                query_params_fy,
+                tuple(query_params_fy),
             )
             val = cr.fetchone()[0] or 0
             account.total_value_fy = val
@@ -86,7 +86,7 @@ class AccountAnalyticAccount(models.Model):
                 + where_date_fy_end
                 + """
                 """,
-                query_params_fy_end,
+                tuple(query_params_fy_end),
             )
             val = cr.fetchone()[0] or 0
             account.total_value_end_fy = val
@@ -109,7 +109,7 @@ class AccountAnalyticAccount(models.Model):
                 + where_date_fy
                 + """
                 """,
-                query_params_fy,
+                tuple(query_params_fy),
             )
             account.actual_costs_fy = 0
             val = cr.fetchone()[0] or 0
@@ -133,7 +133,7 @@ class AccountAnalyticAccount(models.Model):
                 + where_date_fy_end
                 + """
                 """,
-                query_params_fy_end,
+                tuple(query_params_fy_end),
             )
             account.actual_costs_end_fy = 0
             val = cr.fetchone()[0] or 0
@@ -157,8 +157,8 @@ class AccountAnalyticAccount(models.Model):
             """
                 + where_date_fy
                 + """
-            """,
-                query_params_fy,
+                """,
+                tuple(query_params_fy),
             )
             val = cr.fetchone()[0] or 0
             account.total_estimated_costs_fy = val
@@ -181,8 +181,8 @@ class AccountAnalyticAccount(models.Model):
             """
                 + where_date_fy_end
                 + """
-            """,
-                query_params_fy_end,
+                """,
+                tuple(query_params_fy_end),
             )
             val = cr.fetchone()[0] or 0
             account.total_estimated_costs_end_fy = val
@@ -216,7 +216,6 @@ class AccountAnalyticAccount(models.Model):
             )
             #
             # Actual costs for the period
-            # pylint: disable=sql-injection
             cr.execute(
                 """
                 SELECT amount, L.id, AAJ.cost_type
@@ -234,7 +233,7 @@ class AccountAnalyticAccount(models.Model):
                 + where_date
                 + """
                 """,
-                query_params,
+                tuple(query_params),
             )
             account.fy_actual_costs = 0
             fy_actual_cost_line_ids = []
@@ -259,7 +258,6 @@ class AccountAnalyticAccount(models.Model):
                 (6, 0, [l for l in fy_actual_labor_line_ids])
             ]
             # Actual billings to date
-            # pylint: disable=sql-injection
             cr.execute(
                 """
                 SELECT amount, L.id
@@ -275,7 +273,7 @@ class AccountAnalyticAccount(models.Model):
                 + where_date
                 + """
                 """,
-                query_params,
+                tuple(query_params),
             )
             fy_billings_line_ids = []
             for (total, line_id) in cr.fetchall():
