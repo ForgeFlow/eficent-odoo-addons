@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="change_form_view" model="ir.ui.view">
+        <field name="name">change.management.change.form.view</field>
+        <field name="model">change.management.change</field>
+        <field name="inherit_id" ref="change_management.change_form_view"/>
+        <field name="arch" type="xml">
+            <field name="stakeholder_id" position="before">
+                <field name="customer_id"/>
+                <field name="customer_ref"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="change_tree_view" model="ir.ui.view" >
+        <field name="name">change.management.change.tree.view</field>
+        <field name="model">change.management.change</field>
+        <field name="inherit_id" ref="change_management.change_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="customer_id"/>
+                <field name="customer_ref"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="change_search_form_view" model="ir.ui.view">
+        <field name="name">change.management.change.search.form.view</field>
+        <field name="model">change.management.change</field>
+        <field name="inherit_id" ref="change_management.change_search_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="customer_ref"/>
+                <field name="customer_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

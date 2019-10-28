@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_change_management_template_tree" model="ir.ui.view">
+        <field name="name">change.management.template.tree</field>
+        <field name="model">change.management.template</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Template">
+                <field name="name"/>
+                <field name="version_id"/>
+                <field name="revenue_product_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_change_management_template_form" model="ir.ui.view">
+        <field name="name">change.management.template.form</field>
+        <field name="model">change.management.template</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Change management Template" version="7.0">
+                <group>
+                    <field name="name" placeholder="Change template name..."/>
+                </group>
+                <group>
+                    <field name="version_id"/>
+                    <field name="revenue_product_id"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="view_change_management_template_filter" model="ir.ui.view">
+        <field name="name">change.management.template.select</field>
+        <field name="model">change.management.template</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Search change templates">
+                <group col='6' colspan='5'>
+                    <field name="name"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_change_management_template_open_form"
+            model="ir.actions.act_window">
+        <field name="name">Change Management Templates</field>
+        <field name="res_model">change.management.template</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id"
+               ref="view_change_management_template_filter" />
+    </record>
+
+    <record model="ir.actions.act_window.view"
+            id="action_change_management_template_open_form_view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_change_management_template_tree"/>
+        <field name="act_window_id"
+               ref="action_change_management_template_open_form"/>
+    </record>
+
+    <menuitem groups="project.group_project_manager"
+        action="action_change_management_template_open_form"
+        id="change_management_template_entries"
+        parent="project.menu_project_config"
+        sequence="15"/>
+</odoo>

@@ -23,6 +23,7 @@ class AccountAnalyticAccount(models.Model):
         )
         SELECT id FROM children order by parent_id
         """
+        # pylint: disable=sql-injection
         query = query.format(id1=", ".join([str(i) for i in self._ids]))
         self.env.cr.execute(query)
         res = self.env.cr.fetchall()
@@ -48,7 +49,7 @@ class AccountAnalyticAccount(models.Model):
                 AND l.account_id IN %s
                 AND a.active_analytic_planning_version = l.version_id
                 """,
-                query_params,
+                tuple(query_params),
             )
             val = self.env.cr.fetchone()[0] or 0
             acc_id.contract_value = val
