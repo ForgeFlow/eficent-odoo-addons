@@ -174,10 +174,7 @@ class AnalyticResourcePlanLine(models.Model):
             line_warehouse_id = (
                 line.account_id.location_id.get_warehouse() or False
             )
-            if (
-                warehouse_id is not False
-                and line_warehouse_id != warehouse_id
-            ):
+            if warehouse_id is not False and line_warehouse_id != warehouse_id:
                 raise ValidationError(
                     _("You have to select lines " "from the same warehouse.")
                 )
