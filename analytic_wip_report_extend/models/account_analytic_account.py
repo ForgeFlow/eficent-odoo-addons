@@ -30,7 +30,7 @@ class AccountAnalyticAccount(models.Model):
 
     estimated_gross_profit_per = fields.Float(
         compute="_compute_wip_report",
-        string="Total Value",
+        string="Total Value (Percentage)",
         help="""Estimated gros profit percentage
              (estimated gross profit/total contract value)""",
         digits=dp.get_precision("Account"),
