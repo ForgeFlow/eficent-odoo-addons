@@ -6,7 +6,7 @@ from odoo import models, fields
 
 class ChangeManagementTemplate(models.Model):
     _name = 'change.management.template'
-    _description = 'Change Management Templates'
+    _description = 'Change Management Template'
 
     name = fields.Char('Description', size=256, required=True)
     version_id = fields.Many2one('account.analytic.plan.version',

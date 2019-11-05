@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from odoo.tests import common
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tests.common import TransactionCase
 
 
-class TestPurchaseDelivery(common.TransactionCase):
+class TestPurchaseDelivery(TransactionCase):
+
     def setUp(self):
         super(TestPurchaseDelivery, self).setUp()
         self.PurchaseOrder = self.env["purchase.order"]
@@ -17,8 +17,10 @@ class TestPurchaseDelivery(common.TransactionCase):
             {
                 "src_zip_from": 12345,
                 "src_zip_to": 56890,
-                "src_country_ids": [(6, 0, [self.env.user.country_id.id])],
-                "src_state_ids": [(6, 0, [self.env.user.state_id.id])],
+                "src_country_ids": [(6, 0, [
+                    x.id for x in self.env.user.country_id])],
+                "src_state_ids": [(6, 0, [
+                    x.id for x in self.env.user.state_id])],
             }
         )
 
@@ -35,9 +37,7 @@ class TestPurchaseDelivery(common.TransactionCase):
                         "product_qty": 5.0,
                         "product_uom": self.product_id_1.uom_po_id.id,
                         "price_unit": 500.0,
-                        "date_planned": datetime.today().strftime(
-                            DEFAULT_SERVER_DATETIME_FORMAT
-                        ),
+                        "date_planned": datetime.today(),
                     },
                 )
             ],
@@ -49,6 +49,6 @@ class TestPurchaseDelivery(common.TransactionCase):
         self.po.button_confirm()
         self.picking = self.po.picking_ids
         self.picking.action_assign()
-        self.picking.do_new_transfer()
+        self.picking.button_validate()
         self.assertTrue(self.picking.carrier_id)
         self.assertEqual(self.picking.carrier_id, self.po.carrier_id)

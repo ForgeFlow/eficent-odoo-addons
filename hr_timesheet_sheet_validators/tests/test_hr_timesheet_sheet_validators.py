@@ -37,8 +37,8 @@ class TestComputeWorkdays(TransactionCase):
 
         self.timesheet_sheet = self.timesheet_sheet.create(
             {
-                "date_from": time.strftime("%Y-%m-11"),
-                "date_to": time.strftime("%Y-%m-17"),
+                "date_start": time.strftime("%Y-%m-11"),
+                "date_end": time.strftime("%Y-%m-17"),
                 "name": "Employee 1",
                 "state": "new",
                 "user_id": self.user_test.id,
@@ -68,9 +68,9 @@ class TestComputeWorkdays(TransactionCase):
 
     def test_timesheet_methods(self):
         self.timesheet_sheet.action_timesheet_confirm()
-        self.assertEqual(
-            self.timesheet_sheet.validator_user_ids,
+        self.assertIn(
             self.timesheet_sheet.employee_id.parent_id.user_id,
+            self.timesheet_sheet.validator_user_ids,
         )
         with self.assertRaises(UserError):
             self.timesheet_sheet.action_timesheet_done()

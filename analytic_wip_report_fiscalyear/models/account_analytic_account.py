@@ -351,22 +351,22 @@ class AccountAnalyticAccount(models.Model):
     fy_actual_cost_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_fy_wip_report",
-        string="Detail",
+        string="Cost Detail",
     )
     fy_actual_labor_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_fy_wip_report",
-        string="Detail",
+        string="Labor Detail",
     )
     fy_actual_material_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_fy_wip_report",
-        string="Detail",
+        string="Material Detail",
     )
     fy_billings_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_fy_wip_report",
-        string="Detail",
+        string="Billing Detail",
     )
     actual_costs_fy = fields.Float(
         compute="_compute_wip_report",
