@@ -14,8 +14,6 @@ class DeliveryCarrier(models.Model):
     def name_get(self):
         if not len(self.ids):
             return []
-        if self._context is None:
-            self._context = {}
         return [(r["id"], r["name"]) for r in self.read(["name"])]
 
     src_country_ids = fields.Many2many(
