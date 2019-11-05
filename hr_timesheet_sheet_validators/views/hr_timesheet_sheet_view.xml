@@ -42,7 +42,7 @@
             <xpath expr='//field[@name="employee_id"]' position="after">
                 <field name="validator_user_ids"/>
             </xpath>
-            <xpath expr='//filter[@name="to_approve"]' position="after">
+            <xpath expr='//filter[@name="to_review"]' position="after">
                 <filter name="my_timesheets"
                         string="My timesheets to validate"
                         domain="[('validator_user_ids','in',[uid])]"
@@ -56,14 +56,14 @@
         <field name="model">hr_timesheet.sheet</field>
         <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
         <field name="arch" type="xml">
-            <xpath expr='//sheet/group/group[@name="dates"]/field[@name="department_id"]' position="attributes">
+            <xpath expr='//sheet/group/group[@name="details"]/field[@name="department_id"]' position="attributes">
                 <attribute name="invisible">False</attribute>
             </xpath>
         </field>
     </record>
 
-    <menuitem action="hr_timesheet_sheet.act_hr_timesheet_sheet_form"
-              id="hr_timesheet_sheet.menu_act_hr_timesheet_sheet_form"
+    <menuitem action="hr_timesheet_sheet.act_hr_timesheet_sheet_to_review"
+              id="hr_timesheet_sheet.menu_act_hr_timesheet_sheet_to_review"
               parent="hr_timesheet.menu_hr_time_tracking"
               sequence="2"
               groups="base.group_user,hr.group_hr_user"/>
