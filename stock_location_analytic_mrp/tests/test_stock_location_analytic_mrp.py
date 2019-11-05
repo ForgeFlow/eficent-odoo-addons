@@ -29,7 +29,7 @@ class TestStockLocationAnalyticMRP(TransactionCase):
         )
         self.AA1.location_id = self.location1.id
         self.category = self.env["product.category"].create(
-            {"name": "Category for inventory", "type": "normal"}
+            {"name": "Category for inventory"}
         )
         self.product = self.env["product.product"].create(
             {"name": "Test product", "categ_id": self.category.id}
