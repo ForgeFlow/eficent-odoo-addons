@@ -11,7 +11,7 @@ class TestAnalyticCostRevenue(common.SavepointCase):
         super(TestAnalyticCostRevenue, cls).setUpClass()
         cls.project_project = cls.env["project.project"]
         cls.project = cls.project_project.create(
-            {"name": "Test project", "code": "ACV0001"}
+            {"name": "Test project"}
         )
         cls.account_id = cls.project.analytic_account_id
         cls.product_simple = cls.env["product.product"].create(
