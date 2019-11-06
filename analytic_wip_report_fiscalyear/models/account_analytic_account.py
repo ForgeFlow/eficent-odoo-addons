@@ -321,7 +321,7 @@ class AccountAnalyticAccount(models.Model):
 
     fy_gross_profit = fields.Float(
         compute="_compute_fy_wip_report",
-        string="Estimated Gross Profit",
+        string="FY Estimated Gross Profit",
         help="""Total Value – Total Estimated Costs""",
         digits=dp.get_precision("Account"),
     )
@@ -351,22 +351,22 @@ class AccountAnalyticAccount(models.Model):
     fy_actual_cost_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_fy_wip_report",
-        string="Cost Detail",
+        string="FY Cost Detail",
     )
     fy_actual_labor_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_fy_wip_report",
-        string="Labor Detail",
+        string="FY Labor Detail",
     )
     fy_actual_material_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_fy_wip_report",
-        string="Material Detail",
+        string="FY Material Detail",
     )
     fy_billings_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_fy_wip_report",
-        string="Billing Detail",
+        string="FY Billing Detail",
     )
     actual_costs_fy = fields.Float(
         compute="_compute_wip_report",
