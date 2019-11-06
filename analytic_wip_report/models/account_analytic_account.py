@@ -238,8 +238,8 @@ class AccountAnalyticAccount(models.Model):
     )
     estimated_gross_profit_per = fields.Float(
         compute="_compute_wip_report",
-        string="Estimated Gross Profit",
-        help="""Total Value – Total Estimated Costs""",
+        string="Estimated Gross Profit Percentage",
+        help="""Total Value – Total Estimated Costs (%)""",
         digits=dp.get_precision("Account"),
     )
     percent_complete = fields.Float(
@@ -277,32 +277,32 @@ class AccountAnalyticAccount(models.Model):
     actual_billings_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_wip_report",
-        string="Detail",
+        string="Billing Detail",
     )
     actual_cost_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_wip_report",
-        string="Detail",
+        string="Cost Detail",
     )
     actual_material_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_wip_report",
-        string="Detail",
+        string="Material Detail",
     )
     actual_labor_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
         compute="_compute_wip_report",
-        string="Detail",
+        string="Labor Detail",
     )
     total_estimated_cost_line_ids = fields.Many2many(
         comodel_name="account.analytic.line.plan",
         compute="_compute_wip_report",
-        string="Detail",
+        string="Estimated Cost Detail",
     )
     total_value_line_ids = fields.Many2many(
         comodel_name="account.analytic.line.plan",
         compute="_compute_wip_report",
-        string="Detail",
+        string="Value Detail",
     )
 
     @api.multi

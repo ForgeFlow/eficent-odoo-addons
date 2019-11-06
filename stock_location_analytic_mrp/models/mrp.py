@@ -7,7 +7,7 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
     @api.multi
-    @api.constrains("operating_unit_id", "location_src_id", "location_dest_id")
+    @api.constrains("location_src_id", "location_dest_id")
     def _check_mrp_analytic_location(self):
         for mrp in self:
             if mrp.analytic_account_id:
