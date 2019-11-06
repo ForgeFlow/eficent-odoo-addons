@@ -13,16 +13,22 @@ class TestAccountAnalyticPost(common.TransactionCase):
         self.account_obj = self.env["account.account"]
         self.journal_obj = self.env["account.journal"]
         self.users_obj = self.env["res.users"]
+        self.company_id = self.users_obj.browse(self.env.uid).company_id.id
         self.account_cash = self.account_obj.search(
             [("user_type_id.type", "=", "liquidity")], limit=1
         )
         self.account_Income = self.account_obj.search(
             [("user_type_id.name", "=", "Income")], limit=1
         )
+        self.journal_obj.create({
+            "name": "something",
+            "type": "sale",
+            "code": "prefix",
+            "company_id": self.company_id,
+        })
         self.journal = self.journal_obj.search(
             [("type", "=", "sale")], limit=1
         )
-        self.company_id = self.users_obj.browse(self.env.uid).company_id.id
         self.analytic_account_id = self.analytic_account_obj.create(
             {"name": "Test Analytic Account "}
         )
