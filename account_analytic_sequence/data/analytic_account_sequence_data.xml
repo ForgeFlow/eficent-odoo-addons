@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <record id="seq_analytic_account_sequence_default" model="ir.sequence">
-        <field name="name">Analytic account sequence default</field>
-        <field name="code">analytic.account.sequence</field>
-        <field name="padding">2</field>
+    <record id="analytic_account_code_seq" model="ir.sequence">
+        <field name="name">Analytic account code</field>
+        <field name="code">account.analytic.account.code</field>
+        <field name="prefix">AA</field>
+        <field name="padding">3</field>
     </record>
 </odoo>

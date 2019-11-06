@@ -16,6 +16,7 @@ _logger = logging.getLogger(__name__)
 
 class AnalyticAccountSequence(models.Model):
     _name = "analytic.account.sequence"
+    _description = "Analytic Account Sequence"
 
     @api.depends("number_next", "implementation")
     def _compute_number_next_actual(self):
@@ -32,8 +33,7 @@ class AnalyticAccountSequence(models.Model):
                     """
                     SELECT last_value, is_called
                     FROM analytic_account_sequence_%05d
-                    """
-                    % element.id
+                    """ % element.id
                 )
                 # get number from postgres sequence. Cannot use
                 # currval, because that might give an error when
@@ -84,7 +84,7 @@ class AnalyticAccountSequence(models.Model):
         "Suffix", help="Suffix value of the record for " "the sequence"
     )
     number_next = fields.Integer(
-        "Next Number",
+        "Next Number (invisible)",
         required=True,
         default=1,
         help="Next number of this sequence",
@@ -135,7 +135,7 @@ class AnalyticAccountSequence(models.Model):
 
     @api.multi
     def _create_sequence(self, number_increment, number_next):
-        """ Create a PostreSQL sequence.
+        """ Create a PostgreSQL sequence.
         There is no access rights check.
         """
         self.ensure_one()
@@ -151,13 +151,13 @@ class AnalyticAccountSequence(models.Model):
 
     @api.multi
     def _drop_sequence(self):
-        """ Drop the PostreSQL sequence if it exists.
+        """ Drop the PostgreSQL sequence if it exists.
         There is no access rights check.
         """
         ids = self.ids if isinstance(self.ids, list) else list(self.ids)
         assert all(
-            isinstance(i, (int, long)) for i in ids
-        ), "Only ids in (int, long) allowed."
+            isinstance(i, (int, )) for i in ids
+        ), "Only integer ids are allowed."
         names = ",".join("analytic_account_sequence_%05d" % i for i in ids)
         # RESTRICT is the default; it prevents dropping the sequence if an
         # object depends on it.
@@ -166,7 +166,7 @@ class AnalyticAccountSequence(models.Model):
 
     @api.multi
     def _alter_sequence(self, number_increment, number_next=None):
-        """ Alter a PostreSQL sequence.
+        """ Alter a PostgreSQL sequence.
         There is no access rights check.
         """
         if number_increment == 0:
