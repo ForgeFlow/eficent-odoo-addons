@@ -2,12 +2,12 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests import common
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from datetime import datetime
+from odoo import fields
 from odoo.exceptions import ValidationError
 
 
 class TestPurchaseOrderLine(common.TransactionCase):
+
     def setUp(self):
         super(TestPurchaseOrderLine, self).setUp()
         self.PurchaseOrder = self.env["purchase.order"]
@@ -26,7 +26,7 @@ class TestPurchaseOrderLine(common.TransactionCase):
             }
         )
         self.analytic_account.write(
-            {"location_id": self.location.id, "picking_type_id": 1}
+            {"location_id": self.location.id}
         )
         self.po_vals = {
             "partner_id": self.partner_id.id,
@@ -43,9 +43,7 @@ class TestPurchaseOrderLine(common.TransactionCase):
                         "product_uom": self.product_id_1.uom_po_id.id,
                         "price_unit": 500.0,
                         "account_analytic_id": self.analytic_account.id,
-                        "date_planned": datetime.today().strftime(
-                            DEFAULT_SERVER_DATETIME_FORMAT
-                        ),
+                        "date_planned": fields.Datetime.today(),
                     },
                 )
             ],
@@ -68,9 +66,7 @@ class TestPurchaseOrderLine(common.TransactionCase):
                         "product_uom": self.product_id_1.uom_po_id.id,
                         "price_unit": 500.0,
                         "account_analytic_id": self.analytic_account.id,
-                        "date_planned": datetime.today().strftime(
-                            DEFAULT_SERVER_DATETIME_FORMAT
-                        ),
+                        "date_planned": fields.Datetime.today(),
                     },
                 )
             ],
@@ -81,12 +77,12 @@ class TestPurchaseOrderLine(common.TransactionCase):
         self.po.button_confirm()
         self.picking = self.po.picking_ids
         self.picking.action_assign()
-        self.picking.do_new_transfer()
+        self.picking.button_validate()
         self.assertEqual(
             self.picking.location_dest_id.analytic_account_id,
             self.po.project_id,
         )
 
-    def test_check_purchaseno_analytic(self):
+    def test_check_purchase_no_analytic(self):
         with self.assertRaises(ValidationError):
             self.po = self.PurchaseOrder.create(self.po_no_anal_vals)

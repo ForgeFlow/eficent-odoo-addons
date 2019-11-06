@@ -12,7 +12,7 @@
     "category": "Project Management",
     "license": "AGPL-3",
     "depends": [
-        "purchase",
+        "purchase_stock",
         "stock_analytic_account",
         "purchase_analytic",
         "purchase_location_by_line",

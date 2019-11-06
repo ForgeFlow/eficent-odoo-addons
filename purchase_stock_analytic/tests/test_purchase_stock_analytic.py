@@ -1,10 +1,10 @@
 from odoo.tests import common
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from datetime import datetime
+from odoo import fields
 from odoo.exceptions import ValidationError
 
 
 class TestPurchaseStockAnalytic(common.TransactionCase):
+
     def setUp(self):
         super(TestPurchaseStockAnalytic, self).setUp()
         self.PurchaseOrder = self.env["purchase.order"]
@@ -37,9 +37,7 @@ class TestPurchaseStockAnalytic(common.TransactionCase):
                         "picking_type_id": 1,
                         "price_unit": 500.0,
                         "account_analytic_id": self.analytic_account.id,
-                        "date_planned": datetime.today().strftime(
-                            DEFAULT_SERVER_DATETIME_FORMAT
-                        ),
+                        "date_planned": fields.Datetime.today(),
                     },
                 )
             ],
@@ -50,12 +48,12 @@ class TestPurchaseStockAnalytic(common.TransactionCase):
         with self.assertRaises(ValidationError):
             self.po.button_confirm()
         self.analytic_account.write(
-            {"location_id": self.location.id, "picking_type_id": 1}
+            {"location_id": self.location.id}
         )
         self.po.button_confirm()
         self.picking = self.po.picking_ids
         self.picking.action_assign()
-        self.picking.do_new_transfer()
+        self.picking.button_validate()
         self.picking.move_lines.analytic_account_id = self.analytic_account.id
         self.assertEqual(
             self.po.order_line.account_analytic_id.id,
