@@ -45,8 +45,9 @@ class AccountAnalyticAccount(models.Model):
     sequence_ids = fields.One2many(
         'analytic.account.sequence',
         'analytic_account_id',
-        "Child code sequence"
+        string="Child code sequence"
     )
+    code = fields.Char()
 
     @api.model
     def create(self, vals):
@@ -70,7 +71,8 @@ class AccountAnalyticAccount(models.Model):
             vals['code'] = new_code
         analytic_account = super(AccountAnalyticAccount, self).create(vals)
         if 'sequence_ids' not in vals or\
-                ('sequence_ids' in vals and not vals['sequence_ids']):
+                ('sequence_ids' in vals and not vals['sequence_ids']) \
+                and not self._context.get('copy', False):
             analytic_account._create_sequence()
         return analytic_account
 
@@ -78,7 +80,7 @@ class AccountAnalyticAccount(models.Model):
     def write(self, data):
         # If the parent project changes, obtain a new code according to the
         # new parent's sequence
-        if 'parent_id' in data and data['parent_id']:
+        if 'parent_id' in data and data['parent_id'] and 'code' not in data:
             obj_sequence = self.env['analytic.account.sequence']
             parent = self.browse(data['parent_id'])
             if parent.sequence_ids:
@@ -89,12 +91,10 @@ class AccountAnalyticAccount(models.Model):
     @api.model
     def map_sequences(self, new_analytic_account):
         """ copy and map tasks from  old to new analytic account """
-        map_sequence_id = {}
         account = self
         for sequence in account.sequence_ids:
-            map_sequence_id[sequence.id] = sequence.copy({}).id
-        new_analytic_account.\
-            write({'sequence_ids': [(6, 0, map_sequence_id.values())]})
+            sequence.copy(
+                {'analytic_account_id': new_analytic_account.id})
         return True
 
     @api.multi
@@ -102,6 +102,7 @@ class AccountAnalyticAccount(models.Model):
         if default is None:
             default = {}
         default['sequence_ids'] = []
-        res = super(AccountAnalyticAccount, self).copy(default)
+        res = super(AccountAnalyticAccount,
+                    self.with_context(copy=True)).copy(default)
         self.map_sequences(res)
         return res
