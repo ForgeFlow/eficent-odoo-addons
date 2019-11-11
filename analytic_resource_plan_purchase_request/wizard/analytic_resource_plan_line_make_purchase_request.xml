@@ -14,11 +14,7 @@
                  <group>
                      <field name="item_ids" nolabel="1">
                           <tree string="Details" create="false" editable="bottom">
-<<<<<<< HEAD
                               <field name="line_id" options="{'no_open': true}" invisible="1"/>
-=======
-                              <field name="line_id" options="{'no_open': true}"/>
->>>>>>> 78b0c96... [ENH]show product info when creating manual purchase request from the wizard
                               <field name="product_reference_code"/>
                               <field name="product_name"/>
                               <field name="product_manufacturer"/>
