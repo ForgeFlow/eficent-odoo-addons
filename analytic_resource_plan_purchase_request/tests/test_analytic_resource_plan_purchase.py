@@ -12,7 +12,6 @@ from odoo.addons.analytic_resource_plan_stock.tests import (
 class TestAnalyticResourcePlanPurchase(
     test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock
 ):
-
     @classmethod
     def setUpClass(cls):
         super(TestAnalyticResourcePlanPurchase, cls).setUpClass()

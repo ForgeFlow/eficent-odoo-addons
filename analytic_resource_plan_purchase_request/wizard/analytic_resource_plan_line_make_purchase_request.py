@@ -24,6 +24,9 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
             "account_id": line.account_id.id,
             "product_id": line.product_id.id,
             "product_qty": line.unit_amount,
+            "product_name": line.product_id.name,
+            "product_reference_code": line.product_id.reference_code,
+            "product_manufacturer": line.product_id.manufacturer.name,
             "product_uom_id": line.product_uom_id.id,
             "line_id": line.id,
         }
@@ -164,11 +167,15 @@ class AnalyticResourcePlanLineMakePurchaseRequestItem(models.TransientModel):
     _description = "Resource plan make purchase request item"
 
     wiz_id = fields.Many2one(
-        "analytic.resource.plan.line.make.purchase.request", "Wizard"
+        "analytic.resource.plan.line.make.purchase.request",
+        "Wizard",
+        required=True,
+        ondelete="cascade",
     )
     line_id = fields.Many2one(
         "analytic.resource.plan.line",
         "Resource Plan Line",
+        required=True,
     )
     account_id = fields.Many2one(
         "account.analytic.account",
@@ -177,11 +184,11 @@ class AnalyticResourcePlanLineMakePurchaseRequestItem(models.TransientModel):
         readonly=True,
     )
     product_id = fields.Many2one(
-        "product.product",
-        related="line_id.product_id",
-        string="Product",
-        readonly=True,
+        "product.product", related="line_id.product_id", string="Product"
     )
+    product_manufacturer = fields.Char(string="Manufacturer", readonly=True)
+    product_reference_code = fields.Char(string="Part number", readonly=True)
+    product_name = fields.Char(string="Product Name", readonly=True)
     product_qty = fields.Float(
         string="Quantity to request", digits=dp.get_precision("Product UoS")
     )
