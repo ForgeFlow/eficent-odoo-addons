@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="analytic_account_sequence_view" model="ir.ui.view">
+        <field name="model">analytic.account.sequence</field>
+        <field name="arch" type="xml">
+            <form string="Sequences">
+              <sheet>
+                <group col="4">
+                    <field name="analytic_account_id"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="active" groups="base.group_no_one"/>
+                </group>
+                <notebook>
+                <page string="Sequence">
+                    <group col="4">
+                        <field name="prefix"/>
+                        <field name="suffix"/>
+                        <field name="padding"/>
+                        <field name="number_increment"/>
+                        <field name="number_next" invisible="1"/>
+                        <field name="number_next_actual"/>
+                        <field name="implementation"/>
+                    </group>
+                    <group col="3" string="Legend (for prefix, suffix)">
+                        <div>
+                            <p>Current Year with Century: %%(year)s</p>
+                            <p>Current Year without Century: %%(y)s</p>
+                            <p>Month: %%(month)s</p>
+                            <p>Day: %%(day)s</p>
+                        </div>
+                        <div>
+                            <p>Day of the Year: %%(doy)s</p>
+                            <p>Week of the Year: %%(woy)s</p>
+                            <p>Day of the Week (0:Monday): %%(weekday)s</p>
+                        </div>
+                        <div>
+                            <p>Hour 00->24: %%(h24)s</p>
+                            <p>Hour 00->12: %%(h12)s</p>
+                            <p>Minute: %%(min)s</p>
+                            <p>Second: %%(sec)s</p>
+                        </div>
+                    </group>
+                </page>
+                </notebook>
+               </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="analytic_account_sequence_view_tree" model="ir.ui.view">
+        <field name="model">analytic.account.sequence</field>
+        <field name="arch" type="xml">
+            <tree string="Sequences">
+                <field name="analytic_account_id"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="prefix"/>
+                <field name="padding"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="number_next" invisible="1"/>
+                <field name="number_next_actual"/>
+                <field name="number_increment"/>
+                <field name="implementation"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_analytic_account_sequence_search" model="ir.ui.view">
+        <field name="model">analytic.account.sequence</field>
+        <field name="arch" type="xml">
+            <search string="Sequences">
+                <field name="analytic_account_id"/>
+                <field name="name" string="Sequence"/>
+                <field name="code"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </search>
+        </field>
+    </record>
+    <record id="analytic_account_sequence_form" model="ir.actions.act_window">
+        <field name="name">Sequences</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">analytic.account.sequence</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="analytic_account_sequence_view_tree"/>
+        <field name="context">{'active_test': False}</field>
+    </record>
+    <menuitem action="analytic_account_sequence_form" id="menu_ir_sequence_form"
+              parent="account.menu_analytic_accounting"
+              groups="analytic.group_analytic_accounting"/>
+</odoo>
