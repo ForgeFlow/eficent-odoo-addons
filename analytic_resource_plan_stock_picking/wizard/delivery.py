@@ -66,7 +66,6 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
                 [('usage', '=', 'customer')], limit=1)
         partner_id = line.account_id.dest_address_id.id
         product_uom_id = line.product_uom_id.id
-        wh = line.account_id.location_id.get_warehouse()
 
         return {
             'name': line.name,
