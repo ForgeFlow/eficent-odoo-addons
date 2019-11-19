@@ -59,6 +59,11 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
     def _prepare_order_move(self, item, picking_id, date, date_expected):
         line = item.line_id
         location_id = line.account_id.location_id.id
+        customer_loc = self.env.ref(
+            'stock.stock_location_customers', raise_if_not_found=False)
+        if not customer_loc:
+            customer_loc = self.env['stock.location'].search(
+                [('usage', '=', 'customer')], limit=1)
         partner_id = line.account_id.dest_address_id.id
         product_uom_id = line.product_uom_id.id
         wh = line.account_id.location_id.get_warehouse()
@@ -74,7 +79,7 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
             'product_uos': product_uom_id,
             'partner_id': partner_id,
             'location_id': location_id,
-            'location_dest_id': wh.wh_output_stock_loc_id.id,
+            'location_dest_id': customer_loc.id,
             'analytic_account_id': line.account_id.id,
             'tracking_id': False,
             'state': 'draft',
@@ -85,10 +90,14 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
     def _prepare_order_picking(self, line, date, move_type):
         pick_name = self.env['ir.sequence'].next_by_code('stock.picking.out')
         type_obj = self.env['stock.picking.type']
-        company_id = self.env.context.get('company_id') or self.env.user.company_id.id
-        types = type_obj.search([('code', '=', 'incoming'), ('warehouse_id.company_id', '=', company_id),
-                                 ('name', '=', 'Receptions'),
-                                 ('warehouse_id.operating_unit_id', '=', self.env.user.default_operating_unit_id.id)])
+
+        company_id = self.env.context.get(
+            'company_id') or self.env.user.company_id.id
+        types = type_obj.search([('code', '=', 'outgoing'),
+                                 ('warehouse_id.company_id', '=', company_id),
+                                 ('name', '=', 'Delivery Orders'),
+                                 ('warehouse_id.operating_unit_id', '=',
+                                  self.env.user.default_operating_unit_id.id)])
         picking_type = types[:1]
         location = line.account_id.location_id
 
