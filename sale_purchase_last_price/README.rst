@@ -2,16 +2,16 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-===================
-Sale Purchase Price
-===================
+========================
+Sale Purchase Last Price
+========================
 
-This module adds the last purchase price in the sale order line
-
+This module adds the last purchase price in the sale order line.
 
 Credits
 =======
 
 Contributors
 ------------
+
 * Aaron Henriquez <ahenriquez@eficent.com>

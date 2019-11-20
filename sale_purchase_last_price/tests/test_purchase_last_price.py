@@ -1,14 +1,10 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests import common
-from datetime import datetime
-from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as DT
+from odoo.tests.common import TransactionCase
 
 
-class TestPurchaseLastPrice(common.TransactionCase):
+class TestPurchaseLastPrice(TransactionCase):
 
     def setUp(self):
         super(TestPurchaseLastPrice, self).setUp()
@@ -25,13 +21,13 @@ class TestPurchaseLastPrice(common.TransactionCase):
                           'list_price': 5,
                           'type': 'product'}
         self.product = self.env['product.product'].create(product_values)
-        self.product_uom_unit = self.env.ref('product.product_uom_unit')
+        self.product_uom_unit = self.env.ref('uom.product_uom_unit')
 
     def create_sale_order(self):
         sale_obj = self.env['sale.order']
         values = {
             'partner_id': self.partner.id,
-            'commitment_date': '02-02-2010',
+            'expected_date': '02-02-2010',
             'order_line': [(0, 0, {
                 'name': self.product.name,
                 'product_id': self.product.id,
@@ -44,13 +40,11 @@ class TestPurchaseLastPrice(common.TransactionCase):
     def test_purchase_last_price(self):
         purchase_order = self.purchase_model.create({
             'partner_id': self.partner_p.id,
-            'location_id': self.location.id,
-            'pricelist_id': self.pricelist.id,
-            'date': '01-01-2010',
+            'date_order': '01-01-2010',
             'order_line': [(0, 0, {
                 'product_id': self.product.id,
                 'price_unit': 123.0,
-                'product_uom': self.env.ref('product.product_uom_unit').id,
+                'product_uom': self.product_uom_unit.id,
                 'product_qty': 5.0,
                 'name': self.product.name,
                 'date_planned': '01-01-2010'
@@ -58,8 +52,7 @@ class TestPurchaseLastPrice(common.TransactionCase):
         })
         purchase_order.button_confirm()
         sale = self.create_sale_order()
-        p_date = datetime.strptime(purchase_order.date_order, DT)
-        p_date = p_date.date().strftime(DF)
+        p_date = purchase_order.date_order.date()
         for line in sale.order_line:
             self.assertEqual(line.last_supplier_id.id, self.partner_p.id)
             self.assertEqual(line.last_purchase_price, 123.0)

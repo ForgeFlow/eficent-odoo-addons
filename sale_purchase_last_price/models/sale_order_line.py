@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import api, models, fields
@@ -12,8 +11,8 @@ class SaleOrderLine(models.Model):
     def _compute_last_purchase(self):
         """ Get last purchase price, last purchase date and last supplier """
         for so_line in self:
-            date_compare = (so_line.order_id.commitment_date if
-                            so_line.order_id.commitment_date else
+            date_compare = (so_line.order_id.expected_date if
+                            so_line.order_id.expected_date else
                             so_line.order_id.date_order)
             po_lines = self.env['purchase.order.line'].search(
                 [('product_id', '=', so_line.product_id.id),
@@ -22,7 +21,7 @@ class SaleOrderLine(models.Model):
                 order='id DESC', limit=1)
 
             if po_lines:
-                so_line.last_purchase_date = po_lines[0].date_order
+                so_line.last_purchase_date = po_lines[0].date_order.date()
                 so_line.last_purchase_price = po_lines[0].price_unit
                 so_line.last_supplier_id = po_lines[0].order_id.partner_id.id
             else:
