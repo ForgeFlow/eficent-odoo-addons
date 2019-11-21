@@ -22,7 +22,7 @@ class AnalyticWipReport(models.TransientModel):
         if self.to_date:
             start_date = self.to_date
         stages = (
-            self.env["analytic.account.stage"]
+            self.env["base.kanban.stage"]
             .search([("name", "in", ("Closed", "Cancelled"))])
             .ids
         )
