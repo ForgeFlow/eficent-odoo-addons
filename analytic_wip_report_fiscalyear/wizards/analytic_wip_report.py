@@ -9,7 +9,7 @@ class AnalyticWipReport(models.TransientModel):
     fiscalyear_id = fields.Many2one(
         "date.range",
         required=True,
-        domain=[("type_id.fiscal_year", "=", True)],
+        domain=[("type_id.name", "=", "Fiscal Year")],
     )
     from_date_fy = fields.Date("From (within the fiscal year)", required=True)
     to_date_fy = fields.Date("To (within the fiscal year)", required=True)
