@@ -8,7 +8,6 @@ import time
 
 
 class AnalyticResourcePlanLine(models.Model):
-
     _inherit = "analytic.resource.plan.line"
 
     @api.multi
@@ -34,7 +33,6 @@ class AnalyticResourcePlanLine(models.Model):
                 for move in picking.move_lines:
                     qty += move.product_uom_qty
             line.qty_left = line.unit_amount - qty
-        return line.qty_left
 
     picking_ids = fields.One2many(
         "stock.picking",
@@ -126,10 +124,8 @@ class AnalyticResourcePlanLine(models.Model):
                 continue
             if not line.account_id.location_id:
                 raise ValidationError(
-                    _(
-                        """Could not fetch stock. You have to set a
-                    location for the project"""
-                    )
+                    _("Could not fetch stock. "
+                      "You have to set a location for the project")
                 )
             company_id = line.account_id.company_id.id
             warehouses = self.env["stock.warehouse"].search(
@@ -180,9 +176,6 @@ class AnalyticResourcePlanLine(models.Model):
         for line in self:
             if line.picking_ids:
                 raise ValidationError(
-                    _(
-                        "You cannot delete a record that refers to "
-                        "a picking"
-                    )
+                    _("You cannot delete a record that refers to a picking")
                 )
         return super(AnalyticResourcePlanLine, self).unlink()
