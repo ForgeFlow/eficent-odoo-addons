@@ -12,7 +12,10 @@ class AnalyticResourcePlanLine(models.Model):
         res = super(AnalyticResourcePlanLine, self)._prepare_picking_vals(
             src_location_id
         )
+        picking_type = self.env["stock.picking.type"].browse(
+            res["picking_type_id"])
         res[
             "operating_unit_id"
-        ] = self.account_id.location_id.operating_unit_id.id
+        ] = picking_type.warehouse_id.operating_unit_id.id or \
+            self.account_id.location_id.operating_unit_id.id
         return res
