@@ -11,7 +11,7 @@
     "version": "12.0.1.0.0",
     "author":  "Eficent",
     "category": "Analytic",
-    "depends": ["analytic", "account"],
+    "depends": ["account"],
     "data": ["security/security.xml",
              "view/analytic_view.xml",
              "view/category_view.xml"],
