@@ -25,8 +25,6 @@ class AnalyticResourcePlanLineMakePurchaseRequest(models.TransientModel):
             "product_id": line.product_id.id,
             "product_qty": line.unit_amount,
             "product_name": line.product_id.name,
-            "product_reference_code": line.product_id.reference_code,
-            "product_manufacturer": line.product_id.manufacturer.name,
             "product_uom_id": line.product_uom_id.id,
             "line_id": line.id,
         }
