@@ -143,7 +143,7 @@ class AnalyticResourcePlanLine(models.Model):
                     for location_id in get_sublocations:
                         if qty_fetched < line.unit_amount:
                             stock = line.with_context(
-                                {"location": location_id.id}
+                                location=location_id.id
                             ).product_id._product_available()
                             qty_available = stock[line.product_id.id][
                                 "qty_available"
