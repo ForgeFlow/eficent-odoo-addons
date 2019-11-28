@@ -1,9 +1,12 @@
 # Copyright 2015 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import api, fields, models
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
+from datetime import datetime
 
 
 class AnalyticWipReport(models.TransientModel):
+
     _inherit = "analytic.wip.report"
 
     fiscalyear_id = fields.Many2one(
@@ -26,11 +29,15 @@ class AnalyticWipReport(models.TransientModel):
         if data["to_date"]:
             result_context.update({"to_date": data["to_date"]})
         if data["fiscalyear_id"]:
-            result_context.update({"fiscalyear_id": data["fiscalyear_id"]})
+            result_context.update({"fiscalyear_id": data["fiscalyear_id"][0]})
         if data["from_date_fy"]:
-            result_context.update({"from_date_fy": data["from_date_fy"]})
+            result_context.update(
+                {"from_date_fy": datetime.strftime(data["from_date_fy"], DT)}
+            )
         if data["to_date_fy"]:
-            result_context.update({"to_date_fy": data["to_date_fy"]})
+            result_context.update(
+                {"to_date_fy": datetime.strftime(data["to_date_fy"], DT)}
+            )
         result["context"] = str(result_context)
         return result
 
