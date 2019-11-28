@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import api, fields, models
@@ -16,7 +15,7 @@ class AnalyticWipReport(models.TransientModel):
         start_date = '2100-12-31'
         if self.to_date:
             start_date = self.to_date
-        stages = self.env['analytic.account.stage'].search(
+        stages = self.env['base.kanban.stage'].search(
             [('name', 'in', ('Closed', 'Cancelled'))]).ids
 
         if self.category_id:
