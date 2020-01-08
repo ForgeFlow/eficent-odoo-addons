@@ -29,14 +29,11 @@ class StockRule(models.Model):
     @api.model
     def _prepare_purchase_request(self, origin, values):
         res = super(StockRule, self)._prepare_purchase_request(origin, values)
-        if res.get('group_id'):
-            group = self.env['procurement.group'].browse(
-                res.get('group_id'))
+        group = values.get('group_id')
+        if group:
             sales = group.sale_id
             # The user who requested the PR will be the same as the SO,
             # otherwise the user will be Odoobot because of the pull rule
             res['requested_by'] = sales.user_id.id
-            res['sale_order_ids'] = \
-                [(4, sid.id) for sid in
-                 [group.mapped('sale_id')]]
+            res['sale_order_ids'] = [(4, sid.id) for sid in sales]
         return res
