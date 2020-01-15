@@ -221,7 +221,7 @@
                             class="oe_inline oe_stat_button"
                             name="%(change_management.action_show_changes)d"
                             type="action"
-                            icon="fa-code-branch"
+                            icon="fa-code-fork"
                             context="{'default_project_id': active_id,'search_default_project_id': active_id}">
                     <field name="change_count"
                            string="Changes"
@@ -241,7 +241,7 @@
                     <a t-if="record.change_count.raw_value"
                        name="%(change_management.action_show_changes)d"
                        type="action"
-                       class="fa fa-code-branch oe_wbs_button">
+                       class="oe_button">
                         Changes: <field name="change_count"/>
                     </a>
                 </div>
