@@ -12,6 +12,10 @@ class ProgressMeasurementsEntry(models.TransientModel):
     _name = "progress.measurements.entry"
     _description = "Progress measurements entry"
 
+    def _default_progress_measurement_type_id(self):
+        return self.env['progress.measurement.type'].search(
+            [('is_default', '=', True)], limit=1)
+
     communication_date = fields.Date(
         'Communication date',
         required=True,
@@ -20,7 +24,8 @@ class ProgressMeasurementsEntry(models.TransientModel):
     progress_measurement_type_id = fields.Many2one(
         'progress.measurement.type',
         'Progress Measurement Type',
-        required=True
+        required=True,
+        default=_default_progress_measurement_type_id
     )
 
     @api.multi
@@ -68,10 +73,10 @@ class ProgressMeasurementsEntry(models.TransientModel):
                     res.append(measurements[project_id]['id'])
                 else:
                     vals['value'] = measurements[project_id]['value']
-                    res.append(meas_obj.create(vals))
+                    res.append(meas_obj.create(vals).id)
             else:
                 vals['value'] = 0
-                res.append(meas_obj.create(vals))
+                res.append(meas_obj.create(vals).id)
         return {
             'domain': "[('id','in', [" + ','.join(map(str, res)) + "])]",
             'name': _('Non-aggregated progress measurements'),
