@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="project_wbs.open_view_project_wbs" model="ir.actions.act_window">
+        <field name="domain">
+            [('account_class','in',['project'])]
+        </field>
+    </record>
+
+    <record id="open_view_wbs_tree" model="ir.actions.act_window">
+        <field name="name">All WBS Elements</field>
+        <field name="res_model">project.project</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="project.view_project"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="context">
+            {'search_default_current': 1,
+            'default_account_class': False}
+        </field>
+    </record>
+
+    <menuitem action="project_wbs.group_project"
+              id="menu_project_wbs_projects"
+              name="Projects"
+              parent="project_wbs.menu_project_wbs_project"
+              sequence="15"/>
+
+    <menuitem action="project_wbs.open_view_project_phases"
+              id="menu_project_wbs_phases"
+              name="Phases"
+              parent="project_wbs.menu_project_wbs_project"
+              sequence="20"/>
+    <menuitem action="project_wbs.open_view_project_deliverables"
+              id="menu_project_wbs_deliverables"
+              name="Deliverables"
+              parent="project_wbs.menu_project_wbs_project"
+              sequence="30"/>
+    <menuitem action="project_wbs.open_view_project_work_packages"
+              id="menu_project_work_packages"
+              name="Work Packages"
+              parent="project_wbs.menu_project_wbs_project"
+              sequence="40"/>
+
+    <menuitem
+        action="open_view_wbs_tree"
+        id="menu_allwbs"
+        name="All WBS elements"
+        parent="project_wbs.menu_project_wbs_project"
+        sequence="45"/>
+
+    <menuitem
+        action="project_wbs.open_view_wbs_tree"
+        id="menu_fullwbs"
+        name="WBS overview"
+        parent="project_wbs.menu_project_wbs_project"
+        sequence="50"/>
+
+    <record id="edit_project" model="ir.ui.view">
+        <field name="name">project.project.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <label for="date_start" string="Dates"/>
+                <div  class="oe_inline">
+                    <field name="date_start"  class="oe_inline"/> -
+                    <field name="date" class="oe_inline"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+     <record id="view_project" model="ir.ui.view">
+            <field name="name">project.project.tree</field>
+            <field name="model">project.project</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="project_wbs.view_project"/>
+            <field name="arch" type="xml">
+                <field name="stage_id" position="after">
+                        <button
+                                string="Enter non-aggregated Progress Measurements for this WBS element"
+                                name="%(project_progress_measurement.action_progress_measurements_entry_form)d"
+                                icon='fa-cog'
+                                type="action"
+                                groups="project.group_project_user,project.group_project_manager"
+                                attrs="{'invisible':[('account_class','!=','work_package')]}"/>
+                </field>
+                <tree position="attributes">
+                    <attribute name="colors">blue:account_class=='work_package'</attribute>
+                </tree>
+            </field>
+        </record>
+
+</odoo>
