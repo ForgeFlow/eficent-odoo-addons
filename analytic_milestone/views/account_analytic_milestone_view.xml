@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_analytic_milestone_form" model="ir.ui.view">
+        <field name="name">analytic.milestone.form</field>
+        <field name="model">analytic.milestone</field>
+        <field name="arch" type="xml">
+            <form string="Milestones">
+                <header>
+                    <button name="action_button_draft" states="confirm"
+                    string="Draft" type="object"/>
+                    <button name="action_button_confirm" states="draft"
+                    string="Confirm" type="object"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" string="Name" placeholder="Milestone Description"/></h1>
+                    </div>
+                    <group name="main">
+                        <group name="main1">
+                            <field name="state" invisible="1"/>
+                            <field name="account_id"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group name="second">
+                        <group name="second1">
+                            <field name="percent"/>
+                            <field name="base_amount"/>
+                            <field name="approval_date"/>
+                            <field name="milestone_date"/>
+                            <field name="invoice_date"/>
+                            <field name="invoice_amount"/>
+                            <field name="previous_amount"/>
+                            <field name="next_amount"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="invoices" string="Invoice Lines">
+                            <field name="invoice_line_ids" readonly="True"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_analytic_milestone_tree" model="ir.ui.view">
+        <field name="name">analytic.milestone.tree</field>
+        <field name="model">analytic.milestone</field>
+        <field name="arch" type="xml">
+            <tree string="Milestones"
+                  colors = "blue:state=='draft'"
+                  editable="top">
+                <field name="state" invisible="1"/>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="account_id"/>
+                <field name="base_amount"/>
+                <field name="percent"/>
+                <field name="approval_date"/>
+                <field name="milestone_date"/>
+                <field name="invoice_date"/>
+                <field name="invoice_amount"/>
+                <field name="previous_amount"/>
+                <field name="next_amount"/>
+                <button string="Milestone Form View"
+                        name="action_open_view_milestone_form"
+                        type="object"
+                        icon="fa-pencil-square-o"/>
+                <button name="action_button_draft" states="confirm"
+                        string="Draft" type="object"
+                        icon="fa-ban"/>
+                <button name="action_button_confirm" states="draft"
+                        string="Confirm" type="object"
+                        icon="fa-check"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_analytic_milestone_search" model="ir.ui.view">
+        <field name="name">analytic.milestone.search</field>
+        <field name="model">analytic.milestone</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="account_id"/>
+                <field name="project_analytic_id"/>
+                <group expand="0" string="Group By...">
+                    <filter string="Project" name="account" context="{'group_by':'project_analytic_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <act_window
+        id="act_analytic_milestone"
+        name="Analytic Milestones"
+        res_model="analytic.milestone"
+        src_model="account.analytic.account"
+        view_mode="tree,form"
+        view_type="form"/>
+
+    <menuitem groups="analytic.group_analytic_accounting"
+        action="act_analytic_milestone"
+        id="menu_analytic_milestone"
+        name="Milestones"
+        parent="project.menu_main_pm"
+        sequence="7"/>
+</odoo>
