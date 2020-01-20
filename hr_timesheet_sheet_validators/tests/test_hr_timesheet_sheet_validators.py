@@ -13,6 +13,8 @@ class TestComputeWorkdays(TransactionCase):
         self.dept_1 = self.env.ref("hr.dep_rd")
         self.root = self.env.ref("hr.employee_admin")
         self.user = self.env.ref("base.user_admin")
+        # activate validators
+        self.user.company_id.use_timesheet_validators = True
         self.root.write({"user_id": self.user.id})
         self.dept.write(
             {"parent_id": self.dept_1.id, "manager_id": self.root.id}
