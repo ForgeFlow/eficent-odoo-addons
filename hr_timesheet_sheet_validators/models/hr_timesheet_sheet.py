@@ -35,7 +35,8 @@ class HrTimesheetSheet(models.Model):
 
     @api.multi
     def _check_authorised_validator(self):
-        for timesheet in self:
+        for timesheet in self.filtered(
+                lambda ts: ts.company_id.use_timesheet_validators):
             if not self.env.user._is_superuser():
                 if self.env.uid not in timesheet.validator_user_ids.ids:
                     raise UserError(
