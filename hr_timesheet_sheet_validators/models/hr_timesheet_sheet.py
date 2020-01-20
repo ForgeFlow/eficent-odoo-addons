@@ -36,13 +36,14 @@ class HrTimesheetSheet(models.Model):
     @api.multi
     def _check_authorised_validator(self):
         for timesheet in self:
-            if self.env.uid not in timesheet.validator_user_ids.ids:
-                raise UserError(
-                    _(
-                        "You are not authorised to approve  or "
-                        "refuse this Timesheet."
+            if not self.env.user._is_superuser():
+                if self.env.uid not in timesheet.validator_user_ids.ids:
+                    raise UserError(
+                        _(
+                            "You are not authorised to approve  or "
+                            "refuse this Timesheet."
+                        )
                     )
-                )
 
     @api.multi
     def action_timesheet_draft(self):
