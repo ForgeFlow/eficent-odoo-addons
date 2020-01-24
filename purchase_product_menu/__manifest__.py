@@ -33,6 +33,7 @@
         "product",
     ],
     "category": "Hidden/Dependency",
+    "license": "AGPL-3",
     "data": [
         "views/purchase_order_view.xml"
     ],

@@ -8,7 +8,6 @@ class TestChanges(common.TransactionCase):
 
     def setUp(self):
 
-        """***setup change tests***"""
         super(TestChanges, self).setUp()
         self.change_model = self.env['change.management.change']
         self.change_template_model = self.env['change.management.template']
@@ -22,13 +21,24 @@ class TestChanges(common.TransactionCase):
         self.test_project = self.project_model.create(
             {'name': 'ChangeTestProject'})
         self.anal = self.test_project.analytic_account_id
-        self.product_id = self.ref('product.product_product_4')
-        self.product = self.product_model.browse(self.product_id)
+        self.product = self.env['product.product'].create({'name': 'COP'})
+        self.product_id = self.product.id
+        self.account_type = self.env["account.account.type"].create({
+            "name": "Income",
+            "type": "other",
+        })
+        self.gp_account_id = self.env["account.account"].create({
+            "name": "Income",
+            "code": "TEST_A",
+            "user_type_id": self.account_type.id,
+            "reconcile": True,
+        })
+        self.product.product_tmpl_id.property_account_income_id = \
+            self.gp_account_id
         self.product.product_tmpl_id.revenue_analytic_plan_journal_id = \
             self.ref('analytic_plan.analytic_plan_journal_sale')
-        self.version = self.version_model.search(
-            [('default_plan', '=', True)])
-        if not len(self.version):
+        self.version = self.anal_model._default_version()
+        if not self.version:
             self.version = self.version_model.create(
                 {'name': 'name',
                  'company_id': 1,
@@ -47,13 +57,17 @@ class TestChanges(common.TransactionCase):
             'change_value': '123.00',
             'change_template_id': self.template.id,
             'change_project_id': self.test_project.id})
+        self.anal.active_analytic_planning_version = self.version
+        self.test_project.analytic_account_id.\
+            active_analytic_planning_version = self.version
 
     def test_change_owner_and_creator_added_to_followers_for_change(self):
         change = self.test_change_id
         change.set_state_active()
         change.set_state_accepted()
         self.assertEqual(
-            self.anal.contract_value, 123.00, msg='wrong contract value'
+            self.test_project.analytic_account_id.
+            contract_value, 123.00, msg='wrong contract value'
         )
         change.set_state_draft()
         self.assertEqual(

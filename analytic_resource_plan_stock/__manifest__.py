@@ -13,7 +13,7 @@
     'depends': [
         'analytic_resource_plan',
         'stock_location_analytic',
-        'stock'
+        'stock_analytic_account',
     ],
     'data': [
         'views/analytic_resource_plan_line_view.xml'

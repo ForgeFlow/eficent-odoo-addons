@@ -7,6 +7,7 @@
     'author': 'Eficent',
     "website": "www.eficent.com",
     'category': 'Purchase Management',
+    'license': 'LGPL-3',
     'summary': """
     Classify manufacturers by providing an indicator in the partner.
     In the product, select a manufacturer from the list of partners where

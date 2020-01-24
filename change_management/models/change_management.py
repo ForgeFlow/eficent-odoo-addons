@@ -425,9 +425,9 @@ class CMChange(models.Model):
             message_new(msg, custom_values=defaults)
         change = self.browse(res_id)
         email_list = change.email_split(msg)
-        stakeholder_ids = filter(
+        stakeholder_ids = list(filter(
             None, change._find_partner_from_emails(email_list)
-        )
+        ))
         change.message_subscribe(stakeholder_ids)
         return res_id
 
@@ -437,9 +437,9 @@ class CMChange(models.Model):
     def message_update(self, msg, update_vals=None):
         """ Override to update the change according to the email. """
         email_list = self.email_split(msg)
-        stakeholder_ids = filter(
+        stakeholder_ids = list(filter(
             None, self._find_partner_from_emails(email_list)
-        )
+        ))
         self.message_subscribe(stakeholder_ids)
         return super(CMChange, self).message_update(msg,
                                                     update_vals=update_vals)
@@ -470,9 +470,9 @@ class CMChange(models.Model):
             except Exception:
                 pass
         if self.project_id:
-            current_objects = filter(
+            current_objects = list(filter(
                 None, headers.get('X-Odoo-Objects', '').split(',')
-            )
+            ))
             current_objects.insert(
                 0, 'project.project-%s, ' % self.project_id.id
             )

@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+from odoo import fields, models
 
-from odoo import api, fields, models
 
 class Project(models.Model):
 

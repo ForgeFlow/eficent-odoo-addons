@@ -3,4 +3,5 @@
 # Copyright 2016 Matmoz d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from . import model
+from . import wizard
 from .hooks import pre_init_hook

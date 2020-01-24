@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
 
@@ -57,7 +57,7 @@ class ProgressMeasurementsQuickEntry(models.TransientModel):
     def _prepare_measurement_data(self):
 
         project_obj = self.env['project.project']
-        record_id =self._context.get('active_id', False)
+        record_id = self._context.get('active_id', False)
         project = project_obj.browse(record_id)
         vals = {
             'project_id': project.id,

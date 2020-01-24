@@ -36,7 +36,8 @@ class ProcurementOrder(models.Model):
         else:
             res['sale_order_ids'] = \
                 [(4, sid.id) for sid in
-                 [self.group_id.procurement_ids.mapped('sale_line_id').mapped('order_id')]]
+                 [self.group_id.procurement_ids.mapped(
+                     'sale_line_id').mapped('order_id')]]
         return res
 
     def _search_existing_purchase_request(self):

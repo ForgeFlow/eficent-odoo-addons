@@ -105,7 +105,8 @@ class AnalyticResourcePlanLine(models.Model):
                                   line=None):
         data = {
             'company_id': company_id,
-            'origin': self.label or line.account_id.name if line else self.name,
+            'origin': self.label or
+            line.account_id.name if line else self.name,
             'description': self.product_id.description,
             'picking_type_id': picking_type_id,
         }

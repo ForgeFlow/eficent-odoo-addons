@@ -14,13 +14,27 @@ class TestAnalyticResourcePlan(common.SavepointCase):
         super(TestAnalyticResourcePlan, cls).setUp()
         cls.project = cls.env['project.project'].create(
             {'name': 'Test project',
-             'code': '0001'})
+             'code': 'AnalyticResourcePlan0001'})
         cls.account_id = cls.project.analytic_account_id
         cls.plan_version = cls.env.ref(
             'analytic_plan.analytic_plan_version_P02')
+        cls.plan_version.default_plan = True
+        cls.plan_version.active = True
+        cls.plan_version.default_resource_plan = True
         cls.account_id.write({
             'active_analytic_planning_version': cls.plan_version.id})
+        cls.account_type = cls.env["account.account.type"].create({
+            "name": "Test account type",
+            "type": "other",
+        })
+        cls.gp_account_id = cls.env["account.account"].create({
+            "name": "Test account",
+            "code": "TEST_A",
+            "user_type_id": cls.account_type.id,
+            "reconcile": True,
+        })
         cls.product = cls.env['product.product'].create({'name': 'SP'})
+        cls.product.property_account_expense_id = cls.gp_account_id
         cls.anal_journal = cls.env['account.analytic.journal'].create(
             {'name': 'Expenses',
              'code': 'EX',

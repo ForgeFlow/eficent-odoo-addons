@@ -2,7 +2,7 @@
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import api, models
 
 
 class ProjectProject(models.Model):
@@ -43,7 +43,8 @@ class ProjectProject(models.Model):
                     pp.analytic_account_id.write({'date': vals['date']})
             elif 'date_start' in vals:
                 for pp in self:
-                    pp.analytic_account_id.write({'date_start': vals['date_start']})
+                    pp.analytic_account_id.write(
+                        {'date_start': vals['date_start']})
 
     @api.model
     def create(self, values):
@@ -62,29 +63,3 @@ class ProjectProject(models.Model):
                 pp.parent_id.project_ids._compute_scheduled_dates()
                 pp.propagate_dates(vals)
         return res
-
-    # @api.model
-    # def create(self, values):
-    #     pp = super(ProjectProject, self).create(values)
-    #     if 'date_start' in values:
-    #         for pp in values:
-    #             pp.analytic_account_id.write({'date_start': values['date_start']})
-    #     if 'date' in values:
-    #         for pp in self:
-    #             pp.analytic_account_id.write({'date': values['date']})
-    #     return acc_id
-    #
-    # @api.multi
-    # def write(self, vals):
-    #     res = super(ProjectProject, self).write(vals)
-    #     if 'date_start' in vals and 'date' in vals:
-    #         for pp in self:
-    #             pp.analytic_account_id.write({'date_start': vals['date_start'],
-    #                                           'date': vals['date']})
-    #     elif 'date' in vals:
-    #         for pp in self:
-    #             pp.analytic_account_id.write({'date': vals['date']})
-    #     elif 'date_start' in vals:
-    #         for pp in self:
-    #             pp.analytic_account_id.write({'date_start': vals['date_start']})
-    #     return res

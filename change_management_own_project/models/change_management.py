@@ -13,11 +13,11 @@ class ChangeManagementChange(models.Model):
 
     @api.multi
     def _create_change_project(self):
-        for change in self:
-            data = {
-                'name': '%s - %s' % (change.name, change.description),
-                'parent_id': change.project_id.analytic_account_id.id,
-            }
+        self.ensure_one()
+        data = {
+            'name': '%s - %s' % (self.name, self.description),
+            'parent_id': self.project_id.analytic_account_id.id,
+        }
         return data
 
     change_project_id = fields.Many2one(

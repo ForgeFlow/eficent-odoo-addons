@@ -9,6 +9,7 @@
               "Odoo Community Association (OCA)",
     "website": "https://www.odoo-community.org",
     "category": "Purchase Management",
+    "license": "LGPL-3",
     "depends": ["procurement_project", "project"],
     "data": [
         "views/procurement_view.xml",

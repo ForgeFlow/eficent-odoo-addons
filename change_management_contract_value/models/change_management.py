@@ -58,14 +58,14 @@ class ChangeManagementChange(models.Model):
                     property_account_income_categ_id.id
             if not general_account_id:
                 raise ValidationError(
-                    _('There is no expense account defined for this product: '
+                    _('There is no income account defined for this product: '
                       '"%s" (id:%d)') % (product_id.name,
                                          product_id.id,))
             default_plan = plan_version_obj.search(
                 [('default_plan', '=', True)], limit=1)
 
             if account_id.active_analytic_planning_version != default_plan:
-                raise ValidationError.except_orm(
+                raise ValidationError(
                     _('The active planning version of the analytic account '
                       'must be %s. ') % (default_plan.name,))
 
@@ -121,6 +121,6 @@ class ChangeManagementChange(models.Model):
 
     @api.multi
     def set_state_rejected(self):
-        res = super(ChangeManagementChange, self).set_state_draft()
+        res = super(ChangeManagementChange, self).set_state_rejected()
         self._delete_analytic_lines()
         return res

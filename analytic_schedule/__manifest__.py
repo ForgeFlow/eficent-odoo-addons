@@ -8,6 +8,7 @@
     "summary": "Automatically computes start and end dates for analytic "
                "accounts based on the earliest start and latest finish date "
                "of the children.",
+    'license': 'AGPL-3',
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",

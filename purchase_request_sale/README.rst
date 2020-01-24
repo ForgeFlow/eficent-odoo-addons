@@ -1,9 +1,11 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-    :alt: License AGPL-3
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
 
 =====================
 Purchase Request Sale
 =====================
+
 This module will force that 1 single purchase request is created for each
 sales order that is to be procured. It adds the sales order to the purchase
 request and sales order line to the purchase request line.

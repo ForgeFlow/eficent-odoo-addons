@@ -10,6 +10,7 @@
     "version": "10.0.1.0.0",
     "author":  "Eficent",
     "category": "Analytic",
+    'license': 'AGPL-3',
     "depends": ["analytic"],
     "data": ["security/security.xml",
              "view/analytic_view.xml",

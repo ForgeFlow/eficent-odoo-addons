@@ -8,6 +8,7 @@
     "author": "Eficent",
     "website": "www.eficent.com",
     "category": "Generic Modules/Projects & Services",
+    'license': 'AGPL-3',
     "depends": ["project", "mrp_analytic"],
     "summary": """
             Project Manufacturing Order Link

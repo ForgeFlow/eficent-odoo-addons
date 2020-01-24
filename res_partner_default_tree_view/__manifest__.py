@@ -6,6 +6,7 @@
     'name': 'Res Partner Default Tree View',
     'version': '9.0.1.0.0',
     'category': 'Hidden',
+    'license': 'LGPL-3',
     'summary': 'Defaults the tree view for customers and suppliers',
     'author': 'Eficent Business and IT Consulting Services S.L.',
     'website': 'http://www.eficent.com',
