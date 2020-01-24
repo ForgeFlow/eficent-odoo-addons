@@ -88,6 +88,18 @@ class AnalyticMilestoneInvoicing(models.TransientModel):
             raise ValidationError(_('There is no invoiceable milestone.'))
         for invoice in invoices.values():
             invoice.compute_taxes()
+        mil_invoice = self.item_ids.mapped('milestone_id.invoice_line_ids.invoice_id')
+        return {
+            'domain': [('id', 'in', mil_invoice.ids)],
+            'name': 'Invoices',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'account.invoice',
+            'view_id': False,
+            'views': [(self.env.ref('account.invoice_tree').id, 'tree'), (self.env.ref('account.invoice_form').id, 'form')],
+            'context': "{'type':'out_invoice'}",
+            'type': 'ir.actions.act_window'
+        }
 
 
 class AnalyticMilestoneInvoicingItem(models.TransientModel):
