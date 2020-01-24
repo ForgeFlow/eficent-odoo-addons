@@ -44,7 +44,9 @@ class HrTimesheetSheet(models.Model):
     def get_accounts(self, anal_line_ids):
         self.env.cr.execute("""SELECT DISTINCT L.project_id
         FROM account_analytic_line AS L
+        INNER JOIN project_project PP ON L.project_id = PP.id
         WHERE L.id IN %s
+        AND PP.allow_timesheets = true
         GROUP BY L.project_id""", (tuple(anal_line_ids),))
         return self.env.cr.dictfetchall()
 
