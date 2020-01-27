@@ -39,10 +39,10 @@ class StockMove(models.Model):
                 src_anal = move.location_id.analytic_account_id
                 dest_anal = move.location_dest_id.analytic_account_id
                 if analytic:
-                    if src_anal and dest_anal:
-                        raise exceptions.ValidationError(_("""
-                            Cannot move between different projects locations,
-                            please move first to general stock"""))
+                    if src_anal and dest_anal and (src_anal != dest_anal):
+                        raise exceptions.ValidationError(_(
+                            "Cannot move between different projects locations,"
+                            " please move first to general stock"))
                     elif src_anal and not dest_anal:
                         if src_anal != analytic:
                             raise exceptions.ValidationError(_(
