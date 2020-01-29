@@ -64,14 +64,6 @@
                     <page string="Notes" name="notes">
                         <field name="notes"/>
                     </page>
-                    <page string="Hierarchy" name="hierarchy">
-                        <group>
-                            <field name="parent_id"/>
-                        </group>
-                        <group>
-                            <field name="child_ids"/>
-                        </group>
-                    </page>
                     <page string="Costs" name="costs">
                         <field name="analytic_line_plan_ids"/>
                     </page>
@@ -91,7 +83,7 @@
         <field name="model">analytic.resource.plan.line</field>
         <field name="arch" type="xml">
             <tree string="Analytic resource plan line"
-                  colors = "darkmagenta:has_child == True;blue:state=='draft'"
+                  colors = "blue:state=='draft'"
                   editable="top">
                 <field name="account_id"/>
                 <field name="date"/>
@@ -104,8 +96,6 @@
                 <field name="price_unit"/>
                 <field name="price_total" readonly="True"/>
                 <field name="state"/>
-                <field name="has_child"/>
-                <field name="parent_id"/>
                 <button name="action_button_draft" states="confirm"
                         string="Draft" type="object"
                         icon="fa-arrow-left"/>
@@ -129,13 +119,10 @@
                     <field name="account_id"/>
                     <field name="product_id"/>
                     <field name="name"/>
-                    <field name="parent_id"/>
                     <field name="state"/>
                 </group>
                 <group name='filters' expand="0" string="Filters"/>
                 <group name='group_by' expand="0" string="Group By...">
-                    <filter string="Parent" name="Parent"
-                    context="{'group_by':'parent_id'}"/>
                     <filter string="Analytic Account"
                             name="anal"
                             domain="[]"
