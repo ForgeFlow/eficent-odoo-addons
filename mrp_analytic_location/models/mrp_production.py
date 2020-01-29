@@ -1,28 +1,32 @@
-from odoo import _, exceptions, api, fields, models
+from odoo import _, exceptions, api, models
 
 
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-    @api.depends("analytic_account_id")
-    def compute_project_location(self):
+    @api.onchange("analytic_account_id", "location_src_id", "location_dest_id")
+    def onchange_analytic(self):
         for mnf in self:
             if mnf.analytic_account_id:
                 if mnf.analytic_account_id.location_id:
-                    mnf.location_src_id = mnf.analytic_account_id.location_id
-                    mnf.location_dest_id = mnf.analytic_account_id.location_id
-                else:
-                    raise exceptions.ValidationError(
-                        _(
-                            "Please create or assign  a location for the "
-                            "analytic account"
+                    location = mnf.analytic_account_id.location_id
+                    if not location:
+                        location = env["stock.location"].search(
+                            [
+                                (
+                                    "analytic_account_id",
+                                    "=",
+                                    mnf.analytic_account_id.id,
+                                )
+                            ]
                         )
-                    )
+                    if not location:
+                        raise exceptions.UserError(
+                            _(
+                                "Please create or assign  a location for the "
+                                "analytic account"
+                            )
+                        )
+                    mnf.location_src_id = location
+                    mnf.location_dest_id = location
         return True
-
-    location_src_id = fields.Many2one(
-        compute=compute_project_location, store=True
-    )
-    location_dest_id = fields.Many2one(
-        compute=compute_project_location, store=True
-    )
