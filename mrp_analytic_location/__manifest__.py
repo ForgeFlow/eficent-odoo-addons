@@ -9,6 +9,6 @@
     "author": "Eficent, " "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-analytic",
     "license": "AGPL-3",
-    "depends": ["mrp_analytic", "stock_location_analytic"],
+    "depends": ["mrp_analytic", "stock_location_analytic", "purchase_request"],
     "installable": True,
 }

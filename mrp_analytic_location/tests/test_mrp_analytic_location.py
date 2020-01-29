@@ -1,5 +1,5 @@
 from odoo.tests import common
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError
 
 
 class TestMrpAnalyticLocation(common.TransactionCase):
@@ -39,7 +39,7 @@ class TestMrpAnalyticLocation(common.TransactionCase):
         )
 
     def test_no_loc(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(UserError):
             self.production = self.env["mrp.production"].create(
                 {
                     "product_id": self.product.id,
@@ -48,3 +48,4 @@ class TestMrpAnalyticLocation(common.TransactionCase):
                     "bom_id": self.bom.id,
                 }
             )
+            self.production.onchange_analytic()
