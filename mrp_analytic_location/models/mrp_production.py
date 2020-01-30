@@ -11,7 +11,7 @@ class MrpProduction(models.Model):
                 if mnf.analytic_account_id.location_id:
                     location = mnf.analytic_account_id.location_id
                     if not location:
-                        location = env["stock.location"].search(
+                        location = self.env["stock.location"].search(
                             [
                                 (
                                     "analytic_account_id",
