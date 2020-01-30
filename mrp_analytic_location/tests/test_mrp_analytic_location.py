@@ -12,7 +12,7 @@ class TestMrpAnalyticLocation(common.TransactionCase):
             {"name": "Analytic account test", "location_id": self.location.id}
         )
         self.analytic_account2 = self.env["account.analytic.account"].create(
-            {"name": "Analytic account test"}
+            {"name": "Analytic account test", "location_id": False}
         )
         self.location.analytic_account_id = self.analytic_account.id
         self.product = self.env["product.product"].create(
@@ -38,14 +38,14 @@ class TestMrpAnalyticLocation(common.TransactionCase):
             self.analytic_account.location_id, self.production.location_src_id
         )
 
-    def test_no_loc(self):
+    def test_no_loc(self):        
+        production2 = self.env["mrp.production"].create(
+            {
+                "product_id": self.product.id,
+                "analytic_account_id": self.analytic_account2.id,
+                "product_uom_id": self.product.uom_id.id,
+                "bom_id": self.bom.id,
+            }
+        )
         with self.assertRaises(UserError):
-            self.production = self.env["mrp.production"].create(
-                {
-                    "product_id": self.product.id,
-                    "analytic_account_id": self.analytic_account2.id,
-                    "product_uom_id": self.product.uom_id.id,
-                    "bom_id": self.bom.id,
-                }
-            )
             self.production.onchange_analytic()
