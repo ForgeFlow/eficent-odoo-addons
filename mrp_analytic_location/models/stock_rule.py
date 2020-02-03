@@ -44,7 +44,8 @@ class StockRule(models.Model):
     ):
         if location_id.analytic_account_id:
             values.update(
-                {"analytic_account_id": location_id.analytic_account_id.id}
+                {"analytic_account_id": location_id.analytic_account_id.id,
+                 "account_analytic_id": location_id.analytic_account_id.id,}
             )
         return super(StockRule, self)._run_buy(
             product_id,
