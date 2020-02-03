@@ -83,7 +83,7 @@ class AccountAnalyticAccount(models.Model):
                        FROM account_analytic_line L
                        INNER JOIN account_analytic_journal AAJ
                        ON AAJ.id = L.journal_id
-                       WHERE AAJ.name = 'labor'
+                       WHERE AAJ.name in ('labor', 'Vendor Bills')
                        AND L.account_id IN %s
                 """
                 + where_date
