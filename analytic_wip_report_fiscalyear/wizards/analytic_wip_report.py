@@ -25,9 +25,13 @@ class AnalyticWipReport(models.TransientModel):
         ).analytic_wip_report_open_window()
         data = self.read()[0]
         if data["from_date"]:
-            result_context.update({"from_date": data["from_date"]})
+            result_context.update(
+                {"from_date": datetime.strftime(data["from_date"], DT)}
+            )
         if data["to_date"]:
-            result_context.update({"to_date": data["to_date"]})
+            result_context.update(
+                {"to_date": datetime.strftime(data["to_date"], DT)}
+            )
         if data["fiscalyear_id"]:
             result_context.update({"fiscalyear_id": data["fiscalyear_id"][0]})
         if data["from_date_fy"]:
