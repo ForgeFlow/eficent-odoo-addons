@@ -95,16 +95,11 @@ class AccountAnalyticAccount(models.Model):
             cr.execute(
                 """
                 SELECT COALESCE(-1*sum(amount),0.0) total
-                FROM account_analytic_line L
-                INNER JOIN account_analytic_journal AAJ
-                ON AAJ.id = L.journal_id
-                INNER JOIN account_account AC
-                ON L.general_account_id = AC.id
-                INNER JOIN account_account_type AT
-                ON AT.id = AC.user_type_id
-                WHERE AT.name in ('Expense', 'Cost of Goods Sold',
-                'Expenses', 'Cost of Revenue')
-                AND L.account_id in %s
+                       FROM account_analytic_line L
+                       INNER JOIN account_analytic_journal AAJ
+                       ON AAJ.id = L.journal_id
+                       WHERE AAJ.name in ('labor', 'Vendor Bills')
+                       AND L.account_id IN %s
                 """
                 + where_date_fy
                 + """
@@ -119,16 +114,11 @@ class AccountAnalyticAccount(models.Model):
             cr.execute(
                 """
                 SELECT COALESCE(-1*sum(amount),0.0) total
-                FROM account_analytic_line L
-                INNER JOIN account_analytic_journal AAJ
-                ON AAJ.id = L.journal_id
-                INNER JOIN account_account AC
-                ON L.general_account_id = AC.id
-                INNER JOIN account_account_type AT
-                ON AT.id = AC.user_type_id
-                WHERE AT.name in ('Expense', 'Cost of Goods Sold',
-                'Expenses', 'Cost of Revenue')
-                AND L.account_id in %s
+                       FROM account_analytic_line L
+                       INNER JOIN account_analytic_journal AAJ
+                       ON AAJ.id = L.journal_id
+                       WHERE AAJ.name in ('labor', 'Vendor Bills')
+                       AND L.account_id IN %s
                 """
                 + where_date_fy_end
                 + """
@@ -219,16 +209,11 @@ class AccountAnalyticAccount(models.Model):
             cr.execute(
                 """
                 SELECT amount, L.id, AAJ.cost_type
-                FROM account_analytic_line L
-                INNER JOIN account_analytic_journal AAJ
-                ON AAJ.id = L.journal_id
-                INNER JOIN account_account AC
-                ON L.general_account_id = AC.id
-                INNER JOIN account_account_type AT
-                ON AT.id = AC.user_type_id
-                WHERE AT.name in ('Expense', 'Cost of Goods Sold',
-               'Expenses', 'Cost of Revenue')
-                AND L.account_id IN %s
+                       FROM account_analytic_line L
+                       INNER JOIN account_analytic_journal AAJ
+                       ON AAJ.id = L.journal_id
+                       WHERE AAJ.name in ('labor', 'Vendor Bills')
+                       AND L.account_id IN %s
                 """
                 + where_date
                 + """
