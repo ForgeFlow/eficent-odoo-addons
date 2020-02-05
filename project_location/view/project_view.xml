@@ -10,6 +10,13 @@
                 <group name="stock">
                     <field name="location_id" context="{'default_analytic_account_id': project_analytic_id}"/>
                     <field name="dest_address_id"/>
+                    <field name="picking_type_id" invisible="1"/>
+                    <field name="manufacture_picking_type_id" invisible="1"/>
+                    <field name="manufacture_rule_id" invisible="1"/>
+                    <field name="buy_rule_id" invisible="1"/>
+                    <field name="warehouse_id" invisible="1"/>
+                    <field name="will_buy" invisible="1"/>
+                    <field name="will_manufacture" invisible="1"/>
                 </group>
             </xpath>
         </field>
