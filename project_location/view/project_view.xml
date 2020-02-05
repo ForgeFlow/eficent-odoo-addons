@@ -15,8 +15,8 @@
                     <field name="manufacture_rule_id" invisible="1"/>
                     <field name="buy_rule_id" invisible="1"/>
                     <field name="warehouse_id" invisible="1"/>
-                    <field name="will_buy" invisible="1"/>
-                    <field name="will_manufacture" invisible="1"/>
+                    <field name="will_buy"/>
+                    <field name="will_manufacture"/>
                 </group>
             </xpath>
         </field>

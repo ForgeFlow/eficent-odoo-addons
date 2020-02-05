@@ -29,3 +29,32 @@ class AccountAnalyticAccount(models.Model):
         default=_default_dest_address,
         help="""Delivery address for the current contract project."""
     )
+
+
+    @api.model
+    def _prepare_location_vals(self, aa):
+        analytic_account = aa
+        vals = {
+            "analytic_account_id": analytic_account.id,
+            "name": analytic_account.name,
+            "location_id": self.env.ref('stock.stock_location_stock').location_id.id,
+            "usage": "internal",
+        }
+        return vals
+
+    @api.model
+    def _create_project_location(self, aa):
+        if not aa.parent_id.location_id:
+            vals = self._prepare_location_vals(aa)
+            return self.env["stock.location"].create(vals)
+        else:
+            return aa.parent_id.location_id
+
+    @api.model
+    def create(self, vals):
+        res = super(AccountAnalyticAccount, self).create(vals)
+        loc = self._create_project_location(res)
+        res["location_id"] = loc.id
+        if vals.get('partner_id', False):
+            res['dest_address_id'] = vals.get('partner_id')
+        return res

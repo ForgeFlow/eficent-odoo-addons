@@ -168,7 +168,7 @@ class ProjectProject(models.Model):
             "action": "manufacture",
             "warehouse_id": self.warehouse_id.id,
             "company_id": self.company_id.id,
-            "location_src_id": supplier_loc.id,
+            "location_src_id": self.location_id.id,
             "location_id": self.location_id.id,
             "procure_method": "make_to_order",
             "route_id": self.env.ref("mrp.route_warehouse0_manufacture").id,
