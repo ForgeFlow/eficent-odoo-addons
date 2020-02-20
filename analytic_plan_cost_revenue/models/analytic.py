@@ -102,7 +102,7 @@ class AnalyticAccount(models.Model):
     def compute_gross_profit_plan(self):
         for account in self:
             account.gross_profit_plan = (
-                account.revenue_plan - account.total_cost_plan
+                account.revenue_plan + account.total_cost_plan
             )
 
     labor_cost_plan = fields.Float(

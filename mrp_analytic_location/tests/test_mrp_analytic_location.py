@@ -12,9 +12,9 @@ class TestMrpAnalyticLocation(common.TransactionCase):
             {"name": "Analytic account test", "location_id": self.location.id}
         )
         self.analytic_account2 = self.env["account.analytic.account"].create(
-            {"name": "Analytic account test", "location_id": False}
+            {"name": "Analytic account test 2"}
         )
-        self.location.analytic_account_id = self.analytic_account.id
+
         self.product = self.env["product.product"].create(
             {"name": "Test product"}
         )
@@ -34,12 +34,14 @@ class TestMrpAnalyticLocation(common.TransactionCase):
         )
 
     def test_loc_productions(self):
+        self.production.onchange_analytic()
         self.assertEqual(
             self.analytic_account.location_id, self.production.location_src_id
         )
 
     def test_no_loc(self):
-        self.env["mrp.production"].create(
+
+        prod2 = self.env["mrp.production"].create(
             {
                 "product_id": self.product.id,
                 "analytic_account_id": self.analytic_account2.id,
@@ -48,4 +50,4 @@ class TestMrpAnalyticLocation(common.TransactionCase):
             }
         )
         with self.assertRaises(UserError):
-            self.production.onchange_analytic()
+            prod2.onchange_analytic()
