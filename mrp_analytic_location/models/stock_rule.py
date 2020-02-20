@@ -45,7 +45,7 @@ class StockRule(models.Model):
         if location_id.analytic_account_id:
             values.update(
                 {"analytic_account_id": location_id.analytic_account_id.id,
-                 "account_analytic_id": location_id.analytic_account_id.id,}
+                 "account_analytic_id": location_id.analytic_account_id.id, }
             )
         return super(StockRule, self)._run_buy(
             product_id,
@@ -61,7 +61,7 @@ class StockRule(models.Model):
     def _prepare_purchase_request(self, origin, values):
         res = super(StockRule, self)._prepare_purchase_request(origin, values)
         res.update(
-            {"analytic_account_id": values.get("analytic_account_id", False),}
+            {"analytic_account_id": values.get("analytic_account_id", False), }
         )
         return res
 
@@ -73,6 +73,6 @@ class StockRule(models.Model):
             request_id, product_id, product_qty, product_uom, values
         )
         res.update(
-            {"analytic_account_id": values.get("analytic_account_id", False),}
+            {"analytic_account_id": values.get("analytic_account_id", False), }
         )
         return res
