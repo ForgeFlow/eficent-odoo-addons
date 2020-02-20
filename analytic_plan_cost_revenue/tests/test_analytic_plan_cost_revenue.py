@@ -102,7 +102,7 @@ class TestAnalyticCostRevenue(common.SavepointCase):
         )
 
     def test_cost_revenue(self):
-        self.assertEqual(self.account_id.material_cost_plan, -100.0)
-        self.assertEqual(self.account_id.labor_cost_plan, -0.0)
+        self.assertEqual(self.account_id.material_cost_plan, 100.0)
+        self.assertEqual(self.account_id.labor_cost_plan, 0.0)
         self.assertEqual(self.account_id.revenue_plan, 200.0)
         self.assertEqual(self.account_id.gross_profit_plan, 100.0)
