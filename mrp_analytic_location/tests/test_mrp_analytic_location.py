@@ -38,8 +38,8 @@ class TestMrpAnalyticLocation(common.TransactionCase):
             self.analytic_account.location_id, self.production.location_src_id
         )
 
-    def test_no_loc(self):        
-        production2 = self.env["mrp.production"].create(
+    def test_no_loc(self):
+        self.env["mrp.production"].create(
             {
                 "product_id": self.product.id,
                 "analytic_account_id": self.analytic_account2.id,

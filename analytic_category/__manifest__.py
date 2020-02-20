@@ -9,7 +9,7 @@
     """,
     'license': 'AGPL-3',
     "version": "12.0.1.0.0",
-    "author":  "Eficent",
+    "author": "Eficent",
     "category": "Analytic",
     "depends": ["account"],
     "data": ["security/security.xml",

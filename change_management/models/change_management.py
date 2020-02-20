@@ -341,7 +341,7 @@ class CMChange(models.Model):
             'change_management.change_management_new',
             False) and self.env.ref(
             'change_management.change_management_new'
-            ) or self.env['change.management.category']
+        ) or self.env['change.management.category']
 
     # ##### create CR from mail #####  #
 
