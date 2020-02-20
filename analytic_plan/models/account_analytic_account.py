@@ -97,7 +97,7 @@ class AccountAnalyticAccount(models.Model):
             [('account_id', 'in', accs.ids),
                 ('version_id', '=', self.active_analytic_planning_version.id)]
         )
-        res['domain'] = "[('id', 'in', ["+','.join(
-            map(str, line_ids.ids))+"])]"
+        res['domain'] = "[('id', 'in', [" + ','.join(
+            map(str, line_ids.ids)) + "])]"
         res['nodestroy'] = False
         return res

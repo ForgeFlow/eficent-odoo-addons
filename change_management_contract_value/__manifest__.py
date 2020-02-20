@@ -4,7 +4,7 @@
 {
     'name': 'Change Management Contract Value',
     'version': '12.0.1.0.0',
-    'author':   'Eficent Business and IT Consulting Services S.L.',
+    'author': 'Eficent Business and IT Consulting Services S.L.',
     'website': 'www.eficent.com',
     'category': 'Project Management',
     'license': 'AGPL-3',

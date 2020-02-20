@@ -79,4 +79,4 @@ class TestStockAnalyticAccount(common.TransactionCase):
         self.assertEqual(
             len(self.env['stock.quant'].search(
                 [('analytic_account_id', '=',
-                 self.move.analytic_account_id.id)])), 1)
+                  self.move.analytic_account_id.id)])), 1)

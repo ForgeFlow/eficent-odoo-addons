@@ -8,9 +8,9 @@
 {
     'name': 'Analytic Plan',
     'version': '12.0.1.0.0',
-    'author':   'Eficent, '
-                'Matmoz, '
-                'Project Expert Team',
+    'author': 'Eficent, '
+    'Matmoz, '
+    'Project Expert Team',
     'website': 'http://project.expert',
     'category': 'Project Management',
     'license': 'AGPL-3',
