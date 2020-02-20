@@ -4,6 +4,6 @@
         <field name="code">R01</field>
         <field name="name">Resource</field>
         <field name="active">true</field>
-        <field name="default_resource_plan">false</field>
+        <field name="default_resource_plan">true</field>
     </record>
 </odoo>
