@@ -28,3 +28,4 @@ class AnalyticWipReport(models.TransientModel):
             result_context.update({"to_date": data["to_date"]})
         result["context"] = result_context
         return result
+    
