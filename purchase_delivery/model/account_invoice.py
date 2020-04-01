@@ -13,7 +13,7 @@ class AccountInvoice(models.Model):
     @api.onchange('purchase_id')
     def purchase_order_change(self):
         new_lines = self.env['account.invoice.line']
-        if not self.purchase_id.carrier_id:
+        if not self.purchase_id.carrier_id or self.purchase_id.carrier_in_po:
             return super(AccountInvoice, self).purchase_order_change()
         data = self._add_delivery_cost_to_invoice()
         new_line = new_lines.new(data)
