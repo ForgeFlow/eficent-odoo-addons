@@ -3,7 +3,9 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from datetime import datetime
 
 
 class PurchaseOrder(models.Model):
@@ -15,6 +17,14 @@ class PurchaseOrder(models.Model):
         help="""Complete this field if you plan to invoice the shipping based
             on picking."""
     )
+    carrier_in_po = fields.Boolean(compute='_compute_carrier_in_po')
+
+    def _compute_carrier_in_po(self):
+        for rec in self:
+            rec.carrier_in_po = False
+            for line in rec.order_line:
+                if line.carrier_line:
+                    rec.carrier_in_po = True               
 
     @api.onchange('partner_id', 'company_id')
     def onchange_partner_id(self):
@@ -29,7 +39,8 @@ class PurchaseOrder(models.Model):
         return result
 
     def _prepare_invoice_line_from_carrier(self, carrier, price_unit):
-
+        if self.carrier_in_po:
+            return {}
         taxes = carrier.product_id.supplier_taxes_id
         invoice_line_tax_ids = self.fiscal_position_id.map_tax(taxes)
         invoice_line = self.env['account.invoice.line']
@@ -64,3 +75,54 @@ class PurchaseOrder(models.Model):
         if account:
             data['account_id'] = account.id
         return data
+
+
+    @api.multi
+    def _prepare_purchase_order_line(self):
+        carrier = self.carrier_id
+        final_price = carrier.get_price_available(self)
+        vals = {
+            'name': carrier.product_id.name,
+            'order_id': self.id,
+            'uom_id': carrier.product_id.uom_id.id,
+            'product_id': carrier.product_id.id,
+            'price_unit': final_price,
+            'price_unit': final_price,
+            'carrier_line': True,
+            'date_planned': datetime.today().strftime(
+                DEFAULT_SERVER_DATETIME_FORMAT),
+            'product_uom': carrier.product_id.uom_po_id.id,
+            'product_qty': 1.0,
+        }
+        return vals
+
+    @api.multi
+    def _create_delivery_line(self):
+        res = []
+        purchase_obj = self.env['purchase.order']
+        po_line_obj = self.env['purchase.order.line']
+
+        po_line_data = self._prepare_purchase_order_line()
+        po_line_obj.create(po_line_data)
+
+
+    @api.multi
+    def delivery_set(self):
+        for order in self:
+            if order.carrier_in_po:
+                # do not create line if already exist
+                return
+            carrier = order.carrier_id
+            if carrier:
+                order._create_delivery_line()
+
+            else:
+                raise UserError(_('No carrier set for this order.'))
+
+        return True
+
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
+
+    carrier_line = fields.Boolean('This line is a carrier line',
+        default=False)
