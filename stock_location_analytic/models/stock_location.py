@@ -22,7 +22,7 @@ class StockLocation(models.Model):
                 analytic = loc.analytic_account_id
                 if loc.location_id:
                     parent = loc.location_id
-                    if parent.usage != 'view' \
+                    if parent.usage != 'view' and parent.analytic_account_id \
                             and parent.analytic_account_id != analytic:
                         raise ValidationError(_("""Sublocations can only be
                             related to the same project"""))
