@@ -25,10 +25,12 @@ class ProjectProject(models.Model):
                 min_start_date = min(start_dates)
             if end_dates:
                 max_end_date = max(end_dates)
-            if min_start_date:
-                pp.write({"date_start": min_start_date})
-            if max_end_date:
-                pp.write({"date": max_end_date})
+            if min_start_date and max_end_date:
+                pp.write({'date_start': min_start_date, 'date': max_end_date})
+            elif min_start_date:
+                pp.write({'date_start': min_start_date})
+            elif max_end_date:
+                pp.write({'date': max_end_date})
         return True
 
     @api.multi
