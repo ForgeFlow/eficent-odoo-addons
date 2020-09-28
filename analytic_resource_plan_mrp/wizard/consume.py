@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 import odoo.addons.decimal_precision as dp
 
 
@@ -45,6 +46,10 @@ class AnalyticResourcePlanLineConsume(models.TransientModel):
         res = []
         res_plan_obj = self.env['analytic.resource.plan.line']
         for item in self.item_ids:
+            if item.product_qty > item.line_id.qty_available:
+                raise UserError(
+            ("Cannot consume material for product '%s'. Not enough stock" % (
+                item.line_id.product_id.name)))
             move_id = res_plan_obj.create_consume_move(item.line_id.id,
                                                        item.product_qty)
             res.append(move_id.id)
