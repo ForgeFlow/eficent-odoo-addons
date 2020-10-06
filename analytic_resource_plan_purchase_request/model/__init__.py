@@ -5,3 +5,5 @@
 
 from . import analytic_resource_plan_line
 from . import purchase_request
+from . import res_config
+from . import company
