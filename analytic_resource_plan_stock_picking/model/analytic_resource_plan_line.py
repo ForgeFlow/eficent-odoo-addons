@@ -103,6 +103,8 @@ class AnalyticResourcePlanLine(models.Model):
 
     @api.multi
     def action_button_confirm(self):
+        if not self.env.user.company_id.resource_auto_fetch:
+            return super(AnalyticResourcePlanLine, self).action_button_confirm()
         for line in self:
             if line.child_ids:
                 continue

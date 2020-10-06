@@ -19,6 +19,7 @@
     "data": [
         "views/stock_picking_view.xml",
         "views/analytic_resource_plan_view.xml",
+        "views/res_config_view.xml",
         "wizard/delivery.xml",
     ],
     'installable': True,
