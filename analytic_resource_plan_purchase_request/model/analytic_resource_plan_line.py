@@ -97,7 +97,8 @@ class AnalyticResourcePlanLine(models.Model):
     @api.multi
     def action_button_confirm(self):
         res = super(AnalyticResourcePlanLine, self).action_button_confirm()
-        self._make_purchase_request()
+        if self.env.user.company_id.resource_auto_request:
+            self._make_purchase_request()
         return res
 
     @api.model
