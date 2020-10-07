@@ -6,6 +6,11 @@
         <field name="inherit_id" ref="analytic_resource_plan.view_analytic_resource_plan_line_tree"/>
         <field name="type">tree</field>
         <field name="arch" type="xml">
+            <xpath expr='//tree' position='attributes'>
+                <attribute name="colors">
+                darkmagenta:has_child == True;blue:state=='draft';red:qty_available&lt;0 or qty_available==0
+                </attribute>
+            </xpath>
             <xpath expr='//field[@name="product_uom_id"]' position='after'>
                 <field name="qty_available"/>
                 <field name="virtual_available"/>

@@ -23,6 +23,7 @@
     'data': [
         'views/purchase_request_view.xml',
         'views/analytic_resource_plan_view.xml',
+        'views/res_config_view.xml',
         'wizard/analytic_resource_plan_line_make_purchase_request.xml',
     ],
     'installable': True,

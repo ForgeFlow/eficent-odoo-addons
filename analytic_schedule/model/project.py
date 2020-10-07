@@ -26,9 +26,11 @@ class ProjectProject(models.Model):
                 min_start_date = min(start_dates)
             if end_dates:
                 max_end_date = max(end_dates)
-            if min_start_date:
+            if min_start_date and max_end_date:
+                pp.write({'date_start': min_start_date, 'date': max_end_date})
+            elif min_start_date:
                 pp.write({'date_start': min_start_date})
-            if max_end_date:
+            elif max_end_date:
                 pp.write({'date': max_end_date})
         return True
 
@@ -62,29 +64,3 @@ class ProjectProject(models.Model):
                 pp.parent_id.project_ids._compute_scheduled_dates()
                 pp.propagate_dates(vals)
         return res
-
-    # @api.model
-    # def create(self, values):
-    #     pp = super(ProjectProject, self).create(values)
-    #     if 'date_start' in values:
-    #         for pp in values:
-    #             pp.analytic_account_id.write({'date_start': values['date_start']})
-    #     if 'date' in values:
-    #         for pp in self:
-    #             pp.analytic_account_id.write({'date': values['date']})
-    #     return acc_id
-    #
-    # @api.multi
-    # def write(self, vals):
-    #     res = super(ProjectProject, self).write(vals)
-    #     if 'date_start' in vals and 'date' in vals:
-    #         for pp in self:
-    #             pp.analytic_account_id.write({'date_start': vals['date_start'],
-    #                                           'date': vals['date']})
-    #     elif 'date' in vals:
-    #         for pp in self:
-    #             pp.analytic_account_id.write({'date': vals['date']})
-    #     elif 'date_start' in vals:
-    #         for pp in self:
-    #             pp.analytic_account_id.write({'date_start': vals['date_start']})
-    #     return res
