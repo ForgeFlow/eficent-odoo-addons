@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_analytic_account_form_analytic_plan"
+            model="ir.ui.view">
+        <field name="name">account.analytic.account.form.milestones</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id"
+               ref="analytic.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//div[@name="button_box"]' position='inside'>
+                <button help="Milestones"
+                        name="%(act_analytic_milestone)d"
+                        type="action"
+                        context="{'default_account_id': active_id,
+                        'search_default_account_id': active_id}"
+                        groups="analytic.group_analytic_accounting"
+                        class="oe_inline oe_stat_button"
+                        icon="fa-diamond">
+                    <span>Milestones</span>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+        <record id="view_account_analytic_account_milestone_form" model="ir.ui.view">
+        <field name="name">analytic.analytic.account.form</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id"
+               ref="analytic_location.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook//page" position="after">
+                <page name="Milestone" string="Milestones">
+                    <group>
+                        <group name="product">
+                            <field name="milestone_product_id"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

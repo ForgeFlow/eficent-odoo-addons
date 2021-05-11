@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_milestone_invoice" model="ir.ui.view">
+        <field name="name">Milestone Invoicing</field>
+        <field name="model">analytic.milestone.invoice</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+             <form string="Create Invoice">
+                 <sheet>
+                     <group name="outside">
+                         <group name="partner">
+                             <field name="partner_id"/>
+                         </group>
+                     </group>
+                     <notebook>
+                         <page name="dummy" string="Milestones to invoice">
+                            <field name="item_ids" string="Milestones to invoice">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                    <field name="milestone_id"/>
+                                    <field name="account_id"/>
+                                </tree>
+                            </field>
+                         </page>
+                     </notebook>
+                </sheet>
+                 <footer>
+                     <button name="action_invoice_create" string="Create Invoice" type="object" class="oe_highlight"/>
+                     <button special="cancel" string="Cancel" class="oe_link"/>
+                 </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_analytic_milestone_make_invoice" model="ir.actions.act_window">
+        <field name="name">Create Invoice</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">analytic.milestone.invoice</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_milestone_invoice"/>
+        <field name="binding_model_id" ref="analytic_milestone.model_analytic_milestone"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>
+

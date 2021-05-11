@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="analytic_milestone_invoice_process_form" model="ir.ui.view">
+        <field name="name">analytic.milestone.invoice.process.form</field>
+        <field name="model">analytic.milestone.invoice.process</field>
+        <field name="arch" type="xml">
+            <form string="Invoicing Process">
+                <group>
+                    <field name="report_type"/>
+                    <field name="invoice_id"  attrs="{'invisible':[('report_type','!=','invoice')]}"/>
+                </group>
+                <footer>
+                    <button string="Export"
+                            name="invoice_process_run"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel"
+                            class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_analytic_milestone_invoice_process_form" model="ir.actions.act_window">
+        <field name="name">Invoice Process</field>
+        <field name="res_model">analytic.milestone.invoice.process</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form,tree</field>
+        <field name="view_id" ref="analytic_milestone_invoice_process_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <act_window name="Invoice Process"
+                res_model="analytic.milestone.invoice.process"
+                src_model="analytic.milestone"
+                view_mode="form"
+                target="new"
+                multi="True"
+                key2="client_action_multi"
+                id="action_analytic_milestone_invoice_process_form"/>
+
+</odoo>
