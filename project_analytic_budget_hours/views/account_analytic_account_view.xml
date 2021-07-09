@@ -7,7 +7,7 @@
                ref="analytic.view_account_analytic_account_form"/>
         <field name="arch" type="xml">
             <field name="code" position="after">
-                <field name="budget_hours"/>
+                <field name="budget_hours" attrs="{'readonly':[('account_class','not in',('work_package', 'deliverable'))]}"/>
                 <field name="actual_hours"/>
             </field>
         </field>

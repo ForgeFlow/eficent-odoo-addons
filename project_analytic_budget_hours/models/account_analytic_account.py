@@ -9,7 +9,9 @@ class AccountAnalyticAccount(models.Model):
         string="Budget Hours",
         help="Set manually the estimated hours for the project",
     )
-    actual_hours = fields.Float(compute="_compute_actual_project_hours")
+    actual_hours = fields.Float(
+        compute="_compute_actual_project_hours", string="Actual Hours"
+    )
 
     @api.multi
     def _compute_actual_project_hours(self):
