@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_project" model="ir.ui.view">
+        <field name="name">project.project.tree</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_wbs.view_project"/>
+        <field name="field_parent">child_ids</field>
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <field name="budget_hours" attrs="{'readonly':[('account_class','not in',('work_package', 'deliverable'))]}"/>
+                <field name="actual_hours"/>
+                <field name="cost_alert_color" invisible="1"/>
+                <field name="is_cost_controlled" invisible="1"/>
+                <field name="budget_hours_percentage" bg_color="green:cost_alert_color==1;
+                yellow:cost_alert_color==2;
+                red:cost_alert_color==3;
+                darkred:cost_alert_color==4"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="analytic_account_inherited_issue_form" model="ir.ui.view">
+        <field name="name">account.analytic.account.issue.form.inherit</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="project.analytic_account_inherited_form"/>
+        <field name="priority" eval="18"/>
+        <field name="arch" type="xml">
+            <xpath expr='//div[@name="project"]' position='inside'>
+                <field name="is_cost_controlled" groups="project.group_project_manager"/>
+                <label for="is_cost_controlled" groups="project.group_project_manager"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_project_project_filter" model="ir.ui.view">
+         <field name="name">project.project.select</field>
+         <field name="model">project.project</field>
+         <field name="inherit_id" ref="project.view_project_project_filter"/>
+         <field name="type">search</field>
+         <field name="arch" type="xml">
+               <field name="partner_id" position="before">
+                  <field name="budget_hours_percentage" invisible="1"/>
+                  <field name="cost_alert_color" invisible="1"/>
+                  <field name="is_cost_controlled" invisible="1"/>
+               </field>
+               <xpath expr="//filter[contains(@domain, user_id)]" position="after">
+                  <filter string="Cost Exceeded" domain="[('cost_alert_color', '=', 4)]"/>
+                  <filter string="High Cost Risk" domain="[('cost_alert_color', '=', 3)]"/>
+                  <filter string="Medium Cost Risk" domain="[('cost_alert_color', '=', 2)]"/>
+                  <filter string="Low Cost Risk" domain="[('cost_alert_color', '=', 1)]"/>
+                  <filter string="No Cost Risk" domain="[('cost_alert_color', '=', 0)]"/>
+               </xpath>
+         </field>
+     </record>
+
+</odoo>
