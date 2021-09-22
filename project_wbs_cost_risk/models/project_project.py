@@ -42,3 +42,19 @@ class ProjectProject(models.Model):
                 pp.parent_id.project_ids._compute_planned_budget_hours()
                 pp._propagate_budget_hours(vals)
         return res
+
+    @api.multi
+    def button_actual_hours(self):
+        self.ensure_one()
+        account = self.analytic_account_id
+        domain = [
+            ("account_id", "child_of", account.ids),
+            ("sheet_id", "!=", False),
+        ]
+        analytic_line_obj = self.env["account.analytic.line"]
+        anal_lines = analytic_line_obj.search(domain, order="id desc")
+        action = self.env.ref('analytic.account_analytic_line_action_entries')
+        result = action.read()[0]
+        result['domain'] = "[('id','in',[" + ','.join(
+            map(str, anal_lines.ids)) + "])]"
+        return result
