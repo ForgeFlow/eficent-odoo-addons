@@ -10,6 +10,11 @@
             <field name="date" position="after">
                 <field name="budget_hours" attrs="{'readonly':[('account_class','not in',('work_package', 'deliverable'))]}"/>
                 <field name="actual_hours"/>
+                <button name="button_actual_hours" type="object"
+                        string="Actual Hours Detail"
+                        groups="project.group_project_user,project.group_project_manager"
+                        icon='fa-calendar-o'
+                        />
                 <field name="cost_alert_color" invisible="1"/>
                 <field name="is_cost_controlled" invisible="1"/>
                 <field name="budget_hours_percentage" bg_color="green:cost_alert_color==1;
@@ -45,11 +50,12 @@
                   <field name="is_cost_controlled" invisible="1"/>
                </field>
                <xpath expr="//filter[contains(@domain, user_id)]" position="after">
-                  <filter string="Cost Exceeded" domain="[('cost_alert_color', '=', 4)]"/>
-                  <filter string="High Cost Risk" domain="[('cost_alert_color', '=', 3)]"/>
-                  <filter string="Medium Cost Risk" domain="[('cost_alert_color', '=', 2)]"/>
-                  <filter string="Low Cost Risk" domain="[('cost_alert_color', '=', 1)]"/>
-                  <filter string="No Cost Risk" domain="[('cost_alert_color', '=', 0)]"/>
+                  <filter name="is_cost_controlled" string="Is Cost Controlled" domain="[('is_cost_controlled', '=', True)]"/>
+                  <filter name="exceed_cost" string="Cost Exceeded" domain="[('cost_alert_color', '=', 4)]"/>
+                  <filter name="high_cost" string="High Cost Risk" domain="[('cost_alert_color', '=', 3)]"/>
+                  <filter name="medium_cost" string="Medium Cost Risk" domain="[('cost_alert_color', '=', 2)]"/>
+                  <filter name="low_cost" string="Low Cost Risk" domain="[('cost_alert_color', '=', 1)]"/>
+                  <filter name="no_cost" string="No Cost Risk" domain="[('cost_alert_color', '=', 0)]"/>
                </xpath>
          </field>
      </record>
