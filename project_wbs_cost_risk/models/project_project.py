@@ -6,7 +6,6 @@ class ProjectProject(models.Model):
     _inherit = "project.project"
 
     budget_hours = fields.Float(related="analytic_account_id.budget_hours")
-    
 
     @api.multi
     def _compute_planned_budget_hours(self):
@@ -53,8 +52,8 @@ class ProjectProject(models.Model):
         ]
         analytic_line_obj = self.env["account.analytic.line"]
         anal_lines = analytic_line_obj.search(domain, order="id desc")
-        action = self.env.ref('analytic.account_analytic_line_action_entries')
+        action = self.env.ref("analytic.account_analytic_line_action_entries")
         result = action.read()[0]
-        result['domain'] = "[('id','in',[" + ','.join(
-            map(str, anal_lines.ids)) + "])]"
+        result["domain"] = "[('id','in',[" + ",".join(map(str, anal_lines.ids)) + "])]"
+        result["context"] = {"group_by": ["user_id"]}
         return result
