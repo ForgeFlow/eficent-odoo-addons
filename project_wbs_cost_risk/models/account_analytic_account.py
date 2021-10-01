@@ -48,6 +48,8 @@ class AccountAnalyticAccount(models.Model):
         for account in self:
             if account.budget_hours == 0:
                 budget_hours_percentage = 0
+            elif not account.is_cost_controlled:
+                budget_hours_percentage = 0
             else:
                 budget_hours_percentage = (account.actual_hours / account.budget_hours)*100
             account.budget_hours_percentage = budget_hours_percentage
@@ -129,7 +131,7 @@ class AccountAnalyticAccount(models.Model):
 
     @api.model
     def _get_analytic_cost_risk_domain(self):
-        return [('budget_hours', '>', 0)]
+        return [('stage_id', 'not ilike', 'Closed')]
 
     @api.model
     def cron_calculate_cost_risk(self):
