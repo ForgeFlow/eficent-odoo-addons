@@ -42,7 +42,7 @@ class AccountAnalyticAccount(models.Model):
                 account.cost_alert_color = 4
 
     @api.multi
-    @api.depends("budget_hours")
+    @api.depends("budget_hours", "is_cost_controlled")
     def _compute_budget_hours_percentage(self):
         "The recomputation will be triggered by the cron not the api.depends"
         for account in self:
@@ -55,7 +55,7 @@ class AccountAnalyticAccount(models.Model):
             account.budget_hours_percentage = budget_hours_percentage
 
     @api.multi
-    @api.depends("budget_hours")
+    @api.depends("budget_hours", "is_cost_controlled")
     def _compute_actual_project_hours(self):
         "The recomputation will be triggered by the cron not the api.depends"
         analytic_line_obj = self.env["account.analytic.line"]
