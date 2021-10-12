@@ -11,7 +11,6 @@ class AccountAnalyticAccount(models.Model):
         help="Set manually the estimated hours for the project",
     )
     actual_hours = fields.Float(compute="_compute_actual_project_hours", store=True)
-
     budget_hours_percentage = fields.Float(compute="_compute_budget_hours_percentage", store=True, string="Cost Alert")
     cost_alert_color = fields.Integer(compute="_compute_cost_alert_color", store=True)
     is_cost_controlled = fields.Boolean()
@@ -59,16 +58,30 @@ class AccountAnalyticAccount(models.Model):
     def _compute_actual_project_hours(self):
         "The recomputation will be triggered by the cron not the api.depends"
         analytic_line_obj = self.env["account.analytic.line"]
-        # compute only sheet analytic lines
+        journal_obj = self.env['account.analytic.journal']
+        labor_journal_ids = journal_obj.search(
+            [('cost_type', '=', 'labor')])
+        # compute sql based because the child_of domain does not work
+        # so cannot use read_group
         for account in self:
-            domain = [
-                ("account_id", "child_of", account.ids),
-                ("sheet_id", "!=", False),
-            ]
-            anal_groups = analytic_line_obj.read_group(
-                domain, fields=["account_id", "unit_amount"], groupby=["account_id"],
+            all_ids = account.get_child_accounts().keys()
+            # Actual costs
+            query_params = [tuple(all_ids)]
+            cr = self._cr
+            cr.execute(
+                """
+                SELECT unit_amount
+                FROM account_analytic_line AS L
+                LEFT JOIN account_analytic_account AS A
+                ON L.account_id = A.id
+                INNER JOIN account_analytic_journal AS AAJ
+                ON AAJ.id = L.journal_id
+                AND AAJ.cost_type = 'labor'
+                AND L.account_id IN %s
+                """,
+                query_params
             )
-            actual_hours = sum(l["unit_amount"] for l in anal_groups)
+            actual_hours = sum([r[0] for r in cr.fetchall()])
             account.actual_hours = actual_hours
 
     @api.multi
