@@ -46,14 +46,25 @@ class ProjectProject(models.Model):
     def button_actual_hours(self):
         self.ensure_one()
         account = self.analytic_account_id
-        domain = [
-            ("account_id", "child_of", account.ids),
-            ("sheet_id", "!=", False),
-        ]
-        analytic_line_obj = self.env["account.analytic.line"]
-        anal_lines = analytic_line_obj.search(domain, order="id desc")
+        all_ids = account.get_child_accounts().keys()
+        query_params = [tuple(all_ids)]
+        cr = self._cr
+        cr.execute(
+            """
+            SELECT L.id
+            FROM account_analytic_line AS L
+            LEFT JOIN account_analytic_account AS A
+            ON L.account_id = A.id
+            INNER JOIN account_analytic_journal AS AAJ
+            ON AAJ.id = L.journal_id
+            AND AAJ.cost_type = 'labor'
+            AND L.account_id IN %s
+            """,
+            query_params
+        )
+        anal_lines = [r[0] for r in cr.fetchall()]
         action = self.env.ref("analytic.account_analytic_line_action_entries")
         result = action.read()[0]
-        result["domain"] = "[('id','in',[" + ",".join(map(str, anal_lines.ids)) + "])]"
+        result["domain"] = "[('id','in',[" + ",".join(map(str, anal_lines)) + "])]"
         result["context"] = {"group_by": ["user_id"]}
         return result
