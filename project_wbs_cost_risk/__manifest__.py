@@ -3,7 +3,7 @@
 
 {
     "name": "Project WBS Cost Risk",
-    "version": "10.0.1.0.0",
+    "version": "10.0.1.1.0",
     "summary": "Cost Risk in WBS deliverables based on timesheets",
     "author": "ForgeFlow",
     "license": "AGPL-3",
