@@ -58,6 +58,12 @@ class ProjectProject(models.Model):
             INNER JOIN account_analytic_journal AS AAJ
             ON AAJ.id = L.journal_id
             AND AAJ.cost_type = 'labor'
+            INNER JOIN account_account AC
+            ON L.general_account_id = AC.id
+            INNER JOIN account_account_type AT
+            ON AT.id = AC.user_type_id
+            WHERE AT.name in ('Expense', 'Cost of Goods Sold',
+            'Expenses', 'Cost of Revenue')
             AND L.account_id IN %s
             """,
             query_params
