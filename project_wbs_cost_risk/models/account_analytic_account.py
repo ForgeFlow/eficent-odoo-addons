@@ -87,7 +87,11 @@ class AccountAnalyticAccount(models.Model):
                 """,
                 query_params
             )
-            actual_hours = sum([r[0] for r in cr.fetchall()])
+            all_data = cr.fetchall()
+            if all_data:
+                actual_hours = sum([r[0] or 0 for r in all_data])
+            else:
+                actual_hours = 0
             account.actual_hours = actual_hours
 
     @api.multi
