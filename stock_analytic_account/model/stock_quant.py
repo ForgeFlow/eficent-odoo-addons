@@ -41,3 +41,11 @@ class StockQuant(models.Model):
             domain += [
                 ('analytic_account_id', '=', move.analytic_account_id.id)]
         return domain
+
+    @api.model
+    def create(self, vals):
+        if vals.get('location_id', False) and not vals.get('analytic_account_id', False):
+            location = self.env['stock.location'].browse(vals['location_id'])
+            if location.analytic_account_id:
+                vals['analytic_account_id'] = location.analytic_account_id.id
+        return super(StockQuant, self).create(vals)
