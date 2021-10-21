@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import _, api, fields, models
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
+from datetime import datetime
 
 
 class AccountAnalyticAccount(models.Model):
@@ -61,12 +63,16 @@ class AccountAnalyticAccount(models.Model):
         journal_obj = self.env['account.analytic.journal']
         labor_journal_ids = journal_obj.search(
             [('cost_type', '=', 'labor')])
+        # Do not count future hours
+        to_date = datetime.strftime(datetime.today(), DF)
+        where_date = " AND l.date <= %s"
         # compute sql based because the child_of domain does not work
         # so cannot use read_group
         for account in self:
             all_ids = account.get_child_accounts().keys()
             # Actual costs
             query_params = [tuple(all_ids)]
+            query_params += [to_date]
             cr = self._cr
             cr.execute(
                 """
@@ -84,6 +90,7 @@ class AccountAnalyticAccount(models.Model):
                 WHERE AT.name in ('Expense', 'Cost of Goods Sold',
                 'Expenses', 'Cost of Revenue')
                 AND L.account_id IN %s
+                """ + where_date + """
                 """,
                 query_params
             )
