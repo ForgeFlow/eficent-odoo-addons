@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "website": "http://www.forgeflow.com",
     "category": "Project",
-    "depends": ["project_wbs", "hr_timesheet_sheet", "web_tree_dynamic_colored_field"],
+    "depends": ["project_wbs", "hr_timesheet_sheet", "web_tree_dynamic_colored_field", "analytic_cost_revenue"],
     "data": [
         "data/ir_cron.xml",
         "views/account_analytic_account_view.xml",
