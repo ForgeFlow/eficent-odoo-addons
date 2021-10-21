@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
+from datetime import datetime
 
 
 class ProjectProject(models.Model):
@@ -47,7 +49,11 @@ class ProjectProject(models.Model):
         self.ensure_one()
         account = self.analytic_account_id
         all_ids = account.get_child_accounts().keys()
+        # Do not count future hours
+        to_date = datetime.strftime(datetime.today(), DF)
+        where_date = " AND l.date <= %s"
         query_params = [tuple(all_ids)]
+        query_params += [to_date]
         cr = self._cr
         cr.execute(
             """
@@ -65,6 +71,7 @@ class ProjectProject(models.Model):
             WHERE AT.name in ('Expense', 'Cost of Goods Sold',
             'Expenses', 'Cost of Revenue')
             AND L.account_id IN %s
+            """ + where_date + """
             """,
             query_params
         )
