@@ -70,6 +70,8 @@ class AccountAnalyticAccount(models.Model):
         # so cannot use read_group
         for account in self:
             all_ids = account.get_child_accounts().keys()
+            if not len(all_ids):
+                continue
             # Actual costs
             query_params = [tuple(all_ids)]
             query_params += [to_date]
