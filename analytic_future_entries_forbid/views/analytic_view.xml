@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    <record id="view_account_analytic_journal_form" model="ir.ui.view">
+        <field name="name">account.analytic.journal.form</field>
+        <field name="model">account.analytic.journal</field>
+        <field name="inherit_id" ref="analytic_journal.view_accounview_account_analytic_journal_formt_analytic_default_form_search" />
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="restrict_future_entries_posted"/>
+            </field>
+        </field>
+    </record>
+
+
+</openerp>
