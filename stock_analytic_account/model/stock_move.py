@@ -39,6 +39,15 @@ class StockMove(models.Model):
         return True
 
 
+    def is_stock_projects_reserve(self):
+        self.ensure_one()
+        if self.location_id.usage == 'internal' and self.location_dest_id.analytic_account_id \
+                and not self.location_id.analytic_account_id:
+            return True
+        else:
+            return False
+
+
 class StockScrap(models.Model):
 
     _inherit = 'stock.scrap'
