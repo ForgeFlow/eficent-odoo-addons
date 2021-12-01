@@ -37,7 +37,7 @@ class StockQuant(models.Model):
         domain = super(StockQuant, self)._quants_get_reservation_domain(
             move, pack_operation_id=pack_operation_id, lot_id=lot_id,
             company_id=company_id, initial_domain=initial_domain)
-        if move.analytic_account_id:
+        if move.analytic_account_id and not move.is_stock_projects_reserve():
             domain += [
                 ('analytic_account_id', '=', move.analytic_account_id.id)]
         return domain
