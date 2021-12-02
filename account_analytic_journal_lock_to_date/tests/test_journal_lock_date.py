@@ -26,12 +26,26 @@ class TestAnalyticJournalLockDate(common.SavepointCase):
              'code': 'LB2',
              'type': 'general',
              'restrict_lock_dates': False}
-        )        
+        )
+        cls.analytic_parent1 = cls.analytic_account_model.create(
+            {'name': 'parent aa',
+             'code': 'P01',
+             'type': 'general'})
+        cls.analytic_son = cls.analytic_account_model.create(
+            {'name': 'son aa',
+             'code': 'S02',
+             'type': 'general',
+             'parent_id': cls.analytic_parent1.id})        
         cls.partner_line = cls.partner_model.create({
             'name': 'Test Partner Line',
         })
         cls.analytic_account = cls.analytic_account_model.create({
             'name': 'Test Analytic Account',
+            'surpass_lock_dates': False,
+        })
+        cls.analytic_account_surpass = cls.analytic_account_model.create({
+            'name': 'Test Analytic Account Surpass',
+            'surpass_lock_dates': True,
         })
 
     def test_01_analytic_journal_lock_date(self):
@@ -73,3 +87,22 @@ class TestAnalyticJournalLockDate(common.SavepointCase):
             'journal_id': self.unrestricted_analytic_journal.id,
             'partner_id': self.partner_line.id,
         })
+        # account is allow to post in the future
+        self.analytic_journal.journal_lock_to_date = date.today()
+        self.line = self.analytic_line_model.create({
+            'account_id': self.analytic_account_surpass.id,
+            'name': 'Test Line 5',
+            'date': date.today() + timedelta(days=1),
+            'journal_id': self.analytic_journal.id,
+            'partner_id': self.partner_line.id,
+        })
+
+    def test_02_hierarchy(self):
+        """Test surpass lock dates propagation"""
+        self.assertEquals(self.analytic_parent1.surpass_lock_dates, False)
+        # changes in the parent affects the son
+        self.analytic_parent1.surpass_lock_dates = True
+        self.assertEquals(self.analytic_son.surpass_lock_dates, True)
+        # changes in the son does not affect the parent
+        self.analytic_son.surpass_lock_dates = False
+        self.assertEquals(self.analytic_parent1.surpass_lock_dates, True)
