@@ -12,8 +12,10 @@
     'website': 'https://acsone.eu/',
     'depends': [
         'analytic_journal',
+        'account_analytic_parent'
     ],
     'data': [
         'views/account_analytic_journal.xml',
+        'views/analytic_account_view.xml',
     ],
 }
