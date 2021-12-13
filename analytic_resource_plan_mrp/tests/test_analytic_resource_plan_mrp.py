@@ -113,7 +113,8 @@ class TestAnalyticResourcePlanMrp(
         move_id = safe_eval(move_action["domain"])[0][2]
         move = self.env["stock.move"].browse(move_id)[0]
         self.assertEqual(
-            move.product_qty, child.unit_amount, "Wrong consumed qty"
+            move.product_qty, self.resource_plan_line_wbom_id.unit_amount,
+            "Wrong consumed qty"
         )
         # test consume
         wiz_id = (
@@ -126,5 +127,6 @@ class TestAnalyticResourcePlanMrp(
         )
         wiz_id.do_consume()
         self.assertEqual(
-            move.product_qty, child.unit_amount, "Wrong consumed qty"
+            move.product_qty, self.resource_plan_line_wbom_id.unit_amount,
+            "Wrong consumed qty"
         )
