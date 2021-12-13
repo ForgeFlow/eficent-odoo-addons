@@ -77,7 +77,8 @@ class TestAnalyticResourcePlanMrp(
         move_id = eval(move_action['domain'])[0][2]
         move = cls.env['stock.move'].browse(move_id)[0]
         cls.assertEqual(
-            move.product_qty, child.unit_amount, 'Wrong consumed qty')
+            move.product_qty, cls.resource_plan_line_wbom_id.unit_amount,
+            'Wrong consumed qty')
         # test consume
         wiz_id = cls.env['analytic.resource.plan.line.consume'].with_context(
             active_model="analytic.resource.plan.line",
@@ -85,4 +86,5 @@ class TestAnalyticResourcePlanMrp(
         move_action = wiz_id.do_consume()
         move_id = eval(move_action['domain'])[0][2]
         cls.assertEqual(
-            move.product_qty, child.unit_amount, 'Wrong consumed qty')
+            move.product_qty, cls.resource_plan_line_wbom_id.unit_amount,
+            'Wrong consumed qty')
