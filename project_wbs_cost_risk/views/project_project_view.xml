@@ -19,8 +19,8 @@
                 <field name="is_cost_controlled" invisible="1"/>
                 <field name="budget_hours_percentage" bg_color="green:cost_alert_color==1;
                 yellow:cost_alert_color==2;
-                red:cost_alert_color==3;
-                darkred:cost_alert_color==4"/>
+                orange:cost_alert_color==3;
+                red:cost_alert_color==4"/>
             </field>
         </field>
     </record>
