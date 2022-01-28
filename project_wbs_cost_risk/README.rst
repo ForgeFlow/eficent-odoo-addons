@@ -21,7 +21,4 @@ Changelog
 Credits
 =======
 
-Contributors
-------------
-
 * Aaron Henriquez <ahenriquez@forgeflow.com>
