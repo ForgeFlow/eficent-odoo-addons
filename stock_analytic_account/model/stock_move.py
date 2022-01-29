@@ -44,11 +44,13 @@ class StockMove(models.Model):
                             "Cannot move between different projects locations,"
                             " please move first to general stock"))
                     elif src_anal and not dest_anal:
-                        if src_anal != analytic:
+                        # allow if location is a child location
+                        if move.location_id != analytic.location_id:
                             raise exceptions.ValidationError(_(
                                 "Wrong analytic account in source or move"))
                     elif dest_anal and not src_anal:
-                        if dest_anal != analytic:
+                        # allow if location is a child location
+                        if move.location_dest_id != analytic.location_id:
                             raise exceptions.ValidationError(_(
                                 "Wrong analytic account in destination or "
                                 "move"))
