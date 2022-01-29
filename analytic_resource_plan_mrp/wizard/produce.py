@@ -67,15 +67,11 @@ class AnalyticResourcePlanLineProduceItem(models.TransientModel):
     wiz_id = fields.Many2one(
         "analytic.resource.plan.line.produce",
         "Wizard",
-        required=True,
         ondelete="cascade",
-        readonly=True,
     )
     line_id = fields.Many2one(
         "analytic.resource.plan.line",
         "Resource Plan Line",
-        required=True,
-        readonly=True,
     )
     product_qty = fields.Float(
         string="Quantity to produce", digits=dp.get_precision("Product UoS")
@@ -84,5 +80,4 @@ class AnalyticResourcePlanLineProduceItem(models.TransientModel):
         "uom.uom",
         related="line_id.product_uom_id",
         string="UoM",
-        readonly=True,
     )
