@@ -160,7 +160,7 @@ class AnalyticResourcePlanLine(models.Model):
             "product_uom": line.product_uom_id.id,
             "location_id": source_location_id,
             "location_dest_id": destination_location_id,
-            "state": "assigned",
+            "state": "draft",
             "company_id": line.account_id.company_id.id,
             "analytic_account_id": line.account_id.id,
         }
@@ -171,6 +171,10 @@ class AnalyticResourcePlanLine(models.Model):
         return stock_move.create(move_data)
 
     def _complete_stock_move(self, move_id):
+        move_id._action_confirm()
+        move_id._action_assign()
+        for sml in move_id.mapped('move_line_ids'):
+            sml.qty_done = sml.product_qty        
         return move_id._action_done()
 
     def create_consume_move(self, line_id, product_qty):
@@ -221,7 +225,7 @@ class AnalyticResourcePlanLine(models.Model):
             "product_uom": line.product_uom_id.id,
             "location_id": source_location_id,
             "location_dest_id": destination_location_id,
-            "state": "assigned",
+            "state": "draft",
             "company_id": line.account_id.company_id.id,
             "analytic_account_id": line.account_id.id,
         }

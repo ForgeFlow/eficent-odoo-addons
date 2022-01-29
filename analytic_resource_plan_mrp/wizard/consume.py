@@ -67,14 +67,11 @@ class AnalyticResourcePlanLineConsumeItem(models.TransientModel):
         "analytic.resource.plan.line.consume",
         "Wizard",
         required=True,
-        ondelete="cascade",
-        readonly=True,
+        ondelete="cascade"
     )
     line_id = fields.Many2one(
         "analytic.resource.plan.line",
         "Resource Plan Line",
-        required=True,
-        readonly=True,
     )
     product_qty = fields.Float(
         string="Quantity to consume", digits=dp.get_precision("Product UoS")
@@ -83,5 +80,4 @@ class AnalyticResourcePlanLineConsumeItem(models.TransientModel):
         "uom.uom",
         related="line_id.product_uom_id",
         string="UoM",
-        readonly=True,
     )
