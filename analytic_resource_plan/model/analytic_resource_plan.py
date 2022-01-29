@@ -308,7 +308,7 @@ class AnalyticResourcePlanLine(models.Model):
         for resource in self:
             if resource.resource_type == 'task' and (
                 resource.product_uom_id.category_id != (
-                    resource.env.ref('product.uom_categ_wtime'))):
+                    resource.env.ref('uom.uom_categ_wtime'))):
                 raise ValidationError(_("When resource type is task, "
                                         "the uom category should be time"))
 

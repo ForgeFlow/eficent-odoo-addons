@@ -23,4 +23,5 @@ class Analytic(models.Model):
     @api.depends('resource_ids')
     def _compute_resource_count(self):
         for record in self:
-            record.resource_count = len(record.resource_ids)
+            children = self.search([("id", "child_of", record.id)])
+            record.resource_count = len(children.mapped("resource_ids"))

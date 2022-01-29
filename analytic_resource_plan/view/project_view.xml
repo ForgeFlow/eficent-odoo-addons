@@ -12,7 +12,8 @@
                     name="%(action_analytic_resource_plan_line_open_form)d"
                     type="action"
                     icon="fa-shopping-cart"
-                    context="{'default_account_id': analytic_account_id,'search_default_account_id': analytic_account_id}"
+                    domain= "[('account_id','child_of', active_id)]"
+                    context="{'default_account_id': analytic_account_id}"
                     groups="project.group_project_user,project.group_project_manager">
                     <field name="resource_count"
                                widget="statinfo"
