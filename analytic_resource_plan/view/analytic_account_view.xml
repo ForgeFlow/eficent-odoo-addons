@@ -3,9 +3,10 @@
 
     <act_window id="act_account_analytic_2_analytic_resource_plan_line"
                 name="Resource plan lines"
-                context = "{'search_default_account_id': [active_id], 'default_account_id' :active_id}"
+                context = "{'default_account_id' :active_id}"
                 res_model="analytic.resource.plan.line"
                 src_model="account.analytic.account"
+                domain= "[('account_id','child_of', active_id)]"
                 groups="project.group_project_manager,project.group_project_user"/>
 
     <!-- Analytic account -->
@@ -18,6 +19,7 @@
                 <button name="%(act_account_analytic_2_analytic_resource_plan_line)d"
                         help="Resource plan lines"
                         type="action"
+                        domain= "[('account_id','child_of', active_id)]"
                         class="oe_inline oe_stat_button"
                         icon="fa-pencil-square-o">
                 <span>Resource plan lines</span>
