@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="project_wbs.view_project"/>
         <field name="arch" type="xml">
             <field name="date" position="after">
-                <field name="stage_id" string="Stage"/>
+                <field name="stage_id" string="Stage" readonly="False"/>
             </field>
         </field>
     </record>
@@ -18,7 +18,7 @@
         <field name="inherit_id" ref="project.edit_project"/>
         <field name="arch" type="xml">
             <xpath expr='//header' position='inside'>
-                <field name="stage_id" widget="statusbar" readonly="True"/>
+                <field name="stage_id" widget="statusbar" clickable="True" readonly="False"/>
             </xpath>
         </field>
     </record>
