@@ -111,11 +111,6 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
                 ("code", "=", "outgoing"),
                 ("warehouse_id.company_id", "=", company_id),
                 ("name", "=", "Delivery Orders"),
-                (
-                    "warehouse_id.operating_unit_id",
-                    "=",
-                    self.env.user.default_operating_unit_id.id,
-                ),
             ]
         )
         picking_type = types[:1]
@@ -157,7 +152,7 @@ class AnalyticResourcePlanLineStockPickingOut(models.TransientModel):
                 )
             project = project[0]
             if project.date_start and (
-                make_picking.date_expected < project.date_start
+                make_picking.date_expected.date() < project.date_start
             ):
 
                 raise ValidationError(
