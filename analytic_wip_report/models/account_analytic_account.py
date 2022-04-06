@@ -161,12 +161,6 @@ class AccountAnalyticAccount(models.Model):
                 account.over_billings = over_under_billings
             else:
                 account.under_billings = -1*over_under_billings
-            try:
-                account.estimated_gross_profit_per = (
-                    account.estimated_gross_profit /
-                    account.total_value * 100)
-            except ZeroDivisionError:
-                account.estimated_gross_profit_per = 0
             over_under_billings = (account.under_billings -
                                    account.over_billings)
             account.under_over = over_under_billings
@@ -211,12 +205,6 @@ class AccountAnalyticAccount(models.Model):
         digits=dp.get_precision('Account')
     )
     estimated_gross_profit = fields.Float(
-        compute='_compute_wip_report',
-        string='Estimated Gross Profit',
-        help="""Total Value – Total Estimated Costs""",
-        digits=dp.get_precision('Account')
-    )
-    estimated_gross_profit_per = fields.Float(
         compute='_compute_wip_report',
         string='Estimated Gross Profit',
         help="""Total Value – Total Estimated Costs""",
