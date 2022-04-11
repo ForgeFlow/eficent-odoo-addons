@@ -42,7 +42,7 @@ class AccountAnalyticAccount(models.Model):
             # Actual paid to date
             cr.execute(
                 """
-                SELECT balance, L.id
+                SELECT L.id
                 FROM account_move_line L
                 INNER JOIN account_account AC
                 ON L.account_id = AC.id
@@ -58,14 +58,18 @@ class AccountAnalyticAccount(models.Model):
             # that was before I introduce the hack into Odoo for that. So I have
             # to go to the invoice and then the lines
             actual_paid_line_ids = []
-            for (total, line_id) in cr.fetchall():
+            for line_id in cr.fetchall():
                 invoice = self.env["account.move.line"].browse(line_id).move_id
                 # issue if invoices are mixing projects but that is the best
                 # I can do as long old receivable lines are not attached to projects
                 rec_lines = invoice.mapped("line_ids").filtered(lambda l: 'Receivable' in l.account_id.user_type_id.name)
-                if not sum(rec_lines.mapped("amount_residual")) and not sum(rec_lines.mapped("amount_residual_currency")):
-                    account.actual_paid -= total
-                    actual_paid_line_ids.append(line_id)
+                account.actual_paid += sum([l.balance for l in rec_lines])
+                # the total paid is the balance less the residual amount
+                rec_lines_company_curr = rec_lines.filtered(lambda l: not l.currency_id)
+                account.actual_paid -= sum(rec_lines_company_curr.mapped("amount_residual"))
+                rec_lines_other_curr = rec_lines.filtered(lambda l: l.currency_id)
+                account.actual_paid -= sum(rec_lines_other_curr.mapped("amount_residual_currency"))
+                actual_paid_line_ids.extend(rec_lines.ids)
 
             account.actual_paid_line_ids = [
                 (6, 0, [l for l in actual_paid_line_ids])]
