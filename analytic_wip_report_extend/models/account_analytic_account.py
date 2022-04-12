@@ -27,39 +27,20 @@ class AccountAnalyticAccount(models.Model):
                 account.under_billings - account.over_billings
             account.under_over = over_under_billings
 
-            # PAID Analytic Line
-            all_ids = account.get_child_accounts().keys()
-            query_params = [tuple(all_ids)]
-            where_date = ''
-            context = self._context
-            cr = self._cr
-            if context.get('from_date', False):
-                where_date += " AND L.date >= %s"
-                query_params += [context['from_date']]
-            if context.get('to_date', False):
-                where_date += " AND L.date <= %s"
-                query_params += [context['to_date']]
-            # Actual paid to date
-            cr.execute(
-                """
-                SELECT L.id
-                FROM account_move_line L
-                INNER JOIN account_account AC
-                ON L.account_id = AC.id
-                INNER JOIN account_account_type AT
-                ON AT.id = AC.user_type_id
-                WHERE AT.name in ('Income', 'Other Income')
-                AND L.analytic_account_id IN %s
-                """ + where_date + """
-                """,
-                query_params
-            )
+            # # PAID Analytic Line
             # the problem is receivable lines without analytic account
             # that was before I introduce the hack into Odoo for that. So I have
             # to go to the invoice and then the lines
             actual_paid_line_ids = []
-            for line_id in cr.fetchall():
-                invoice = self.env["account.move.line"].browse(line_id).move_id
+            invoices = []
+            for line_id in account.actual_billings_line_ids:
+                invoice = line_id.move_id.move_id
+                if not invoice:
+                    continue
+                if invoice in invoices:
+                    # several income lines in the same invoice, do not count it twice
+                    continue
+                invoices.append(invoice)
                 # issue if invoices are mixing projects but that is the best
                 # I can do as long old receivable lines are not attached to projects
                 rec_lines = invoice.mapped("line_ids").filtered(lambda l: 'Receivable' in l.account_id.user_type_id.name)
