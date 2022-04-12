@@ -10,7 +10,7 @@
                 <field name="estimated_gross_profit_per" string="Estimated Gross Profit Percent"/>
             </xpath>
             <xpath expr="//button[@name='action_open_analytic_lines']" position="after">
-                <field name="actual_paid" string="Paid To Date"/>
+                <field name="actual_paid" string="Paid To Date" sum="total_paid_to_date"/>
                 <button string="Detail"
                     name="action_open_move_lines"
                     type="object"
