@@ -41,9 +41,16 @@ class AccountAnalyticAccount(models.Model):
                     # several income lines in the same invoice, do not count it twice
                     continue
                 invoices.append(invoice)
-                # issue if invoices are mixing projects but that is the best
-                # I can do as long old receivable lines are not attached to projects
-                rec_lines = invoice.mapped("line_ids").filtered(lambda l: 'Receivable' in l.account_id.user_type_id.name)
+                # Issue: if invoices are mixing projects and the receivable line
+                # mix several projects. Those lines are not counted
+                # We can count the ones for the same project (using this
+                # branch https://github.com/ForgeFlow/odoo/tree/10.0-ap_ar_analytic)
+                # or we can trust the manual label in the journal item is the code
+                # of the project. Or if the balance is the same as the income line
+                rec_lines = invoice.mapped("line_ids").filtered(
+                    lambda l: 'Receivable' in l.account_id.user_type_id.name and (
+                        l.name == account.code or l.analytic_account_id == account or (
+                        not l.name and abs(l.balance) == abs(line_id.balance))))
                 account.actual_paid += sum([l.balance for l in rec_lines])
                 # the total paid is the balance less the residual amount
                 rec_lines_company_curr = rec_lines.filtered(lambda l: not l.currency_id)
