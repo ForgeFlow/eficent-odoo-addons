@@ -1,0 +1,17 @@
+# Do NOT update manually; changes here will be overwritten by Copier
+_commit: v1.6.1
+_src_path: https://github.com/OCA/oca-addons-repo-template.git
+ci: GitHub
+dependency_installation_mode: PIP
+generate_requirements_txt: false
+include_wkhtmltopdf: false
+odoo_version: 15.0
+org_name: ForgeFlow
+org_slug: ForgeFlow
+rebel_module_groups: []
+repo_description: null
+repo_name: Analytic account addons
+repo_slug: eficent-odoo-addons
+repo_website: https://github.com/ForgeFlow/eficent-odoo-addons
+travis_apt_packages: []
+travis_apt_sources: []
