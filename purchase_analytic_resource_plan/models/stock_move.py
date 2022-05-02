@@ -93,13 +93,13 @@ class StockMove(models.Model):
                 existing_resource,
             ) = move._check_new_resource_is_needed()
             if should_create:
-                resource_plan_vals = self._prepare_anlaytic_resource_plan_vals()
+                resource_plan_vals = move._prepare_anlaytic_resource_plan_vals()
                 self.env["analytic.resource.plan.line"].create(
                     resource_plan_vals
                 )
             elif should_update and existing_resource:
                 resource_plan_vals = (
-                    self._prepare_update_analytic_resource_plan_vals(
+                    move._prepare_update_analytic_resource_plan_vals(
                         existing_resource
                     )
                 )
