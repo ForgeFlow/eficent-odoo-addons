@@ -8,8 +8,8 @@
         <field name="field_parent">child_ids</field>
         <field name="arch" type="xml">
             <field name="date" position="after">
-                <field name="budget_hours" attrs="{'readonly':[('account_class','not in',('work_package', 'deliverable'))]}"/>
-                <field name="actual_hours"/>
+                <field name="budget_hours" attrs="{'readonly':[('account_class','not in',('work_package', 'deliverable'))]}" sum="Total Budget Hours"/>
+                <field name="actual_hours" sum="Total Actual Hours"/>
                 <button name="button_actual_hours" type="object"
                         string="Actual Hours Detail"
                         groups="project.group_project_user,project.group_project_manager"
