@@ -34,7 +34,7 @@ class AccountAnalyticAccount(models.Model):
             actual_paid_line_ids = []
             invoices = []
             for line_id in account.actual_billings_line_ids:
-                invoice = line_id.move_id.move_id
+                invoice = line_id.sudo().move_id.move_id
                 if not invoice:
                     continue
                 if invoice in invoices:
