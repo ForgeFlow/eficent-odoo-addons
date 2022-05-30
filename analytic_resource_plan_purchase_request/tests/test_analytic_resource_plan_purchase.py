@@ -16,6 +16,7 @@ class TestAnalyticResourcePlanPurchase(
         super(TestAnalyticResourcePlanPurchase, cls).setUp()
 
     def test_res_purchase(cls):
+        cls.env.user.company_id.resource_auto_request = True
         cls.assertEqual(cls.resource_plan_line.qty_available, 0.0,
                         'Showing qty where there is not')
         cls.assertEqual(cls.resource_plan_line.request_state,
