@@ -59,10 +59,6 @@ class AccountAnalyticAccount(models.Model):
     @api.depends("budget_hours", "is_cost_controlled")
     def _compute_actual_project_hours(self):
         "The recomputation will be triggered by the cron not the api.depends"
-        analytic_line_obj = self.env["account.analytic.line"]
-        journal_obj = self.env['account.analytic.journal']
-        labor_journal_ids = journal_obj.search(
-            [('cost_type', '=', 'labor')])
         # Do not count future hours
         to_date = datetime.strftime(datetime.today(), DF)
         where_date = " AND l.date <= %s"
