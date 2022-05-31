@@ -65,7 +65,7 @@ class ChangeManagementChange(models.Model):
                 [('default_plan', '=', True)], limit=1)
 
             if account_id.active_analytic_planning_version != default_plan:
-                raise ValidationError.except_orm(
+                raise ValidationError(
                     _('The active planning version of the analytic account '
                       'must be %s. ') % (default_plan.name,))
 
