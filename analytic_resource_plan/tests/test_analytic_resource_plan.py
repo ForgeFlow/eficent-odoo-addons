@@ -12,9 +12,10 @@ class TestAnalyticResourcePlan(common.SavepointCase):
 
     def setUp(cls):
         super(TestAnalyticResourcePlan, cls).setUp()
+        next_id = cls.env['account.analytic.account'].search([], order="id desc", limit=1).id + 1
         cls.project = cls.env['project.project'].create(
             {'name': 'Test project',
-             'code': 'XX0001'})
+             'code': 'XX0 %s' % next_id})
         cls.account_id = cls.project.analytic_account_id
         cls.plan_version = cls.env.ref(
             'analytic_plan.analytic_plan_version_P02')

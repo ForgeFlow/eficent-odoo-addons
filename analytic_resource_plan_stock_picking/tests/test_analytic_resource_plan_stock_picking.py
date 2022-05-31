@@ -11,6 +11,7 @@ class TestAnalyticResourcePlanStockPicking(
         test_analytic_resource_plan_stock.TestAnalyticResourcePlanStock):
     def setUp(cls):
         super(TestAnalyticResourcePlanStockPicking, cls).setUp()
+        cls.env.user.company_id.resource_auto_fetch = True
         cls.analytic_account_obj = cls.env['account.analytic.account']
         cls.resource_plan_line_obj =\
             cls.env['analytic.resource.plan.line']

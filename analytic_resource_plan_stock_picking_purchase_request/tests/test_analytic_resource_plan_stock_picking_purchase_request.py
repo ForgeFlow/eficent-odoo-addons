@@ -14,15 +14,8 @@ class TestAnalyticResourcePlanStockPickingPurchaseRequest(
         super(TestAnalyticResourcePlanStockPickingPurchaseRequest, cls).setUp()
 
     def test_analytic_resource_plan_stock_picking(cls):
+        cls.env.user.company_id.resource_auto_request = True
         cls.resource_plan_line.unit_amount = 2.0
-        upd_qty = cls.env['stock.change.product.qty'].create({
-            'product_id': cls.resource_plan_line.product_id.id,
-            'product_tmpl_id':
-            cls.resource_plan_line.product_id.product_tmpl_id.id,
-            'new_quantity': 1.0,
-            'location_id': cls.env.ref('stock.stock_location_stock').id
-        })
-        upd_qty.change_product_qty()
         cls.resource_plan_line.action_button_confirm()
         purchase_request_line = \
             cls.resource_plan_line.purchase_request_lines[0]
@@ -33,4 +26,4 @@ class TestAnalyticResourcePlanStockPickingPurchaseRequest(
             cls.resource_plan_line.request_state, 'approved',
             'should approved request')
         cls.assertEqual(
-            cls.resource_plan_line.requested_qty, 1.0, 'bad qty requested')
+            cls.resource_plan_line.requested_qty, 2.0, 'bad qty requested')
