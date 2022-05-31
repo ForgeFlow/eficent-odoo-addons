@@ -34,4 +34,5 @@
         'wizard/analytic_plan_copy_version.xml',
     ],
     'installable': True,
+    'post_init_hook': 'post_init_hook',
 }
