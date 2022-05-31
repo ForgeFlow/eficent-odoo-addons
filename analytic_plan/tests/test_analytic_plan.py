@@ -31,13 +31,15 @@ class TestAnalyticPlan(TransactionCase):
         self.analytic_parent1 = self.analytic_account_obj.create({
             'name': 'Parent Analytic Account',
             'active_analytic_planning_version': self.analytic_plan_version.id,
-            'partner_id': self.partner.id
+            'partner_id': self.partner.id,
+            'code': 'PPPP'
         })
 
         self.analytic_account = self.analytic_account_obj.create({
             'name': 'Test Analytic Account',
             'active_analytic_planning_version': self.analytic_plan_version.id,
-            'parent_id': self.analytic_parent1.id
+            'parent_id': self.analytic_parent1.id,
+            'code': 'PPPPT'
         })
 
         self.analytic_plan_journal = self.analytic_plan_journal_obj.create({
