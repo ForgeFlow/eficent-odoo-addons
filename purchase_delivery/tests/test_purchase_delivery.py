@@ -47,13 +47,5 @@ class TestPurchaseDelivery(common.TransactionCase):
                                       }).get_price()
         self.carrier_id.name_get()
         self.po.delivery_set()
-        with self.assertRaises(ValidationError):
-            self.po.button_confirm()
-            self.po.delivery_set()
-        self.picking = self.po.picking_ids
-        self.picking.force_assign()
-        self.picking.do_new_transfer()
-        self.assertEqual(self.picking.carrier_id, self.po.carrier_id)
-        self.assertEqual(self.po.order_line[1].product_id.list_price,
-                         self.po.carrier_id.fixed_price)
-        self.assertEqual(self.po.name, self.picking.group_id.name)
+        self.po._compute_carrier_in_po()
+        self.assertTrue(self.po.carrier_in_po)
