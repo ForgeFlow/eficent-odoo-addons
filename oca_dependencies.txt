@@ -5,4 +5,4 @@ sale-workflow
 hr
 hr-timesheet
 account-invoicing
-operating_unit
+operating-unit
