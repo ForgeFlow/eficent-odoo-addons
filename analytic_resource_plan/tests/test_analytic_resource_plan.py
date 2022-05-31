@@ -6,6 +6,7 @@
 # Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo.tests import common
+from odoo import fields
 
 
 class TestAnalyticResourcePlan(common.SavepointCase):
@@ -14,7 +15,7 @@ class TestAnalyticResourcePlan(common.SavepointCase):
         super(TestAnalyticResourcePlan, cls).setUp()
         cls.project = cls.env['project.project'].create(
             {'name': 'Test project',
-             'code': 'XX0001'})
+             'code': 'XX0001 %s' % fields.Date.to_string(fields.Date.from_string(fields.Date.today()))})
         cls.account_id = cls.project.analytic_account_id
         cls.plan_version = cls.env.ref(
             'analytic_plan.analytic_plan_version_P02')
