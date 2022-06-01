@@ -13,7 +13,7 @@ class TestAnalyticResourcePlan(common.SavepointCase):
     def setUp(cls):
         super(TestAnalyticResourcePlan, cls).setUp()
         next_id = cls.env['account.analytic.account'].search([], order="id desc", limit=1).id + 1
-        cls.project = cls.env['project.project'].create(
+        cls.project = cls.env['project.project'].with_context(skip_ou_check=True).create(
             {'name': 'Test project',
              'code': 'XX0 %s' % next_id})
         cls.account_id = cls.project.analytic_account_id
