@@ -14,7 +14,7 @@ class TestAnalyticResourcePlanStock(
 
     def setUp(cls):
         super(TestAnalyticResourcePlanStock, cls).setUp()
-        cls.location = cls.env['stock.location'].create({
+        cls.location = cls.env['stock.location'].with_context(skip_ou_check=True).create({
             'name': 'ACC',
             'usage': 'internal',
             'analytic_account_id': cls.account_id.id})
