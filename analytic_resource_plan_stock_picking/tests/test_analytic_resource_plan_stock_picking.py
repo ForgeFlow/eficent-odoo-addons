@@ -15,8 +15,6 @@ class TestAnalyticResourcePlanStockPicking(
         cls.analytic_account_obj = cls.env['account.analytic.account']
         cls.resource_plan_line_obj =\
             cls.env['analytic.resource.plan.line']
-        cls.mrp_bom_obj = cls.env['mrp.bom']
-        cls.mrp_bom_line_obj = cls.env['mrp.bom.line']
         cls.product_id = cls.env.ref('product.product_product_27')
         cls.partner = cls.env.ref('base.res_partner_1')
         cls.analytic_plan_version =\
@@ -41,6 +39,9 @@ class TestAnalyticResourcePlanStockPicking(
         cls.product_id.write({
             'expense_analytic_plan_journal_id': cls.analytic_plan_journal.id
         })
+        account_type = cls.env['account.account.type'].create({'name': 'RCV type', 'type': 'receivable'})
+        account_expense = cls.env['account.account'].create({'name': 'Expense', 'code': 'EXP00' , 'user_type_id': account_type.id, 'reconcile': True})
+        cls.resource_plan_line.product_id.categ_id.property_account_expense_categ_id = account_expense.id
 
     def test_analytic_resource_plan_stock_picking(cls):
         # error if no location
