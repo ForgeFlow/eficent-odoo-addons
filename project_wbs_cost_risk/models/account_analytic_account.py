@@ -25,15 +25,15 @@ class AccountAnalyticAccount(models.Model):
                 if account.is_cost_controlled and account.cost_alert_color != 0:
                     account.cost_risk_notify(account.cost_alert_color, 0)
                 account.cost_alert_color = 0
-            elif account.budget_hours_percentage >= 50 and account.budget_hours_percentage < 67:
+            elif account.budget_hours_percentage >= 50 and account.budget_hours_percentage < 70:
                 if account.is_cost_controlled and account.cost_alert_color != 1:
                     account.cost_risk_notify(account.cost_alert_color, 1)
                 account.cost_alert_color = 1
-            elif account.budget_hours_percentage >= 67 and account.budget_hours_percentage <= 84:
+            elif account.budget_hours_percentage >= 70 and account.budget_hours_percentage <= 85:
                 if account.is_cost_controlled and account.cost_alert_color != 2:
                     account.cost_risk_notify(account.cost_alert_color, 2)
                 account.cost_alert_color = 2
-            elif account.budget_hours_percentage >= 84 and account.budget_hours_percentage <= 100:
+            elif account.budget_hours_percentage >= 85 and account.budget_hours_percentage <= 100:
                 if account.is_cost_controlled and account.cost_alert_color != 3:
                     account.cost_risk_notify(account.cost_alert_color, 3)
                 account.cost_alert_color = 3
