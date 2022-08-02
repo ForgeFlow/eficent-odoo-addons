@@ -79,6 +79,14 @@ class PurchaseOrderLine(models.Model):
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
+    @api.onchange('project_id')
+    def onchange_analytic(self):
+        for line in self.order_line:
+            if self.project_id:
+                line.location_dest_id = self.project_id.location_id
+            else:
+                line.location_dest_id = False
+
     @api.multi
     def button_confirm(self):
         for po in self:
