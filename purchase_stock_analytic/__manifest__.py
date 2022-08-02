@@ -7,7 +7,7 @@
 
 {
     "name": "Purchase Stock Analytic",
-    "version": "10.0.1.0.0",
+    "version": "10.0.2.0.0",
     "author": "Eficent, Odoo Community Association (OCA),"
               "Project Expert Team",
     "website": "http://project.expert",
@@ -18,6 +18,7 @@
         "stock_analytic_account",
         "purchase_analytic",
         "purchase_location_by_line",
+        "account_analytic_parent"
     ],
     'data': [
         'views/purchase_views.xml',

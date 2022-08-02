@@ -62,7 +62,7 @@ class TestPurchaseOrderLine(common.TransactionCase):
                 })],
         }
 
-    def test_check_purchase_analytic(self):
+    def test_01_check_purchase_analytic(self):
         self.po = self.PurchaseOrder.create(self.po_vals)
         self.po.button_confirm()
         self.picking = self.po.picking_ids
@@ -72,6 +72,19 @@ class TestPurchaseOrderLine(common.TransactionCase):
             self.picking.location_dest_id.analytic_account_id,
             self.po.project_id)
 
-    def test_check_purchaseno_analytic(self):
+    def test_02_check_purchaseno_analytic(self):
         with self.assertRaises(ValidationError):
             self.po = self.PurchaseOrder.create(self.po_no_anal_vals)
+
+    def test_03_check_purchase_analytic(self):
+        """
+        Test that if changed the analytic at parent level all the lines
+        get the location of the project
+        """
+        po = self.PurchaseOrder.new(self.po_no_anal_vals)
+        po.project_id = self.analytic_account
+        po._onchange_project_id()  # in purchase_analytic_module
+        po.onchange_analytic()  # in this module
+        self.assertEqual(
+            po.order_line.location_dest_id.analytic_account_id,
+            po.project_id)
