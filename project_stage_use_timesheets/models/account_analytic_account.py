@@ -15,14 +15,16 @@ class AccountAnalyticAccount(models.Model):
             and self.env["analytic.account.stage"]
             .browse(values.get("stage_id"))
             .allow_timesheets
-            and self.account_class == "work_package"
+            and all([l.account_class == "work_package" for l in self])
         ):
-            self.project_ids.allow_timesheets = True
+            for rec in self:
+                rec.project_ids.allow_timesheets = True
         if (
             values.get("stage_id")
             and not self.env["analytic.account.stage"]
             .browse(values.get("stage_id"))
             .allow_timesheets
         ):
-            self.project_ids.allow_timesheets = False
+            for rec in self:
+                rec.project_ids.allow_timesheets = False
         return super(AccountAnalyticAccount, self).write(values)
