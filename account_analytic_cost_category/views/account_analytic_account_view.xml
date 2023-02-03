@@ -12,4 +12,16 @@
         </field>
     </record>
 
+    <record id="view_account_analytic_line_tree_cost_category" model="ir.ui.view">
+        <field name="name">account.analytic.line.cost.category</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id"
+               ref="analytic.view_account_analytic_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="account_id" position="after">
+                <field name="cost_category"/>
+            </field>
+        </field>
+    </record>
+
 </odoo>
