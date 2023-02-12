@@ -129,7 +129,7 @@ class AccountAnalyticAccount(models.Model):
                 self.env['mail.followers'].sudo().create(reg)
         # notify risk change
         message = self._risk_change_message_content(previous_cost_risk, new_cost_risk)
-        self.message_post(body=message, subtype='mail.mt_comment')
+        self.message_post(body=message, subtype='mail.mt_comment', partner_ids=message_follower_ids)
 
     @api.multi
     def _risk_change_message_content(self, previous_cost_risk, new_cost_risk):
