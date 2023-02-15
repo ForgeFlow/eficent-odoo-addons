@@ -1,10 +1,9 @@
-from odoo import api, models
+from odoo import models
 
 
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
-    @api.multi
     def get_validator_user_ids(self):
         """Return the list of user_ids that can validate a given timesheet."""
         self.ensure_one()
