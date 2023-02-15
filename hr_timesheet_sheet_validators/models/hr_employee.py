@@ -16,8 +16,7 @@ class HrEmployee(models.Model):
                 employee.department_id
                 and employee.department_id.manager_id
                 and employee.department_id.manager_id.user_id
-                and employee.department_id.manager_id.user_id.id
-                != self.env.uid
+                and employee.department_id.manager_id.user_id.id != self.env.uid
             ):
                 users.append(employee.department_id.manager_id.user_id.id)
             elif (
