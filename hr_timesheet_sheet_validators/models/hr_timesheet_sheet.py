@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -7,9 +7,7 @@ class HrTimesheetSheet(models.Model):
 
     @api.model
     def _default_department(self):
-        employees = self.env["hr.employee"].search(
-            [("user_id", "=", self.env.uid)]
-        )
+        employees = self.env["hr.employee"].search([("user_id", "=", self.env.uid)])
         for emp in employees:
             return emp.department_id and emp.department_id.id or False
         return False
@@ -28,15 +26,14 @@ class HrTimesheetSheet(models.Model):
         if employee_id:
             employee = self.env["hr.employee"].browse(employee_id)
             validators = employee.get_validator_user_ids()
-            vals["validator_user_ids"] = [
-                (4, user_id) for user_id in validators
-            ]
+            vals["validator_user_ids"] = [(4, user_id) for user_id in validators]
         return super(HrTimesheetSheet, self).create(vals)
 
     @api.multi
     def _check_authorised_validator(self):
         for timesheet in self.filtered(
-                lambda ts: ts.company_id.use_timesheet_validators):
+            lambda ts: ts.company_id.use_timesheet_validators
+        ):
             if not self.env.user._is_superuser():
                 if self.env.uid not in timesheet.validator_user_ids.ids:
                     raise UserError(

@@ -8,7 +8,7 @@
     "summary": """This module allows a user outside of the Human Resources
                groups to validate timesheets. A rule is predefined, but it
                is flexible enough to accept extensions.""",
-    "website": "http://www.forgeflow.com",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "license": "LGPL-3",
     "depends": ["hr_timesheet_sheet"],
     "data": [
@@ -17,5 +17,5 @@
         "views/res_config_settings_view.xml",
     ],
     "installable": True,
-    'pre_init_hook': 'pre_init_hook',
+    "pre_init_hook": "pre_init_hook",
 }
