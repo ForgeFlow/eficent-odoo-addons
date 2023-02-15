@@ -29,7 +29,6 @@ class HrTimesheetSheet(models.Model):
             vals["validator_user_ids"] = [(4, user_id) for user_id in validators]
         return super(HrTimesheetSheet, self).create(vals)
 
-    @api.multi
     def _check_authorised_validator(self):
         for timesheet in self.filtered(
             lambda ts: ts.company_id.use_timesheet_validators
@@ -43,12 +42,10 @@ class HrTimesheetSheet(models.Model):
                         )
                     )
 
-    @api.multi
     def action_timesheet_draft(self):
         self._check_authorised_validator()
         return super(HrTimesheetSheet, self).action_timesheet_draft()
 
-    @api.multi
     def action_timesheet_done(self):
         self._check_authorised_validator()
         return super(HrTimesheetSheet, self).action_timesheet_done()
