@@ -11,7 +11,8 @@
         </field>
     </record>
 
-    <!--FORM VIEW-->
+    <!--FORM
+    VIEW-->
     <record id="edit_project" model="ir.ui.view">
         <field name="name">project.project.form</field>
         <field name="model">project.project</field>
@@ -23,12 +24,14 @@
                     widget="statusbar"
                     clickable="True"
                     readonly="False"
+                    options="{'clickable': '1', 'fold_field': 'fold'}"
                 />
             </xpath>
         </field>
     </record>
 
-    <!--KANBAN VIEW-->
+    <!--KANBAN
+    VIEW-->
     <record id="view_project_kanban" model="ir.ui.view">
         <field name="name">project.project.kanban.wbs</field>
         <field name="model">project.project</field>
