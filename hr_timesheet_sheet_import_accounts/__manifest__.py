@@ -7,7 +7,7 @@
     "category": "Human Resources",
     "summary": "This module lets the user import the analytic accounts from "
     "the previous timesheet, with a simple click.",
-    "website": "http://www.eficent.com",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "license": "LGPL-3",
     "depends": [
         "hr_timesheet_sheet",

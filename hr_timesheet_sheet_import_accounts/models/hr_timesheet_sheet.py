@@ -7,26 +7,18 @@ class HrTimesheetSheet(models.Model):
     @api.multi
     def prepare_timesheet(self, project_id):
         for sheet in self:
-            aa = (
-                self.env["project.project"]
-                .browse(project_id)
-                .analytic_account_id
-            )
+            aa = self.env["project.project"].browse(project_id).analytic_account_id
             ga_id = self.env[
                 "account.analytic.line"
             ]._getGeneralAccountFromCostCategory(aa, sheet.user_id)
             if not ga_id:
                 ga_id = (
                     sheet.employee_id.product_id.property_account_expense_id.id
-                    or sheet.employee_id.product_id.categ_id.
-                    property_account_expense_categ_id.id
+                    or sheet.employee_id.product_id.categ_id.property_account_expense_categ_id.id
                 )
             if not ga_id:
                 raise exceptions.ValidationError(
-                    _(
-                        "Please set a general expense "
-                        "account in your employee view"
-                    )
+                    _("Please set a general expense " "account in your employee view")
                 )
             vals = {
                 "date": sheet.date_start,
@@ -67,9 +59,7 @@ class HrTimesheetSheet(models.Model):
         sheet_obj = self.env["hr_timesheet.sheet"]
         for sheet in self:
             if sheet.state not in ("draft", "new"):
-                raise exceptions.ValidationError(
-                    _("Timesheet draft or opened")
-                )
+                raise exceptions.ValidationError(_("Timesheet draft or opened"))
             date_start = sheet.date_start
             emp_id = sheet.employee_id and sheet.employee_id.id or False
             if not emp_id:

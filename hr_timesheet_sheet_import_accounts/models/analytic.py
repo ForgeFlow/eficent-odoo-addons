@@ -18,8 +18,7 @@ class AccountAnalyticLine(models.Model):
         if emp:
             if vals.get("unit_amount"):
                 vals.update(
-                    amount=emp.product_id.standard_price
-                    * vals.get("unit_amount")
+                    amount=emp.product_id.standard_price * vals.get("unit_amount")
                 )
             vals.update(product_id=emp.product_id.id)
         return super(AccountAnalyticLine, self).create(vals)
@@ -29,9 +28,7 @@ class AccountAnalyticLine(models.Model):
         for a in self:
             if a.sheet_id and vals.get("unit_amount"):
                 if a.product_id.is_employee:
-                    amount = a.product_id.standard_price * vals.get(
-                        "unit_amount"
-                    )
+                    amount = a.product_id.standard_price * vals.get("unit_amount")
                 if amount:
                     vals.update(amount=amount)
         return super(AccountAnalyticLine, self).write(vals)
