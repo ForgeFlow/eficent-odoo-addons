@@ -23,7 +23,6 @@ class AccountAnalyticLine(models.Model):
             vals.update(product_id=emp.product_id.id)
         return super(AccountAnalyticLine, self).create(vals)
 
-    @api.multi
     def write(self, vals):
         for a in self:
             if a.sheet_id and vals.get("unit_amount"):

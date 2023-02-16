@@ -6,7 +6,6 @@ class HrEmployee(models.Model):
 
     product_id = fields.Many2one(comodel_name="product.product", string="Product")
 
-    @api.multi
     @api.constrains("product_id")
     def _check_is_employee(self):
         for rec in self:

@@ -4,7 +4,6 @@ from odoo import _, api, exceptions, models
 class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet.sheet"
 
-    @api.multi
     def prepare_timesheet(self, project_id):
         for sheet in self:
             aa = self.env["project.project"].browse(project_id).analytic_account_id
@@ -12,10 +11,11 @@ class HrTimesheetSheet(models.Model):
                 "account.analytic.line"
             ]._getGeneralAccountFromCostCategory(aa, sheet.user_id)
             if not ga_id:
-                ga_id = (
+                account = (
                     sheet.employee_id.product_id.property_account_expense_id.id
-                    or sheet.employee_id.product_id.categ_id.property_account_expense_categ_id.id
+                    or sheet.employee_id.product_id.categ_id.property_account_expense_categ_id.id  # noqa
                 )
+                ga_id = account
             if not ga_id:
                 raise exceptions.ValidationError(
                     _("Please set a general expense " "account in your employee view")
@@ -51,10 +51,9 @@ class HrTimesheetSheet(models.Model):
         return [
             ("date_end", "<=", date_start),
             ("employee_id", "=", emp_id),
-            ("hr_period_id.type_id", "=", period_type.id),
+            # ("hr_period_id.type_id", "=", period_type.id),
         ]
 
-    @api.multi
     def set_previous_timesheet_ids(self):
         sheet_obj = self.env["hr_timesheet.sheet"]
         for sheet in self:
