@@ -5,14 +5,13 @@
 
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html)..
 
-from odoo import api, models
+from odoo import models
 
 
 class AccountAnalyticAccount(models.Model):
     _name = "account.analytic.account"
     _inherit = ["account.analytic.account", "base.kanban.abstract"]
 
-    @api.multi
     def write(self, values):
         res = super(AccountAnalyticAccount, self).write(values)
         if values.get("stage_id"):
