@@ -4,10 +4,10 @@ from openupgradelib import openupgrade
 
 def fill_stages(cr):
 
-    cr.execute("SELECT id FROM ir_model WHERE "
-               "model = 'account.analytic.account'")
+    cr.execute("SELECT id FROM ir_model WHERE " "model = 'account.analytic.account'")
     analytic_model_id = cr.fetchone()
-    query = """
+    query = (
+        """
         INSERT INTO base_kanban_stage (
             id,
             name,
@@ -33,7 +33,9 @@ def fill_stages(cr):
             %s
         FROM analytic_account_stage AS aas
         ON CONFLICT DO NOTHING
-    """ % analytic_model_id
+    """
+        % analytic_model_id
+    )
     openupgrade.logged_query(cr, query)
 
 
@@ -41,5 +43,5 @@ def fill_stages(cr):
 def migrate(env, version):
     cr = env.cr
     # base_kanban_stage already installed
-    if openupgrade.table_exists(cr, 'analytic_account_stage'):
+    if openupgrade.table_exists(cr, "analytic_account_stage"):
         fill_stages(cr)
