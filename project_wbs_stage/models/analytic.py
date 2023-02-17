@@ -1,16 +1,34 @@
-# Copyright 2017-19 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017-23 ForgeFlow S.L.
 # Copyright 2017-19 Luxim d.o.o.
 # Copyright 2017-19 Matmoz d.o.o.
 # Copyright 2017-19 Deneroteam.
 
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html)..
 
-from odoo import models
+from odoo import SUPERUSER_ID, api, fields, models
 
 
 class AccountAnalyticAccount(models.Model):
-    _name = "account.analytic.account"
-    _inherit = ["account.analytic.account", "base.kanban.abstract"]
+    _inherit = "account.analytic.account"
+
+    @api.model
+    def _read_group_stage_ids(self, stages, domain, order):
+        search_domain = [("id", "in", stages.ids)]
+        stage_ids = stages._search(
+            search_domain, order=order, access_rights_uid=SUPERUSER_ID
+        )
+        return stages.browse(stage_ids)
+
+    stage_id = fields.Many2one(
+        "project.project.stage",
+        string="Stage",
+        ondelete="restrict",
+        groups="project.group_project_stages",
+        tracking=True,
+        index=True,
+        copy=False,
+        group_expand="_read_group_stage_ids",
+    )
 
     def write(self, values):
         res = super(AccountAnalyticAccount, self).write(values)
