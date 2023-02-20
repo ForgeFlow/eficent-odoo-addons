@@ -71,30 +71,18 @@ class AccountJournal(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    @api.multi
     def _prepare_analytic_line(self):
-        self.ensure_one()
         res = super(AccountMoveLine, self)._prepare_analytic_line()
-        if not self.journal_id.analytic_journal_id:
-            raise ValidationError(
-                _(
-                    "Please define an analytic journal for "
-                    "journal %s" % self.journal_id.name
+        for move_line in self:
+            if not move_line.journal_id.analytic_journal_id:
+                raise ValidationError(
+                    _(
+                        "Please define an analytic journal for "
+                        "journal %s" % move_line.journal_id.name
+                    )
                 )
-            )
-        res[0]["journal_id"] = self.journal_id.analytic_journal_id.id
-        return res
-
-
-class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
-
-    @api.model
-    def invoice_line_move_line_get(self):
-        res = super(AccountInvoice, self).invoice_line_move_line_get()
-        for data in res:
-            if data.get("analytic_line_ids", False) and data.get("invoice_id"):
-                aj = self.browse(data["invoice_id"]).journal_id.analytic_journal_id.id
-                for line in data["analytic_line_ids"]:
-                    line[2]["journal_id"] = aj
+            for line in res:
+                if line.get("move_id") == move_line.id:
+                    line["journal_id"] = move_line.journal_id.analytic_journal_id.id
+                    break
         return res

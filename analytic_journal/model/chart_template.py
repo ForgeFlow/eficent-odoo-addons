@@ -2,13 +2,12 @@
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lpgl.html).
 
-from odoo import api, models
+from odoo import models
 
 
 class AccountChartTemplate(models.Model):
     _inherit = "account.chart.template"
 
-    @api.multi
     def _prepare_all_journals(self, acc_template_ref, company, journals_dict=None):
         res = super(AccountChartTemplate, self)._prepare_all_journals(
             acc_template_ref, company, journals_dict=journals_dict
