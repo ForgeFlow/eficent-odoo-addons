@@ -4,9 +4,10 @@
 
 {
     "name": "Analytic Journal",
-    "version": "10.0.1.0.0",
+    "version": "14.0.1.0.0",
     "summary": "Analytic Journals as in previous Odoo versions",
-    "author": "Odoo SA",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
+    "author": "ForgeFlow",
     "license": "LGPL-3",
     "category": "Analytic",
     "depends": ["account", "analytic"],
