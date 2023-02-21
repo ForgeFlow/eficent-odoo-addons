@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
 #---------------------------------------------------------------------------------------------------------
@@ -10,9 +10,9 @@
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree string="Analytic Planning Version">
-                <field name="code"/>
-                <field name="name"/>
-                <field name="active"/>
+                <field name="code" />
+                <field name="name" />
+                <field name="active" />
             </tree>
         </field>
     </record>
@@ -24,11 +24,11 @@
         <field name="arch" type="xml">
             <search string="Analytic Planning Version">
                 <group>
-                    <field name="code"/>
-                    <field name="name"/>
+                    <field name="code" />
+                    <field name="name" />
                 </group>
                 <group string="Group By..." expand="0">
-                    <filter string="Active" context="{'group_by':'active'}"/>
+                    <filter string="Active" context="{'group_by':'active'}" />
                 </group>
             </search>
         </field>
@@ -42,15 +42,19 @@
             <form string="Analytic Planning Version">
                 <sheet>
                     <group colspan="4">
-                    <field name="name"/>
-                    <field name="code"/>
-                    <field name="active"/>  
-                    <field name="default_committed"/>
-                    <field name="default_plan"/>
-                    <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="active" />
+                    <field name="default_committed" />
+                    <field name="default_plan" />
+                    <field
+                            name="company_id"
+                            groups="base.group_multi_company"
+                            widget="selection"
+                        />
                     <notebook colspan="2">
                         <page string="Notes" name="notes">
-                            <field name="notes"/>
+                            <field name="notes" />
                         </page>
                     </notebook>
                     </group>
@@ -59,17 +63,22 @@
         </field>
     </record>
 
-    <record id="action_account_analytic_plan_version_form" model="ir.actions.act_window">
+    <record
+        id="action_account_analytic_plan_version_form"
+        model="ir.actions.act_window"
+    >
         <field name="name">Analytic Planning Versions</field>
         <field name="res_model">account.analytic.plan.version</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_account_analytic_plan_version_search"/>
+        <field name="search_view_id" ref="view_account_analytic_plan_version_search" />
     </record>
 
-    <menuitem groups="analytic.group_analytic_accounting" 
-            action="action_account_analytic_plan_version_form" 
-            id="account_analytic_plan_version" 
-            parent="account.menu_analytic_accounting"/>
+    <menuitem
+        groups="analytic.group_analytic_accounting"
+        action="action_account_analytic_plan_version_form"
+        id="account_analytic_plan_version"
+        parent="account.menu_analytic_accounting"
+    />
 
 </odoo>
