@@ -24,24 +24,22 @@
         </field>
     </record>
 
-    <record id="action_analytic_plan_copy_version_form" model="ir.actions.act_window">
+    <record
+        id="action_analytic_plan_copy_version_form_diff_ver"
+        model="ir.actions.act_window"
+    >
         <field name="name">Copy analytic plan lines to a different version</field>
         <field name="res_model">analytic.plan.copy.version</field>
-        <field name="view_type">form</field>
         <field name="view_mode">form,tree</field>
         <field name="view_id" ref="analytic_plan_copy_version_form" />
         <field name="target">new</field>
     </record>
 
-    <act_window
-        name="Copy Analytic Plan Lines"
-        res_model="analytic.plan.copy.version"
-        src_model="account.analytic.account"
-        view_mode="form"
-        target="new"
-        multi="True"
-        key2="client_action_multi"
-        id="action_analytic_plan_copy_version_form"
-    />
-
+    <record model="ir.actions.act_window" id="action_analytic_plan_copy_version_form">
+        <field name="name">Copy Analytic Plan Lines</field>
+        <field name="res_model">analytic.plan.copy.version</field>
+        <field name="binding_model_id" ref="account.model_account_analytic_account" />
+        <field name="binding_view_types">form</field>
+        <field name="target">new</field>
+    </record>
 </odoo>
