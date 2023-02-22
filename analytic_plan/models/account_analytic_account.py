@@ -1,5 +1,3 @@
-# Copyright 2015 Eficent Business and IT Consulting Services S.L.
-# (Jordi Ballester Alomar)
 # Copyright 2016 Matmoz d.o.o.
 # (Matjaž Mozetič)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -8,7 +6,6 @@ from odoo import api, fields, models
 
 
 class AccountAnalyticAccount(models.Model):
-
     _inherit = "account.analytic.account"
 
     @api.model
@@ -18,7 +15,6 @@ class AccountAnalyticAccount(models.Model):
         )
         return plan_versions
 
-    @api.multi
     def _compute_debit_credit_bal_qtty_plan(self):
         analytic_line_obj = self.env["account.analytic.line.plan"]
         domain = [("account_id", "in", self.mapped("id"))]
@@ -76,11 +72,10 @@ class AccountAnalyticAccount(models.Model):
         default=_default_version,
     )
 
-    @api.multi
     def open_plan_cost_tree_view(self):
         self.ensure_one()
-        res = self.env.get("ir.actions.act_window").for_xml_id(
-            "analytic_plan", "action_account_analytic_plan_journal_open_form"
+        res = self.env.get("ir.actions.act_window")._for_xml_id(
+            "analytic_plan.action_account_analytic_plan_journal_open_form"
         )
         plan_obj = self.env["account.analytic.line.plan"]
 

@@ -1,5 +1,3 @@
-# Copyright 2015 Eficent Business and IT Consulting Services S.L.
-# (Jordi Ballester Alomar)
 # Copyright 2016 Matmoz d.o.o. and 2018 Luxim d.o.o.s
 # (Matjaž Mozetič)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -22,7 +20,7 @@ class AccountAnalyticLinePlan(models.Model):
     date = fields.Date(
         string="Date", required=True, index=True, default=fields.Date.context_today
     )
-    amount = fields.Float(string="Amount", required=True, deafult=0.0)
+    amount = fields.Float(string="Amount", required=True, default=0.0)
     unit_amount = fields.Float(string="Quantity", default=0.0)
     unit_price = fields.Float(string="Unit Price")
     amount_currency = fields.Float(
@@ -46,7 +44,7 @@ class AccountAnalyticLinePlan(models.Model):
     currency_id = fields.Many2one(
         related="company_id.currency_id", string="Currency", readonly=True
     )
-    product_uom_id = fields.Many2one(comodel_name="product.uom", string="UoM")
+    product_uom_id = fields.Many2one(comodel_name="uom.uom", string="UoM")
     product_id = fields.Many2one(comodel_name="product.product", string="Product")
     general_account_id = fields.Many2one(
         comodel_name="account.account",
@@ -77,7 +75,6 @@ class AccountAnalyticLinePlan(models.Model):
         ),
     )
 
-    @api.multi
     def _set_unit_price(self):
         analytic_journal_obj = self.env["account.analytic.plan.journal"]
 
@@ -110,7 +107,6 @@ class AccountAnalyticLinePlan(models.Model):
                     )
                     line.unit_price = product.price
 
-    @api.multi
     def _compute_total_amount(self):
         analytic_journal_obj = self.env["account.analytic.plan.journal"]
 
@@ -122,7 +118,6 @@ class AccountAnalyticLinePlan(models.Model):
             for line in self:
                 line.amount = line.unit_price * line.unit_amount
 
-    @api.multi
     def _get_pricelist(self):
         self.ensure_one()
         if self.partner_id:
@@ -130,7 +125,6 @@ class AccountAnalyticLinePlan(models.Model):
         else:
             return False
 
-    @api.multi
     @api.onchange("product_id")
     def product_id_change(self):
         self.ensure_one()
@@ -182,7 +176,6 @@ class AccountAnalyticLinePlan(models.Model):
         self.general_account_id = a
         self.name = prod.name
 
-    @api.multi
     @api.onchange("product_uom_id", "unit_amount")
     def product_uom_change(self):
         self.ensure_one()
