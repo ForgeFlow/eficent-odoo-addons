@@ -76,4 +76,4 @@ class TestAnalyticPlan(TransactionCase):
         self.balance_plan = (
             self.analytic_account.credit_plan - self.analytic_account.debit_plan
         )
-        self.assertEquals(self.analytic_account.balance_plan, self.balance_plan)
+        self.assertEqual(self.analytic_account.balance_plan, self.balance_plan)
