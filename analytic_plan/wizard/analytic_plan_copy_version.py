@@ -1,10 +1,8 @@
-# Copyright 2015 Eficent Business and IT Consulting Services S.L.
-# (Jordi Ballester Alomar)
 # Copyright 2016 Matmoz d.o.o.
 # (Matjaž Mozetič)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.exceptions import UserError
 from odoo.tools.translate import _
 
@@ -25,7 +23,6 @@ class AnalyticPlanCopyVersion(models.TransientModel):
     )
     include_child = fields.Boolean("Include child accounts", default=True)
 
-    @api.multi
     def analytic_plan_copy_version_open_window(self):
         new_line_plan_ids = []
         analytic_obj = self.env["account.analytic.account"]
@@ -68,7 +65,6 @@ class AnalyticPlanCopyVersion(models.TransientModel):
         return {
             "domain": "[('id','in', [" + ",".join(map(str, new_line_plan_ids)) + "])]",
             "name": _("Analytic Planning Lines"),
-            "view_type": "form",
             "view_mode": "tree,form",
             "res_model": "account.analytic.line.plan",
             "view_id": False,

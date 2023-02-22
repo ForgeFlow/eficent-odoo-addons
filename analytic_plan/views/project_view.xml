@@ -7,7 +7,7 @@
         <field name="type">form</field>
         <field name="inherit_id" ref="project.edit_project" />
         <field name="arch" type="xml">
-            <xpath expr='//field[@name="sequence"]' position='after'>
+            <xpath expr='//field[@name="company_id"]' position='after'>
                 <field
                     name="active_analytic_planning_version"
                     string="Active Plan Version"
