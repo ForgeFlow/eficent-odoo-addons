@@ -4,7 +4,7 @@
 
 {
     "name": "Analytic Plan",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow, " "Matmoz, " "Project Expert Team",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Project Management",
