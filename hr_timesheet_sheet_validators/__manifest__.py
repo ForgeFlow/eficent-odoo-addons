@@ -2,7 +2,7 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html)
 {
     "name": "HR Timesheet Sheet Validators",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow",
     "category": "Human Resources",
     "summary": """This module allows a user outside of the Human Resources
