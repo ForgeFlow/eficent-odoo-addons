@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -6,12 +5,12 @@
     "name": "Analytic Schedule",
     "version": "10.0.2.0.1",
     "summary": "Automatically computes start and end dates for analytic "
-               "accounts based on the earliest start and latest finish date "
-               "of the children.",
+    "accounts based on the earliest start and latest finish date "
+    "of the children.",
     "author": "Eficent",
-    "website": "www.eficent.com",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Generic Modules/Projects & Services",
     "depends": ["analytic", "account_analytic_parent"],
-    "data": ['views/analyltic_account_view.xml'],
-    'installable': True,
+    "data": ["views/analyltic_account_view.xml"],
+    "installable": True,
 }
