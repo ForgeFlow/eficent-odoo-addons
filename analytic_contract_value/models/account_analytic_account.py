@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
 # © 2015 Eficent - Jordi Ballester Alomar
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
 from itertools import chain
+
+from odoo import api, fields, models
 
 
 class AccountAnalyticAccount(models.Model):
-    _inherit = 'account.analytic.account'
+    _inherit = "account.analytic.account"
 
     @api.multi
     def _get_all_analytic_accounts(self):
         # Now add the children
-        query = '''
+        query = """
         WITH RECURSIVE children AS (
         SELECT parent_id, id
         FROM account_analytic_account
@@ -23,8 +23,8 @@ class AccountAnalyticAccount(models.Model):
         JOIN children b ON(a.parent_id = b.id)
         )
         SELECT id FROM children order by parent_id
-        '''
-        query = query.format(id1=', '.join([str(i) for i in self._ids]))
+        """
+        query = query.format(id1=", ".join([str(i) for i in self._ids]))
         self.env.cr.execute(query)
         res = self.env.cr.fetchall()
         res_list = list(chain(*res))
@@ -49,12 +49,14 @@ class AccountAnalyticAccount(models.Model):
                 AND l.account_id IN %s
                 AND a.active_analytic_planning_version = l.version_id
                 """,
-                query_params)
+                query_params,
+            )
             val = self.env.cr.fetchone()[0] or 0
             acc_id.contract_value = val
         return True
 
     contract_value = fields.Float(
         compute=_compute_contract_value,
-        string='Current Total Contract Value',
-        help='Total Contract Value including child analytic accounts')
+        string="Current Total Contract Value",
+        help="Total Contract Value including child analytic accounts",
+    )
