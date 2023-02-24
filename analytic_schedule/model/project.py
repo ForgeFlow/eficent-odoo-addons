@@ -7,13 +7,12 @@ from odoo import api, models
 class ProjectProject(models.Model):
     _inherit = "project.project"
 
-    @api.multi
     def _compute_scheduled_dates(self):
         """Obtains the earliest and latest dates of the children."""
         for pp in self:
             start_dates = []
             end_dates = []
-            for child in pp.child_ids:
+            for child in pp.analytic_account_id.child_ids:
                 for project in child.project_ids:
                     if project.date_start:
                         start_dates.append(project.date_start)
@@ -33,7 +32,6 @@ class ProjectProject(models.Model):
                 pp.write({"date": max_end_date})
         return True
 
-    @api.multi
     def propagate_dates(self, vals):
         for pp in self:
             if "date_start" in vals and "date" in vals:
@@ -50,17 +48,16 @@ class ProjectProject(models.Model):
     @api.model
     def create(self, values):
         res = super(ProjectProject, self).create(values)
-        res.parent_id.project_ids._compute_scheduled_dates()
+        res.analytic_account_id.parent_id.project_ids._compute_scheduled_dates()
         res.propagate_dates(values)
         return res
 
-    @api.multi
     def write(self, vals):
         res = super(ProjectProject, self).write(vals)
         if "date_start" in vals or "date" in vals:
             for pp in self:
-                if not pp.parent_id:
+                if not pp.analytic_account_id.parent_id:
                     return res
-                pp.parent_id.project_ids._compute_scheduled_dates()
+                pp.analytic_account_id.parent_id.project_ids._compute_scheduled_dates()
                 pp.propagate_dates(vals)
         return res
