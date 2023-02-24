@@ -79,7 +79,7 @@ class AccountAnalyticAccount(models.Model):
         )
         plan_obj = self.env["account.analytic.line.plan"]
 
-        acc_ids = self.get_child_accounts().keys()
+        acc_ids = list(self.get_child_accounts().keys())
         line_ids = plan_obj.search(
             [
                 ("account_id", "in", acc_ids),
