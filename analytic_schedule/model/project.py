@@ -50,7 +50,7 @@ class ProjectProject(models.Model):
     @api.model
     def create(self, values):
         res = super(ProjectProject, self).create(values)
-        res.parent_id.project_ids._compute_scheduled_dates()
+        res.analytic_account_id.parent_id.project_ids._compute_scheduled_dates()
         res.propagate_dates(values)
         return res
 
@@ -59,8 +59,8 @@ class ProjectProject(models.Model):
         res = super(ProjectProject, self).write(vals)
         if 'date_start' in vals or 'date' in vals:
             for pp in self:
-                if not pp.parent_id:
+                if not pp.analytic_account_id.parent_id:
                     return res
-                pp.parent_id.project_ids._compute_scheduled_dates()
+                pp.analytic_account_id.parent_id.project_ids._compute_scheduled_dates()
                 pp.propagate_dates(vals)
         return res
