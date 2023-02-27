@@ -8,7 +8,7 @@
     "name": "Project WBS Stage",
     "version": "15.0.1.0.0",
     "author": "Eficent,ForgeFlow",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Generic Modules/Projects & Services",
     "summary": """Add the stage to the project wbs
