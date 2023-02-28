@@ -4,13 +4,13 @@
 
 {
     "name": "Analytic Contract Value",
-    "version": "10.0.1.0.0",
+    "version": "14.0.1.0.0",
     "summary": "Sets a Contract Value on the analytic account",
-    "author": "Eficent",
+    "author": "ForgeFlow",
     "license": "AGPL-3",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Generic",
-    "depends": ["analytic"],
+    "depends": ["analytic", "analytic_plan"],
     "data": [
         "security/analytic_security.xml",
         "views/analytic_account_view.xml",
