@@ -5,9 +5,9 @@
     "name": "Account Journal Lock Date",
     "summary": """
         Lock each journal independently""",
-    "version": "10.0.1.0.0",
+    "version": "14.0.1.0.0",
     "license": "AGPL-3",
-    "author": "ForgeFlow S.L.,Odoo Community Association (OCA)",
+    "author": "ForgeFlow ,Odoo Community Association (OCA)",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "depends": ["analytic_journal", "account_analytic_parent"],
     "data": [
