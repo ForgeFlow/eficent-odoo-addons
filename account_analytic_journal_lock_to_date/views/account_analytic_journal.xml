@@ -1,18 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2017 ACSONE SA/NV
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
-
 <odoo>
 <data>
     <record id="view_account_analytic_journal_form" model="ir.ui.view">
         <field name="name">account.analytic.journal.form</field>
         <field name="model">account.analytic.journal</field>
-        <field name="inherit_id"
-               ref="analytic_journal.view_account_analytic_journal_form"/>
+        <field
+                name="inherit_id"
+                ref="analytic_journal.view_account_analytic_journal_form"
+            />
             <field name="arch" type="xml">
                 <field name="type" position="after">
-                    <field name="restrict_lock_dates"/>
-                    <field name="journal_lock_to_date"/>
+                    <field name="restrict_lock_dates" />
+                    <field name="journal_lock_to_date" />
                 </field>
             </field>
     </record>
