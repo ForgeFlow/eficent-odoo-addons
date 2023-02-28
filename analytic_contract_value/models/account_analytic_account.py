@@ -1,22 +1,21 @@
-# © 2015 Eficent - Jordi Ballester Alomar
+# Copyright 2023 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from itertools import chain
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class AccountAnalyticAccount(models.Model):
     _inherit = "account.analytic.account"
 
-    @api.multi
     def _get_all_analytic_accounts(self):
         # Now add the children
         query = """
         WITH RECURSIVE children AS (
         SELECT parent_id, id
         FROM account_analytic_account
-        WHERE parent_id in ({id1}) or id in ({id1})
+        WHERE parent_id in %s or id in %s
         UNION ALL
         SELECT a.parent_id, a.id
         FROM account_analytic_account a
@@ -24,13 +23,11 @@ class AccountAnalyticAccount(models.Model):
         )
         SELECT id FROM children order by parent_id
         """
-        query = query.format(id1=", ".join([str(i) for i in self._ids]))
-        self.env.cr.execute(query)
+        self.env.cr.execute(query, (tuple(self._ids), tuple(self._ids)))
         res = self.env.cr.fetchall()
         res_list = list(chain(*res))
         return list(set(res_list))
 
-    @api.multi
     def _compute_contract_value(self):
         for acc_id in self:
             all_ids = acc_id._get_all_analytic_accounts()
