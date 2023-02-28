@@ -47,7 +47,7 @@ class AnalyticPlanCopyVersion(models.TransientModel):
                 _("Choose different source and destination " "planning versions.")
             )
         if include_child:
-            account_ids = record.get_child_accounts().keys()
+            account_ids = list(record.get_child_accounts().keys())
         else:
             account_ids = record_ids
 
