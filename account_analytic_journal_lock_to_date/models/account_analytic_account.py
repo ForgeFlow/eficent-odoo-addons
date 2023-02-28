@@ -1,7 +1,7 @@
 # Copyright 2021 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class AccountAnalyticAccount(models.Model):
@@ -9,7 +9,6 @@ class AccountAnalyticAccount(models.Model):
 
     surpass_lock_dates = fields.Boolean()
 
-    @api.multi
     def write(self, vals):
         # propagate surpass_lock_dates in the hierarchy
         if self and "surpass_lock_dates" in vals and not vals["surpass_lock_dates"]:
