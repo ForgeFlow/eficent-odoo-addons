@@ -1,13 +1,12 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models
+from odoo import models
 
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    @api.multi
     def create_analytic_lines(self):
         new_lines = self.env["account.move.line"]
         valid_list = ["Income", "Expense", "Cost", "Revenue"]
