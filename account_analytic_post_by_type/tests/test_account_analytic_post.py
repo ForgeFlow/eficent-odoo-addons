@@ -1,10 +1,10 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests import common
+from odoo.tests.common import TransactionCase
 
 
-class TestAccountAnalyticPost(common.TransactionCase):
+class TestAccountAnalyticPost(TransactionCase):
     def setUp(self):
         super(TestAccountAnalyticPost, self).setUp()
         self.move_obj = self.env["account.move"]
