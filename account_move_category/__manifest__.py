@@ -1,10 +1,10 @@
-# Copyright 2018 Eficent Business and IT Consulting Services S.L.
+# Copyright 2018 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Account Move Category",
-    "version": "10.0.1.0.0",
-    "author": "Eficent, Odoo Community Association (OCA)",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow, Odoo Community Association (OCA)",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Generic",
     "depends": ["account", "analytic"],
