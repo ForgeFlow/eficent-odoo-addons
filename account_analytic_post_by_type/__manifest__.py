@@ -3,7 +3,7 @@
 
 {
     "name": "Account Analytic Post by Type",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "category": "Analytic Accounting",
     "license": "AGPL-3",
     "author": "ForgeFlow",

@@ -1,6 +1,6 @@
-=====================
-Account analytic Post
-=====================
+=============================
+Account analytic Post By Type
+=============================
 
 This module introduces the following features:
 
@@ -14,6 +14,5 @@ Credits
 Contributors
 ------------
 
-* Eficent <http://www.eficent.com>
+* ForgeFlow <http://www.forgeflow.com>
 * Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
-
