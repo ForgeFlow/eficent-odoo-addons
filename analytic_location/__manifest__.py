@@ -4,8 +4,8 @@
 
 {
     "name": "Stock Location in Analytic Account",
-    "version": "10.0.1.1.0",
-    "author": "Eficent, " "Project Expert Team, " "Odoo Community Association (OCA)",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow, " "Project Expert Team, " "Odoo Community Association (OCA)",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Project Management",
     "license": "AGPL-3",
