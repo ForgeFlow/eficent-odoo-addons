@@ -3,7 +3,7 @@
 
     <record id="stock_project_external" model="stock.location">
         <field name="usage">view</field>
-        <field name="company_id" />
+        <field name="company_id" ref="base.main_company" />
         <field eval="1" name="active" />
         <field name="name">Projects External Location</field>
         <field
@@ -12,7 +12,7 @@
     </record>
 
     <record id="stock_project_internal" model="stock.location">
-        <field name="company_id" />
+        <field name="company_id" ref="base.main_company" />
         <field name="usage">view</field>
         <field name="location_id" ref="stock.stock_location_company" />
         <field eval="1" name="active" />

@@ -11,7 +11,6 @@ class StockLocation(models.Model):
         "account.analytic.account", "Analytic Account", copy=False
     )
 
-    @api.multi
     @api.constrains("analytic_account_id")
     def _check_analytic_account(self):
         for loc in self:
