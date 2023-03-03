@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 
 <!--CATEGORY-->
@@ -28,16 +28,28 @@
     </record>
 
 <!--PROXIMITY-->
-    <record id="change_management_proximity_imminent" model="change.management.proximity">
+    <record
+        id="change_management_proximity_imminent"
+        model="change.management.proximity"
+    >
         <field name="name">Imminent</field>
     </record>
-    <record id="change_management_proximity_within_stage" model="change.management.proximity">
+    <record
+        id="change_management_proximity_within_stage"
+        model="change.management.proximity"
+    >
         <field name="name">Within stage</field>
     </record>
-    <record id="change_management_proximity_within_project" model="change.management.proximity">
+    <record
+        id="change_management_proximity_within_project"
+        model="change.management.proximity"
+    >
         <field name="name">Within project</field>
     </record>
-    <record id="change_management_proximity_longterm" model="change.management.proximity">
+    <record
+        id="change_management_proximity_longterm"
+        model="change.management.proximity"
+    >
         <field name="name">Beyond project</field>
     </record>
 
@@ -45,49 +57,49 @@
     <record id="mt_change_draft" model="mail.message.subtype">
         <field name="name">Change Back to Draft</field>
         <field name="res_model">change.management.change</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="description">Change back in Draft</field>
     </record>
     <record id="mt_change_active" model="mail.message.subtype">
         <field name="name">Change Confirmed</field>
         <field name="res_model">change.management.change</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="description">Change Confirmed</field>
     </record>
     <record id="mt_change_accepted" model="mail.message.subtype">
         <field name="name">Change Approved</field>
         <field name="res_model">change.management.change</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="description">Change Approved</field>
     </record>
     <record id="mt_change_in_progress" model="mail.message.subtype">
         <field name="name">Change In Progress</field>
         <field name="res_model">change.management.change</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="description">Change In Progress</field>
     </record>
     <record id="mt_change_done" model="mail.message.subtype">
         <field name="name">Change Completed</field>
         <field name="res_model">change.management.change</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="description">Change Completed</field>
     </record>
     <record id="mt_change_rejected" model="mail.message.subtype">
         <field name="name">Change Rejected</field>
         <field name="res_model">change.management.change</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="description">Change Rejected</field>
     </record>
     <record id="mt_change_withdrawn" model="mail.message.subtype">
         <field name="name">Change Withdrawn</field>
         <field name="res_model">change.management.change</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="description">Change Withdrawn</field>
     </record>
     <record id="mt_change_deferred" model="mail.message.subtype">
         <field name="name">Change Deferred</field>
         <field name="res_model">change.management.change</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="description">Change Deferred</field>
     </record>
 
