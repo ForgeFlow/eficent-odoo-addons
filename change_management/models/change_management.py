@@ -27,7 +27,7 @@ class CMProximity(models.Model):
 class CMChange(models.Model):
     _name = "change.management.change"
     _description = "Change"
-    _inherit = ["mail.thread", "ir.needaction_mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "id desc"
 
     # ##### Track state changes #####  #
@@ -68,7 +68,6 @@ class CMChange(models.Model):
             vals["name"] = self.env["ir.sequence"].get("change.management.change")
         return super(CMChange, self).create(vals)
 
-    @api.multi
     def copy(self, default=None):
         self.ensure_one()
         if default is None:
@@ -85,6 +84,7 @@ class CMChange(models.Model):
         states={"draft": [("readonly", False)]},
         help="""Change label Can be changed as long as change is in
         state 'draft'.""",
+        index=True,
     )
     description = fields.Char(
         string="Request Description",
@@ -130,11 +130,12 @@ class CMChange(models.Model):
     project_id = fields.Many2one(
         comodel_name="project.project",
         string="Project",
-        ondelete="set null",
+        ondelete="restrict",
         readonly=True,
         states={"draft": [("readonly", False)]},
         required=True,
         help="The project where the change request was initiated.",
+        index=True,
     )
     author_id = fields.Many2one(
         "res.users",
@@ -176,6 +177,7 @@ class CMChange(models.Model):
         help="Change Category: "
         "The type of change in terms of the project's or business"
         "chosen categories (e.g. Schedule, quality, legal etc.)",
+        index=True,
     )
     description_cause = fields.Html("Change")
     description_event = fields.Html("Reason")
@@ -200,7 +202,6 @@ class CMChange(models.Model):
         readonly=True,
         string="State",
         states={"draft": [("readonly", False)]},
-        # track_visibility='on_change'
     )
     change_owner_id = fields.Many2one(
         "res.users",
@@ -210,6 +211,7 @@ class CMChange(models.Model):
         only one change owner per change), change ownership is assigned
         to a managerial level, in case of business continuity to a
         C-level manager.""",
+        index=True,
     )
 
     company_id = fields.Many2one(
@@ -218,7 +220,7 @@ class CMChange(models.Model):
         required=True,
         readonly=True,
         states={"draft": [("readonly", False)]},
-        default=lambda self: self.env.user.company_id.id,
+        default=lambda self: self.env.company,
     )
 
     # ##### DEFINITIONS #####  #
@@ -242,54 +244,45 @@ class CMChange(models.Model):
         for record in self:
             record.change_response_count = len(record.change_response_ids)
 
-    @api.multi
     def set_state_draft(self):
         self.write({"state": "draft"})
         self.confirmed_id = self.approved_id = []
         self.date_confirmed = self.approval_date = ""
 
-    @api.multi
     def set_state_active(self):
         self.write({"state": "active"})
         self.confirmed_id = self.env.user
         self.date_confirmed = fields.Datetime.now()
 
-    @api.multi
     def set_state_accepted(self):
         self.write({"state": "accepted"})
         self.approved_id = self.env.user
         self.date_approved = fields.Datetime.now()
 
-    @api.multi
     def set_in_progress(self):
         self.write({"state": "in_progress"})
 
-    @api.multi
     def set_state_done(self):
         self.write({"state": "done"})
 
-    @api.multi
     def set_state_rejected(self):
         self.write({"state": "rejected"})
 
-    @api.multi
     def set_state_deferred(self):
         self.write({"state": "deferred"})
 
-    @api.multi
     def set_state_withdrawn(self):
         self.write({"state": "withdraw"})
 
-    @api.multi
     def _subscribe_extra_followers(self, vals):
         user_ids = [
-            vals[x]
+            vals[x].partner_id.id
             for x in ["author_id", "change_owner_id"]
             if x in vals
             if not vals[x] is False
         ]
         if len(user_ids) > 0:
-            self.message_subscribe_users(user_ids=user_ids)
+            self.message_subscribe(partner_ids=user_ids)
 
         changes = self.read(["message_follower_ids", "change_response_ids"])
         for change in changes:
@@ -299,7 +292,6 @@ class CMChange(models.Model):
                     change["change_response_ids"], change["message_follower_ids"]
                 )
 
-    @api.multi
     def write(self, vals):
         ret = super(CMChange, self).write(vals)
         self._subscribe_extra_followers(vals)
@@ -324,14 +316,14 @@ class CMChange(models.Model):
             list(project_ids), default=default
         )
         return {
-                change.id:
-                aliases.get(change.project_id and change.project_id.id or 0, False)
+            change.id: aliases.get(
+                change.project_id and change.project_id.id or 0, False
+            )
             for change in changes
         }
 
-    @api.multi
-    def message_get_suggested_recipients(self):
-        recipients = super(CMChange, self).message_get_suggested_recipients()
+    def _message_get_suggested_recipients(self):
+        recipients = super(CMChange, self)._message_get_suggested_recipients()
         try:
             for change in self:
                 if change.stakeholder_id:
@@ -344,24 +336,25 @@ class CMChange(models.Model):
             pass
         return recipients
 
-    @api.multi
     def email_split(self, msg):
         email_list = tools.email_split(
             (msg.get("to") or "") + "," + (msg.get("cc") or "")
         )
         # check left-part is not already an alias
-        return filter(
-            lambda x: x.split("@")[0] not in self.mapped("project_id.alias_name"),
-            email_list,
+        return list(
+            filter(
+                lambda x: x.split("@")[0] not in self.mapped("project_id.alias_name"),
+                email_list,
+            )
         )
 
     @api.model
     def message_new(self, msg, custom_values=None):
-        """Overrides mail_thread message_new that is called by the mailgateway
+        """Overrides mail_thread message_new that is called by the mail gateway
         through message_process.
         This override updates the document according to the email.
         """
-        # removes default author when going through the mail gateway. Indeed we
+        # removes default author when going through the mail gateway. Indeed, we
         # do not want to explicitly set user_id to False; however we do not
         # want the gateway user to be responsible if no other responsible is
         # found.
@@ -381,22 +374,21 @@ class CMChange(models.Model):
         )
         change = self.browse(res_id)
         email_list = change.email_split(msg)
-        stakeholder_ids = filter(None, change._find_partner_from_emails(email_list))
+        stakeholder_ids = [
+            _f for _f in change._mail_find_partner_from_emails(email_list) if _f
+        ]
         change.message_subscribe(stakeholder_ids)
         return res_id
 
-    # Some v10 related entries
-
-    @api.multi
     def message_update(self, msg, update_vals=None):
         """Override to update the change according to the email."""
         email_list = self.email_split(msg)
-        stakeholder_ids = filter(None, self._find_partner_from_emails(email_list))
+        stakeholder_ids = [
+            _f for _f in self._mail_find_partner_from_emails(email_list) if _f
+        ]
         self.message_subscribe(stakeholder_ids)
         return super(CMChange, self).message_update(msg, update_vals=update_vals)
 
-    @api.multi
-    @api.returns("mail.message", lambda value: value.id)
     def message_post(self, subtype=None, **kwargs):
         """Overrides mail_thread message_post so that we can set
         the date of last action field when a new message is posted on
@@ -408,7 +400,6 @@ class CMChange(models.Model):
             self.sudo().write({"date_modified": fields.Datetime.now()})
         return mail_message
 
-    @api.multi
     def message_get_email_values(self, notif_mail=None):
         self.ensure_one()
         res = super(CMChange, self).message_get_email_values(notif_mail=notif_mail)
@@ -419,7 +410,9 @@ class CMChange(models.Model):
             except Exception:
                 pass
         if self.project_id:
-            current_objects = filter(None, headers.get("X-Odoo-Objects", "").split(","))
+            current_objects = [
+                _f for _f in headers.get("X-Odoo-Objects", "").split(",") if _f
+            ]
             current_objects.insert(0, "project.project-%s, " % self.project_id.id)
             headers["X-Odoo-Objects"] = ",".join(current_objects)
         if self.tag_ids:

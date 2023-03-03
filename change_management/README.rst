@@ -23,7 +23,7 @@ Credits
 Contributors
 ------------
 
-* Eficent Business and It Consulting Services <contact@eficent.com>
+* ForgeFlow <contact@forgeflow.com>
 * Matmoz d.o.o. <http://www.matmoz.si>
 * Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
 
@@ -36,7 +36,7 @@ Maintainer
 
 This module is maintained by Project Expert Team.
 
-Project Expert is a joint effort between EFICENT (Barcelona, Spain) and MATMOZ (Ljubljana, Slovenia),
+Project Expert is a joint effort between ForgeFlow (Barcelona, Spain) and MATMOZ (Ljubljana, Slovenia),
 both active members of Odoo Community Association (OCA).
 
 .. image:: http://odoo-community.org/logo.png

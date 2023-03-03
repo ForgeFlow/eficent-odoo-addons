@@ -8,8 +8,10 @@
         <field name="arch" type="xml">
             <tree
                 string='Changes'
-                colors="green:state in 'accepted';purple:state in 'active';steelblue:state in 'deferred';lightgrey:state in ('rejected','withdrawn','done');"
-                fonts="bold:message_unread == True"
+                decoration-success="state=='accepted'"
+                decoration-primary="state=='active'"
+                decoration-info="state=='deferred'"
+                decoration-muted="state in ('rejected','withdrawn','done')"
             >
                 <field name="name" />
                 <field name="description" />
@@ -185,36 +187,35 @@
                     name="no_actions"
                     icon="terp-check"
                 />
-               <field name="change_owner_id" index="1" string="Change Owner">
+               <field name="change_owner_id" string="Change Owner">
                    <filter
                         domain="[('change_owner_id','=',False)]"
                         help="Changes without ownership"
                         icon="terp-personal-"
+                        name="change_owner"
                     />
                </field>
                <separator orientation="vertical" />
 
-               <field name="name" index="1" />
-               <field
-                    name="project_id"
-                    index="1"
-                    domain="['|',('user_id','=',uid),('members','in',uid)]"
-                >
+               <field name="name" />
+               <field name="project_id" domain="['|',('user_id','=',uid)]">
                    <filter
-                        domain="['|',('project_id.user_id','=',uid),('project_id.members','in',uid)]"
+                        domain="['|',('project_id.user_id','=',uid)]"
                         help="My Projects"
                         icon="terp-personal"
+                        name="projects"
                     />
                </field>
-               <field name="change_category_id" index="1" />
+               <field name="change_category_id" />
                <separator orientation="vertical" />
 
-               <field name="message_unread" index="1">
-                   <filter
-                        domain="[('message_unread', '=', True)]"
-                        help="Unread messages"
-                    />
-               </field>
+<!--               <field name="message_unread">-->
+<!--                   <filter-->
+<!--                        domain="[('message_unread', '=', True)]"-->
+<!--                        help="Unread messages"-->
+<!--                        name="unread_messages"-->
+<!--                    />-->
+<!--               </field>-->
 
                <newline />
                <group expand="0" string="Group By..." colspan="4" col="20">
@@ -262,24 +263,28 @@
                         icon="terp-go-month"
                         domain="[]"
                         context="{'group_by':'create_date'}"
+                        name="create_date"
                     />
                    <filter
                         string="Mod. Date"
                         icon="terp-go-month"
                         domain="[]"
                         context="{'group_by':'date_modified'}"
+                        name="mod_date"
                     />
                    <filter
                         string="Conf. Date"
                         icon="terp-go-month"
                         domain="[]"
                         context="{'group_by':'date_confirmed'}"
+                        name="conf_date"
                     />
                    <filter
                         string="Appr. Date"
                         icon="terp-go-month"
                         domain="[]"
                         context="{'group_by':'date_approved'}"
+                        name="approved_date"
                     />
                </group>
            </search>
@@ -291,7 +296,6 @@
         <field name="name">Changes</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">change.management.change</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="change_search_form_view" />
         <field name="context">{'search_default_active': 1}</field>
@@ -301,7 +305,6 @@
         <field name="name">Actions</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">project.task</field>
-        <field name="view_type">form</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="view_id" ref="change_management_project_task_tree_view" />
         <field name="search_view_id" ref="change_management_project_task_search_view" />

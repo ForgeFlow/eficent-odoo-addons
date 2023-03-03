@@ -3,8 +3,9 @@
 
 {
     "name": "Change Management",
-    "version": "10.0.1.0.0",
-    "author": "Matmoz d.o.o., Odoo Community Association (OCA)," "Project Expert Team",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow, Matmoz d.o.o., Odoo Community Association (OCA),"
+    "Project Expert Team",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Project Management",
     "license": "AGPL-3",

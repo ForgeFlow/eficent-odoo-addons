@@ -22,7 +22,7 @@
     <record id="change_management_project_task_tree_view" model="ir.ui.view">
         <field name="name">change.management.inherit.task.tree1</field>
         <field name="model">project.task</field>
-        <field name="priority">20</field>
+        <field name="priority">100</field>
         <field name="inherit_id" ref="project.view_task_tree2" />
         <field name="arch" type="xml">
             <data>
@@ -48,6 +48,7 @@
                     domain="[('change_id','&lt;&gt;',False)]"
                     help="Show only tasks (actions) on change"
                     icon="terp-emblem-important"
+                    name="change_action"
                 />
                 <filter
                     string="Active Tasks"

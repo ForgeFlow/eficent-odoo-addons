@@ -17,7 +17,6 @@
         <field name="name">Proximity</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">change.management.proximity</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="proximity_tree_view" />
     </record>
