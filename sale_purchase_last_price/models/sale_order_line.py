@@ -2,8 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import fields, models
 
-import odoo.addons.decimal_precision as dp
-
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
@@ -37,7 +35,7 @@ class SaleOrderLine(models.Model):
 
     last_purchase_price = fields.Float(
         compute="_compute_last_purchase",
-        digits=dp.get_precision("Product"),
+        digits="Product Price",
         string="Last Purchase Price",
     )
     last_purchase_date = fields.Date(

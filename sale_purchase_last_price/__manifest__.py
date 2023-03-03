@@ -3,16 +3,12 @@
 
 {
     "name": "Sale Purchase Last Price Info",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "category": "Purchase Management",
     "license": "AGPL-3",
     "author": "ForgeFlow, " "Odoo Community Association (OCA)",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
-    "depends": [
-        "sale",
-        "sale_order_dates",
-        "purchase",
-    ],
+    "depends": ["sale", "purchase", "stock"],
     "data": [
         "views/sale_view.xml",
     ],
