@@ -1,14 +1,11 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import api, fields, models
-
-import odoo.addons.decimal_precision as dp
+from odoo import fields, models
 
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    @api.multi
     def _compute_last_purchase(self):
         """Get last purchase price, last purchase date and last supplier"""
         for so_line in self:
@@ -38,7 +35,7 @@ class SaleOrderLine(models.Model):
 
     last_purchase_price = fields.Float(
         compute="_compute_last_purchase",
-        digits=dp.get_precision("Product"),
+        digits="Product Price",
         string="Last Purchase Price",
     )
     last_purchase_date = fields.Date(

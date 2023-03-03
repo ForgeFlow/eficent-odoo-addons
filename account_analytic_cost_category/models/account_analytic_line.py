@@ -9,6 +9,5 @@ class AccountAnalyticLine(models.Model):
     _inherit = "account.analytic.line"
 
     cost_category = fields.Selection(
-        [("cogs", "Cost of Goods Sold"), ("expense", "Expense")],
         related="account_id.cost_category",
     )
