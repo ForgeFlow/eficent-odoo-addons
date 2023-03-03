@@ -1,16 +1,16 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
 
-from odoo.tests import common
+from odoo.tests.common import TransactionCase
 from odoo.tools import (
     DEFAULT_SERVER_DATE_FORMAT as DF,
     DEFAULT_SERVER_DATETIME_FORMAT as DT,
 )
 
 
-class TestPurchaseLastPrice(common.TransactionCase):
+class TestPurchaseLastPrice(TransactionCase):
     def setUp(self):
         super(TestPurchaseLastPrice, self).setUp()
         self.purchase_model = self.env["purchase.order"]
