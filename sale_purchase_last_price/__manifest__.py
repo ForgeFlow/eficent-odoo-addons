@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -7,9 +6,8 @@
     "version": "10.0.1.0.0",
     "category": "Purchase Management",
     "license": "AGPL-3",
-    "author": "Eficent, "
-              "Odoo Community Association (OCA)",
-    "website": "http://www.eficent.com",
+    "author": "Eficent, " "Odoo Community Association (OCA)",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "depends": [
         "sale",
         "sale_order_dates",
