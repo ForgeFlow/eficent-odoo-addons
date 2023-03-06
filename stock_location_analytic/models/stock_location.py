@@ -25,8 +25,7 @@ class StockLocation(models.Model):
                     ):
                         raise ValidationError(
                             _(
-                                """Sublocations can only be
-                            related to the same project"""
+                                """Sublocations can only be related to the same project"""
                             )
                         )
         return True
