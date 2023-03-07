@@ -1,20 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-   
+
     <record id="view_picking_internal_analytic_search" model="ir.ui.view">
         <field name="name">stock.picking.internal.search</field>
         <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="inherit_id" ref="stock.view_picking_internal_search" />
         <field name="arch" type="xml">
             <xpath expr="//search/field[@name='group_id']" position="after">
-                <field name="analytic_account_ids" groups="analytic.group_analytic_accounting"/>
-                <field name="analytic_account_user_ids" groups="analytic.group_analytic_accounting"/>
+                <field
+                    name="analytic_account_ids"
+                    groups="analytic.group_analytic_accounting"
+                />
+                <field
+                    name="analytic_account_user_ids"
+                    groups="analytic.group_analytic_accounting"
+                />
             </xpath>
         </field>
     </record>
 
-    <record id="action_picking_out_analytic_tree"
-            model="ir.actions.act_window">
+    <record id="action_picking_out_analytic_tree" model="ir.actions.act_window">
         <field name="name">Delivery Orders</field>
         <field name="res_model">stock.picking</field>
         <field name="type">ir.actions.act_window</field>
@@ -22,7 +27,7 @@
         <field name="view_mode">tree,form,calendar</field>
         <field name="domain">[('picking_type_code','=','customers')]</field>
         <field name="context">{'contact_display': 'partner_address'}</field>
-        <field name="search_view_id" ref="view_picking_internal_analytic_search"/>
+        <field name="search_view_id" ref="view_picking_internal_analytic_search" />
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
             Click to create a delivery order.
@@ -34,8 +39,7 @@
         </field>
     </record>
 
-    <record id="action_picking_in_analytic_tree"
-            model="ir.actions.act_window">
+    <record id="action_picking_in_analytic_tree" model="ir.actions.act_window">
         <field name="name">Incoming Shipments</field>
         <field name="res_model">stock.picking</field>
         <field name="type">ir.actions.act_window</field>
@@ -43,7 +47,7 @@
         <field name="view_mode">tree,form,calendar</field>
         <field name="domain">[('picking_type_code','=','suppliers')]</field>
         <field name="context">{'contact_display': 'partner_address'}</field>
-        <field name="search_view_id" ref="view_picking_internal_analytic_search"/>
+        <field name="search_view_id" ref="view_picking_internal_analytic_search" />
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
             Click to create an incoming shipment.
