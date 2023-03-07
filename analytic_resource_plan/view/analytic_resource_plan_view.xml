@@ -124,7 +124,8 @@
         <field name="arch" type="xml">
             <tree
                 string="Analytic resource plan line"
-                colors="darkmagenta:has_child == True;blue:state=='draft'"
+                decoration-danger="has_child == True"
+                decoration-info="state=='draft'"
                 editable="top"
             >
                 <field name="account_id" />
@@ -189,6 +190,7 @@
                     />
                     <filter
                         string="Analytic Account"
+                        name="account"
                         domain="[]"
                         context="{'group_by':'account_id'}"
                     />
@@ -216,7 +218,6 @@
         <field name="name">Plan resources</field>
         <field name="res_model">analytic.resource.plan.line</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_type">form</field>
         <field name="search_view_id" ref="view_analytic_resource_plan_line_filter" />
     </record>
 

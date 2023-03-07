@@ -1,4 +1,4 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # Copyright 2018 Luxim d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -12,9 +12,8 @@ class AnalyticResourcePlanLine(models.Model):
 
     _name = "analytic.resource.plan.line"
     _description = "Analytic Resource Planning lines"
-    _inherit = ["mail.thread", "ir.needaction_mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
-    @api.multi
     @api.depends("child_ids")
     def _compute_has_child(self):
         for line in self:
@@ -67,7 +66,7 @@ class AnalyticResourcePlanLine(models.Model):
         states={"draft": [("readonly", False)]},
     )
     product_uom_id = fields.Many2one(
-        comodel_name="product.uom",
+        comodel_name="uom.uom",
         string="UoM",
         required=True,
         readonly=True,
@@ -116,7 +115,6 @@ class AnalyticResourcePlanLine(models.Model):
         comodel_name="res.users", string="Assign To", ondelete="set null"
     )
 
-    @api.multi
     def copy(self, default=None):
         self.ensure_one()
         if default is None:
@@ -207,7 +205,7 @@ class AnalyticResourcePlanLine(models.Model):
             (curr_id,),
         )
         res = self.env.cr.fetchall()
-        for x, y in res:
+        for _x, y in res:
             result[y] = True
         return result
 
@@ -227,11 +225,10 @@ class AnalyticResourcePlanLine(models.Model):
         ana_line.unlink()
         return True
 
-    @api.multi
     def action_button_draft(self):
         for line in self:
             for child in line.child_ids:
-                if child.state not in ("draft", "plan"):
+                if child.state not in "draft":
                     raise ValidationError(
                         _(
                             "All the child resource plan "
@@ -241,7 +238,6 @@ class AnalyticResourcePlanLine(models.Model):
             line._delete_analytic_lines()
         return self.write({"state": "draft"})
 
-    @api.multi
     def action_button_confirm(self):
         for line in self:
             children = line._get_child_resource_plan_lines()
@@ -262,16 +258,14 @@ class AnalyticResourcePlanLine(models.Model):
             )
             self.price_unit = self.product_id.standard_price
 
-    @api.multi
-    def write(self, vals):
-        analytic_obj = self.env["account.analytic.account"]
-        if "account_id" in vals:
-            analytic = analytic_obj.browse(vals["account_id"])
-            if vals.get("date", False):
-                vals["date"] = analytic.date
-        return super(AnalyticResourcePlanLine, self).write(vals)
+    # def write(self, vals):
+    #     analytic_obj = self.env["account.analytic.account"]
+    #     if "account_id" in vals:
+    #         analytic = analytic_obj.browse(vals["account_id"])
+    #         if vals.get("date", False):
+    #             vals["date"] = analytic.date
+    #     return super(AnalyticResourcePlanLine, self).write(vals)
 
-    @api.multi
     def unlink(self):
         for line in self:
             if line.analytic_line_plan_ids:
@@ -284,13 +278,11 @@ class AnalyticResourcePlanLine(models.Model):
         return super(AnalyticResourcePlanLine, self).unlink()
 
     # PRICE DEFINITIONS
-    @api.multi
     @api.depends("price_unit", "unit_amount")
     def _compute_get_price_total(self):
         for resource in self:
             resource.price_total = resource.price_unit * resource.unit_amount
 
-    @api.multi
     def _get_pricelist(self):
         self.ensure_one()
         partner_id = self._get_partner()
@@ -306,24 +298,21 @@ class AnalyticResourcePlanLine(models.Model):
         if self.resource_type == "procurement":
             self.user_id = False
 
-    @api.multi
     @api.constrains("resource_type", "product_uom_id")
     def _check_description(self):
         for resource in self:
             if resource.resource_type == "task" and (
                 resource.product_uom_id.category_id
-                != (resource.env.ref("product.uom_categ_wtime"))
+                != (resource.env.ref("uom.uom_categ_wtime"))
             ):
                 raise ValidationError(
                     _("When resource type is task, " "the uom category should be time")
                 )
 
-    @api.multi
     def action_open_view_rpl_form(self):
         self.with_context(view_buttons=True)
         view = {
             "name": _("Details"),
-            "view_type": "form",
             "view_mode": "form,tree",
             "res_model": "analytic.resource.plan.line",
             "view_id": False,

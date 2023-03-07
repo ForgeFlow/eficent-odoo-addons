@@ -28,21 +28,9 @@
     >
         <field name="name">Change status</field>
         <field name="res_model">resource.plan.line.change.state</field>
-        <field name="view_type">form</field>
         <field name="view_mode">form,tree</field>
         <field name="view_id" ref="resource_plan_line_change_state_form" />
         <field name="target">new</field>
     </record>
-
-    <act_window
-        name="Change status"
-        res_model="resource.plan.line.change.state"
-        src_model="analytic.resource.plan.line"
-        view_mode="form"
-        target="new"
-        multi="True"
-        key2="client_action_multi"
-        id="action_resource_plan_line_change_state_form"
-    />
 
 </odoo>

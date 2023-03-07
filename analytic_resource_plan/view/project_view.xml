@@ -22,13 +22,15 @@
         </field>
     </record>
 
-    <act_window
-        name="Resource plan lines"
-        id="resource_plan_line_action_project"
-        res_model="analytic.resource.plan.line"
-        src_model="project.project"
-        context="{'default_account_id': analytic_account_id,'search_default_account_id': [analytic_account_id]}"
-        groups="project.group_project_user,project.group_project_manager"
-    />
+    <record id="resource_plan_line_action_project" model="ir.actions.act_window">
+        <field name="name">Resource plan lines</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">analytic.resource.plan.line</field>
+        <field name="view_mode">form</field>
+        <field
+            name="context"
+        >{'default_account_id': analytic_account_id,'search_default_account_id': [analytic_account_id]}</field>
+        <field name="groups_id" eval="[(4, ref('project.group_project_user'))]" />
+    </record>
 
 </odoo>
