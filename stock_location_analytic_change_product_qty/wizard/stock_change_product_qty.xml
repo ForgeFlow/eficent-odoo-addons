@@ -6,7 +6,7 @@
         <field name="model">stock.change.product.qty</field>
         <field name="inherit_id" ref="stock.view_change_product_quantity" />
         <field name="arch" type="xml">
-            <field name="location_id" position="after">
+            <field name="product_id" position="after">
                 <field
                     name="analytic_account_id"
                     groups="analytic.group_analytic_accounting"
