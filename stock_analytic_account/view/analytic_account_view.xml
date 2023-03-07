@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
-#---------------------------------------------------------------------------------------------------------
-#   Extend the analytic account
-#---------------------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------------------------------
+    # Extend the analytic account
+    #---------------------------------------------------------------------------------------------------------
     <record model="ir.actions.act_window" id="act_analytic_account_2_stock_move">
         <field name="name">Stock Moves</field>
         <field name="res_model">stock.move</field>
-        <field name="src_model">account.analytic.account</field>
+        <field name="binding_model_id" ref="account.model_account_analytic_account" />
+        <field name="binding_view_types">list,form</field>
         <field name="view_id" ref="stock_analytic.view_move_tree" />
-        <field name="view_mode">tree,form</field>
-        <field name="view_type">form</field>
     </record>
 
     <record
@@ -53,13 +51,20 @@
         </field>
     </record>
 
-    <act_window
-        name="Stock Moves"
-        id="analytic_account_stock_move"
-        res_model="stock.move"
-        src_model="account.analytic.account"
-        context="{'default_analytic_account_id': active_id,'search_default_analytic_account_id': [active_id]}"
-        groups="analytic.group_analytic_accounting"
-    />
+    <record model="ir.actions.act_window" id="analytic_account_stock_move">
+        <field name="name">Stock Moves</field>
+        <field name="res_model">stock.move</field>
+        <field name="binding_model_id" ref="account.model_account_analytic_account" />
+        <field name="binding_view_types">list,form</field>
+        <field
+            name="context"
+        >"{'default_analytic_account_id':active_id,'search_default_analytic_account_id':[active_id]}"</field>
+        <field name="view_id" ref="stock_analytic.view_move_tree" />
+        <field
+            name="groups_id"
+            eval="[(4, ref('analytic.group_analytic_accounting'))]"
+        />
+    </record>
+
 
 </odoo>

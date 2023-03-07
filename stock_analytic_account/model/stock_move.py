@@ -1,4 +1,4 @@
-# Copyright 2014-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2023 ForgeFlow S.L.
 # Copyright 2016 Matmoz d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import _, api, exceptions, fields, models
@@ -15,43 +15,53 @@ class StockMove(models.Model):
         readonly=True,
     )
 
-    @api.multi
+    @api.model
+    def create(self, vals):
+        src_loc = self.location_id.browse(vals["location_id"])
+        dest_loc = self.location_id.browse(vals["location_dest_id"])
+        add_analytic_id = False
+
+        if src_loc.analytic_account_id or dest_loc.analytic_account_id:
+            if (
+                src_loc.usage in ("customer", "supplier")
+                and dest_loc.usage == "internal"
+            ) or (
+                src_loc.usage == "internal"
+                and dest_loc.usage in ("customer", "supplier")
+            ):
+                add_analytic_id = dest_loc.analytic_account_id.id
+        if add_analytic_id:
+            vals["analytic_account_id"] = add_analytic_id
+        return super(StockMove, self).create(vals)
+
     @api.constrains("analytic_account_id", "location_id", "location_dest_id")
     def _check_analytic_account(self):
         for move in self:
-            analytic = move.analytic_account_id
-            src_anal = move.location_id.analytic_account_id
-            dest_anal = move.location_dest_id.analytic_account_id
-            if src_anal and dest_anal:
-                raise exceptions.ValidationError(
-                    _(
-                        """
-                    Cannot move between different projects locations,
-                    please move first to general stock"""
-                    )
-                )
-            elif src_anal and not dest_anal:
-                if src_anal != analytic:
-                    raise exceptions.ValidationError(
-                        _("Wrong analytic account in source or move")
-                    )
-            elif dest_anal and not src_anal:
-                if dest_anal != analytic:
-                    raise exceptions.ValidationError(
-                        _("Wrong analytic account in destination or " "move")
-                    )
+            if move.analytic_account_id:
+                analytic = move.analytic_account_id
+                src_anal = move.location_id.analytic_account_id
+                dest_anal = move.location_dest_id.analytic_account_id
+                if analytic:
+                    if src_anal and dest_anal and (src_anal != dest_anal):
+                        raise exceptions.ValidationError(
+                            _(
+                                "Cannot move between different projects locations,"
+                                " please move first to general stock"
+                            )
+                        )
+                    elif src_anal and not dest_anal:
+                        # allow if location is a child location
+                        if move.location_id != analytic.location_id:
+                            raise exceptions.ValidationError(
+                                _("Wrong analytic account in source or move")
+                            )
+                    elif dest_anal and not src_anal:
+                        # allow if location is a child location
+                        if move.location_dest_id != analytic.location_id:
+                            raise exceptions.ValidationError(
+                                _("Wrong analytic account in destination or " "move")
+                            )
         return True
-
-    def is_stock_projects_reserve(self):
-        self.ensure_one()
-        if (
-            self.location_id.usage == "internal"
-            and self.location_dest_id.analytic_account_id
-            and not self.location_id.analytic_account_id
-        ):
-            return True
-        else:
-            return False
 
 
 class StockScrap(models.Model):
