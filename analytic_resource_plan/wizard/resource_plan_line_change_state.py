@@ -1,7 +1,7 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.tools.translate import _
 
 
@@ -21,7 +21,6 @@ class ResourcePlanLineChangeState(models.TransientModel):
         "resource plan line by the user.",
     )
 
-    @api.multi
     def change_state_confirm(self):
         data = self[0]
         record_ids = self._context and self._context.get("active_ids", False)
@@ -34,7 +33,6 @@ class ResourcePlanLineChangeState(models.TransientModel):
         return {
             "domain": "[('id','in', [" + ",".join(map(str, record_ids)) + "])]",
             "name": _("Resource Planning Lines"),
-            "view_type": "form",
             "view_mode": "tree,form",
             "res_model": "analytic.resource.plan.line",
             "view_id": False,

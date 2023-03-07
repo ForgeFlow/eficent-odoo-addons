@@ -33,21 +33,9 @@
     >
         <field name="name">Copy Resource Plan lines to a different version</field>
         <field name="res_model">analytic.resource.plan.copy.version</field>
-        <field name="view_type">form</field>
         <field name="view_mode">form,tree</field>
         <field name="view_id" ref="analytic_resource_plan_copy_version_form" />
         <field name="target">new</field>
     </record>
-
-    <act_window
-        name="Copy Resource Plan Lines"
-        res_model="analytic.resource.plan.copy.version"
-        src_model="account.analytic.account"
-        view_mode="form"
-        target="new"
-        multi="True"
-        key2="client_action_multi"
-        id="action_analytic_resource_plan_copy_version_form"
-    />
 
 </odoo>

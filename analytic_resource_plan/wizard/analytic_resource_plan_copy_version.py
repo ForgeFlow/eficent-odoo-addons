@@ -1,8 +1,8 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
-from odoo.exceptions import Warning
+from odoo import fields, models
+from odoo.exceptions import UserError
 from odoo.tools.translate import _
 
 
@@ -26,7 +26,6 @@ class AnalyticResourcePlanCopyVersion(models.TransientModel):
     )
     include_child = fields.Boolean(string="Include child accounts", default=True)
 
-    @api.multi
     def analytic_resource_plan_copy_version_open_window(self):
         new_line_plan_ids = []
         analytic_obj = self.env["account.analytic.account"]
@@ -43,7 +42,7 @@ class AnalyticResourcePlanCopyVersion(models.TransientModel):
         )
         dest_version = data.dest_version_id if data and data.dest_version_id else False
         if dest_version.default_plan:
-            raise Warning(
+            raise UserError(
                 _(
                     """It is prohibited to copy to the default
                 planning version."""
@@ -51,14 +50,14 @@ class AnalyticResourcePlanCopyVersion(models.TransientModel):
             )
 
         if source_version == dest_version:
-            raise Warning(
+            raise UserError(
                 _(
                     """Choose different source and destination
                 planning versions."""
                 )
             )
         if include_child:
-            account_ids = record.get_child_accounts().keys()
+            account_ids = list(record.get_child_accounts().keys())
         else:
             account_ids = record_ids
 
@@ -75,7 +74,6 @@ class AnalyticResourcePlanCopyVersion(models.TransientModel):
         return {
             "domain": "[('id','in', [" + ",".join(map(str, new_line_plan_ids)) + "])]",
             "name": _("Resource Plan Lines"),
-            "view_type": "form",
             "view_mode": "tree,form",
             "res_model": "analytic.resource.plan.line",
             "view_id": False,

@@ -1,3 +1,5 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
 "access_analytic_resource_plan_line_project","analytic.resource.plan.line project","model_analytic_resource_plan_line","project.group_project_manager",1,1,1,1
 "access_analytic_resource_plan_line_project_user","analytic.resource.plan.line project user","model_analytic_resource_plan_line","project.group_project_user",1,1,1,1
+"access_analytic_resource_plan_copy_version","access_analytic_resource_plan_copy_version","model_analytic_resource_plan_copy_version","project.group_project_user",1,1,1,1
+"access_resource_plan_line_change_state","access_resource_plan_line_change_state","model_resource_plan_line_change_state","project.group_project_user",1,1,1,1
