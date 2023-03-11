@@ -1,4 +1,4 @@
-# © 2015-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015-17 ForgeFlow S.L.
 # - Jordi Ballester Alomar
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -34,6 +34,7 @@ class TestProduct(common.TransactionCase):
                 "list_price": 121,
                 "seller_ids": [(6, 0, [supplierinfo.id])],
                 "supplier_taxes_id": [(6, 0, [tax_include_id.id])],
+                "type": "consu",
             }
         )
 
