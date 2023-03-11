@@ -1,4 +1,4 @@
-# © 2015-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015-17 ForgeFlow S.L.
 # - Jordi Ballester Alomar
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -30,7 +30,6 @@ class ProductTemplate(models.Model):
             supplierinfo_obj.create(supplierinfo_vals)
         return product_tmp
 
-    @api.multi
     def write(self, vals):
         res = super(ProductTemplate, self).write(vals)
         supplierinfo_obj = self.env["product.supplierinfo"]
