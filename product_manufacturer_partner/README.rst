@@ -27,12 +27,7 @@ You can access the manufacturer list via a new menu entry 'Manufacturers' on
 Credits
 =======
 
-Images
-------
-
-* Eficent Business and IT Consulting Services S.L. `Icon <http://www.eficent.com/wordpress/wp-content/uploads/2012/09/eficent_logo.png>`_.
-
 Contributors
 ------------
 
-* Eficent Business and IT Consulting Services S.L. <contact@eficent.com>
+* ForgeFlow S.L. <contact@forgeflow.com>
