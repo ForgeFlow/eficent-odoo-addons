@@ -2,7 +2,7 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
 {
     "name": "Products Manufacturer Partner",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "license": "AGPL-3",

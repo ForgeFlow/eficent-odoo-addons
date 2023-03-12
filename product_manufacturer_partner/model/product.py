@@ -7,6 +7,4 @@ from odoo import fields, models
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    manufacturer = fields.Many2one(
-        "res.partner", "Manufacturer", domain=[("manufacturer", "=", True)]
-    )
+    manufacturer = fields.Many2one("res.partner", domain=[("manufacturer", "=", True)])

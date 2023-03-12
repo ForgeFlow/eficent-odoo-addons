@@ -27,11 +27,6 @@ You can access the manufacturer list via a new menu entry 'Manufacturers' on
 Credits
 =======
 
-Images
-------
-
-* ForgeFlow S.L. `Icon <http://www.eficent.com/wordpress/wp-content/uploads/2012/09/eficent_logo.png>`_.
-
 Contributors
 ------------
 
