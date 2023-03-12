@@ -1,10 +1,11 @@
-# © 2015-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015-17 ForgeFlow S.L.
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
 {
     "name": "Products Manufacturer Partner",
-    "version": "10.0.1.0.0",
-    "author": "Eficent",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
+    "license": "AGPL-3",
     "category": "Purchase Management",
     "summary": """
     Classify manufacturers by providing an indicator in the partner.
