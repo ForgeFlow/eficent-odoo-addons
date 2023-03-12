@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
 #        <contact@eficent.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -8,11 +7,9 @@
     "version": "10.0.1.0.0",
     "summary": """Delivery No Weight Unit""",
     "author": "Eficent",
-    "website": "www.eficent.com",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "license": "AGPL-3",
     "category": "Purchase Management",
-    "depends": [
-        "delivery"
-    ],
-    'installable': True,
+    "depends": ["delivery"],
+    "installable": True,
 }
