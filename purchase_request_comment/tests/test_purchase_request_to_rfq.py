@@ -1,8 +1,8 @@
 # Copyright 2016 ForgeFlow S.L.
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0).
 
+from odoo import SUPERUSER_ID
 from odoo.tests import common
-from odoo.tools import SUPERUSER_ID
 
 
 class TestPurchaseRequestToRfq(common.TransactionCase):
@@ -23,7 +23,7 @@ class TestPurchaseRequestToRfq(common.TransactionCase):
         vals = {
             "request_id": purchase_request.id,
             "product_id": self.env.ref("product.product_product_13").id,
-            "product_uom_id": self.env.ref("product.product_uom_unit").id,
+            "product_uom_id": self.env.ref("uom.product_uom_unit").id,
             "product_qty": 5.0,
         }
         purchase_request_line = self.purchase_request_line.create(vals)
