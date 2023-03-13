@@ -1,8 +1,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": "Purchase Request Comment",
-    "version": "10.0.1.0.0",
-    "author": "Eficent",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow",
     "license": "AGPL-3",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Purchase Management",

@@ -18,7 +18,7 @@ Credits
 Contributors
 ------------
 
-* Adria Gil Sorribes <adria.gil@eficent.com>
+* Adria Gil Sorribes <adria.gil@forgeflow.com>
 
 
 Maintainer
