@@ -75,10 +75,8 @@ class AccountMoveLine(models.Model):
         for move_line in self:
             if not move_line.journal_id.analytic_journal_id:
                 raise ValidationError(
-                    _(
-                        "Please define an analytic journal for "
-                        "journal %s" % move_line.journal_id.name
-                    )
+                    _("Please define an analytic journal for journal %s")
+                    % move_line.journal_id.name
                 )
             for line in res:
                 if line.get("move_id") == move_line.id:
