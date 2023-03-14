@@ -14,6 +14,8 @@ class StockChangeProductQty(models.TransientModel):
             )
             if warehouse.lot_stock_id.analytic_account_id:
                 wiz.analytic_account_id = warehouse.lot_stock_id.analytic_account_id.id
+            else:
+                wiz.analytic_account_id = False
         return True
 
     analytic_account_id = fields.Many2one(
