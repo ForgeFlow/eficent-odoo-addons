@@ -13,15 +13,13 @@ class AccountAnalyticPlanVersion(models.Model):
     name = fields.Char("Planning Version Name", required=True)
     code = fields.Char("Planning Version Code")
     active = fields.Boolean(
-        "Active",
         help="""If the active field is set to False, it will allow you to hide
                 the analytic planning version without removing it.""",
         default=True,
     )
-    notes = fields.Text("Notes")
+    notes = fields.Text()
     company_id = fields.Many2one(
         "res.company",
-        "Company",
         required=True,
         default=lambda self: self.env["res.users"].browse(self._uid).company_id.id,
     )

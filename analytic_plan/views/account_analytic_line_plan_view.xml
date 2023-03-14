@@ -55,7 +55,7 @@
         <field name="model">account.analytic.line.plan</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
-            <tree string="Analytic Entries" editable="top">
+            <tree name="Analytic Entries" editable="top">
                 <field name="account_id" />
                 <field name="date" />
                 <field name="name" />
@@ -65,8 +65,6 @@
                 <field name="unit_amount" sum="Total Quantity" invisible="False" />
                 <field name="product_uom_id" invisible="False" />
                 <field name="unit_price" />
-                <!--<field
-                name="amount_currency"/>-->
                 <field name="currency_id" />
                 <field name="amount" sum="Total" />
                 <field name="company_id" invisible="True" />

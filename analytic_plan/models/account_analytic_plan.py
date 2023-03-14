@@ -17,14 +17,11 @@ class AccountAnalyticLinePlan(models.Model):
         return self.env.context.get("user_id", self.env.user.id)
 
     name = fields.Char(string="Description", required=True)
-    date = fields.Date(
-        string="Date", required=True, index=True, default=fields.Date.context_today
-    )
-    amount = fields.Float(string="Amount", required=True, default=0.0)
+    date = fields.Date(required=True, index=True, default=fields.Date.context_today)
+    amount = fields.Float(required=True, default=0.0)
     unit_amount = fields.Float(string="Quantity", default=0.0)
-    unit_price = fields.Float(string="Unit Price")
+    unit_price = fields.Float()
     amount_currency = fields.Float(
-        string="Amount Currency",
         help="The amount expressed in an optional other currency.",
     )
     account_id = fields.Many2one(
@@ -62,9 +59,9 @@ class AccountAnalyticLinePlan(models.Model):
         if self._context and "journal_id" in self._context
         else None,
     )
-    code = fields.Char(string="Code")
-    ref = fields.Char(string="Ref.")
-    notes = fields.Text(string="Notes")
+    code = fields.Char()
+    ref = fields.Char()
+    notes = fields.Text()
     version_id = fields.Many2one(
         comodel_name="account.analytic.plan.version",
         string="Planning Version",
@@ -143,16 +140,17 @@ class AccountAnalyticLinePlan(models.Model):
             a = prod.product_tmpl_id.property_account_expense_id.id
             if not a:
                 a = prod.categ_id.property_account_expense_categ_id.id
+
             if not a:
                 raise UserError(
                     _(
-                        "There is no expense account defined "
-                        'for this product: "%s" (id:%d)'
+                        "There is no expense account defined for this product:"
+                        " '%(name)s' (id:%(id)d)"
                     )
-                    % (
-                        prod.name,
-                        prod.id,
-                    )
+                    % {
+                        "name": prod.name,
+                        "id": prod.id,
+                    }
                 )
         else:
             a = prod.product_tmpl_id.property_account_income_id.id
@@ -161,13 +159,13 @@ class AccountAnalyticLinePlan(models.Model):
             if not a:
                 raise UserError(
                     _(
-                        "There is no income account defined "
-                        'for this product: "%s" (id:%d)'
+                        "There is no income account defined for this product:"
+                        " '%(name)s' (id:%(id)d)"
                     )
-                    % (
-                        prod.name,
-                        self.product_id,
-                    )
+                    % {
+                        "name": prod.name,
+                        "id": self.product_id,
+                    }
                 )
         if prod.uom_id:
             self.product_uom_id = prod.uom_id.id
@@ -197,13 +195,13 @@ class AccountAnalyticLinePlan(models.Model):
             if not a:
                 raise UserError(
                     _(
-                        "There is no expense account defined "
-                        'for this product: "%s" (id:%d)'
+                        "There is no expense account defined for this product:"
+                        " '%(name)s' (id:%(id)d)"
                     )
-                    % (
-                        prod.name,
-                        prod.id,
-                    )
+                    % {
+                        "name": prod.name,
+                        "id": prod.id,
+                    }
                 )
         else:
             a = prod.product_tmpl_id.property_account_income_id.id
@@ -212,13 +210,13 @@ class AccountAnalyticLinePlan(models.Model):
             if not a:
                 raise UserError(
                     _(
-                        "There is no income account defined "
-                        'for this product: "%s" (id:%d)'
+                        "There is no income account defined for this product:"
+                        " '%(name)s' (id:%(id)d)"
                     )
-                    % (
-                        prod.name,
-                        self.product_id,
-                    )
+                    % {
+                        "name": prod.name,
+                        "id": self.product_id,
+                    }
                 )
         self._set_unit_price()
         self._compute_total_amount()
@@ -244,13 +242,13 @@ class AccountAnalyticLinePlan(models.Model):
             if not a:
                 raise UserError(
                     _(
-                        "There is no expense account defined "
-                        'for this product: "%s" (id:%d)'
+                        "There is no expense account defined for this product:"
+                        " '%(name)s' (id:%(id)d)"
                     )
-                    % (
-                        prod.name,
-                        prod.id,
-                    )
+                    % {
+                        "name": prod.name,
+                        "id": prod.id,
+                    }
                 )
 
         else:
@@ -260,15 +258,14 @@ class AccountAnalyticLinePlan(models.Model):
             if not a:
                 raise UserError(
                     _(
-                        "There is no income account defined "
-                        'for this product: "%s" (id:%d)'
+                        "There is no income account defined for this product:"
+                        " '%(name)s' (id:%(id)d)"
                     )
-                    % (
-                        prod.name,
-                        self.product_id,
-                    )
+                    % {
+                        "name": prod.name,
+                        "id": self.product_id,
+                    }
                 )
-
         self._set_unit_price()
         self._compute_total_amount()
         self.general_account_id = a

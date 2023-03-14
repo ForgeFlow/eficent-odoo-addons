@@ -8,7 +8,7 @@
         <field name="model">account.analytic.plan.journal</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
-            <tree string="Analytic Journal">
+            <tree name="Analytic Journal">
                 <field name="code" />
                 <field name="name" />
                 <field name="type" />
