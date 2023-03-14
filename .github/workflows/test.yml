@@ -1,4 +1,4 @@
-name: test Odoo addons
+name: tests
 
 on:
   pull_request:
@@ -7,17 +7,18 @@ on:
   push:
     branches:
       - "15.0*"
-
 jobs:
   test:
     runs-on: ubuntu-22.04
     container: ${{ matrix.container }}
+    name: ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - container: ghcr.io/oca/oca-ci/py3.8-odoo15.0:latest
             makepot: "false"
+            name: test with Odoo
     services:
       postgres:
         image: postgres:9.6
@@ -42,6 +43,3 @@ jobs:
       - name: Run tests
         run: oca_run_tests
       - uses: codecov/codecov-action@v1
-      - name: Update .pot files
-        run: oca_export_and_push_pot https://x-access-token:${{ secrets.GIT_PUSH_TOKEN }}@github.com/${{ github.repository }}
-        if: ${{ matrix.makepot == 'true' && github.event_name == 'push' && github.repository_owner == 'OCA' }}
