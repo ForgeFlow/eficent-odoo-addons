@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<openerp>
+<odoo>
     <record id="view_account_analytic_line_form" model="ir.ui.view">
         <field name="name">account.analytic.line.form</field>
         <field name="model">account.analytic.line</field>
@@ -33,7 +33,7 @@
         <field name="name">account.analytic.journal.tree</field>
         <field name="model">account.analytic.journal</field>
         <field name="arch" type="xml">
-            <tree string="Analytic Journal">
+            <tree name="Analytic Journal">
                 <field name="code" />
                 <field name="name" />
                 <field name="type" />
@@ -109,4 +109,4 @@
         </field>
     </record>
 
-</openerp>
+</odoo>
