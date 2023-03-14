@@ -9,7 +9,7 @@
     "author": "ForgeFlow",
     "license": "AGPL-3",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
-    "depends": ["stock", "analytic", "analytic_location"],
+    "depends": ["analytic_location"],
     "data": [
         "views/stock_view.xml",
         "views/analytic_view.xml",
