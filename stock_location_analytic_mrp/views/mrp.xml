@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Deactive duplicate view for field analytic_account_id -->
+    <record id="mrp_analytic.custom_mrp_production_form_view" model="ir.ui.view">
+        <field name="active" eval="False" />
+    </record>
+</odoo>

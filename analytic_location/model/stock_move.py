@@ -22,4 +22,6 @@ class StockMove(models.Model):
             return analytic_account[0].id
         return False
 
-    analytic_account_id = fields.Many2one(default=_default_analytic_account_id)
+    analytic_account_id = fields.Many2one(
+        comodel_name="account.analytic.account", default=_default_analytic_account_id
+    )
