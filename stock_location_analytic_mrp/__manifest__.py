@@ -3,7 +3,7 @@
 
 {
     "name": "Stock Location Analytic MRP",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow",
     "summary": "MRP analytic location with analytic locations",
     "license": "AGPL-3",
@@ -12,5 +12,6 @@
         "stock_location_analytic",
         "mrp_analytic",
     ],
+    "data": ["views/mrp.xml"],
     "installable": True,
 }
