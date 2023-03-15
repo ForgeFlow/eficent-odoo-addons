@@ -36,7 +36,7 @@ Credits
 Contributors
 ------------
 
-* Aaron Henriquez <ahenriquez@eficent.com>
+* Aaron Henriquez <ahenriquez@forgeflow.com>
 
 Maintainer
 ----------
