@@ -1,4 +1,4 @@
-# Copyright 2015 Eficent - Jordi Ballester Alomar
+# Copyright 2015 ForgeFlow - Jordi Ballester Alomar
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, fields, models
@@ -34,11 +34,10 @@ class AnalyticAccountOpen(models.TransientModel):
             (curr_id,),
         )
         res = self.env.cr.fetchall()
-        for x, y in res:
+        for _x, y in res:
             result[y] = True
         return result
 
-    @api.multi
     def analytic_account_open_window(self):
         self.ensure_one()
         act_window_id = self.env.ref("analytic.action_account_analytic_account_form")
