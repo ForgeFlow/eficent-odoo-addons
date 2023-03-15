@@ -1,31 +1,11 @@
 # © 2023 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class ProjectProject(models.Model):
     _inherit = "project.project"
-
-    @api.model
-    def get_parent_stock_data(self):
-        context = self.env.context
-        res = {}
-        if "default_parent_id" in context and context["default_parent_id"]:
-            for project in self.search(
-                [("analytic_account_id", "=", context["default_parent_id"])]
-            ):
-                res["location_id"] = project.location_id
-                res["dest_address_id"] = project.dest_address_id
-        return res
-
-    @api.model
-    def _default_dest_address(self):
-        res = self.get_parent_stock_data()
-        if "dest_address_id" in res:
-            return res["dest_address_id"]
-        else:
-            return super(ProjectProject, self)._default_dest_address()
 
     picking_type_id = fields.Many2one(related="analytic_account_id.picking_type_id")
     location_id = fields.Many2one(

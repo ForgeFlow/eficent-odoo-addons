@@ -8,6 +8,8 @@ Stock Location in Project
 Features of this module:
     - Adds the stock location in the project.
 
+Note: Removed project_stock dependancy and add project_wbs dependancy. as project_stock totally refactor and added new fields which same in this module is related with analytic account.
+
 Usage
 =====
 
