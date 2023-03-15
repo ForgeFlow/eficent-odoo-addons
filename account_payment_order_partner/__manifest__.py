@@ -1,11 +1,11 @@
-# © 2018 Eficent Business and IT Consulting Services S.L.
+# Copyright 2018 ForgeFlow S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Account Payment Order Partner",
-    "version": "10.0.1.0.0",
+    "version": "14.0.1.0.0",
     "license": "AGPL-3",
-    "author": "Eficent, " "Odoo Community Association (OCA)",
+    "author": "ForgeFlow, " "Odoo Community Association (OCA)",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Banking addons",
     "depends": [
