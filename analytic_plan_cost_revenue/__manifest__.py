@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Eficent Business and IT Consulting Services S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -11,14 +10,12 @@
 Panned analytic Cost and Revenue to analytic accounts
 
 """,
-    "website": "http://www.eficent.com/",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "license": "AGPL-3",
     "depends": [
         "analytic_plan",
         "analytic_cost_revenue",
     ],
-    "data": [
-        "views/analytic_view.xml"
-    ],
+    "data": ["views/analytic_view.xml"],
     "installable": True,
 }
