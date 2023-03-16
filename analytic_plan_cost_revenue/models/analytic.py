@@ -1,8 +1,6 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# © 2023 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import api, fields, models
-
-from odoo.addons import decimal_precision as dp
 
 
 class AccountAnalyticPlanJournal(models.Model):
@@ -43,14 +41,12 @@ class AnalyticAccount(models.Model):
             res = accs[0]["amount"]
         return res
 
-    @api.multi
     def compute_total_cost_plan(self):
         for account in self:
             account.total_cost_plan = (
                 account.material_cost_plan + account.labor_cost_plan
             )
 
-    @api.multi
     def compute_cost_revenue_plan(self):
         journal_obj = self.env["account.analytic.plan.journal"]
         revenue_journal_ids = journal_obj.search([("cost_type", "=", "revenue")])
@@ -84,34 +80,27 @@ class AnalyticAccount(models.Model):
             else:
                 account.labor_cost_plan = 0.0
 
-    @api.multi
     @api.depends("total_cost_plan", "revenue_plan")
     def compute_gross_profit_plan(self):
         for account in self:
             account.gross_profit_plan = account.revenue_plan - account.total_cost_plan
 
     labor_cost_plan = fields.Float(
-        compute=compute_cost_revenue_plan,
-        string="Planned Labor cost",
-        digits=dp.get_precision("Account"),
+        compute=compute_cost_revenue_plan, string="Planned Labor cost", digits="Account"
     )
     material_cost_plan = fields.Float(
         compute=compute_cost_revenue_plan,
         string="Planned Material cost",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     total_cost_plan = fields.Float(
-        compute=compute_total_cost_plan,
-        string="Planned total cost",
-        digits=dp.get_precision("Account"),
+        compute=compute_total_cost_plan, string="Planned total cost", digits="Account"
     )
     revenue_plan = fields.Float(
-        compute=compute_cost_revenue_plan,
-        string="Planned Revenue",
-        digits=dp.get_precision("Account"),
+        compute=compute_cost_revenue_plan, string="Planned Revenue", digits="Account"
     )
     gross_profit_plan = fields.Float(
         compute=compute_gross_profit_plan,
         string="Planned Gross Profit",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
