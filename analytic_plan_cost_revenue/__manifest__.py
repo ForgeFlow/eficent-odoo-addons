@@ -1,10 +1,10 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# © 2023 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Analytic Plan Cost and Revenue",
-    "version": "10.0.1.0.0",
-    "author": "Eficent",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow",
     "category": "Projects",
     "Summary": """
 Panned analytic Cost and Revenue to analytic accounts
