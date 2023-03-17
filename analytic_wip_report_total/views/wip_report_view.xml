@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2017 Eficent Business and IT Consulting Services S.L.
      Copyright 2017 Serpent Consulting Services Pvt. Ltd.
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
@@ -7,7 +7,10 @@
     <record id="view_account_analytic_account_wip_tree_total1" model="ir.ui.view">
         <field name="name">account.analytic.account.wip.tree</field>
         <field name="model">account.analytic.account</field>
-        <field name="inherit_id" ref="analytic_wip_report.view_account_analytic_account_wip_tree"/>
+        <field
+            name="inherit_id"
+            ref="analytic_wip_report.view_account_analytic_account_wip_tree"
+        />
         <field name="arch" type="xml">
             <field name="total_value" position="attributes">
                 <attribute name="sum">Total</attribute>
@@ -42,7 +45,10 @@
     <record id="view_account_analytic_account_wip_tree_total3" model="ir.ui.view">
         <field name="name">account.analytic.account.wip.tree</field>
         <field name="model">account.analytic.account</field>
-        <field name="inherit_id" ref="analytic_wip_report_extend.view_account_analytic_account_wip_extend_tree"/>
+        <field
+            name="inherit_id"
+            ref="analytic_wip_report_extend.view_account_analytic_account_wip_extend_tree"
+        />
         <field name="arch" type="xml">
             <field name="under_over" position="attributes">
                 <attribute name="sum">Total</attribute>
