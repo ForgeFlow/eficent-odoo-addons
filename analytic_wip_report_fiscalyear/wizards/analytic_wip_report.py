@@ -6,27 +6,32 @@ from odoo import api, fields, models
 class AnalyticWipReport(models.TransientModel):
     _inherit = "analytic.wip.report"
 
-    fiscalyear_id = fields.Many2one(
-        "date.range", required=True, domain=[("type_id.fiscal_year", "=", True)]
-    )
+    fiscalyear_id = fields.Many2one("date.range", required=True)
     from_date_fy = fields.Date("From (within the fiscal year)", required=True)
     to_date_fy = fields.Date("To (within the fiscal year)", required=True)
 
-    @api.multi
     def analytic_wip_report_open_window(self):
         result_context = {}
         result = super(AnalyticWipReport, self).analytic_wip_report_open_window()
         data = self.read()[0]
         if data["from_date"]:
-            result_context.update({"from_date": data["from_date"]})
+            result_context.update(
+                {"from_date": data["from_date"].strftime(fields.DATE_FORMAT)}
+            )
         if data["to_date"]:
-            result_context.update({"to_date": data["to_date"]})
+            result_context.update(
+                {"to_date": data["to_date"].strftime(fields.DATE_FORMAT)}
+            )
         if data["fiscalyear_id"]:
-            result_context.update({"fiscalyear_id": data["fiscalyear_id"]})
+            result_context.update({"fiscalyear_id": data["fiscalyear_id"][0]})
         if data["from_date_fy"]:
-            result_context.update({"from_date_fy": data["from_date_fy"]})
+            result_context.update(
+                {"from_date_fy": data["from_date_fy"].strftime(fields.DATE_FORMAT)}
+            )
         if data["to_date_fy"]:
-            result_context.update({"to_date_fy": data["to_date_fy"]})
+            result_context.update(
+                {"to_date_fy": data["to_date_fy"].strftime(fields.DATE_FORMAT)}
+            )
         result["context"] = str(result_context)
         return result
 
