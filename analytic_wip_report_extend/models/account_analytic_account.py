@@ -1,20 +1,17 @@
-# Copyright 2016 Eficent Business and IT Consulting Services S.L.
+# Copyright 2023 ForgeFlow S.L.
 # Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
-
-import odoo.addons.decimal_precision as dp
+from odoo import fields, models
 
 
 class AccountAnalyticAccount(models.Model):
-
     _inherit = "account.analytic.account"
 
-    @api.multi
     def _compute_wip_report(self):
         res = super(AccountAnalyticAccount, self)._compute_wip_report()
         for account in self:
+            account.actual_paid = 0
             # Estimated gross profit percentage
             try:
                 account.estimated_gross_profit_per = (
@@ -54,7 +51,7 @@ class AccountAnalyticAccount(models.Model):
                         or (not l.name and abs(l.balance) == abs(line_id.balance))
                     )
                 )
-                account.actual_paid += sum([l.balance for l in rec_lines])
+                account.actual_paid += sum([line.balance for line in rec_lines])
                 # the total paid is the balance less the residual amount
                 rec_lines_company_curr = rec_lines.filtered(lambda l: not l.currency_id)
                 account.actual_paid -= sum(
@@ -66,7 +63,9 @@ class AccountAnalyticAccount(models.Model):
                 )
                 actual_paid_line_ids.extend(rec_lines.ids)
 
-            account.actual_paid_line_ids = [(6, 0, [l for l in actual_paid_line_ids])]
+            account.actual_paid_line_ids = [
+                (6, 0, [line for line in actual_paid_line_ids])
+            ]
         return res
 
     estimated_gross_profit_per = fields.Float(
@@ -74,7 +73,7 @@ class AccountAnalyticAccount(models.Model):
         string="Total Value",
         help="""Estimated gros profit percentage
              (estimated gross profit/total contract value)""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     under_over = fields.Float(
         compute="_compute_wip_report",
@@ -84,7 +83,7 @@ class AccountAnalyticAccount(models.Model):
         compute="_compute_wip_report",
         string="Paid to date",
         help="""Total paid amount from the customer to date""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     actual_paid_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
@@ -92,12 +91,11 @@ class AccountAnalyticAccount(models.Model):
         string="Detail",
     )
 
-    @api.multi
     def action_open_move_lines(self):
         line = self
         bill_lines = [x.id for x in line.actual_paid_line_ids]
-        res = self.env["ir.actions.act_window"].for_xml_id(
-            "account", "action_account_moves_all_a"
+        res = self.env["ir.actions.act_window"]._for_xml_id(
+            "account.action_account_moves_all_a"
         )
         res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
