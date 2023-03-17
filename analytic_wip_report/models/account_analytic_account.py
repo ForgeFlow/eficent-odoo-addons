@@ -1,19 +1,18 @@
-# Copyright 2015 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
-
-from odoo.addons import decimal_precision as dp
+from odoo import fields, models
 
 
 class AccountAnalyticAccount(models.Model):
 
     _inherit = "account.analytic.account"
 
-    @api.multi
     def _compute_wip_report(self):
         for account in self:
-            all_ids = account.get_child_accounts().keys()
+            account.actual_material_cost = 0
+            account.actual_labor_cost = 0
+            all_ids = list(account.get_child_accounts().keys())
             # Total Value
             query_params = [tuple(all_ids)]
             where_date = ""
@@ -49,7 +48,9 @@ class AccountAnalyticAccount(models.Model):
             for (total, line_id) in cr.fetchall():
                 account.total_value += total
                 total_value_line_ids.append(line_id)
-            account.total_value_line_ids = [(6, 0, [l for l in total_value_line_ids])]
+            account.total_value_line_ids = [
+                (6, 0, [line for line in total_value_line_ids])
+            ]
             # Actual billings to date
             cr.execute(
                 """
@@ -73,7 +74,7 @@ class AccountAnalyticAccount(models.Model):
                 actual_billings_line_ids.append(line_id)
 
             account.actual_billings_line_ids = [
-                (6, 0, [l for l in actual_billings_line_ids])
+                (6, 0, [line for line in actual_billings_line_ids])
             ]
             # Actual costs to date
             cr.execute(
@@ -108,11 +109,15 @@ class AccountAnalyticAccount(models.Model):
                     actual_labor_line_ids.append(line_id)
                 account.actual_costs -= total
                 actual_cost_line_ids.append(line_id)
-            account.actual_cost_line_ids = [(6, 0, [l for l in actual_cost_line_ids])]
-            account.actual_material_line_ids = [
-                (6, 0, [l for l in actual_material_line_ids])
+            account.actual_cost_line_ids = [
+                (6, 0, [line for line in actual_cost_line_ids])
             ]
-            account.actual_labor_line_ids = [(6, 0, [l for l in actual_labor_line_ids])]
+            account.actual_material_line_ids = [
+                (6, 0, [line for line in actual_material_line_ids])
+            ]
+            account.actual_labor_line_ids = [
+                (6, 0, [line for line in actual_labor_line_ids])
+            ]
 
             # Total estimated costs
             cr.execute(
@@ -140,7 +145,7 @@ class AccountAnalyticAccount(models.Model):
                 account.total_estimated_costs += total
                 total_estimated_cost_line_ids.append(line_id)
             account.total_estimated_cost_line_ids = [
-                (6, 0, [l for l in total_estimated_cost_line_ids])
+                (6, 0, [line for line in total_estimated_cost_line_ids])
             ]
             # Estimated costs to complete
             account.estimated_costs_to_complete = (
@@ -181,45 +186,45 @@ class AccountAnalyticAccount(models.Model):
         compute="_compute_wip_report",
         string="Total Value",
         help="""Total estimated revenue of the contract""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     actual_billings = fields.Float(
         compute="_compute_wip_report",
         string="Actual Billings to date",
         help="""Total invoiced amount issued to the customer to date""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     actual_costs = fields.Float(
         compute="_compute_wip_report",
         string="Actual Costs to date",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     actual_material_cost = fields.Float(
         compute="_compute_wip_report",
         string="Material Costs to date",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     actual_labor_cost = fields.Float(
         compute="_compute_wip_report",
         string="Labor Costs to date",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     total_estimated_costs = fields.Float(
         compute="_compute_wip_report",
         string="Total Estimated Costs",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     estimated_costs_to_complete = fields.Float(
         compute="_compute_wip_report",
         string="Estimated Costs to Complete",
         help="""Total Estimated Costs – Actual Costs to Date""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     estimated_gross_profit = fields.Float(
         compute="_compute_wip_report",
         string="Estimated Gross Profit",
         help="""Total Value – Total Estimated Costs""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     percent_complete = fields.Float(
         compute="_compute_wip_report",
@@ -231,27 +236,27 @@ class AccountAnalyticAccount(models.Model):
         compute="_compute_wip_report",
         string="Earned Revenue to date",
         help="Percent Complete * Total Estimated Revenue",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     over_billings = fields.Float(
         compute="_compute_wip_report",
         string="Over billings",
         help="""Total Billings on Contract – Earned Revenue to Date
                 (when > 0 )""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     under_billings = fields.Float(
         compute="_compute_wip_report",
         string="Under billings",
         help="""Total Billings on Contract – Earned Revenue to Date
                 (when < 0 )""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     under_over = fields.Float(
         compute="_compute_wip_report",
         string="Under over",
         help="""Billings in excess of costs""",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     actual_billings_line_ids = fields.Many2many(
         comodel_name="account.analytic.line",
@@ -284,65 +289,59 @@ class AccountAnalyticAccount(models.Model):
         string="Detail",
     )
 
-    @api.multi
     def action_open_analytic_lines(self):
         line = self
         bill_lines = [x.id for x in line.actual_billings_line_ids]
-        res = self.env["ir.actions.act_window"].for_xml_id(
-            "analytic", "account_analytic_line_action_entries"
+        res = self.env["ir.actions.act_window"]._for_xml_id(
+            "analytic.account_analytic_line_action_entries"
         )
         res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
-    @api.multi
     def action_open_cost_lines(self):
         line = self
         bill_lines = [x.id for x in line.actual_cost_line_ids]
-        res = self.env["ir.actions.act_window"].for_xml_id(
-            "analytic", "account_analytic_line_action_entries"
+        res = self.env["ir.actions.act_window"]._for_xml_id(
+            "analytic.account_analytic_line_action_entries"
         )
         res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
-    @api.multi
     def action_open_material_lines(self):
         line = self
         bill_lines = [x.id for x in line.actual_material_line_ids]
-        res = self.env["ir.actions.act_window"].for_xml_id(
-            "analytic", "account_analytic_line_action_entries"
+        res = self.env["ir.actions.act_window"]._for_xml_id(
+            "analytic.account_analytic_line_action_entries"
         )
         res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
-    @api.multi
     def action_open_labor_lines(self):
         """
         :return dict: dictionary value for created view
         """
         line = self
         bill_lines = [x.id for x in line.actual_labor_line_ids]
-        res = self.env["ir.actions.act_window"].for_xml_id(
-            "analytic", "account_analytic_line_action_entries"
+        res = self.env["ir.actions.act_window"]._for_xml_id(
+            "analytic.account_analytic_line_action_entries"
         )
         res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
-    @api.multi
     def action_open_total_estimated_cost_lines(self):
         line = self
         bill_lines = [x.id for x in line.total_estimated_cost_line_ids]
-        res = self.env["ir.actions.act_window"].for_xml_id(
-            "analytic_plan", "action_account_analytic_line_plan_form"
+        res = self.env["ir.actions.act_window"]._for_xml_id(
+            "analytic_plan.action_account_analytic_line_plan_form"
         )
         res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
 
-    @api.multi
     def action_open_total_value_lines(self):
         line = self
         bill_lines = [x.id for x in line.total_value_line_ids]
-        res = self.env["ir.actions.act_window"].for_xml_id(
-            "analytic_plan", "action_account_analytic_line_plan_form"
+        res = self.env["ir.actions.act_window"]._for_xml_id(
+            "analytic_plan.action_account_analytic_line_plan_form"
         )
         res["domain"] = "[('id', 'in', [" + ",".join(map(str, bill_lines)) + "])]"
         return res
