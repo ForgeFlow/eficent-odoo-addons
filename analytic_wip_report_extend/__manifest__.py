@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016 Eficent Business and IT Consulting Services S.L.
 # Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -10,16 +9,14 @@
     "author": "Eficent Business and IT Consulting Services S.L.",
     "category": "Projects",
     "summary": """This adds new fields to analytic wip statement report""",
-    "website": "http://www.eficent.com/",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "license": "",
     "depends": [
         "analytic_wip_report",
         "account_analytic_parent",
     ],
-    "data": [
-        "views/account_analytic_account_view.xml"
-    ],
+    "data": ["views/account_analytic_account_view.xml"],
     "installable": True,
     "auto_install": True,
-    "active": True
+    "active": True,
 }
