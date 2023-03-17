@@ -16,6 +16,6 @@ Credits
 Contributors
 ------------
 
-* Jordi Ballester <jordi.ballester@eficent.com>,
-* Aaron Henriquez <ahenriquez@eficent.com>
+* Jordi Ballester <jordi.ballester@forgeflow.com>,
+* Aaron Henriquez <ahenriquez@forgeflow.com>
 * Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
