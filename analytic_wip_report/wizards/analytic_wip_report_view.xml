@@ -10,6 +10,7 @@
                     <field name="from_date" />
                     <field name="to_date" />
                     <label
+                        for="to_date"
                         string="(Keep empty to open the current situation)"
                         colspan="4"
                     />
@@ -32,7 +33,6 @@
         <field name="name">Work In Progress Statement</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">analytic.wip.report</field>
-        <field name="view_type">form</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="analytic_wip_report_view" />
         <field name="target">new</field>

@@ -1,13 +1,13 @@
-# Copyright 2015 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo.tests import common
+from odoo import fields
+from odoo.tests import Form, common
 
 
 class TestAnalyticWipReport(common.TransactionCase):
     def setUp(self):
         super(TestAnalyticWipReport, self).setUp()
         self.AnalyticAccountObject = self.env["account.analytic.account"]
-        self.account_invoice = self.env["account.invoice"]
         self.account_model = self.env["account.account"]
 
         self.partner = self.env.ref("base.res_partner_2")
@@ -24,29 +24,25 @@ class TestAnalyticWipReport(common.TransactionCase):
         self.invoice_account = self.account_model.search(
             [("user_type_id", "=", self.receivable.id)], limit=1
         )
-        self.invoice = self.account_invoice.create(
-            {
-                "partner_id": self.partner.id,
-                "type": "out_invoice",
-                "account_id": self.invoice_account.id,
-                "invoice_line_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "Test invoice line",
-                            "account_id": self.invoice_account.id,
-                            "quantity": 2,
-                            "price_unit": 100,
-                            "account_analytic_id": self.account.id,
-                        },
-                    )
-                ],
-            }
+        move_form = Form(
+            self.env["account.move"].with_context(default_move_type="out_invoice")
         )
-        self.invoice.action_invoice_open()
+        move_form.invoice_date = fields.Date.from_string("2019-01-01")
+        move_form.date = move_form.invoice_date
+        move_form.partner_id = self.partner
+
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.name = "Test invoice line"
+            line_form.account_id = self.invoice_account
+            line_form.quantity = 2
+            line_form.price_unit = 100
+            line_form.analytic_account_id = self.account
+
+        self.invoice = move_form.save()
+
+        self.invoice._post()
         self.account._compute_wip_report()
-        self.assertEquals(self.account.earned_revenue, 0)
-        self.assertEquals(self.account.total_value, 0)
-        self.assertEquals(self.account.actual_costs, 0)
-        self.assertEquals(self.account.total_estimated_costs, 0)
+        self.assertEqual(self.account.earned_revenue, 0)
+        self.assertEqual(self.account.total_value, 0)
+        self.assertEqual(self.account.actual_costs, 0)
+        self.assertEqual(self.account.total_estimated_costs, 0)

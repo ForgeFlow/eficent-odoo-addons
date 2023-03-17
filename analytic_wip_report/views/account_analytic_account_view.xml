@@ -5,13 +5,7 @@
         <field name="model">account.analytic.account</field>
         <field name="field_parent">child_ids</field>
         <field name="arch" type="xml">
-            <tree
-                colors="green:stage_name=='Execution';grey:stage_name in ('Close','Cancelled');"
-                string="Analytic account"
-                toolbar="1"
-                create="false"
-            >
-                <field name="stage_name" invisible="1" />
+            <tree string="Analytic account" create="false">
                 <field name="complete_wbs_code" string="Contract Code" />
                 <field name="complete_wbs_name" string="Contract" />
                 <field name="total_value" sum="Total" />
@@ -97,7 +91,6 @@
         <field name="name">Work In Progress Statement</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">account.analytic.account</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form,graph</field>
         <field name="view_id" ref="view_account_analytic_account_wip_tree" />
     </record>
