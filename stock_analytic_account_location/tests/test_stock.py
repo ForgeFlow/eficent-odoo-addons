@@ -1,4 +1,4 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # Copyright 2017 Serpent Consulting Services Pvt. Ltd.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
@@ -70,8 +70,8 @@ class TestStock(TransactionCase):
         self.move5 = self.create_move("return_aa", self.location2, self.location3)
         self.move6 = self.create_move("return_aa", self.location2, self.location4)
 
-    def create_account(self, name, code, type):
-        vals = {"name": name, "code": code, "user_type_id": type.id}
+    def create_account(self, name, code, user_type):
+        vals = {"name": name, "code": code, "user_type_id": user_type.id}
         account = self.account_model.create(vals)
         return account
 
