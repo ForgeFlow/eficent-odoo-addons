@@ -3,7 +3,7 @@
 
 {
     "name": "Stock Analytic Account Location",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "category": "Logistics",
     "summary": "Stock analytic account using analytic locations",
     "author": "ForgeFlow, Odoo Community Association (OCA)",
