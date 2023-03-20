@@ -25,5 +25,5 @@ Credits
 Contributors
 ------------
 
-* Aarón Henríquez <ahenriquez@eficent.com>
+* Aarón Henríquez <ahenriquez@forgeflow.com>
 * Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
