@@ -1,20 +1,13 @@
-# Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
-#        <contact@eficent.com>
+# Copyright 2015-17 ForgeFlow S.L. <contact@forgeflow.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.tools.safe_eval import safe_eval
 
 
 class DeliveryCarrier(models.Model):
     _inherit = "delivery.carrier"
 
-    @api.multi
-    def get_price(self):
-        if self._context.get("purchase_order_id", False):
-            self.price = 0.0
-
-    @api.multi
     def name_get(self):
         if not len(self.ids):
             return []
@@ -39,7 +32,6 @@ class DeliveryCarrier(models.Model):
     src_zip_from = fields.Char("Start Source Zip", size=12)
     src_zip_to = fields.Char("To Source Zip", size=12)
 
-    @api.multi
     def get_price_available(self, order):
         weight = volume = quantity = 0
         total_delivery = 0.0

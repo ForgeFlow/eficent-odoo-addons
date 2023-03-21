@@ -1,4 +1,4 @@
-# Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015-17 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
@@ -73,16 +73,14 @@ class PurchaseOrder(models.Model):
             data["account_id"] = account.id
         return data
 
-    @api.multi
     def _prepare_purchase_order_line(self):
         carrier = self.carrier_id
         final_price = carrier.get_price_available(self)
         vals = {
             "name": carrier.product_id.name,
             "order_id": self.id,
-            "uom_id": carrier.product_id.uom_id.id,
+            "product_uom_qty": carrier.product_id.uom_id.id,
             "product_id": carrier.product_id.id,
-            "price_unit": final_price,
             "price_unit": final_price,
             "carrier_line": True,
             "date_planned": datetime.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT),
@@ -91,15 +89,11 @@ class PurchaseOrder(models.Model):
         }
         return vals
 
-    @api.multi
     def _create_delivery_line(self):
-        self.env["purchase.order"]
         po_line_obj = self.env["purchase.order.line"]
-
         po_line_data = self._prepare_purchase_order_line()
         po_line_obj.create(po_line_data)
 
-    @api.multi
     def delivery_set(self):
         for order in self:
             if order.carrier_in_po:

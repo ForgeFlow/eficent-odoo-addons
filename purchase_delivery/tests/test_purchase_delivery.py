@@ -1,4 +1,4 @@
-# Copyright 2018 Eficent Business and IT Consulting Services S.L.
+# Copyright 2018 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
@@ -20,8 +20,8 @@ class TestPurchaseDelivery(common.TransactionCase):
             {
                 "src_zip_from": 12345,
                 "src_zip_to": 56890,
-                "src_country_ids": [(6, 0, [self.env.user.country_id.id])],
-                "src_state_ids": [(6, 0, [self.env.user.state_id.id])],
+                "src_country_ids": [(6, 0, [1])],
+                "src_state_ids": [(6, 0, [1])],
             }
         )
 
@@ -49,7 +49,6 @@ class TestPurchaseDelivery(common.TransactionCase):
 
     def test_delivery(self):
         self.po.onchange_partner_id()
-        self.carrier_id.with_context({"purchase_order_id": self.po.id}).get_price()
         self.carrier_id.name_get()
         self.po.delivery_set()
         self.po._compute_carrier_in_po()

@@ -1,14 +1,13 @@
-# Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
-#        <contact@eficent.com>
+# Copyright 2015-17 ForgeFlow S.L. <contact@forgeflow.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Purchase Delivery Costs",
-    "version": "10.0.1.0.0",
+    "version": "14.0.1.0.0",
     "category": "Purchase Management",
     "summary": """Allows you to add delivery methods in purchase orders
     and pickings""",
-    "author": "Eficent, Odoo Community Association (OCA)",
+    "author": "ForgeFlow, Odoo Community Association (OCA)",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "license": "AGPL-3",
     "depends": ["delivery", "purchase_analytic"],
