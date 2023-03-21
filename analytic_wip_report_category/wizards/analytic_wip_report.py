@@ -1,6 +1,6 @@
-# © 2016 Eficent Business and IT Consulting Services S.L.
+# Copyright 2023 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class AnalyticWipReport(models.TransientModel):
@@ -10,14 +10,13 @@ class AnalyticWipReport(models.TransientModel):
         "account.analytic.category", "Category", ondelete="restrict"
     )
 
-    @api.multi
     def _get_analytic_search_domain(self):
         comparing_date = self.fiscalyear_id.date_start
         start_date = "2100-12-31"
         if self.to_date:
             start_date = self.to_date
         stages = (
-            self.env["analytic.account.stage"]
+            self.env["base.kanban.stage"]
             .search([("name", "in", ("Closed", "Cancelled"))])
             .ids
         )

@@ -1,11 +1,11 @@
-# Copyright 2016 Eficent Business and IT Consulting Services S.L.
+# Copyright 2023 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Work In Progress Statement Analytic Categories",
-    "version": "10.0.1.0.0",
-    "author": "Eficent Business and IT Consulting Services S.L.,"
-    "Odoo Community Association (OCA)",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow,Odoo Community Association (OCA)",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "summary": """Filter categories in analytic wip report""",
     "category": "Generic Modules/Projects & Services",
     "license": "AGPL-3",
