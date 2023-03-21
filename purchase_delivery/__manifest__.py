@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
 #        <contact@eficent.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -10,12 +9,9 @@
     "summary": """Allows you to add delivery methods in purchase orders
     and pickings""",
     "author": "Eficent, Odoo Community Association (OCA)",
-    "website": "www.eficent.com",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "license": "AGPL-3",
-    "depends": [
-        "delivery",
-        "purchase_analytic"
-    ],
+    "depends": ["delivery", "purchase_analytic"],
     "data": [
         "view/purchase_view.xml",
         "view/delivery_view.xml",
