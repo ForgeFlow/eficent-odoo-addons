@@ -51,7 +51,7 @@ class AccountAnalyticAccount(models.Model):
                         or (not l.name and abs(l.balance) == abs(line_id.balance))
                     )
                 )
-                account.actual_paid += sum([line.balance for line in rec_lines])
+                account.actual_paid += sum(line.balance for line in rec_lines)
                 # the total paid is the balance less the residual amount
                 rec_lines_company_curr = rec_lines.filtered(lambda l: not l.currency_id)
                 account.actual_paid -= sum(
