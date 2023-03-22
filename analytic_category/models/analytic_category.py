@@ -8,5 +8,5 @@ class AccountAnalyticCategory(models.Model):
     _name = "account.analytic.category"
     _description = "Analytic Category"
 
-    name = fields.Char("Name", required=True)
-    code = fields.Char("Code")
+    name = fields.Char(required=True)
+    code = fields.Char()

@@ -3,7 +3,7 @@
 {
     "name": "Analytic Category",
     "summary": """Allow to define analytic categories for analytic accounts""",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Analytic",
