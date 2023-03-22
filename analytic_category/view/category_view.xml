@@ -21,7 +21,7 @@
         <field name="name">analytic_category.tree_analytic_category</field>
         <field name="model">account.analytic.category</field>
         <field name="arch" type="xml">
-        <tree string="Categories">
+        <tree>
             <field name="name" />
             <field name="code" />
         </tree>
