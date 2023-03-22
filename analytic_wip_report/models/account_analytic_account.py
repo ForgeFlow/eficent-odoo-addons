@@ -184,7 +184,6 @@ class AccountAnalyticAccount(models.Model):
 
     total_value = fields.Float(
         compute="_compute_wip_report",
-        string="Total Value",
         help="""Total estimated revenue of the contract""",
         digits="Account",
     )
@@ -211,7 +210,6 @@ class AccountAnalyticAccount(models.Model):
     )
     total_estimated_costs = fields.Float(
         compute="_compute_wip_report",
-        string="Total Estimated Costs",
         digits="Account",
     )
     estimated_costs_to_complete = fields.Float(
@@ -222,13 +220,11 @@ class AccountAnalyticAccount(models.Model):
     )
     estimated_gross_profit = fields.Float(
         compute="_compute_wip_report",
-        string="Estimated Gross Profit",
         help="""Total Value – Total Estimated Costs""",
         digits="Account",
     )
     percent_complete = fields.Float(
         compute="_compute_wip_report",
-        string="Percent Complete",
         help="Actual Costs to Date / Total Estimated Costs",
         digits=(16, 2.0),
     )

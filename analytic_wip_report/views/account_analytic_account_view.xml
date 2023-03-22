@@ -5,7 +5,7 @@
         <field name="model">account.analytic.account</field>
         <field name="field_parent">child_ids</field>
         <field name="arch" type="xml">
-            <tree string="Analytic account" create="false">
+            <tree create="false">
                 <field name="complete_wbs_code" string="Contract Code" />
                 <field name="complete_wbs_name" string="Contract" />
                 <field name="total_value" sum="Total" />
