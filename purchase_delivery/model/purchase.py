@@ -55,7 +55,7 @@ class PurchaseOrder(models.Model):
             "uom_id": carrier.product_id.uom_id.id,
             "product_id": carrier.product_id.id,
             "account_id": invoice_line.with_context(
-                {"journal_id": default_journal_id.id, "type": "in_invoice"}
+                **{"journal_id": default_journal_id.id, "type": "in_invoice"}
             )._default_account(),
             "price_unit": price_unit,
             "quantity": 1.0,
