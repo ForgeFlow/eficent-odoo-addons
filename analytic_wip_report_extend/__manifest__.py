@@ -5,7 +5,7 @@
 
 {
     "name": "Work In Progress Statement Extend",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow",
     "category": "Projects",
     "summary": """This adds new fields to analytic wip statement report""",
