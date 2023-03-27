@@ -1,10 +1,8 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from itertools import chain
 
 from odoo import fields, models
-
-from odoo.addons import decimal_precision as dp
 
 
 class AccountAnalyticJournal(models.Model):
@@ -95,25 +93,21 @@ class AnalyticAccount(models.Model):
     labor_cost = fields.Float(
         compute=compute_cost_revenue,
         string="Labor cost",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     material_cost = fields.Float(
         compute=compute_cost_revenue,
-        string="Material cost",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     total_cost = fields.Float(
         compute=compute_total_cost,
-        string="Total cost",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     revenue = fields.Float(
         compute=compute_cost_revenue,
-        string="Revenue",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     gross_profit = fields.Float(
         compute=compute_gross_profit,
-        string="Gross Profit",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )

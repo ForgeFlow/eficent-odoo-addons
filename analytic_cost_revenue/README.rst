@@ -15,5 +15,5 @@ Credits
 Contributors
 ------------
 
-* Jordi Ballester Alomar <jordi.ballester@eficent.com>
-* Aaron Henriquez <ahenriquez@eficent.com>
+* Jordi Ballester Alomar <jordi.ballester@forgeflow.com>
+* Aaron Henriquez <aaron.henriquez@forgeflow.com>
