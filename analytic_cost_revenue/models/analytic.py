@@ -4,8 +4,6 @@ from itertools import chain
 
 from odoo import fields, models
 
-from odoo.addons import decimal_precision as dp
-
 
 class AccountAnalyticJournal(models.Model):
     _inherit = "account.analytic.journal"
@@ -95,25 +93,25 @@ class AnalyticAccount(models.Model):
     labor_cost = fields.Float(
         compute=compute_cost_revenue,
         string="Labor cost",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     material_cost = fields.Float(
         compute=compute_cost_revenue,
         string="Material cost",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     total_cost = fields.Float(
         compute=compute_total_cost,
         string="Total cost",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     revenue = fields.Float(
         compute=compute_cost_revenue,
         string="Revenue",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
     gross_profit = fields.Float(
         compute=compute_gross_profit,
         string="Gross Profit",
-        digits=dp.get_precision("Account"),
+        digits="Account",
     )
