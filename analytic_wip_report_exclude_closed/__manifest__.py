@@ -3,7 +3,7 @@
 
 {
     "name": "Work In Progress Statement Exclude Closed Projects",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow, Odoo Community Association (OCA)",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "summary": """Filter closed projects in analytic wip report""",

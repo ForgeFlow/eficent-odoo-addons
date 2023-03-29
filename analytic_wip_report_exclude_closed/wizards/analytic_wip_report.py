@@ -7,7 +7,7 @@ class AnalyticWipReport(models.TransientModel):
     _inherit = "analytic.wip.report"
 
     filter_project = fields.Boolean("Filter By Project", default=True)
-    only_closed = fields.Boolean("Only Closed", default=False)
+    only_closed = fields.Boolean(default=False)
 
     def analytic_wip_report_open_window(self):
         res = super(AnalyticWipReport, self).analytic_wip_report_open_window()
@@ -20,7 +20,7 @@ class AnalyticWipReport(models.TransientModel):
         if self.to_date:
             start_date = self.to_date
         stages = (
-            self.env["base.kanban.stage"]
+            self.env["project.project.stage"]
             .search([("name", "in", ("Closed", "Cancelled"))])
             .ids
         )
