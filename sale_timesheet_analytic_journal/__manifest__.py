@@ -3,7 +3,7 @@
 
 {
     "name": "Sale timesheet analytic journal",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow",
     "category": "HR",
     "summary": """Analytic journal for timesheets""",
