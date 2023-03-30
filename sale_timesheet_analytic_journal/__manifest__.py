@@ -1,10 +1,10 @@
-# Copyright 2014-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2014-17 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Sale timesheet analytic journal",
-    "version": "10.0.1.0.0",
-    "author": "Eficent",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow",
     "category": "HR",
     "summary": """Analytic journal for timesheets""",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
