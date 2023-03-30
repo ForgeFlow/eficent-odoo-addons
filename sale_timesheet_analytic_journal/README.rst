@@ -17,4 +17,4 @@ Configuration
 Contributors
 ------------
 
-* Aaron Henriquez Quintana <ahenriquez@eficent.com>
+* Aaron Henriquez Quintana <aaron.henriquez@forgeflow.com>
