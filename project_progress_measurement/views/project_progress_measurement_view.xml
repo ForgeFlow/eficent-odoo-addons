@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record id="view_project_progress_measurement_search" model="ir.ui.view">
         <field name="name">project.progress.measurement.search</field>
         <field name="model">project.progress.measurement</field>
@@ -35,7 +34,7 @@
         <field name="name">project.progress.measurement.tree</field>
         <field name="model">project.progress.measurement</field>
         <field name="arch" type="xml">
-            <tree string="Progress measurement" editable="top">
+            <tree editable="top">
                 <field name="project_id" />
                 <field name="communication_date" string="Date" />
                 <field name="progress_measurement_type" string="Type" />
@@ -92,5 +91,4 @@
         id="menu_project_progress_measurement_view"
         parent="progress_measurement.menu_progress_measurement_config"
     />
-
 </odoo>

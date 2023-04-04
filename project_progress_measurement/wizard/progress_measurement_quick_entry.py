@@ -37,7 +37,7 @@ class ProgressMeasurementsQuickEntry(models.TransientModel):
         return meas_type[0]
 
     communication_date = fields.Date(
-        "Communication date", required=True, default=datetime.today().strftime(DT)
+        required=True, default=datetime.today().strftime(DT)
     )
     progress_measurement_type_id = fields.Many2one(
         "progress.measurement.type",

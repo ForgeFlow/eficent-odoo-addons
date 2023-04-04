@@ -13,9 +13,7 @@ class ProgressMeasurementsEntry(models.TransientModel):
     _name = "progress.measurements.entry"
     _description = "Progress measurements entry"
 
-    communication_date = fields.Date(
-        "Communication date", required=True, default=fields.Date.context_today
-    )
+    communication_date = fields.Date(required=True, default=fields.Date.context_today)
     progress_measurement_type_id = fields.Many2one(
         "progress.measurement.type", "Progress Measurement Type", required=True
     )
@@ -60,7 +58,7 @@ class ProgressMeasurementsEntry(models.TransientModel):
                 "communication_date": communication_date,
                 "progress_measurement_type": progress_measurement_type_id,
             }
-            if project_id in measurements.keys():
+            if project_id in list(measurements.keys()):
                 if measurements[project_id]["communication_date"] == communication_date:
                     res.append(measurements[project_id]["id"])
                 else:
@@ -72,7 +70,6 @@ class ProgressMeasurementsEntry(models.TransientModel):
         return {
             "domain": "[('id','in', [" + ",".join(map(str, res)) + "])]",
             "name": _("Non-aggregated progress measurements"),
-            "view_type": "form",
             "view_mode": "tree,form",
             "res_model": "project.progress.measurement",
             "view_id": False,
