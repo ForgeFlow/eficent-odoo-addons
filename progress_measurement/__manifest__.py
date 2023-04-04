@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2014-17 Eficent Business and IT Consulting Services S.L.
 # © 2016 Matmoz d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -7,7 +6,7 @@
     "name": "Progress measurement",
     "version": "10.0.1.0.0",
     "author": "Eficent, Odoo Community Association (OCA)",
-    "website": "www.eficent.com",
+    "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Generic Modules",
     "depends": ["project"],
     "license": "AGPL-3",
@@ -19,5 +18,5 @@
         "views/progress_measurement_type_view.xml",
         "security/ir.model.access.csv",
     ],
-    'installable': True,
+    "installable": True,
 }
