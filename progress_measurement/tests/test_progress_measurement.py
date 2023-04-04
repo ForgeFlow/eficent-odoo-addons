@@ -48,5 +48,5 @@ class TestProgressMeasurement(TransactionCase):
             )
         self.assertEqual(
             self.progress_measurement_id.communication_date_print,
-            self.progress_measurement_id.communication_date,
+            self.progress_measurement_id.communication_date.strftime("%Y-%m-%d"),
         )

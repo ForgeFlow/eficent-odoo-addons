@@ -28,15 +28,14 @@ class ProgressMeasurement(models.Model):
         "Description", size=32, required=False, help="Description given to the measure"
     )
     communication_date = fields.Date(
-        "Communication date",
         required=True,
         help="Date when the measurement " "was communicated",
         default=time.strftime("%Y-%m-%d"),
     )
     communication_date_print = fields.Char("Communication Date", size=32, required=True)
-    value = fields.Float("Value", required=True, help="Value of the " "measure")
+    value = fields.Float(required=True, help="Value of the " "measure")
     progress_measurement_type = fields.Many2one(
-        "progress.measurement.type", "Progress Measurement Type", required=True
+        "progress.measurement.type", required=True
     )
     user_id = fields.Many2one(
         "res.users", "Entered by", required=True, default=lambda self: self.env.uid

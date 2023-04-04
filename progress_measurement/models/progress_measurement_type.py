@@ -48,8 +48,6 @@ class ProgressMeasurementType(models.Model):
                     )
 
     name = fields.Char(
-        "Name",
-        size=32,
         required=True,
         translate=True,
         help="Name given to the progress measurement type",
@@ -63,13 +61,11 @@ class ProgressMeasurementType(models.Model):
         "progress.",
     )
     precision = fields.Float(
-        "Precision",
         help="Value of increments permitted"
         "for the given progress measurement type "
         "measured as a total measure of progress.",
     )
     active = fields.Boolean(
-        "Active",
         default=True,
         help="Indicates that this type of progress can " "be used",
     )
