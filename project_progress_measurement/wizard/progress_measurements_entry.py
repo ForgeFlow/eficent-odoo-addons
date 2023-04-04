@@ -1,8 +1,8 @@
-# Copyright 2014-17 Eficent Business and IT Consulting Services S.L.
-#        <contact@eficent.com>
+# Copyright 2014-17 ForgeFlow S.L.
+#        <contact@forgeflow.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 
 
 class ProgressMeasurementsEntry(models.TransientModel):
@@ -20,7 +20,6 @@ class ProgressMeasurementsEntry(models.TransientModel):
         "progress.measurement.type", "Progress Measurement Type", required=True
     )
 
-    @api.multi
     def progress_measurements_open_window(self):
 
         res = []
@@ -61,7 +60,7 @@ class ProgressMeasurementsEntry(models.TransientModel):
                 "communication_date": communication_date,
                 "progress_measurement_type": progress_measurement_type_id,
             }
-            if project_id in measurements.keys():
+            if project_id in list(measurements.keys()):
                 if measurements[project_id]["communication_date"] == communication_date:
                     res.append(measurements[project_id]["id"])
                 else:
@@ -73,7 +72,6 @@ class ProgressMeasurementsEntry(models.TransientModel):
         return {
             "domain": "[('id','in', [" + ",".join(map(str, res)) + "])]",
             "name": _("Non-aggregated progress measurements"),
-            "view_type": "form",
             "view_mode": "tree,form",
             "res_model": "project.progress.measurement",
             "view_id": False,

@@ -1,10 +1,10 @@
-# Copyright 2014-17 Eficent Business and IT Consulting Services S.L.
-#        <contact@eficent.com>
+# Copyright 2014-17 ForgeFlow S.L.
+#        <contact@forgeflow.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     "name": "Project progress measurement",
-    "version": "10.0.1.0.0",
-    "author": "Eficent, Odoo Community Association (OCA)," "Project Expert Team",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow, Odoo Community Association (OCA)," "Project Expert Team",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Project Management",
     "license": "AGPL-3",

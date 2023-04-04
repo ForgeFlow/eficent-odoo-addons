@@ -32,15 +32,4 @@
         <field name="target">new</field>
     </record>
 
-    <act_window
-        name="Enter Progress Measurements"
-        res_model="progress.measurements.entry"
-        src_model="project.project"
-        view_mode="form"
-        target="new"
-        multi="True"
-        key2="client_action_multi"
-        id="action_progress_measurements_entry_form"
-    />
-
 </odoo>
