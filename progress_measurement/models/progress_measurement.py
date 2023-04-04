@@ -1,5 +1,5 @@
-# © 2014-17 Eficent Business and IT Consulting Services S.L.
-# © 2016 Matmoz d.o.o.
+# Copyright 2014-17 ForgeFlow S.L.
+# Copyright 2016 Matmoz d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import time
 
@@ -12,7 +12,6 @@ class ProgressMeasurement(models.Model):
     _name = "progress.measurement"
     _description = "Progress Measurement"
 
-    @api.multi
     @api.constrains("value", "progress_measurement_type")
     def _check_is_value_less_than_max(self):
         for item in self:
@@ -48,7 +47,6 @@ class ProgressMeasurement(models.Model):
         vals["communication_date_print"] = vals["communication_date"]
         return super(ProgressMeasurement, self).create(vals)
 
-    @api.multi
     def write(self, vals):
         if "communication_date" in vals:
             vals["communication_date_print"] = vals["communication_date"]
