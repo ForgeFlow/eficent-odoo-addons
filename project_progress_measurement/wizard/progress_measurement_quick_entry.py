@@ -1,7 +1,7 @@
 ##############################################################################
 #
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
-#              <contact@eficent.com>
+#    Copyright (C) 2014 ForgeFlow (<http://www.forgeflow.com/>)
+#              <contact@forgefloe.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,7 +19,7 @@
 ##############################################################################
 from datetime import datetime
 
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
 
 
@@ -47,7 +47,6 @@ class ProgressMeasurementsQuickEntry(models.TransientModel):
     )
     value = fields.Float("Measurement value", required=True, default=0.0)
 
-    @api.multi
     def _prepare_measurement_data(self):
 
         project_obj = self.env["project.project"]

@@ -1,8 +1,8 @@
-# Copyright 2014-17 Eficent Business and IT Consulting Services S.L.
-#        <contact@eficent.com>
+# Copyright 2014-17 ForgeFlow S.L.
+#        <contact@forgeflow.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class Project(models.Model):
@@ -12,7 +12,6 @@ class Project(models.Model):
         "project.progress.measurement", "project_id", "Measurements"
     )
 
-    @api.multi
     def copy(self, default=None):
         self.ensure_one()
         if default is None:

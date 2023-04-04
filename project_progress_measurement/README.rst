@@ -35,8 +35,8 @@ Credits
 Contributors
 ------------
 
-* Eficent <http://www.eficent.com>
-* Jordi Ballester <jordi.ballester@eficent.com>
+* ForgeFlow <http://www.forgeflow.com>
+* Jordi Ballester <jordi.ballester@forgeflow.com>
 * Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
 
 
