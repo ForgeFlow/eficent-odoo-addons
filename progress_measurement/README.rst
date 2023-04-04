@@ -45,9 +45,9 @@ Installation
 Credits
 =======
 
-* Jordi Ballester Alomar <jordi.ballester@eficent.com>
+* Jordi Ballester Alomar <jordi.ballester@forgeflow.com>
 * Matjaž Mozetič <m.mozetic@matmoz.si>
-* Aaron Henriquez <ahenriquez@eficent.com>
+* Aaron Henriquez <ahenriquez@forgeflow.com>
 * Serpent Consulting Services Pvt. Ltd. <support@serpentcs.com>
 
 Maintainer

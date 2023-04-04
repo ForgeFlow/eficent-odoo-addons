@@ -1,5 +1,5 @@
-# © 2014-17 Eficent Business and IT Consulting Services S.L.
-# © 2016 Matmoz d.o.o.
+# Copyright 2014-17 ForgeFlow S.L.
+# Copyright 2016 Matmoz d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -11,28 +11,24 @@ class ProgressMeasurementType(models.Model):
     _description = "Progress Measurement Type"
 
     @api.constrains("default_max_value")
-    @api.multi
     def _check_default_max_value(self):
         for item in self:
             if item.default_max_value <= 0:
                 return ValidationError(_("The maximum value must be greater than 0"))
 
     @api.constrains("is_percent", "default_max_value")
-    @api.multi
     def _check_is_percent_default_max_value(self):
         for item in self:
             if item.is_percent is True and item.default_max_value > 100:
                 return ValidationError("The maximum percentage must not exceed 100")
 
     @api.constrains("precision")
-    @api.multi
     def _check_precision(self):
         for item in self:
             if item.precision <= 0:
                 return ValidationError("The precision value must be greater than 0")
 
     @api.constrains("precision", "default_max_value")
-    @api.multi
     def _check_is_default_max_value_greater_than_precision(self):
         for item in self:
             if item.precision > item.default_max_value:
@@ -102,7 +98,6 @@ class ProgressMeasurementType(models.Model):
         self._check_default(vals)
         return super(ProgressMeasurementType, self).create(vals)
 
-    @api.multi
     def write(self, vals):
         self._check_default(vals)
         return super(ProgressMeasurementType, self).write(vals)
@@ -110,5 +105,5 @@ class ProgressMeasurementType(models.Model):
     @api.onchange("is_percent")
     def on_change_is_percent(self):
         for rec in self:
-            if self.is_percent is True:
-                self.default_max_value = 100
+            if rec.is_percent is True:
+                rec.default_max_value = 100

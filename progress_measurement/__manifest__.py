@@ -1,11 +1,11 @@
-# © 2014-17 Eficent Business and IT Consulting Services S.L.
-# © 2016 Matmoz d.o.o.
+# Copyright 2014-17 ForgeFlow S.L.
+# Copyright 2016 Matmoz d.o.o.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Progress measurement",
-    "version": "10.0.1.0.0",
-    "author": "Eficent, Odoo Community Association (OCA)",
+    "version": "14.0.1.0.0",
+    "author": "ForgeFlow, Odoo Community Association (OCA)",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Generic Modules",
     "depends": ["project"],

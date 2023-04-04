@@ -59,10 +59,7 @@
             <field name="res_model">progress.measurement.type</field>
             <field name="view_id" ref="view_progress_measurement_type_tree" />
             <field name="view_mode">tree,form</field>
-            <field
-                name="search_view_id"
-                ref="view_progress_measurement_type_search"
-            />
+            <field name="search_view_id" ref="view_progress_measurement_type_search" />
             <field name="help">Define the Progress Measurement Types.</field>
         </record>
 
