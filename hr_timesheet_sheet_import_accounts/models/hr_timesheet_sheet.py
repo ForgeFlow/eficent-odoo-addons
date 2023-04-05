@@ -77,5 +77,5 @@ class HrTimesheetSheet(models.Model):
                 projects = self.get_accounts(a_line_ids)
                 for project_id in [a['project_id'] for a in projects]:
                     vals = sheet.prepare_timesheet(project_id)
-                    self.env['account.analytic.line'].create(vals)
+                    self.env['account.analytic.line'].with_context(add_lines=True).create(vals)
         return True
