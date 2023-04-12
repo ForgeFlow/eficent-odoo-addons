@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
+from datetime import datetime
+
 from odoo import api, fields, models
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
-from datetime import datetime
 
 
 class ProjectProject(models.Model):
@@ -71,9 +71,11 @@ class ProjectProject(models.Model):
             WHERE AT.name in ('Expense', 'Cost of Goods Sold',
             'Expenses', 'Cost of Revenue')
             AND L.account_id IN %s
-            """ + where_date + """
+            """
+            + where_date
+            + """
             """,
-            query_params
+            query_params,
         )
         anal_lines = [r[0] for r in cr.fetchall()]
         action = self.env.ref("analytic.account_analytic_line_action_entries")

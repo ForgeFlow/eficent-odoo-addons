@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
+from datetime import datetime
+
 from odoo import _, api, fields, models
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
-from datetime import datetime
 
 
 class AccountAnalyticAccount(models.Model):
@@ -13,7 +13,9 @@ class AccountAnalyticAccount(models.Model):
         help="Set manually the estimated hours for the project",
     )
     actual_hours = fields.Float(compute="_compute_actual_project_hours", store=True)
-    budget_hours_percentage = fields.Float(compute="_compute_budget_hours_percentage", store=True, string="Cost Alert")
+    budget_hours_percentage = fields.Float(
+        compute="_compute_budget_hours_percentage", store=True, string="Cost Alert"
+    )
     cost_alert_color = fields.Integer(compute="_compute_cost_alert_color", store=True)
     is_cost_controlled = fields.Boolean()
 
@@ -25,15 +27,24 @@ class AccountAnalyticAccount(models.Model):
                 if account.is_cost_controlled and account.cost_alert_color != 0:
                     account.cost_risk_notify(account.cost_alert_color, 0)
                 account.cost_alert_color = 0
-            elif account.budget_hours_percentage >= 50 and account.budget_hours_percentage < 70:
+            elif (
+                account.budget_hours_percentage >= 50
+                and account.budget_hours_percentage < 70
+            ):
                 if account.is_cost_controlled and account.cost_alert_color != 1:
                     account.cost_risk_notify(account.cost_alert_color, 1)
                 account.cost_alert_color = 1
-            elif account.budget_hours_percentage >= 70 and account.budget_hours_percentage <= 85:
+            elif (
+                account.budget_hours_percentage >= 70
+                and account.budget_hours_percentage <= 85
+            ):
                 if account.is_cost_controlled and account.cost_alert_color != 2:
                     account.cost_risk_notify(account.cost_alert_color, 2)
                 account.cost_alert_color = 2
-            elif account.budget_hours_percentage >= 85 and account.budget_hours_percentage <= 100:
+            elif (
+                account.budget_hours_percentage >= 85
+                and account.budget_hours_percentage <= 100
+            ):
                 if account.is_cost_controlled and account.cost_alert_color != 3:
                     account.cost_risk_notify(account.cost_alert_color, 3)
                 account.cost_alert_color = 3
@@ -52,7 +63,9 @@ class AccountAnalyticAccount(models.Model):
             elif not account.is_cost_controlled:
                 budget_hours_percentage = 0
             else:
-                budget_hours_percentage = (account.actual_hours / account.budget_hours)*100
+                budget_hours_percentage = (
+                    account.actual_hours / account.budget_hours
+                ) * 100
             account.budget_hours_percentage = budget_hours_percentage
 
     @api.multi
@@ -88,9 +101,11 @@ class AccountAnalyticAccount(models.Model):
                 WHERE AT.name in ('Expense', 'Cost of Goods Sold',
                 'Expenses', 'Cost of Revenue')
                 AND L.account_id IN %s
-                """ + where_date + """
+                """
+                + where_date
+                + """
                 """,
-                query_params
+                query_params,
             )
             all_data = cr.fetchall()
             if all_data:
@@ -102,46 +117,45 @@ class AccountAnalyticAccount(models.Model):
     @api.multi
     def cost_risk_notify(self, previous_cost_risk, new_cost_risk):
         self.ensure_one()
-        project_manager_id = self.user_id and \
-        self.user_id.partner_id.id or False
+        project_manager_id = self.user_id and self.user_id.partner_id.id or False
         # add the project manager as follower
         if project_manager_id:
-            message_follower_ids = [x.partner_id.id for x in
-                                    self.message_follower_ids]
+            message_follower_ids = [x.partner_id.id for x in self.message_follower_ids]
 
             if project_manager_id not in message_follower_ids:
                 reg = {
-                    'res_id': self.id,
-                    'res_model': 'account.analytic.account',
-                    'partner_id': project_manager_id,
+                    "res_id": self.id,
+                    "res_model": "account.analytic.account",
+                    "partner_id": project_manager_id,
                 }
-                self.env['mail.followers'].sudo().create(reg)
+                self.env["mail.followers"].sudo().create(reg)
         # add followers of the project to follow the analytic account
-        for follower in self.project_ids.mapped('message_follower_ids.partner_id'):
-            message_follower_ids = [x.partner_id.id for x in
-                        self.message_follower_ids]
+        for follower in self.project_ids.mapped("message_follower_ids.partner_id"):
+            message_follower_ids = [x.partner_id.id for x in self.message_follower_ids]
             if follower.id not in message_follower_ids:
                 reg = {
-                    'res_id': self.id,
-                    'res_model': 'account.analytic.account',
-                    'partner_id': follower.id,
+                    "res_id": self.id,
+                    "res_model": "account.analytic.account",
+                    "partner_id": follower.id,
                 }
-                self.env['mail.followers'].sudo().create(reg)
+                self.env["mail.followers"].sudo().create(reg)
         # notify risk change
         message = self._risk_change_message_content(previous_cost_risk, new_cost_risk)
-        self.message_post(body=message, subtype='mail.mt_comment', partner_ids=message_follower_ids)
+        self.message_post(
+            body=message, subtype="mail.mt_comment", partner_ids=message_follower_ids
+        )
 
     @api.multi
     def _risk_change_message_content(self, previous_cost_risk, new_cost_risk):
         self.ensure_one()
-        title = _('Project Cost Risk Update for account %s') % (
-            self.complete_wbs_code)
-        message = '<h3>%s</h3><ul>' % title
+        title = _("Project Cost Risk Update for account %s") % (self.complete_wbs_code)
+        message = "<h3>%s</h3><ul>" % title
         risk_status_text = self.get_risk_text(new_cost_risk)
         previous_risk_status_text = self.get_risk_text(previous_cost_risk)
-        message += _('The project passed from %s '
-                     'to %s') % (
-            previous_risk_status_text, risk_status_text)
+        message += _("The project passed from %s " "to %s") % (
+            previous_risk_status_text,
+            risk_status_text,
+        )
         return message
 
     @api.model
@@ -159,7 +173,7 @@ class AccountAnalyticAccount(models.Model):
 
     @api.model
     def _get_analytic_cost_risk_domain(self):
-        return [('stage_id', 'not ilike', 'Closed')]
+        return [("stage_id", "not ilike", "Closed")]
 
     @api.model
     def cron_calculate_cost_risk(self):
