@@ -8,8 +8,15 @@ class ProjectProject(models.Model):
     _inherit = "project.project"
 
     budget_hours = fields.Float(related="analytic_account_id.budget_hours")
+    actual_hours = fields.Float(related="analytic_account_id.actual_hours")
+    budget_hours_percentage = fields.Float(
+        related="analytic_account_id.budget_hours_percentage"
+    )
+    cost_alert_color = fields.Integer(related="analytic_account_id.cost_alert_color")
+    is_cost_controlled = fields.Boolean(
+        related="analytic_account_id.is_cost_controlled"
+    )
 
-    @api.multi
     def _compute_planned_budget_hours(self):
         """Obtains the earliest and latest dates of the children."""
         for pp in self:
@@ -20,7 +27,6 @@ class ProjectProject(models.Model):
             pp.write({"budget_hours": budget_hours})
         return True
 
-    @api.multi
     def _propagate_budget_hours(self, vals):
         for pp in self:
             if "budget_hours" in vals:
@@ -33,7 +39,6 @@ class ProjectProject(models.Model):
         res._propagate_budget_hours(values)
         return res
 
-    @api.multi
     def write(self, vals):
         res = super(ProjectProject, self).write(vals)
         if "budget_hours" in vals:
@@ -44,7 +49,6 @@ class ProjectProject(models.Model):
                 pp._propagate_budget_hours(vals)
         return res
 
-    @api.multi
     def button_actual_hours(self):
         self.ensure_one()
         account = self.analytic_account_id
