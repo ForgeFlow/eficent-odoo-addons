@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-from odoo.tests import common
-from odoo import fields
 import time
 from datetime import datetime, timedelta
+
+from odoo import fields
+from odoo.tests import common
 
 
 class TestProjectAnalyticBudgetHours(common.TransactionCase):
     def setUp(self):
         super(TestProjectAnalyticBudgetHours, self).setUp()
         self.timeheet_model = self.env["hr_timesheet_sheet.sheet"]
-        self.analytic_journal_model = self.env['account.analytic.journal']
-        self.account_model = self.env['account.account']
-        self.account_type_model = self.env['account.account.type']
+        self.analytic_journal_model = self.env["account.analytic.journal"]
+        self.account_model = self.env["account.account"]
+        self.account_type_model = self.env["account.account.type"]
         self.employee = self.env["hr.employee"].create({"name": "Dick"})
         self.project = self.env["project.project"].create(
             {"name": "Test project", "code": "0001"}
@@ -64,10 +64,7 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
             }
         )
         self.analytic_journal = self.analytic_journal_model.create(
-            {'name': 'Labor',
-             'code': 'LB',
-             'type': 'general',
-             'cost_type': 'labor'}
+            {"name": "Labor", "code": "LB", "type": "general", "cost_type": "labor"}
         )
 
     def test_01_budget_hours(self):
@@ -138,11 +135,15 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
             }
         )
         # we do this here by hand for not adding extra dependencies on cost_category modules
-        ts_lines = self.env['account.analytic.line'].search([('sheet_id', '=', timesheet_sheet.id)])
-        ts_lines.write({
-            'journal_id': self.analytic_journal.id,
-            "general_account_id": self.expense_account.id,
-        })
+        ts_lines = self.env["account.analytic.line"].search(
+            [("sheet_id", "=", timesheet_sheet.id)]
+        )
+        ts_lines.write(
+            {
+                "journal_id": self.analytic_journal.id,
+                "general_account_id": self.expense_account.id,
+            }
+        )
         self.parent_account.budget_hours = 7
         self.project_son.analytic_account_id._compute_actual_project_hours()
         # self.assertEquals(self.project_son.actual_hours, 5.0)
@@ -156,10 +157,8 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
 
     def test_03_future_actual_hours(self):
         "Test future hours excluded"
-        todays_date = fields.Datetime.to_string(
-            datetime.now())
-        future_date = fields.Datetime.to_string(
-            datetime.now() + timedelta(weeks=1))
+        todays_date = fields.Datetime.to_string(datetime.now())
+        future_date = fields.Datetime.to_string(datetime.now() + timedelta(weeks=1))
         timesheet_sheet = self.timeheet_model.create(
             {
                 "employee_id": self.employee.id,
@@ -198,11 +197,15 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
             }
         )
         # we do this here by hand for not adding extra dependencies on cost_category modules
-        ts_lines = self.env['account.analytic.line'].search([('sheet_id', '=', timesheet_sheet.id)])
-        ts_lines.write({
-            'journal_id': self.analytic_journal.id,
-            "general_account_id": self.expense_account.id,
-        })
+        ts_lines = self.env["account.analytic.line"].search(
+            [("sheet_id", "=", timesheet_sheet.id)]
+        )
+        ts_lines.write(
+            {
+                "journal_id": self.analytic_journal.id,
+                "general_account_id": self.expense_account.id,
+            }
+        )
         # only the line for today should count
         self.project_grand_son.analytic_account_id._compute_actual_project_hours()
         # self.assertEquals(self.project_grand_son.actual_hours, 5.0)
