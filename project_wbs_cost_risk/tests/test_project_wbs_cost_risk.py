@@ -8,7 +8,7 @@ from odoo.tests import common
 class TestProjectAnalyticBudgetHours(common.TransactionCase):
     def setUp(self):
         super(TestProjectAnalyticBudgetHours, self).setUp()
-        self.timeheet_model = self.env["hr_timesheet_sheet.sheet"]
+        self.timeheet_model = self.env["hr_timesheet.sheet"]
         self.analytic_journal_model = self.env["account.analytic.journal"]
         self.account_model = self.env["account.account"]
         self.account_type_model = self.env["account.account.type"]
@@ -54,7 +54,7 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
         )
         self.employee.user_id = self.user1
         self.expense_type = self.account_type_model.create(
-            {"name": "Expenses", "type": "other"}
+            {"name": "Expenses", "type": "other", "internal_group": "expense"}
         )
         self.expense_account = self.account_model.create(
             {
@@ -68,20 +68,20 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
         )
 
     def test_01_budget_hours(self):
-        "Test budget hours propagation"
+        """Test budget hours propagation"""
         self.project_grand_son.budget_hours = 5.0
         self.project_son2.budget_hours = 2.0
         self.assertEquals(self.project_son.budget_hours, 5.0)
         self.assertEquals(self.project.budget_hours, 7.0)
 
     def test_02_actual_hours(self):
-        "Test hours computation"
+        """Test hours computation"""
         timesheet_sheet = self.timeheet_model.create(
             {
                 "employee_id": self.employee.id,
                 "state": "new",
-                "date_from": time.strftime("1990-01-01"),
-                "date_to": time.strftime("1990-01-31"),
+                "date_start": time.strftime("1990-01-01"),
+                "date_end": time.strftime("1990-01-31"),
             }
         )
         # I add 5 + 2 hours of work timesheet
@@ -121,7 +121,7 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
                 "unit_amount": 1.0,
                 "user_id": self.user1.id,
                 "general_account_id": self.expense_account.id,
-                "analytic_journal": self.analytic_journal.id,
+                "journal_id": self.analytic_journal.id,
             }
         )
         self.env["account.analytic.line"].create(
@@ -131,7 +131,7 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
                 "unit_amount": 2.0,
                 "user_id": self.user1.id,
                 "general_account_id": self.expense_account.id,
-                "analytic_journal": self.analytic_journal.id,
+                "journal_id": self.analytic_journal.id,
             }
         )
         # we do this here by hand for not adding extra dependencies on cost_category modules
@@ -163,8 +163,8 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
             {
                 "employee_id": self.employee.id,
                 "state": "new",
-                "date_from": todays_date,
-                "date_to": future_date,
+                "date_start": todays_date,
+                "date_end": future_date,
             }
         )
         # I add 7 hours of work timesheet, two of them in the future

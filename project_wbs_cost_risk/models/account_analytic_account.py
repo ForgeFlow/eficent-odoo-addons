@@ -19,7 +19,6 @@ class AccountAnalyticAccount(models.Model):
     cost_alert_color = fields.Integer(compute="_compute_cost_alert_color", store=True)
     is_cost_controlled = fields.Boolean()
 
-    @api.multi
     def _compute_cost_alert_color(self):
         "The recomputation will be triggered by the cron not the api.depends"
         for account in self:
@@ -53,7 +52,6 @@ class AccountAnalyticAccount(models.Model):
                     account.cost_risk_notify(account.cost_alert_color, 4)
                 account.cost_alert_color = 4
 
-    @api.multi
     @api.depends("budget_hours", "is_cost_controlled")
     def _compute_budget_hours_percentage(self):
         "The recomputation will be triggered by the cron not the api.depends"
@@ -68,7 +66,6 @@ class AccountAnalyticAccount(models.Model):
                 ) * 100
             account.budget_hours_percentage = budget_hours_percentage
 
-    @api.multi
     @api.depends("budget_hours", "is_cost_controlled")
     def _compute_actual_project_hours(self):
         "The recomputation will be triggered by the cron not the api.depends"
@@ -114,7 +111,6 @@ class AccountAnalyticAccount(models.Model):
                 actual_hours = 0
             account.actual_hours = actual_hours
 
-    @api.multi
     def cost_risk_notify(self, previous_cost_risk, new_cost_risk):
         self.ensure_one()
         project_manager_id = self.user_id and self.user_id.partner_id.id or False
@@ -145,7 +141,6 @@ class AccountAnalyticAccount(models.Model):
             body=message, subtype="mail.mt_comment", partner_ids=message_follower_ids
         )
 
-    @api.multi
     def _risk_change_message_content(self, previous_cost_risk, new_cost_risk):
         self.ensure_one()
         title = _("Project Cost Risk Update for account %s") % (self.complete_wbs_code)

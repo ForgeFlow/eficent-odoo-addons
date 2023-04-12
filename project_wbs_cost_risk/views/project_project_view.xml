@@ -5,7 +5,6 @@
         <field name="name">project.project.tree</field>
         <field name="model">project.project</field>
         <field name="inherit_id" ref="project_wbs.view_project" />
-        <field name="field_parent">child_ids</field>
         <field name="arch" type="xml">
             <field name="date" position="after">
                 <field
@@ -24,10 +23,7 @@
                 <field name="is_cost_controlled" invisible="1" />
                 <field
                     name="budget_hours_percentage"
-                    bg_color="green:cost_alert_color==1;
-                yellow:cost_alert_color==2;
-                orange:cost_alert_color==3;
-                red:cost_alert_color==4"
+                    options='{"bg_color": "green:cost_alert_color == 1; yellow:cost_alert_color == 2; orange:cost_alert_color==3;red:cost_alert_color==4"}'
                 />
             </field>
         </field>
@@ -36,7 +32,10 @@
     <record id="analytic_account_inherited_issue_form" model="ir.ui.view">
         <field name="name">account.analytic.account.issue.form.inherit</field>
         <field name="model">account.analytic.account</field>
-        <field name="inherit_id" ref="project.analytic_account_inherited_form" />
+        <field
+            name="inherit_id"
+            ref="project.account_analytic_account_view_form_inherit"
+        />
         <field name="priority" eval="18" />
         <field name="arch" type="xml">
             <xpath expr='//div[@name="project"]' position='inside'>
@@ -53,49 +52,48 @@
     </record>
 
     <record id="view_project_project_filter" model="ir.ui.view">
-         <field name="name">project.project.select</field>
-         <field name="model">project.project</field>
-         <field name="inherit_id" ref="project.view_project_project_filter" />
-         <field name="type">search</field>
-         <field name="arch" type="xml">
-               <field name="partner_id" position="before">
-                  <field name="budget_hours_percentage" invisible="1" />
-                  <field name="cost_alert_color" invisible="1" />
-                  <field name="is_cost_controlled" invisible="1" />
-               </field>
-               <xpath expr="//filter[contains(@domain, user_id)]" position="after">
-                  <filter
+        <field name="name">project.project.select</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_project_filter" />
+        <field name="arch" type="xml">
+            <field name="partner_id" position="before">
+                <field name="budget_hours_percentage" invisible="1" />
+                <field name="cost_alert_color" invisible="1" />
+                <field name="is_cost_controlled" invisible="1" />
+            </field>
+            <xpath expr="//filter[contains(@domain, user_id)]" position="after">
+                <filter
                     name="is_cost_controlled"
                     string="Is Cost Controlled"
                     domain="[('is_cost_controlled', '=', True)]"
                 />
-                  <filter
+                <filter
                     name="exceed_cost"
                     string="Cost Exceeded"
                     domain="[('cost_alert_color', '=', 4)]"
                 />
-                  <filter
+                <filter
                     name="high_cost"
                     string="High Cost Risk"
                     domain="[('cost_alert_color', '=', 3)]"
                 />
-                  <filter
+                <filter
                     name="medium_cost"
                     string="Medium Cost Risk"
                     domain="[('cost_alert_color', '=', 2)]"
                 />
-                  <filter
+                <filter
                     name="low_cost"
                     string="Low Cost Risk"
                     domain="[('cost_alert_color', '=', 1)]"
                 />
-                  <filter
+                <filter
                     name="no_cost"
                     string="No Cost Risk"
                     domain="[('cost_alert_color', '=', 0)]"
                 />
-               </xpath>
-         </field>
-     </record>
+            </xpath>
+        </field>
+    </record>
 
 </odoo>
