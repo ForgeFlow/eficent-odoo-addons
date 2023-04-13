@@ -106,7 +106,7 @@ class AccountAnalyticAccount(models.Model):
             )
             all_data = cr.fetchall()
             if all_data:
-                actual_hours = sum([r[0] or 0 for r in all_data])
+                actual_hours = sum(r[0] or 0 for r in all_data)
             else:
                 actual_hours = 0
             account.actual_hours = actual_hours

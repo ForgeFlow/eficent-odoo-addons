@@ -71,8 +71,8 @@ class TestProjectAnalyticBudgetHours(common.TransactionCase):
         """Test budget hours propagation"""
         self.project_grand_son.budget_hours = 5.0
         self.project_son2.budget_hours = 2.0
-        self.assertEquals(self.project_son.budget_hours, 5.0)
-        self.assertEquals(self.project.budget_hours, 7.0)
+        self.assertEqual(self.project_son.budget_hours, 5.0)
+        self.assertEqual(self.project.budget_hours, 7.0)
 
     def test_02_actual_hours(self):
         """Test hours computation"""
