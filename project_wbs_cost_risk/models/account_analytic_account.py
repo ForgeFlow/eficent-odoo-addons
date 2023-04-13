@@ -9,7 +9,6 @@ class AccountAnalyticAccount(models.Model):
 
     budget_hours = fields.Float(
         default=0,
-        string="Budget Hours",
         help="Set manually the estimated hours for the project",
     )
     actual_hours = fields.Float(compute="_compute_actual_project_hours", store=True)
@@ -147,10 +146,10 @@ class AccountAnalyticAccount(models.Model):
         message = "<h3>%s</h3><ul>" % title
         risk_status_text = self.get_risk_text(new_cost_risk)
         previous_risk_status_text = self.get_risk_text(previous_cost_risk)
-        message += _("The project passed from %s " "to %s") % (
-            previous_risk_status_text,
-            risk_status_text,
-        )
+        message += _("The project passed from %(previous)s " "to %(current)s") % {
+            "previous": previous_risk_status_text,
+            "current": risk_status_text,
+        }
         return message
 
     @api.model
