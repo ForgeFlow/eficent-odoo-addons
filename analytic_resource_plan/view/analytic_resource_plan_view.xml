@@ -123,7 +123,6 @@
         <field name="model">analytic.resource.plan.line</field>
         <field name="arch" type="xml">
             <tree
-                string="Analytic resource plan line"
                 decoration-danger="has_child == True"
                 decoration-info="state=='draft'"
                 editable="top"

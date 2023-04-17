@@ -9,7 +9,7 @@ from odoo.tools.translate import _
 class AccountAnalyticPlanVersion(models.Model):
     _inherit = "account.analytic.plan.version"
 
-    default_resource_plan = fields.Boolean("Default for resource plan", default=False)
+    default_resource_plan = fields.Boolean(default=False)
 
     @api.constrains("default_resource_plan")
     def _check_default_resource(self):

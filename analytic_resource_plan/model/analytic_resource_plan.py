@@ -38,7 +38,6 @@ class AnalyticResourcePlanLine(models.Model):
         states={"draft": [("readonly", False)]},
     )
     date = fields.Date(
-        string="Date",
         required=True,
         index=True,
         readonly=True,
@@ -80,7 +79,7 @@ class AnalyticResourcePlanLine(models.Model):
         help="Specifies the quantity that has " "been planned.",
         default=1,
     )
-    notes = fields.Text(string="Notes")
+    notes = fields.Text()
     parent_id = fields.Many2one(
         "analytic.resource.plan.line", "Parent", readonly=True, ondelete="cascade"
     )
@@ -148,12 +147,12 @@ class AnalyticResourcePlanLine(models.Model):
             raise ValidationError(
                 _(
                     "There is no expense account defined "
-                    'for this product: "%s" (id:%d)'
+                    'for this product: "%(name)s" (id:%(id)d)'
                 )
-                % (
-                    self.product_id.name,
-                    self.product_id.id,
-                )
+                % {
+                    "name": self.product_id.name,
+                    "id": self.product_id.id,
+                }
             )
         default_plan = plan_version_obj.search(
             [("default_resource_plan", "=", True)], limit=1
