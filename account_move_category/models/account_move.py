@@ -12,6 +12,5 @@ class AccountMove(models.Model):
             ("open", "Opening Fiscal year"),
             ("close", "Closing Fiscal Year"),
         ],
-        "Category",
         index=True,
     )
