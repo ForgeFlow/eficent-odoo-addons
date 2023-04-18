@@ -1,10 +1,8 @@
-# Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015-17 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-
-import odoo.addons.decimal_precision as dp
 
 
 class AnalyticResourcePlanLineConsume(models.TransientModel):
@@ -45,8 +43,8 @@ class AnalyticResourcePlanLineConsume(models.TransientModel):
         for item in self.item_ids:
             if item.product_qty > item.line_id.qty_available:
                 raise UserError(
-                        "Cannot consume material for product '%s'. Not enough stock"
-                        % (item.line_id.product_id.name)
+                    _("Cannot consume material for product '%s'. Not enough stock")
+                    % item.line_id.product_id.name
                 )
             move_id = res_plan_obj.create_consume_move(
                 item.line_id.id, item.product_qty
@@ -55,7 +53,6 @@ class AnalyticResourcePlanLineConsume(models.TransientModel):
         return {
             "domain": "[('id','in', [" + ",".join(map(str, res)) + "])]",
             "name": _("Stock Moves"),
-            "view_type": "form",
             "view_mode": "tree,form",
             "res_model": "stock.move",
             "view_id": False,
@@ -82,8 +79,8 @@ class AnalyticResourcePlanLineConsumeItem(models.TransientModel):
         readonly=True,
     )
     product_qty = fields.Float(
-        string="Quantity to consume", digits=dp.get_precision("Product UoS")
+        string="Quantity to consume", digits="Product Unit of Measure"
     )
     product_uom_id = fields.Many2one(
-        "product.uom", related="line_id.product_uom_id", string="UoM", readonly=True
+        "uom.uom", related="line_id.product_uom_id", string="UoM", readonly=True
     )

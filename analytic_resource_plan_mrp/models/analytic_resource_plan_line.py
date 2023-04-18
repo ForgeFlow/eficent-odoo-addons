@@ -1,4 +1,4 @@
-# Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015-17 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, api, fields, models
@@ -8,7 +8,6 @@ from odoo.exceptions import ValidationError
 class AnalyticResourcePlanLine(models.Model):
     _inherit = "analytic.resource.plan.line"
 
-    @api.multi
     def _compute_show_button_bom_explode(self):
         for line in self:
             if line.bom_id:
@@ -16,7 +15,6 @@ class AnalyticResourcePlanLine(models.Model):
             else:
                 line.show_button_bom_explode = False
 
-    @api.multi
     def action_button_confirm(self):
         for line in self:
             if line.bom_id:
@@ -42,13 +40,11 @@ class AnalyticResourcePlanLine(models.Model):
         bom_id = bom_obj._bom_find(product=self.product_id)
         self.bom_id = bom_id
 
-    @api.multi
     def button_bom_explode_to_resource_plan(self):
         res = self.bom_explode_to_resource_plan()
         return {
             "domain": "[('id','in', [" + ",".join(map(str, res)) + "])]",
             "name": _("New Resource Plan Lines"),
-            "view_type": "form",
             "view_mode": "tree,form",
             "res_model": "analytic.resource.plan.line",
             "view_id": False,
@@ -76,7 +72,6 @@ class AnalyticResourcePlanLine(models.Model):
             res.update({"resource_type": "task"})
         return res
 
-    @api.multi
     def bom_explode_to_resource_plan(self):
         plan_line_obj = self.env["analytic.resource.plan.line"]
         res = []
@@ -167,7 +162,7 @@ class AnalyticResourcePlanLine(models.Model):
         return stock_move.create(move_data)
 
     def _complete_stock_move(self, move_id):
-        return move_id.action_done()
+        return move_id._action_done()
 
     def create_consume_move(self, line_id, product_qty):
         line = self.browse(line_id)

@@ -1,0 +1,5 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_analytic_resource_plan_line_consume","access_analytic_resource_plan_line_consume","model_analytic_resource_plan_line_consume","project.group_project_user",1,1,1,1
+"access_analytic_resource_plan_line_consume_item","access_analytic_resource_plan_line_consume_item","model_analytic_resource_plan_line_consume_item","project.group_project_user",1,1,1,1
+"access_analytic_resource_plan_line_produce","access_analytic_resource_plan_line_produce","model_analytic_resource_plan_line_produce","project.group_project_user",1,1,1,1
+"access_analytic_resource_plan_line_produce_item","access_analytic_resource_plan_line_produce_item","model_analytic_resource_plan_line_produce_item","project.group_project_user",1,1,1,1

@@ -1,9 +1,7 @@
-# Copyright 2015-17 Eficent Business and IT Consulting Services S.L.
+# Copyright 2015-17 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, api, fields, models
-
-import odoo.addons.decimal_precision as dp
 
 
 class AnalyticResourcePlanLineProduce(models.TransientModel):
@@ -50,7 +48,6 @@ class AnalyticResourcePlanLineProduce(models.TransientModel):
         return {
             "domain": "[('id','in', [" + ",".join(map(str, res)) + "])]",
             "name": _("Stock Moves"),
-            "view_type": "form",
             "view_mode": "tree,form",
             "res_model": "stock.move",
             "view_id": False,
@@ -77,8 +74,8 @@ class AnalyticResourcePlanLineProduceItem(models.TransientModel):
         readonly=True,
     )
     product_qty = fields.Float(
-        string="Quantity to produce", digits=dp.get_precision("Product UoS")
+        string="Quantity to produce", digits="Product Unit of Measure"
     )
     product_uom_id = fields.Many2one(
-        "product.uom", related="line_id.product_uom_id", string="UoM", readonly=True
+        "uom.uom", related="line_id.product_uom_id", string="UoM", readonly=True
     )
