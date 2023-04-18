@@ -36,10 +36,9 @@ class SaleOrderLine(models.Model):
     last_purchase_price = fields.Float(
         compute="_compute_last_purchase",
         digits="Product Price",
-        string="Last Purchase Price",
     )
     last_purchase_date = fields.Date(
-        compute="_compute_last_purchase", string="Last Purchase Date"
+        compute="_compute_last_purchase",
     )
     last_supplier_id = fields.Many2one(
         compute="_compute_last_purchase",
