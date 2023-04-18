@@ -38,7 +38,6 @@ class AnalyticResourcePlanLine(models.Model):
             )
 
     qty_available = fields.Float(
-        string="Qty Available",
         digits="Product Unit of Measure",
         compute="_compute_quantities",
         help="Current quantity of products. "

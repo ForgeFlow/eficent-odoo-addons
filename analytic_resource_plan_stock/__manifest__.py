@@ -1,6 +1,6 @@
 {
     "name": "Analytic Resource Plan Stock",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "ForgeFlow, " "Matmoz, " "Luxim, " "Project Expert Team",
     "website": "https://github.com/ForgeFlow/eficent-odoo-addons",
     "category": "Project Management",
