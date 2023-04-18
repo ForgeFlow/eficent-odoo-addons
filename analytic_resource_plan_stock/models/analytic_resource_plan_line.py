@@ -1,15 +1,12 @@
-# Copyright 2017 Eficent Business and IT Consulting Services S.L.
+# Copyright 2017 ForgeFlow S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-from odoo import api, fields, models
-
-import odoo.addons.decimal_precision as dp
+from odoo import fields, models
 
 
 class AnalyticResourcePlanLine(models.Model):
 
     _inherit = "analytic.resource.plan.line"
 
-    @api.multi
     def _compute_quantities(self):
         for line in self:
             stock = line.with_context(
@@ -26,7 +23,6 @@ class AnalyticResourcePlanLine(models.Model):
                 line.virtual_available = 0.0
                 line.qty_available = 0.0
 
-    @api.multi
     def _compute_done_quantities(self):
         for line in self:
             stock = line.with_context(
@@ -43,7 +39,7 @@ class AnalyticResourcePlanLine(models.Model):
 
     qty_available = fields.Float(
         string="Qty Available",
-        digits=dp.get_precision("Product Unit of Measure"),
+        digits="Product Unit of Measure",
         compute="_compute_quantities",
         help="Current quantity of products. "
         "In a context with a single Stock Location, this includes "
@@ -60,7 +56,7 @@ class AnalyticResourcePlanLine(models.Model):
     virtual_available = fields.Float(
         string="Virtually available",
         compute="_compute_quantities",
-        digits=dp.get_precision("Product Unit of Measure"),
+        digits="Product Unit of Measure",
         help="Forecast quantity (computed as Quantity On Hand "
         "- Outgoing + Incoming) "
         "In a context with a single Stock Location, this includes "
@@ -76,7 +72,7 @@ class AnalyticResourcePlanLine(models.Model):
     )
     incoming_qty = fields.Float(
         string="Qty Incoming",
-        digits=dp.get_precision("Product Unit of Measure"),
+        digits="Product Unit of Measure",
         compute="_compute_quantities",
         help="Quantity of products that are planned to arrive. "
         "In a context with a single Stock Location, this includes "
@@ -94,7 +90,7 @@ class AnalyticResourcePlanLine(models.Model):
         string="Outgoing Quantity",
         default=lambda self: self.unit_amount,
         compute="_compute_quantities",
-        digits=dp.get_precision("Product Unit of Measure"),
+        digits="Product Unit of Measure",
         help="Quantity of products that are planned to leave. "
         "In a context with a single Stock Location, this includes "
         "goods leaving this Location, or any of its children. "
@@ -110,7 +106,7 @@ class AnalyticResourcePlanLine(models.Model):
 
     incoming_done_qty = fields.Float(
         string="Qty Incoming Done",
-        digits=dp.get_precision("Product Unit of Measure"),
+        digits="Product Unit of Measure",
         compute="_compute_done_quantities",
         help="Quantity of products that have been produced or have " "arrived.",
     )
@@ -118,6 +114,6 @@ class AnalyticResourcePlanLine(models.Model):
         string="Qty Outgoing Done",
         default=lambda self: self.unit_amount,
         compute="_compute_done_quantities",
-        digits=dp.get_precision("Product Unit of Measure"),
+        digits="Product Unit of Measure",
         help="Quantity of products that have been consumed or delivered.",
     )

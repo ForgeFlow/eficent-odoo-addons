@@ -10,9 +10,11 @@
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <xpath expr='//tree' position='attributes'>
-                <attribute name="colors">
-                darkmagenta:has_child == True;blue:state=='draft';red:qty_available&lt;0 or qty_available==0
-                </attribute>
+                <attribute name="decoration-primary">has_child == True</attribute>
+                <attribute name="decoration-info">state=='draft'</attribute>
+                <attribute
+                    name="decoration-danger"
+                >qty_available&lt;0 or qty_available==0</attribute>
             </xpath>
             <xpath expr='//field[@name="product_uom_id"]' position='after'>
                 <field name="qty_available" />
