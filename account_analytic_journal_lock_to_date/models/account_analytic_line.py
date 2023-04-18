@@ -5,14 +5,11 @@ from datetime import datetime, timedelta
 
 from odoo import _, api, models
 from odoo.exceptions import ValidationError
-from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DT
 
 
 class AccountAnalyticLine(models.Model):
-
     _inherit = "account.analytic.line"
 
-    @api.multi
     @api.constrains("date")
     def _check_lock_date(self):
         for line in self:
@@ -25,8 +22,8 @@ class AccountAnalyticLine(models.Model):
             if not lock_date:
                 lock_date = datetime.now().date() + timedelta(days=1)
             else:
-                lock_date = datetime.strptime(lock_date, DT).date()
-            if lock_date and datetime.strptime(line.date, DT).date() >= lock_date:
+                lock_date = lock_date
+            if lock_date and line.date >= lock_date:
                 raise ValidationError(
                     _("You cannot add/modify entries after %s" % lock_date)
                 )
