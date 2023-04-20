@@ -25,6 +25,6 @@ class AccountAnalyticLine(models.Model):
                 lock_date = lock_date
             if lock_date and line.date >= lock_date:
                 raise ValidationError(
-                    _("You cannot add/modify entries after %s" % lock_date)
+                    _("You cannot add/modify entries after %s") % lock_date
                 )
         return True
