@@ -25,7 +25,14 @@ class ProjectProject(models.Model):
             if end_dates:
                 max_end_date = max(end_dates)
             if min_start_date and max_end_date:
-                pp.write({"date_start": min_start_date, "date": max_end_date})
+                # Check if the parent's start date is later than the earliest child's start date
+                if (
+                    pp.date_start and pp.date_start > min_start_date
+                ) or not pp.date_start:
+                    pp.write({"date_start": min_start_date})
+                # Check if the parent's end date is earlier than the latest child's end date
+                if (pp.date and pp.date < max_end_date) or not pp.date:
+                    pp.write({"date": max_end_date})
             elif min_start_date:
                 pp.write({"date_start": min_start_date})
             elif max_end_date:
