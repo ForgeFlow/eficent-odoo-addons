@@ -16,18 +16,19 @@ class SaleOrder(models.Model):
         copy=False,
         string="Purchase Requests")
 
-    @api.multi
-    def action_cancel(self):
-        res = super(SaleOrder, self).action_cancel()
-        for sale in self:
-            request_ids = sale.purchase_request_ids.filtered(
-                lambda s: s.state in ['draft', 'to_approve'])
-            if request_ids:
-                request_ids.button_rejected()
-            for request in request_ids:
-                message = _(
-                    'Purchase Request %s has been cancelled due to cancel of '
-                    'the corresponding Sales Order %s') % (request.name,
-                                                           sale.name)
-                request.message_post(body=message)
-        return res
+    # Commented due to client requirement to not cancel PRs when SO is cancelled so PO lines are not erased
+    # @api.multi
+    # def action_cancel(self):
+    #     res = super(SaleOrder, self).action_cancel()
+    #     for sale in self:
+    #         request_ids = sale.purchase_request_ids.filtered(
+    #             lambda s: s.state in ['draft', 'to_approve'])
+    #         if request_ids:
+    #             request_ids.button_rejected()
+    #         for request in request_ids:
+    #             message = _(
+    #                 'Purchase Request %s has been cancelled due to cancel of '
+    #                 'the corresponding Sales Order %s') % (request.name,
+    #                                                        sale.name)
+    #             request.message_post(body=message)
+    #     return res
